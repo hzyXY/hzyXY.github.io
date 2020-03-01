@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="我的第一篇博客, XY">
+    <meta name="keywords" content="源NAT, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>我的第一篇博客 | XY</title>
+    <title>源NAT | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -241,12 +241,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">我的第一篇博客</h1>
+                    <h1 class="description center-align post-title">源NAT</h1>
                 </div>
             </div>
         </div>
@@ -361,12 +361,33 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/NAT/">
+                                <span class="chip bg-color">NAT</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                                <span class="chip bg-color">华为</span>
+                            </a>
+                        
+                            <a href="/tags/%E6%BA%90NAT/">
+                                <span class="chip bg-color">源NAT</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1/" class="post-category">
+                                数据通信
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -375,7 +396,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-02-29
+                    2020-03-01
                 </div>
                 
 
@@ -384,7 +405,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    19
+                    341
                 </div>
                 
 
@@ -407,7 +428,17 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>2020年2月29日的第一篇博客！！！期待四年后的2月29日！！！</p>
+                <p>#源NAT</p>
+<p>源NAT是指对报文中的源地址进行转换。<br>通过源NAT技术将私网IP地址转换成公网IP地址，使私网用户可以利用公网地址访问Internet。</p>
+<p>####NAT No-PAT<br>NAT No-PAT是一种NAT转换时只转换地址，不转换端口，实现私网地址到公网地址一对一的地址转换方式。</p>
+<p>如果地址池中的地址已经全部分配出去，则剩余内网主机访问外网时不会进行NAT转换，直到地址池中有空闲地址时才会进行NAT转换。</p>
+<p>FW上会生成两个Server-map表项：<br><strong>正向Server-map表项</strong>保证特定私网用户访问Internet时，快速转换地址，提高了FW处理效率。<br><strong>反向Server-map表项</strong>允许Internet上的用户主动访问私网用户，将报文进行地址转换。</p>
+<p>NAT NO-PAT有<strong>两种</strong>：<br><strong>本地（Local）NO-PAT</strong><br>本地NO-PAT生成的Server-Map表中包含安全区域参数，只有此安全区域的Server可以访问内网Host。<br><strong>全局（Global）NO-PAT</strong><br>全局NO-PAT生成的Server-Map表中不包含安全区域参数，一旦建立，所有安全区域的Server都可以访问内网Host。</p>
+<p>适用场景：上网用户<strong>较少</strong>且公网地址数与同时上网的用户数量<strong>相同</strong>。</p>
+<p>####NAPT</p>
+<p>####Smart NAT</p>
+<p>####Easy IP</p>
+<p>####三元组NAT</p>
 
             </div>
             <hr/>
@@ -433,7 +464,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://yoursite.com/2020/02/29/wo-de-di-yi-pian-bo-ke/">http://yoursite.com/2020/02/29/wo-de-di-yi-pian-bo-ke/</a>
+                    <a href="http://yoursite.com/2020/03/01/yuan-nat/">http://yoursite.com/2020/03/01/yuan-nat/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -470,7 +501,19 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/NAT/">
+                                    <span class="chip bg-color">NAT</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                                    <span class="chip bg-color">华为</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%BA%90NAT/">
+                                    <span class="chip bg-color">源NAT</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -509,9 +552,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2020/03/01/yuan-nat/">
                     <div class="card-image">
@@ -531,9 +575,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-01
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-01
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -546,6 +590,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -569,7 +614,7 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
                 <a href="/2020/02/29/wo-de-di-yi-pian-bo-ke/">
@@ -600,7 +645,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
