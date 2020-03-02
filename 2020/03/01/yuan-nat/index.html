@@ -409,7 +409,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    337
+                    407
                 </div>
                 
 
@@ -432,13 +432,30 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="源NAT"><a href="#源NAT" class="headerlink" title="源NAT"></a>源NAT</h1><p>源NAT是指对报文中的源地址进行转换。<br>通过源NAT技术将私网IP地址转换成公网IP地址，使私网用户可以利用公网地址访问Internet。</p>
-<h4 id="NAT-No-PAT"><a href="#NAT-No-PAT" class="headerlink" title="NAT No-PAT"></a>NAT No-PAT</h4><p>NAT No-PAT是一种NAT转换时只转换地址，不转换端口，实现私网地址到公网地址一对一的地址转换方式。</p>
-<p>如果地址池中的地址已经全部分配出去，则剩余内网主机访问外网时不会进行NAT转换，直到地址池中有空闲地址时才会进行NAT转换。</p>
-<p>FW上会生成两个Server-map表项：<br><strong>正向Server-map表项</strong>保证特定私网用户访问Internet时，快速转换地址，提高了FW处理效率。<br><strong>反向Server-map表项</strong>允许Internet上的用户主动访问私网用户，将报文进行地址转换。</p>
-<p>NAT NO-PAT有<strong>两种</strong>：<br><strong>本地（Local）NO-PAT</strong><br>本地NO-PAT生成的Server-Map表中包含安全区域参数，只有此安全区域的Server可以访问内网Host。<br><strong>全局（Global）NO-PAT</strong><br>全局NO-PAT生成的Server-Map表中不包含安全区域参数，一旦建立，所有安全区域的Server都可以访问内网Host。</p>
-<p>适用场景：上网用户<strong>较少</strong>且公网地址数与同时上网的用户数量<strong>相同</strong>。</p>
-<h4 id="NAPT"><a href="#NAPT" class="headerlink" title="NAPT"></a>NAPT</h4><h4 id="Smart-NAT"><a href="#Smart-NAT" class="headerlink" title="Smart NAT"></a>Smart NAT</h4><h4 id="Easy-IP"><a href="#Easy-IP" class="headerlink" title="Easy IP"></a>Easy IP</h4><h4 id="三元组NAT"><a href="#三元组NAT" class="headerlink" title="三元组NAT"></a>三元组NAT</h4>
+                <h2 id="源NAT"><a href="#源NAT" class="headerlink" title="源NAT"></a>源NAT</h2><hr>
+
+<ul>
+<li>源NAT是指对报文中的源地址进行转换。<br>通过源NAT技术将私网IP地址转换成公网IP地址，使私网用户可以利用公网地址访问Internet。</li>
+</ul>
+<h3 id="NAT-No-PAT"><a href="#NAT-No-PAT" class="headerlink" title="NAT No-PAT"></a>NAT No-PAT</h3><ul>
+<li><p>NAT No-PAT是一种NAT转换时只转换地址，不转换端口，实现私网地址到公网地址一对一的地址转换方式。</p>
+<p> <u>如果地址池中的地址已经全部分配出去，则剩余内网主机访问外网时不会进行NAT转换，直到地址池中有空闲地址时才会进行NAT转换</u></p>
+</li>
+</ul>
+<p><strong>FW上会生成两个Server-map表项</strong>：  </p>
+<blockquote>
+<p><strong>正向Server-map表项</strong>保证特定私网用户访问Internet时，快速转换地址，提高了FW处理效率。<br><strong>反向Server-map表项</strong>允许Internet上的用户主动访问私网用户，将报文进行地址转换。</p>
+</blockquote>
+<p><strong>NAT NO-PAT有两种:</strong>  </p>
+<blockquote>
+<p>  <strong>本地（Local）NO-PAT</strong><br>本地NO-PAT生成的Server-Map表中包含安全区域参数，只有此安全区域的Server可以访问内网Host。<br><strong>全局（Global）NO-PAT</strong><br>  全局NO-PAT生成的Server-Map表中不包含安全区域参数，一旦建立，所有安全区域的Server都可以访问内网Host。</p>
+</blockquote>
+<ul>
+<li>适用场景：<strong>上网用户较少</strong>且公网地址数与同时上网的<strong>用户数量相同</strong>。</li>
+</ul>
+<h3 id="NAPT"><a href="#NAPT" class="headerlink" title="NAPT"></a>NAPT</h3><p>NAPT是一种转换时同时转换地址和端口，实现多个私网地址共用一个或多个公网地址的地址转换方式。</p>
+<p>-适用于公网地址数量少，需要上网的私网用户数量大的场景。</p>
+<h3 id="Smart-NAT"><a href="#Smart-NAT" class="headerlink" title="Smart NAT"></a>Smart NAT</h3><h3 id="Easy-IP"><a href="#Easy-IP" class="headerlink" title="Easy IP"></a>Easy IP</h3><h3 id="三元组NAT"><a href="#三元组NAT" class="headerlink" title="三元组NAT"></a>三元组NAT</h3>
             </div>
             <hr/>
 
@@ -453,7 +470,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://yoursite.com" rel="external nofollow noreferrer">XY</a>
+                    <a href="https://hzyxy.github.io" rel="external nofollow noreferrer">XY</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -463,7 +480,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://yoursite.com/2020/03/01/yuan-nat/">http://yoursite.com/2020/03/01/yuan-nat/</a>
+                    <a href="https://hzyxy.github.io/2020/03/01/yuan-nat/">https://hzyxy.github.io/2020/03/01/yuan-nat/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -476,7 +493,7 @@
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="http://yoursite.com" target="_blank">XY</a>
+                    <a href="https://hzyxy.github.io" target="_blank">XY</a>
                     !
                 </span>
             </div>
@@ -568,8 +585,13 @@
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            源NAT源NAT是指对报文中的源地址进行转换。通过源NAT技术将私网IP地址转换成公网IP地址，使私网用户可以利用公网地址访问Internet。
-NAT No-PATNAT No-PAT是一种NAT转换时只转换地址，不转换端口，实现私网地址
+                            源NAT
+
+
+源NAT是指对报文中的源地址进行转换。通过源NAT技术将私网IP地址转换成公网IP地址，使私网用户可以利用公网地址访问Internet。
+
+NAT No-PAT
+NAT No-PAT是一种NAT转换时只转换地址，不转换端口，实
                         
                     </div>
                     <div class="publish-info">
@@ -785,13 +807,13 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2020</span>
-            <a href="http://yoursite.com" target="_blank">XY</a>
+            <a href="https://hzyxy.github.io" target="_blank">XY</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">356</span>&nbsp;字
+                class="white-color">426</span>&nbsp;字
             
             
             
