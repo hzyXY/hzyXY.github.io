@@ -409,7 +409,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    144
+                    348
                 </div>
                 
 
@@ -454,7 +454,38 @@
 </blockquote>
 <h4 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/naptsession.JPG" alt="查看FW1的会话表"></p>
 <p><img src="/2020/03/29/yuan-nat-de-pei-zhi/naptservermap.JPG" alt="查看FW1的server-map表"></p>
-<h3 id="Smart-NAT"><a href="#Smart-NAT" class="headerlink" title="Smart NAT"></a>Smart NAT</h3>
+<h3 id="Smart-NAT"><a href="#Smart-NAT" class="headerlink" title="Smart NAT"></a>Smart NAT</h3><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/snattopo.JPG" alt="snattopo"></p>
+<h4 id="配置步骤-2"><a href="#配置步骤-2" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置-2"><a href="#一、在FW1上的配置-2" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.配置NAT地址池</strong></p>
+<blockquote>
+<p>nat address-group snat 0<br> mode no-pat global<br> route enable<br> smart-nopat 1.1.1.11<br> section 0 1.1.1.10 1.1.1.10</p>
+</blockquote>
+<p><strong>2.配置源NAT策略</strong></p>
+<blockquote>
+<p>nat-policy<br> rule name snat<br>  source-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.0 24<br>  action nat address-group snat</p>
+</blockquote>
+<h4 id="验证配置-2"><a href="#验证配置-2" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/snatsession.JPG" alt="查看FW1的会话表"></p>
+<p><img src="/2020/03/29/yuan-nat-de-pei-zhi/snatservermap.JPG" alt="查看FW1的server-map表"></p>
+<h3 id="Easy-IP"><a href="#Easy-IP" class="headerlink" title="Easy IP"></a>Easy IP</h3><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/topo.JPG" alt="拓扑"></p>
+<h4 id="配置步骤-3"><a href="#配置步骤-3" class="headerlink" title="配置步骤"></a>配置步骤</h4><p><strong>一、在FW1上的配置</strong></p>
+<p><strong>1.配置源NAT策略</strong></p>
+<blockquote>
+<p> rule name enat<br>  source-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.0 24<br>  action nat easy-ip</p>
+</blockquote>
+<h4 id="验证配置-3"><a href="#验证配置-3" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/enatsession.JPG" alt="查看FW1的会话表"></p>
+<p><img src="/2020/03/29/yuan-nat-de-pei-zhi/enatservermap.JPG" alt="查看FW1的server-map表"></p>
+<h3 id="三元组NAT"><a href="#三元组NAT" class="headerlink" title="三元组NAT"></a>三元组NAT</h3><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/snattopo.JPG" alt="snattopo"></p>
+<h4 id="配置步骤-4"><a href="#配置步骤-4" class="headerlink" title="配置步骤"></a>配置步骤</h4><p><strong>一、在FW1上的配置</strong></p>
+<p><strong>1.配置NAT地址池</strong></p>
+<blockquote>
+<p>nat address-group fullnat 0<br> reference count: 1<br> mode full-cone global<br> status active<br> route enable<br> section 0 1.1.1.10 1.1.1.10</p>
+</blockquote>
+<p><strong>2.配置源NAT策略</strong></p>
+<blockquote>
+<p>nat-policy<br> rule name fullnat<br>  source-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.0 24<br>  action nat address-group fullnat</p>
+</blockquote>
+<h4 id="验证配置-4"><a href="#验证配置-4" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/fullnatsession.JPG" alt="查看FW1的会话表"></p>
+<p><img src="/2020/03/29/yuan-nat-de-pei-zhi/fullnatservermap.JPG" alt="查看FW1的server-map表"></p>
+
             </div>
             <hr/>
 
@@ -946,7 +977,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">1.5k</span>&nbsp;字
+                class="white-color">1.7k</span>&nbsp;字
             
             
             
