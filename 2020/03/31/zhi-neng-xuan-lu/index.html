@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="源NAT, XY">
+    <meta name="keywords" content="智能选路, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>源NAT | XY</title>
+    <title>智能选路 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -250,7 +250,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">源NAT</h1>
+                    <h1 class="description center-align post-title">智能选路</h1>
                 </div>
             </div>
         </div>
@@ -371,8 +371,8 @@
                                 <span class="chip bg-color">华为</span>
                             </a>
                         
-                            <a href="/tags/NAT/">
-                                <span class="chip bg-color">NAT</span>
+                            <a href="/tags/%E6%99%BA%E8%83%BD%E9%80%89%E8%B7%AF/">
+                                <span class="chip bg-color">智能选路</span>
                             </a>
                         
                     </div>
@@ -396,7 +396,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-01
+                    2020-03-31
                 </div>
                 
 
@@ -405,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    809
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    2 分
                 </div>
                 
 
@@ -428,102 +428,31 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="源NAT"><a href="#源NAT" class="headerlink" title="源NAT"></a>源NAT</h2><hr>
-
+                <h2 id="智能选路"><a href="#智能选路" class="headerlink" title="智能选路"></a>智能选路</h2><p>企业通常会在网络出口部署多条链路，以此提高出口链路的带宽和可靠性。<br>但是由于出口设备在转发流量时一般是随机选择一条链路转发流量并不考虑各条链路的实际带宽或链路的实时状态，因此在实际应用中会存在如下问题：</p>
+<ol>
+<li>如果各条链路的带宽不等，则很可能出现某些带宽大的链路空闲、某些带宽小的链路拥塞的情况，从而造成链路资源的浪费。</li>
+<li>由于不同ISP链路的传输质量和服务费用不同，有时用户希望优先保证业务的传输质量，有时希望优先使用费用较低的链路，而平分流量是无法实现这些需求的。</li>
+<li>当出口设备与目的设备之间的链路出现故障或者目的设备上的服务不可用时，如果流量被转发到相应的链路上，则将造成访问失败。</li>
+</ol>
 <ul>
-<li>源NAT是指对报文中的源地址进行转换。<br>通过源NAT技术将私网IP地址转换成公网IP地址，使私网用户可以利用公网地址访问Internet。</li>
+<li>智能选路是指到达目的网络有多条链路可选时，FW通过不同的智能选路方式，即根据链路带宽、权重、优先级或者自动探测到的链路质量，动态选择最优链路，并根据各链路实时状态动态调整分配结果，以此提高链路资源的利用率和用户体验。</li>
 </ul>
-<h3 id="NAT-No-PAT"><a href="#NAT-No-PAT" class="headerlink" title="NAT No-PAT"></a>NAT No-PAT</h3><ul>
-<li><p>NAT No-PAT是一种NAT转换时只转换地址，不转换端口，实现私网地址到公网地址一对一的地址转换方式。</p>
-<p> <u>如果地址池中的地址已经全部分配出去，则剩余内网主机访问外网时不会进行NAT转换，直到地址池中有空闲地址时才会进行NAT转换</u></p>
-</li>
+<h3 id="智能选路分类"><a href="#智能选路分类" class="headerlink" title="智能选路分类"></a>智能选路分类</h3><ol>
+<li><strong>出站智能选路</strong>：当内网用户访问外网时，如果到达目的网络有多条链路可选，FW进行智能的选路。</li>
+<li><strong>入站智能选路</strong>：当外网用户通过域名访问内网服务器时，向企业内网DNS服务器发起DNS请求，DNS服务器返回解析后地址给外网用户，FW可以将DNS回应报文中的解析地址进行智能的修改，使用户能够获得最合适的解析地址，避免链路拥塞或者跨运营商访问，这种解析方式称为<strong>智能DNS</strong>。</li>
+</ol>
+<h4 id="出站智能选路"><a href="#出站智能选路" class="headerlink" title="出站智能选路"></a>出站智能选路</h4><h5 id="全局选路策略（基于等价路由或缺省路由的出站智能选路）"><a href="#全局选路策略（基于等价路由或缺省路由的出站智能选路）" class="headerlink" title="全局选路策略（基于等价路由或缺省路由的出站智能选路）"></a>全局选路策略（基于等价路由或缺省路由的出站智能选路）</h5><ul>
+<li>按照不同的选路方式转发流量到各条链路上，并根据各条链路的实时状态动态调整分配结果，由此提高链路资源的利用率和用户体验。</li>
 </ul>
-<p><strong>FW上会生成两个Server-map表项</strong>：  </p>
-<blockquote>
-<p><strong>正向Server-map表项</strong>保证特定私网用户访问Internet时，快速转换地址，提高了FW处理效率。<br><strong>反向Server-map表项</strong>允许Internet上的用户主动访问私网用户，将报文进行地址转换。</p>
-</blockquote>
-<p><strong>NAT NO-PAT有两种:</strong>  </p>
-<blockquote>
-<p>  <strong>本地（Local）NO-PAT</strong><br>本地NO-PAT生成的Server-Map表中包含安全区域参数，只有此安全区域的Server可以访问内网Host。<br><strong>全局（Global）NO-PAT</strong><br>  全局NO-PAT生成的Server-Map表中不包含安全区域参数，一旦建立，所有安全区域的Server都可以访问内网Host。</p>
-</blockquote>
-<ul>
-<li>适用场景：<strong>上网用户较少</strong>且公网地址数与同时上网的<strong>用户数量相同</strong>。</li>
-</ul>
-<h3 id="NAPT"><a href="#NAPT" class="headerlink" title="NAPT"></a>NAPT</h3><ul>
-<li><p>NAPT是一种转换时同时转换地址和端口，实现多个私网地址共用一个或多个公网地址的地址转换方式。</p>
-<p><u>由于地址转换的同时还进行端口的转换，可以实现多个私网用户共同使用一个公网IP地址上网，FW根据端口区分不同用户，所以可以支持同时上网的用户数量更多。</u></p>
-</li>
-</ul>
-<blockquote>
-<p>NAPT方式不会生成Server-map表</p>
-</blockquote>
-<ul>
-<li>适用场景：<strong>公网地址数量少</strong>，需要上网的<strong>私网用户数量大</strong>。</li>
-</ul>
-<h3 id="Smart-NAT"><a href="#Smart-NAT" class="headerlink" title="Smart NAT"></a>Smart NAT</h3><ul>
-<li><p>Smart NAT是No-PAT方式的一种<strong>补充</strong></p>
-<p> <u>Smart NAT是一种可以在No-PAT的NAT模式下，指定某个IP地址预留做NAPT方式的地址转换方式。</u></p>
-</li>
-</ul>
-<blockquote>
-<p>Smart NAT的产生：<br>使用No-PAT方式时，进行地址池的一对一转换。随着内部用户数量的不断增加，地址池中的地址数可能不再能满足用户上网需求，部分用户将得不到转换地址而无法访问Internet。</p>
-</blockquote>
-<ul>
-<li>由于地址转换的同时还进行端口的转换（<strong>先是No-PAT的地址用尽后才会使用预留地址进行NAPT的转换</strong>），可以实现多个私网用户共同使用一个公网IP地址上网，FW根据端口区分不同用户，所以可以支持同时上网的用户数量更多。</li>
-</ul>
-<blockquote>
-<p>NAPT方式不会生成Server-map表，No-PAT会生成Server-map表</p>
-</blockquote>
-<ul>
-<li>适用场景：<strong>平时上网的用户数量少</strong>，公网IP地址数量与同时上网用户数<strong>基本相同</strong>，<strong>但个别时段上网用户数激增</strong>。</li>
-</ul>
-<h3 id="Easy-IP"><a href="#Easy-IP" class="headerlink" title="Easy IP"></a>Easy IP</h3><ul>
-<li><p>Easy IP是一种<strong>利用出接口的公网IP地址作为NAT转后的地址</strong>，同时转换地址和端口的地址转换方式。  </p>
-<ul>
-<li><input checked disabled type="checkbox"> 接口IP是动态获取的场景下也可使用  </li>
-<li><input checked disabled type="checkbox"> 支持端口的转换 </li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>Easy IP的产生：使用No-PAT或NAPT方式时均需要多个静态的公网IP地址，且需要配置地址池，会造成大量IP地址的浪费。当公网IP地址为动态获取时，NAT的地址池很难得到正确的配置。</p>
-</blockquote>
-<ul>
-<li><p>适用场景：当<strong>接口的公网IP是动态获取</strong>的状态下，只想使用这一个公网IP进行上网，并且<strong>私网用户数量多</strong>。</p>
-</li>
-<li><p>Easy IP不会产生Server-map</p>
-</li>
-</ul>
-<h3 id="三元组NAT"><a href="#三元组NAT" class="headerlink" title="三元组NAT"></a>三元组NAT</h3><ul>
-<li><p>三元组NAT是一种转换时<strong>同时转换地址和端口</strong>，实现多个私网地址共用一个或多个公网地址的地址转换方式且允许Internet上的用户主动访问私网用户。</p>
-<ul>
-<li><input checked disabled type="checkbox"> 三元组NAT的<strong>端口不能复用</strong>，保证了内部PC对外呈现的端口的一致性，不会动态变化，但是公网地址利用率低。</li>
-<li><input checked disabled type="checkbox"> 支持外部设备通过转换后的地址和端口<strong>主动访问内部PC</strong>。FW即使没有配置相应的安全策略，也允许此类访问报文通过。</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>三元组NAT的产生：当内网PC访问Internet时，如果FW采用五元组NAT（NAPT）方式进行地址转换，外部设备无法通过转换后的地址和端口主动访问内部PC。</p>
-</blockquote>
-<ul>
-<li><strong>缺省情况下，端点无关过滤功能处于开启状态。</strong></li>
-</ul>
-<blockquote>
-<p>开启时公网用户访问私网用户时匹配目的Server-map表，不进行安全策略处理。<br>关闭时匹配安全策略规则，由安全策略规则决定是否转发报文。</p>
-</blockquote>
-<ul>
-<li>三元组NAT可产生<strong>正向</strong>与<strong>反向</strong>的Server-map。</li>
-</ul>
-<ul>
-<li><p>三元组NAT有两种：</p>
-<ul>
-<li><input checked disabled type="checkbox"> 本地（Local）三元组NAT</li>
-<li><input checked disabled type="checkbox"> 全局（Global）三元组NAT</li>
-</ul>
-</li>
-<li><p>FW支持Smart三元组NAT功能，可以根据报文的目的端口来选择分配端口的模式，在一定程度上提高公网地址的利用率。当报文的目的端口属于设置的端口范围之内，就采用NAPT模式来分配端口，如果报文的目的端口不属于设置的端口范围之内，则采用三元组NAT模式来分配端口。</p>
-</li>
-</ul>
+<p>负载分担方式：</p>
+<ol>
+<li>根据链路带宽负载分担</li>
+<li>根据链路质量负载分担</li>
+<li>根据链路权重负载分担</li>
+<li>根据链路优先级主备备份</li>
+</ol>
+<h5 id="策略路由（基于策略路由的出站智能选路）"><a href="#策略路由（基于策略路由的出站智能选路）" class="headerlink" title="策略路由（基于策略路由的出站智能选路）"></a>策略路由（基于策略路由的出站智能选路）</h5><p>当网络中配置了策略路由，并且流量命中配置的策略路由时，如果到达目的网络有多条链路可选，FW通过不同的智能选路方式动态选择最优链路。</p>
+<h5 id="ISP选路（基于ISP路由的选路）"><a href="#ISP选路（基于ISP路由的选路）" class="headerlink" title="ISP选路（基于ISP路由的选路）"></a>ISP选路（基于ISP路由的选路）</h5><p>当FW作为出口网关设备连接多个ISP网络时，通过批量生成ISP路由，使访问特定ISP网络的流量从相应出接口转发出去，保证流量转发使用最短路径。</p>
 
             </div>
             <hr/>
@@ -549,7 +478,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/03/01/yuan-nat/">https://hzyxy.github.io/2020/03/01/yuan-nat/</a>
+                    <a href="https://hzyxy.github.io/2020/03/31/zhi-neng-xuan-lu/">https://hzyxy.github.io/2020/03/31/zhi-neng-xuan-lu/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -591,8 +520,8 @@
                                     <span class="chip bg-color">华为</span>
                                 </a>
                             
-                                <a href="/tags/NAT/">
-                                    <span class="chip bg-color">NAT</span>
+                                <a href="/tags/%E6%99%BA%E8%83%BD%E9%80%89%E8%B7%AF/">
+                                    <span class="chip bg-color">智能选路</span>
                                 </a>
                             
                         </div>
@@ -758,29 +687,84 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/03/29/yuan-nat-de-pei-zhi/">
+                <a href="/2020/03/31/zhi-neng-xuan-lu/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="源NAT的配置">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="智能选路">
                         
-                        <span class="card-title">源NAT的配置</span>
+                        <span class="card-title">智能选路</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            源NAT的配置
+                            智能选路介绍
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-29
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1/" class="post-category">
+                                    数据通信
+                                </a>
+                            
+                            
                         </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                        <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%99%BA%E8%83%BD%E9%80%89%E8%B7%AF/">
+                        <span class="chip bg-color">智能选路</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/03/31/fang-huo-qiang-yuan-jin-yuan-chu/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="源进源出">
+                        
+                        <span class="card-title">源进源出</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            使得来回路径一致
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -800,65 +784,8 @@
                         <span class="chip bg-color">华为</span>
                     </a>
                     
-                    <a href="/tags/NAT/">
-                        <span class="chip bg-color">NAT</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
                     <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
                         <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2020/02/29/wo-de-di-yi-pian-bo-ke/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="我的第一篇博客">
-                        
-                        <span class="card-title">我的第一篇博客</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            第一次
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-29
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E6%9D%82%E8%B0%88/" class="post-category">
-                                    杂谈
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E8%83%A1%E6%80%9D%E4%B9%B1%E6%83%B3/">
-                        <span class="chip bg-color">胡思乱想</span>
                     </a>
                     
                 </div>
