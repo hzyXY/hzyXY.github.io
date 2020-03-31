@@ -405,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1
+                    736
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    2 分
                 </div>
                 
 
@@ -428,7 +428,41 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="SLB"><a href="#SLB" class="headerlink" title="SLB"></a>SLB</h2>
+                <h2 id="SLB"><a href="#SLB" class="headerlink" title="SLB"></a>SLB</h2><ul>
+<li><p>服务器负载均衡就是将本应由一个服务器处理的业务分发给多个服务器来处理，以此提高处理业务的效率和能力。</p>
+</li>
+<li><p>处理业务的服务器组成服务器集群，对外体现为一台逻辑上的服务器。对于用户来说，访问的是这台逻辑上的服务器，而不知道实际处理业务的是其他服务器，由FW决定如何分配流量给各个服务器。</p>
+</li>
+</ul>
+<h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><ul>
+<li>负载均衡算法决定了FW如何分配业务流量到服务器上</li>
+</ul>
+<p>FW支持的负载均衡算法如下：</p>
+<p><strong>1.简单轮询算法</strong></p>
+<blockquote>
+<p>优点：实现简单，效率较高<br>缺点：不会考虑每个服务器上的实际负载<br>简单轮询算法是一个静态算法<br>适用场景为服务器的性能相近，服务类型比较简单，且每条流对服务器造成的业务负载大致相等</p>
+</blockquote>
+<p><strong>2.加权轮询算法</strong></p>
+<blockquote>
+<p>加权轮询算法是将客户端的业务流量按照一定权重比依次分配到各个服务器上<br>根据服务器的不同处理能力，给每个服务器分配不同的权值，使其接受相应权值数的服务请求</p>
+</blockquote>
+<p><strong>3.最小连接算法</strong></p>
+<blockquote>
+<p>最小连接算法是将客户端的业务流量分配到并发连接数最小的服务器上。(并发连接数即服务器对应的实时连接数，会话新建或老化都会影响并发连接数的大小)<br>最小连接算法是动态算法<br>适用场景为服务器的性能相近，每条流对服务器造成的业务负载大致相等，但是每条流的会话存活时间不同。</p>
+</blockquote>
+<p><strong>4.加权最小连接算法</strong></p>
+<blockquote>
+<p>加权最小连接算法是将客户端的业务流量分配到加权并发连接数最小的服务器上。(加权并发连接数是考虑服务器权重后得到的实时连接数)<br>适用场景为服务器的性能不同，每一条流对服务器造成的业务负载大致相等，但是每一条流的会话存活时间不同。</p>
+</blockquote>
+<p><strong>5.源IP hash算法</strong></p>
+<blockquote>
+<p>源IP Hash算法是将客户端的IP地址进行Hash运算，得到Hash Index值。FW根据Hash Index值与Hash列表中服务器的对应关系，分配流量至服务器。<br>适用场景为各个服务器性能差别不大</p>
+</blockquote>
+<p><strong>6.加权源IP hash算法</strong></p>
+<blockquote>
+<p>加权源IP Hash算法是将客户端的IP地址进行Hash运算，得到Hash Index值，而后通过FW调整各个服务器的权重得到Hash表中服务器新的权重值。<br>适用场景为各个服务器的性能有一定的差异</p>
+</blockquote>
+<h3 id="服务健康检查"><a href="#服务健康检查" class="headerlink" title="服务健康检查"></a>服务健康检查</h3>
             </div>
             <hr/>
 
@@ -916,7 +950,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">2.3k</span>&nbsp;字
+                class="white-color">3k</span>&nbsp;字
             
             
             
