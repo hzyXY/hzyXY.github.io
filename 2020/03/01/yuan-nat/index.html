@@ -480,8 +480,8 @@
 <h3 id="Easy-IP"><a href="#Easy-IP" class="headerlink" title="Easy IP"></a>Easy IP</h3><ul>
 <li><p>Easy IP是一种<strong>利用出接口的公网IP地址作为NAT转后的地址</strong>，同时转换地址和端口的地址转换方式。  </p>
 <ul>
-<li><input checked="" disabled="" type="checkbox"> 接口IP是动态获取的场景下也可使用  </li>
-<li><input checked="" disabled="" type="checkbox"> 支持端口的转换 </li>
+<li><input checked disabled type="checkbox"> 接口IP是动态获取的场景下也可使用  </li>
+<li><input checked disabled type="checkbox"> 支持端口的转换 </li>
 </ul>
 </li>
 </ul>
@@ -497,8 +497,8 @@
 <h3 id="三元组NAT"><a href="#三元组NAT" class="headerlink" title="三元组NAT"></a>三元组NAT</h3><ul>
 <li><p>三元组NAT是一种转换时<strong>同时转换地址和端口</strong>，实现多个私网地址共用一个或多个公网地址的地址转换方式且允许Internet上的用户主动访问私网用户。</p>
 <ul>
-<li><input checked="" disabled="" type="checkbox"> 三元组NAT的<strong>端口不能复用</strong>，保证了内部PC对外呈现的端口的一致性，不会动态变化，但是公网地址利用率低。</li>
-<li><input checked="" disabled="" type="checkbox"> 支持外部设备通过转换后的地址和端口<strong>主动访问内部PC</strong>。FW即使没有配置相应的安全策略，也允许此类访问报文通过。</li>
+<li><input checked disabled type="checkbox"> 三元组NAT的<strong>端口不能复用</strong>，保证了内部PC对外呈现的端口的一致性，不会动态变化，但是公网地址利用率低。</li>
+<li><input checked disabled type="checkbox"> 支持外部设备通过转换后的地址和端口<strong>主动访问内部PC</strong>。FW即使没有配置相应的安全策略，也允许此类访问报文通过。</li>
 </ul>
 </li>
 </ul>
@@ -517,8 +517,8 @@
 <ul>
 <li><p>三元组NAT有两种：</p>
 <ul>
-<li><input checked="" disabled="" type="checkbox"> 本地（Local）三元组NAT</li>
-<li><input checked="" disabled="" type="checkbox"> 全局（Global）三元组NAT</li>
+<li><input checked disabled type="checkbox"> 本地（Local）三元组NAT</li>
+<li><input checked disabled type="checkbox"> 全局（Global）三元组NAT</li>
 </ul>
 </li>
 <li><p>FW支持Smart三元组NAT功能，可以根据报文的目的端口来选择分配端口的模式，在一定程度上提高公网地址的利用率。当报文的目的端口属于设置的端口范围之内，就采用NAPT模式来分配端口，如果报文的目的端口不属于设置的端口范围之内，则采用三元组NAT模式来分配端口。</p>
@@ -1006,7 +1006,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">1.7k</span>&nbsp;字
+                class="white-color">2.3k</span>&nbsp;字
             
             
             

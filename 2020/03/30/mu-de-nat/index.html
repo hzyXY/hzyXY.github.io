@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="源NAT的配置, XY">
+    <meta name="keywords" content="目的NAT, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>源NAT的配置 | XY</title>
+    <title>目的NAT | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">源NAT的配置</h1>
+                    <h1 class="description center-align post-title">目的NAT</h1>
                 </div>
             </div>
         </div>
@@ -400,7 +400,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-29
+                    2020-03-30
                 </div>
                 
 
@@ -409,7 +409,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    348
+                    248
                 </div>
                 
 
@@ -432,59 +432,45 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="源NAT的配置"><a href="#源NAT的配置" class="headerlink" title="源NAT的配置"></a>源NAT的配置</h2><h3 id="NAT-No-PAT"><a href="#NAT-No-PAT" class="headerlink" title="NAT No-PAT"></a>NAT No-PAT</h3><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/topo.JPG" alt="拓扑"></p>
-<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置"><a href="#一、在FW1上的配置" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.配置NAT地址池</strong></p>
+                <h2 id="目的NAT"><a href="#目的NAT" class="headerlink" title="目的NAT"></a>目的NAT</h2><h3 id="NAT-Server"><a href="#NAT-Server" class="headerlink" title="NAT Server"></a>NAT Server</h3><ul>
+<li><p>用来发布内网的服务或特定的服务<br>通常用于隐藏一个对外提供服务的网络设备的真实IP地址，使客户端可以通过访问一个公网地址来访问这些服务器。</p>
 <blockquote>
-<p>nat address-group gnopat 0<br> mode no-pat global<br> route enable<br> section 0 1.1.1.10</p>
+<p><strong>自动生成Server-map表</strong></p>
 </blockquote>
-<p><strong>2.配置源NAT策略</strong></p>
+</li>
+</ul>
+<p><img src="/2020/03/30/mu-de-nat/natservertopo.JPG" alt="拓扑"></p>
+<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置"><a href="#一、在FW1上的配置" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.配置安全策略</strong></p>
 <blockquote>
-<p>nat-policy<br> rule name nopat<br>  source-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.0 24<br>  action nat address-group gnopat</p>
+<p>security-policy<br> rule name http<br>  source-zone untrust<br>  destination-zone dmz<br>  destination-address 192.168.1.1 32<br>  service http<br>  action permit</p>
 </blockquote>
-<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/nopatsession.JPG" alt="查看FW1的会话表"></p>
-<p><img src="/2020/03/29/yuan-nat-de-pei-zhi/nopatservermap.JPG" alt="查看FW1的server-map表"></p>
-<h3 id="NAPT"><a href="#NAPT" class="headerlink" title="NAPT"></a>NAPT</h3><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/topo.JPG" alt="拓扑"></p>
-<h4 id="配置步骤-1"><a href="#配置步骤-1" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置-1"><a href="#一、在FW1上的配置-1" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.配置NAT地址池</strong></p>
+<p><strong>2.配置NAT Server</strong></p>
 <blockquote>
-<p>nat address-group gpat 0<br> mode pat<br> route enable<br> section 0 1.1.1.10</p>
+<p> nat server http protocol tcp global 1.1.1.10 www inside 192.168.1.1 www no-reverse </p>
 </blockquote>
-<p><strong>2.配置源NAT策略</strong></p>
+<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/30/mu-de-nat/natserversession.JPG" alt="查看FW1的会话表"></p>
+<p><img src="/2020/03/30/mu-de-nat/natserverservermap.JPG" alt="查看FW1的server-map表"></p>
+<h3 id="Destination-NAT"><a href="#Destination-NAT" class="headerlink" title="Destination NAT"></a>Destination NAT</h3><ul>
+<li>目的NAT是指对报文中的目的地址和端口进行转换。</li>
+</ul>
 <blockquote>
-<p>nat-policy<br> rule name pat<br>  source-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.0 24<br>  action nat address-group gpat</p>
+<p>不产生Server-map表</p>
 </blockquote>
-<h4 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/naptsession.JPG" alt="查看FW1的会话表"></p>
-<p><img src="/2020/03/29/yuan-nat-de-pei-zhi/naptservermap.JPG" alt="查看FW1的server-map表"></p>
-<h3 id="Smart-NAT"><a href="#Smart-NAT" class="headerlink" title="Smart NAT"></a>Smart NAT</h3><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/snattopo.JPG" alt="snattopo"></p>
-<h4 id="配置步骤-2"><a href="#配置步骤-2" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置-2"><a href="#一、在FW1上的配置-2" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.配置NAT地址池</strong></p>
+<p><img src="/2020/03/30/mu-de-nat/dnattopo.JPG" alt="拓扑"></p>
+<h4 id="配置步骤-1"><a href="#配置步骤-1" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置-1"><a href="#一、在FW1上的配置-1" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.配置安全策略</strong></p>
 <blockquote>
-<p>nat address-group snat 0<br> mode no-pat global<br> route enable<br> smart-nopat 1.1.1.11<br> section 0 1.1.1.10 1.1.1.10</p>
+<p>security-policy<br> rule name http<br>  source-zone untrust<br>  destination-zone dmz<br>  destination-address 192.168.1.1 32<br>  service http<br>  action permit</p>
 </blockquote>
-<p><strong>2.配置源NAT策略</strong></p>
+<p><strong>2.配置ACL</strong></p>
 <blockquote>
-<p>nat-policy<br> rule name snat<br>  source-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.0 24<br>  action nat address-group snat</p>
+<p>acl number 3000<br> rule 5 permit ip destination 8.8.8.8 0</p>
 </blockquote>
-<h4 id="验证配置-2"><a href="#验证配置-2" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/snatsession.JPG" alt="查看FW1的会话表"></p>
-<p><img src="/2020/03/29/yuan-nat-de-pei-zhi/snatservermap.JPG" alt="查看FW1的server-map表"></p>
-<h3 id="Easy-IP"><a href="#Easy-IP" class="headerlink" title="Easy IP"></a>Easy IP</h3><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/topo.JPG" alt="拓扑"></p>
-<h4 id="配置步骤-3"><a href="#配置步骤-3" class="headerlink" title="配置步骤"></a>配置步骤</h4><p><strong>一、在FW1上的配置</strong></p>
-<p><strong>1.配置源NAT策略</strong></p>
+<p><strong>3.配置目的NAT</strong></p>
 <blockquote>
-<p> rule name enat<br>  source-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.0 24<br>  action nat easy-ip</p>
+<p>firewall zone untrust<br> destination-nat 3000 address 192.168.1.1</p>
 </blockquote>
-<h4 id="验证配置-3"><a href="#验证配置-3" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/enatsession.JPG" alt="查看FW1的会话表"></p>
-<p><img src="/2020/03/29/yuan-nat-de-pei-zhi/enatservermap.JPG" alt="查看FW1的server-map表"></p>
-<h3 id="三元组NAT"><a href="#三元组NAT" class="headerlink" title="三元组NAT"></a>三元组NAT</h3><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/snattopo.JPG" alt="snattopo"></p>
-<h4 id="配置步骤-4"><a href="#配置步骤-4" class="headerlink" title="配置步骤"></a>配置步骤</h4><p><strong>一、在FW1上的配置</strong></p>
-<p><strong>1.配置NAT地址池</strong></p>
-<blockquote>
-<p>nat address-group fullnat 0<br> reference count: 1<br> mode full-cone global<br> status active<br> route enable<br> section 0 1.1.1.10 1.1.1.10</p>
-</blockquote>
-<p><strong>2.配置源NAT策略</strong></p>
-<blockquote>
-<p>nat-policy<br> rule name fullnat<br>  source-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.0 24<br>  action nat address-group fullnat</p>
-</blockquote>
-<h4 id="验证配置-4"><a href="#验证配置-4" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/29/yuan-nat-de-pei-zhi/fullnatsession.JPG" alt="查看FW1的会话表"></p>
-<p><img src="/2020/03/29/yuan-nat-de-pei-zhi/fullnatservermap.JPG" alt="查看FW1的server-map表"></p>
+<h4 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/30/mu-de-nat/dnatsession.JPG" alt="查看FW1的会话表"></p>
+<p><img src="/2020/03/30/mu-de-nat/dnatservermap.JPG" alt="查看FW1的server-map表"></p>
 
             </div>
             <hr/>
@@ -510,7 +496,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/03/29/yuan-nat-de-pei-zhi/">https://hzyxy.github.io/2020/03/29/yuan-nat-de-pei-zhi/</a>
+                    <a href="https://hzyxy.github.io/2020/03/30/mu-de-nat/">https://hzyxy.github.io/2020/03/30/mu-de-nat/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -727,24 +713,24 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/03/30/mu-de-nat/">
+                <a href="/2020/03/31/shuang-xiang-nat/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="目的NAT">
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="双向NAT">
                         
-                        <span class="card-title">目的NAT</span>
+                        <span class="card-title">双向NAT</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            目的NAT的种类介绍与配置
+                            双向NAT的介绍与配置
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-30
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
                         </span>
                         <span class="publish-author">
                             
@@ -784,24 +770,24 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/03/01/yuan-nat/">
+                <a href="/2020/03/29/yuan-nat-de-pei-zhi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="源NAT">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="源NAT的配置">
                         
-                        <span class="card-title">源NAT</span>
+                        <span class="card-title">源NAT的配置</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            源NAT的种类介绍
+                            源NAT的配置
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-01
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-29
                             </span>
                         <span class="publish-author">
                             
@@ -824,6 +810,10 @@
                     
                     <a href="/tags/NAT/">
                         <span class="chip bg-color">NAT</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
                     </a>
                     
                 </div>
