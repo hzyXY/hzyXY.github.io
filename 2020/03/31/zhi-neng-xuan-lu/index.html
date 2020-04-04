@@ -383,8 +383,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1/" class="post-category">
-                                数据通信
+                            <a href="/categories/Datacom/" class="post-category">
+                                Datacom
                             </a>
                         
                     </div>
@@ -405,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    809
+                    1.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    6 分
                 </div>
                 
 
@@ -446,13 +446,56 @@
 </ul>
 <p>负载分担方式：</p>
 <ol>
-<li>根据链路带宽负载分担</li>
-<li>根据链路质量负载分担</li>
-<li>根据链路权重负载分担</li>
-<li>根据链路优先级主备备份</li>
+<li><p>根据链路带宽负载分担</p>
+</li>
+<li><p>根据链路质量负载分担</p>
+</li>
+<li><p>根据链路权重负载分担</p>
+</li>
+<li><p>根据链路优先级主备备份</p>
+</li>
 </ol>
-<h5 id="策略路由（基于策略路由的出站智能选路）"><a href="#策略路由（基于策略路由的出站智能选路）" class="headerlink" title="策略路由（基于策略路由的出站智能选路）"></a>策略路由（基于策略路由的出站智能选路）</h5><p>当网络中配置了策略路由，并且流量命中配置的策略路由时，如果到达目的网络有多条链路可选，FW通过不同的智能选路方式动态选择最优链路。</p>
-<h5 id="ISP选路（基于ISP路由的选路）"><a href="#ISP选路（基于ISP路由的选路）" class="headerlink" title="ISP选路（基于ISP路由的选路）"></a>ISP选路（基于ISP路由的选路）</h5><p>当FW作为出口网关设备连接多个ISP网络时，通过批量生成ISP路由，使访问特定ISP网络的流量从相应出接口转发出去，保证流量转发使用最短路径。</p>
+<h5 id="策略路由（基于策略路由的出站智能选路）"><a href="#策略路由（基于策略路由的出站智能选路）" class="headerlink" title="策略路由（基于策略路由的出站智能选路）"></a>策略路由（基于策略路由的出站智能选路）</h5><ul>
+<li>策略路由是在路由表已经产生的情况下，不按照现有的路由表进项转发，而是根据用户指定的策略进行路由选择的机制，从更多的维度（如接口、源安全区域、源/目的IP地址、用户、服务、应用）来决定报文如何转发，增加了在报文转发控制上的灵活度。</li>
+</ul>
+<p>通过策略路由，可以实现下述功能，可根据需要进行选配。</p>
+<ol>
+<li>基于用户的选路：指定用户/用户组只能通过指定的链路访问互联网。</li>
+<li>基于应用、协议类型的选路</li>
+</ol>
+<p>基于应用、协议类型的选路</p>
+<p><strong>策略路由的动作</strong></p>
+<p>如果策略路由配置的所有匹配条件都匹配，则此流量成功匹配该策略路由规则，并执行策略路由的动作。策略路由的动作包括：</p>
+<ul>
+<li>转发：按照策略路由转发。根据出接口的不同类型，又分为：<ul>
+<li>单出口：把报文发送到指定的下一跳设备或者从指定出接口发送报文。</li>
+<li>多出口：利用智能选路功能，从多个出接口中选择一个出接口发送报文。</li>
+</ul>
+</li>
+<li>转发其他虚拟系统：按照策略路由将流量转发至其他虚拟系统。</li>
+<li>不做策略路由，按照现有的路由表进行转发。</li>
+</ul>
+<h5 id="ISP选路（基于ISP路由的选路）"><a href="#ISP选路（基于ISP路由的选路）" class="headerlink" title="ISP选路（基于ISP路由的选路）"></a>ISP选路（基于ISP路由的选路）</h5><p>ISP选路是基于ISP路由的选路方式，通过批量生成到运营商网络的ISP路由实现访问特定ISP网络的报文都从相应的出接口转发。ISP选路可以单独使用，也可以结合其他智能选路功能一起使用。</p>
+<p><strong>ISP选路场景</strong></p>
+<p>1.ISP选路<br>如果用户希望访问特定ISP网络的流量从相应出接口转发，不会绕道其他ISP，可以配置ISP选路功能。</p>
+<p>2.ISP选路+策略路由组合</p>
+<p>如果用户希望根据报文目的地址所属ISP网络选择相应的出接口，并根据多出口策略路由进行智能的选路，实现链路资源的合理利用，可以使用该场景。</p>
+<p>3.ISP选路+全局选路策略+DNS透明代理组合</p>
+<p>当内网用户通过域名访问Web服务器时，可以使用该场景。通过配置DNS透明代理，可以使DNS请求报文根据选择的出接口，修改DNS请求报文的目的地址（DNS服务器地址）。通过配置ISP选路和全局选路策略，FW根据报文目的地址所属ISP网络选择相应的出接口，并根据全局选路策略，实现链路资源的合理利用。</p>
+<ul>
+<li>DNS透明代理：<br>对于命中DNS透明代理策略的DNS请求报文，FW会根据DNS请求报文选择的出接口，修改请求报文的目的地址（DNS服务器地址），即将其修改为其他ISP内的DNS服务器地址。</li>
+</ul>
+<h4 id="入站智能选路"><a href="#入站智能选路" class="headerlink" title="入站智能选路"></a>入站智能选路</h4><h5 id="智能DNS："><a href="#智能DNS：" class="headerlink" title="智能DNS："></a>智能DNS：</h5><p>将DNS回应报文中的解析地址进行修改，使用户能够获得与用户属于同一ISP网络的地址。用户发起实际访问流量时会以此地址为目的地址。</p>
+<p><strong>智能DNS可以分为：</strong></p>
+<ul>
+<li>单服务器智能DNS：当企业内网只部署一台Web服务器，即企业内网的DNS服务器上Web服务器的域名与一个Web服务器的IP地址对应时，选择配置单服务器智能DNS。</li>
+<li>多服务器智能DNS：当企业内网部署多台Web服务器，即企业内网的DNS服务器上Web服务器的域名与多个Web服务器的IP地址对应时，选择配置多服务器智能DNS。</li>
+</ul>
+<p><strong>智能DNS功能需要配合NAT Server功能和源进源出功能一起使用。</strong></p>
+<ul>
+<li>通过NAT Server功能，将访问报文的目的地址由公网地址映射为Web服务器的私网地址。</li>
+<li>通过源进源出功能，可以保证转发DNS响应报文时，直接使用入接口作为DNS响应报文的出接口，而不是通过查找路由表来确定出接口，避免报文来回路径不一致导致访问速度慢或业务中断等问题。</li>
+</ul>
 
             </div>
             <hr/>
@@ -687,43 +730,41 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/03/31/zhi-neng-xuan-lu/">
+                <a href="/2020/04/03/ip-link/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="智能选路">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="IP-Link">
                         
-                        <span class="card-title">智能选路</span>
+                        <span class="card-title">IP-Link</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            智能选路介绍
+                            IP-Link的介绍与配置
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-03
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1/" class="post-category">
-                                    数据通信
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -731,8 +772,12 @@
                         <span class="chip bg-color">华为</span>
                     </a>
                     
-                    <a href="/tags/%E6%99%BA%E8%83%BD%E9%80%89%E8%B7%AF/">
-                        <span class="chip bg-color">智能选路</span>
+                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
+                        <span class="chip bg-color">防火墙</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
+                        <span class="chip bg-color">高可靠性</span>
                     </a>
                     
                 </div>
@@ -769,8 +814,8 @@
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1/" class="post-category">
-                                    数据通信
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
                                 </a>
                             
                             
@@ -937,7 +982,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">4k</span>&nbsp;字
+                class="white-color">6.7k</span>&nbsp;字
             
             
             
