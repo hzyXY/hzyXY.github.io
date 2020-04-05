@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="我的第一篇博客, XY">
+    <meta name="keywords" content="Link-Group, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>我的第一篇博客 | XY</title>
+    <title>Link-Group | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">我的第一篇博客</h1>
+                    <h1 class="description center-align post-title">Link-Group</h1>
                 </div>
             </div>
         </div>
@@ -367,8 +367,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                                <span class="chip bg-color">记录</span>
+                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                                <span class="chip bg-color">华为</span>
+                            </a>
+                        
+                            <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
+                                <span class="chip bg-color">高可靠性</span>
                             </a>
                         
                     </div>
@@ -379,8 +383,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                Datacom
                             </a>
                         
                     </div>
@@ -392,7 +396,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-02-29
+                    2020-04-05
                 </div>
                 
 
@@ -401,7 +405,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5
+                    403
                 </div>
                 
 
@@ -424,7 +428,22 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><strong>博客上线了！！！</strong></p>
+                <h2 id="Link-Group"><a href="#Link-Group" class="headerlink" title="Link-Group"></a>Link-Group</h2><ul>
+<li><p>Link-Group功能是将多个接口的状态相互绑定，组成一个逻辑组。当组内任一接口出现故障，系统将组内其它接口状态设置为Down。当组内所有接口恢复正常后，整个组内的接口状态才重新被设置为Up。</p>
+</li>
+<li><p>通过Link-Group功能，可以使上下行接口状态一致，这样可以避免主备切换后，上下行链路路径不一致的问题。</p>
+</li>
+<li><p>Link-Group不仅支持同一接口板的接口状态管理、同一虚拟系统的接口状态管理，而且支持跨接口板的接口状态管理、根系统和不同虚拟系统的接口状态管理。</p>
+</li>
+</ul>
+<p><strong>当Eth-Trunk接口加入Link-Group后，只有Eth-Trunk成员接口的状态全部变为Down，系统才会认为该Eth-Trunk接口出现故障。</strong></p>
+<p>如果期望不同Link-Group下的接口状态相互关联，则需要通过Link-Group-Monitor监控组来实现。</p>
+<ul>
+<li>同一Link-Group只能添加到一个Link-Group-Monitor监控组的一个子组中，不能重复属于多个子组。</li>
+<li><strong>同一Link-Group-Monitor监控组下同一子组下不同Link-Group之间相互独立</strong>，不会相互影响。</li>
+<li><strong>同一Link-Group-Monitor监控组下不同子组之间只在如下情况才会相互影响</strong>：当子组下所有Link-Group状态均为fault，设备才会强制将其他子组中的Link-Group下的所有接口切换为Down状态。</li>
+<li>不同Link-Group-Monitor监控组之间相互独立，不会相互影响。</li>
+</ul>
 
             </div>
             <hr/>
@@ -450,7 +469,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/02/29/wo-de-di-yi-pian-bo-ke/">https://hzyxy.github.io/2020/02/29/wo-de-di-yi-pian-bo-ke/</a>
+                    <a href="https://hzyxy.github.io/2020/04/05/link-group/">https://hzyxy.github.io/2020/04/05/link-group/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -488,8 +507,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                                    <span class="chip bg-color">记录</span>
+                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                                    <span class="chip bg-color">华为</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
+                                    <span class="chip bg-color">高可靠性</span>
                                 </a>
                             
                         </div>
@@ -659,24 +682,24 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/03/01/yuan-nat/">
+                <a href="/2020/04/05/eth-trunk-de-pei-zhi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="源NAT">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="Eth-Trunk的配置">
                         
-                        <span class="card-title">源NAT</span>
+                        <span class="card-title">Eth-Trunk的配置</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            源NAT的种类介绍
+                            Eth-Trunk的配置
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-01
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-05
                         </span>
                         <span class="publish-author">
                             
@@ -697,8 +720,12 @@
                         <span class="chip bg-color">华为</span>
                     </a>
                     
-                    <a href="/tags/NAT/">
-                        <span class="chip bg-color">NAT</span>
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
+                        <span class="chip bg-color">高可靠性</span>
                     </a>
                     
                 </div>
@@ -709,46 +736,57 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/02/29/wo-de-di-yi-pian-bo-ke/">
+                <a href="/2020/04/04/bfd/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="我的第一篇博客">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="BFD">
                         
-                        <span class="card-title">我的第一篇博客</span>
+                        <span class="card-title">BFD</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            上线
+                            双向转发检测的介绍与配置
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-29
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-04
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                        <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
+                        <span class="chip bg-color">防火墙</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
+                        <span class="chip bg-color">高可靠性</span>
                     </a>
                     
                 </div>
