@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="源NAT, XY">
+    <meta name="keywords" content="Eth-Trunk, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>源NAT | XY</title>
+    <title>Eth-Trunk | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">源NAT</h1>
+                    <h1 class="description center-align post-title">Eth-Trunk</h1>
                 </div>
             </div>
         </div>
@@ -371,8 +371,8 @@
                                 <span class="chip bg-color">华为</span>
                             </a>
                         
-                            <a href="/tags/NAT/">
-                                <span class="chip bg-color">NAT</span>
+                            <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
+                                <span class="chip bg-color">高可靠性</span>
                             </a>
                         
                     </div>
@@ -396,7 +396,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-01
+                    2020-04-05
                 </div>
                 
 
@@ -428,100 +428,34 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="源NAT"><a href="#源NAT" class="headerlink" title="源NAT"></a>源NAT</h2><hr>
-
-<ul>
-<li>源NAT是指对报文中的源地址进行转换。<br>通过源NAT技术将私网IP地址转换成公网IP地址，使私网用户可以利用公网地址访问Internet。</li>
+                <h2 id="Eth-Trunk"><a href="#Eth-Trunk" class="headerlink" title="Eth-Trunk"></a>Eth-Trunk</h2><ul>
+<li>以太网链路聚合（Eth-Trunk），它通过将多条以太网物理链路捆绑在一起成为一条逻辑链路，从而实现增加链路带宽的目的。同时，这些捆绑在一起的链路通过相互间的动态备份，可以有效地提高链路的可靠性。</li>
 </ul>
-<h3 id="NAT-No-PAT"><a href="#NAT-No-PAT" class="headerlink" title="NAT No-PAT"></a>NAT No-PAT</h3><ul>
-<li><p>NAT No-PAT是一种NAT转换时只转换地址，不转换端口，实现私网地址到公网地址一对一的地址转换方式。</p>
-<p> <u>如果地址池中的地址已经全部分配出去，则剩余内网主机访问外网时不会进行NAT转换，直到地址池中有空闲地址时才会进行NAT转换</u></p>
+<p><strong>好处：</strong></p>
+<ul>
+<li>增加带宽<br>链路聚合接口的最大带宽可以达到各成员接口带宽之和。</li>
+<li>提高可靠性<br>当某条活动链路出现故障时，流量可以切换到其他可用的成员链路上，从而提高链路聚合接口的可靠性。</li>
+<li>负载分担<br>在一个链路聚合组内，可以实现在各成员活动链路上的负载分担。</li>
+</ul>
+<h3 id="链路聚合的分类"><a href="#链路聚合的分类" class="headerlink" title="链路聚合的分类"></a>链路聚合的分类</h3><h4 id="手工负载分担模式"><a href="#手工负载分担模式" class="headerlink" title="手工负载分担模式"></a>手工负载分担模式</h4><p>手工负载分担模式下，Eth-Trunk的建立、成员接口的加入由手工配置，没有链路聚合控制协议的参与。该模式下所有活动链路都参与数据的转发，平均分担流量，因此称为负载分担模式。如果某条活动链路故障，链路聚合组自动在剩余的活动链路中平均分担流量。当需要在两个直连设备间提供一个较大的链路带宽而设备又不支持LACP协议时，可以使用手工负载分担模式。</p>
+<p>缺点：无法检测到链路层故障、链路错连等故障。</p>
+<h4 id="LACP模式"><a href="#LACP模式" class="headerlink" title="LACP模式"></a>LACP模式</h4><h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><ul>
+<li>系统LACP优先级<br>LACP模式下，两端设备所选择的活动接口必须保持一致，否则链路聚合组就无法建立。而要想使两端活动接口保持一致，可以使其中一端具有更高的优先级，另一端根据高优先级的一端来选择活动接口即可。系统LACP优先级就是为了区分两端设备优先级的高低而配置的参数，系统LACP优先级值越小优先级越高。</li>
+<li>接口LACP优先级<br>接口LACP优先级是为了区别同一个Eth-Trunk中的不同接口被选为活动接口的优先程度，优先级高的接口将优先被选为活动接口。接口LACP优先级值越小，优先级越高。</li>
+</ul>
+<h5 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h5><p>LACP通过链路聚合控制协议数据单元LACPDU（Link Aggregation Control Protocol Data Unit）与对端交互信息。</p>
+<p>在LACP模式的Eth-Trunk中加入成员接口后，这些接口将通过发送LACPDU向对端通告自己的系统优先级、MAC地址、接口优先级、接口号和操作Key（用来判断各接口相连对端是否在同一聚合组以及各接口带宽是否一致等）等信息。对端接收到这些信息后，将这些信息与自身接口所保存的信息比较，用以选择能够聚合的接口，双方对哪些接口能够成为活动接口达成一致，确定活动链路。</p>
+<ul>
+<li><p>LACP抢占<br>使能LACP抢占功能后，聚合组会始终保持高优先级的接口作为活动接口的状态。</p>
+</li>
+<li><p>LACP抢占延时<br>配置抢占延时是为了避免由于某些链路状态频繁变化而导致Eth-Trunk数据传输不稳定的情况。抢占延时是LACP抢占发生时，处于备用状态的链路将会等待一段时间后再切换到转发状态。</p>
 </li>
 </ul>
-<p><strong>FW上会生成两个Server-map表项</strong>：  </p>
-<blockquote>
-<p><strong>正向Server-map表项</strong>保证特定私网用户访问Internet时，快速转换地址，提高了FW处理效率。<br><strong>反向Server-map表项</strong>允许Internet上的用户主动访问私网用户，将报文进行地址转换。</p>
-</blockquote>
-<p><strong>NAT NO-PAT有两种:</strong>  </p>
-<blockquote>
-<p>  <strong>本地（Local）NO-PAT</strong><br>本地NO-PAT生成的Server-Map表中包含安全区域参数，只有此安全区域的Server可以访问内网Host。<br><strong>全局（Global）NO-PAT</strong><br>  全局NO-PAT生成的Server-Map表中不包含安全区域参数，一旦建立，所有安全区域的Server都可以访问内网Host。</p>
-</blockquote>
+<p>链路聚合协议LACP分为<strong>静态LACP模式</strong>和<strong>动态LACP模式</strong></p>
 <ul>
-<li>适用场景：<strong>上网用户较少</strong>且公网地址数与同时上网的<strong>用户数量相同</strong>。</li>
-</ul>
-<h3 id="NAPT"><a href="#NAPT" class="headerlink" title="NAPT"></a>NAPT</h3><ul>
-<li><p>NAPT是一种转换时同时转换地址和端口，实现多个私网地址共用一个或多个公网地址的地址转换方式。</p>
-<p><u>由于地址转换的同时还进行端口的转换，可以实现多个私网用户共同使用一个公网IP地址上网，FW根据端口区分不同用户，所以可以支持同时上网的用户数量更多。</u></p>
+<li><p><strong>静态LACP模式</strong><br>静态LACP模式是一种利用LACP协议报文进行聚合参数协商，从而确定活动接口和非活动接口的链路聚合方式。<br>静态LACP模式下，Eth-Trunk的建立，成员接口的加入，都是由手工配置完成的。但与手工负载分担模式链路聚合不同的是，该模式下活动接口的选择由LACP协议报文负责。也就是说，当把一组接口加入Eth-Trunk接口后，这些成员接口中哪些接口作为活动接口，哪些接口作为非活动接口还需要经过LACP协议报文的协商确定。<br>静态LACP模式也称为M∶N模式。这种方式同时可以实现负载分担和冗余备份的双重功能。在链路聚合组中M条链路处于活动状态，这些链路负责转发数据并进行负载分担，另外N条链路处于非活动状态作为备份链路，不转发数据。当M条链路中有链路出现故障时，系统会从N条备份链路中选择优先级最高的接替出现故障的链路，同时这条链路状态变为活动状态开始转发数据。</p>
 </li>
-</ul>
-<blockquote>
-<p>NAPT方式不会生成Server-map表</p>
-</blockquote>
-<ul>
-<li>适用场景：<strong>公网地址数量少</strong>，需要上网的<strong>私网用户数量大</strong>。</li>
-</ul>
-<h3 id="Smart-NAT"><a href="#Smart-NAT" class="headerlink" title="Smart NAT"></a>Smart NAT</h3><ul>
-<li><p>Smart NAT是No-PAT方式的一种<strong>补充</strong></p>
-<p> <u>Smart NAT是一种可以在No-PAT的NAT模式下，指定某个IP地址预留做NAPT方式的地址转换方式。</u></p>
-</li>
-</ul>
-<blockquote>
-<p>Smart NAT的产生：<br>使用No-PAT方式时，进行地址池的一对一转换。随着内部用户数量的不断增加，地址池中的地址数可能不再能满足用户上网需求，部分用户将得不到转换地址而无法访问Internet。</p>
-</blockquote>
-<ul>
-<li>由于地址转换的同时还进行端口的转换（<strong>先是No-PAT的地址用尽后才会使用预留地址进行NAPT的转换</strong>），可以实现多个私网用户共同使用一个公网IP地址上网，FW根据端口区分不同用户，所以可以支持同时上网的用户数量更多。</li>
-</ul>
-<blockquote>
-<p>NAPT方式不会生成Server-map表，No-PAT会生成Server-map表</p>
-</blockquote>
-<ul>
-<li>适用场景：<strong>平时上网的用户数量少</strong>，公网IP地址数量与同时上网用户数<strong>基本相同</strong>，<strong>但个别时段上网用户数激增</strong>。</li>
-</ul>
-<h3 id="Easy-IP"><a href="#Easy-IP" class="headerlink" title="Easy IP"></a>Easy IP</h3><ul>
-<li><p>Easy IP是一种<strong>利用出接口的公网IP地址作为NAT转后的地址</strong>，同时转换地址和端口的地址转换方式。  </p>
-<ul>
-<li><input checked disabled type="checkbox"> 接口IP是动态获取的场景下也可使用  </li>
-<li><input checked disabled type="checkbox"> 支持端口的转换 </li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>Easy IP的产生：使用No-PAT或NAPT方式时均需要多个静态的公网IP地址，且需要配置地址池，会造成大量IP地址的浪费。当公网IP地址为动态获取时，NAT的地址池很难得到正确的配置。</p>
-</blockquote>
-<ul>
-<li><p>适用场景：当<strong>接口的公网IP是动态获取</strong>的状态下，只想使用这一个公网IP进行上网，并且<strong>私网用户数量多</strong>。</p>
-</li>
-<li><p>Easy IP不会产生Server-map</p>
-</li>
-</ul>
-<h3 id="三元组NAT"><a href="#三元组NAT" class="headerlink" title="三元组NAT"></a>三元组NAT</h3><ul>
-<li><p>三元组NAT是一种转换时<strong>同时转换地址和端口</strong>，实现多个私网地址共用一个或多个公网地址的地址转换方式且允许Internet上的用户主动访问私网用户。</p>
-<ul>
-<li><input checked disabled type="checkbox"> 三元组NAT的<strong>端口不能复用</strong>，保证了内部PC对外呈现的端口的一致性，不会动态变化，但是公网地址利用率低。</li>
-<li><input checked disabled type="checkbox"> 支持外部设备通过转换后的地址和端口<strong>主动访问内部PC</strong>。FW即使没有配置相应的安全策略，也允许此类访问报文通过。</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>三元组NAT的产生：当内网PC访问Internet时，如果FW采用五元组NAT（NAPT）方式进行地址转换，外部设备无法通过转换后的地址和端口主动访问内部PC。</p>
-</blockquote>
-<ul>
-<li><strong>缺省情况下，端点无关过滤功能处于开启状态。</strong></li>
-</ul>
-<blockquote>
-<p>开启时公网用户访问私网用户时匹配目的Server-map表，不进行安全策略处理。<br>关闭时匹配安全策略规则，由安全策略规则决定是否转发报文。</p>
-</blockquote>
-<ul>
-<li>三元组NAT可产生<strong>正向</strong>与<strong>反向</strong>的Server-map。</li>
-</ul>
-<ul>
-<li><p>三元组NAT有两种：</p>
-<ul>
-<li><input checked disabled type="checkbox"> 本地（Local）三元组NAT</li>
-<li><input checked disabled type="checkbox"> 全局（Global）三元组NAT</li>
-</ul>
-</li>
-<li><p>FW支持Smart三元组NAT功能，可以根据报文的目的端口来选择分配端口的模式，在一定程度上提高公网地址的利用率。当报文的目的端口属于设置的端口范围之内，就采用NAPT模式来分配端口，如果报文的目的端口不属于设置的端口范围之内，则采用三元组NAT模式来分配端口。</p>
+<li><p><strong>动态LACP模式</strong><br>静态LACP模式和动态LACP模式在LACP协议交互方面没有区别，区别在于两种模式在LACP协商失败后的处理不一致：<br>静态LACP模式下，LACP协商失败后Eth-Trunk变为Down，不能转发数据。<br>动态LACP模式，LACP协商失败后Eth-Trunk变为Down，但其成员口继承Eth-Trunk的VLAN属性状态变为Indep，可独立进行二层数据转发。<br>动态LACP模式下的Eth-Trunk通常应用于设备和服务器直连的场景。</p>
 </li>
 </ul>
 
@@ -549,7 +483,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/03/01/yuan-nat/">https://hzyxy.github.io/2020/03/01/yuan-nat/</a>
+                    <a href="https://hzyxy.github.io/2020/04/05/eth-trunk/">https://hzyxy.github.io/2020/04/05/eth-trunk/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -591,8 +525,8 @@
                                     <span class="chip bg-color">华为</span>
                                 </a>
                             
-                                <a href="/tags/NAT/">
-                                    <span class="chip bg-color">NAT</span>
+                                <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
+                                    <span class="chip bg-color">高可靠性</span>
                                 </a>
                             
                         </div>
@@ -758,29 +692,84 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/03/29/yuan-nat-de-pei-zhi/">
+                <a href="/2020/04/05/eth-trunk/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="源NAT的配置">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="Eth-Trunk">
                         
-                        <span class="card-title">源NAT的配置</span>
+                        <span class="card-title">Eth-Trunk</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            源NAT的配置
+                            Eth-Trunk的介绍
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-29
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-05
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
+                                </a>
+                            
+                            
                         </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                        <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
+                        <span class="chip bg-color">高可靠性</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/04/05/eth-trunk-de-pei-zhi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="Eth-Trunk的配置">
+                        
+                        <span class="card-title">Eth-Trunk的配置</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Eth-Trunk的配置
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-05
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -800,65 +789,8 @@
                         <span class="chip bg-color">华为</span>
                     </a>
                     
-                    <a href="/tags/NAT/">
-                        <span class="chip bg-color">NAT</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2020/02/29/wo-de-di-yi-pian-bo-ke/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="我的第一篇博客">
-                        
-                        <span class="card-title">我的第一篇博客</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            上线
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-29
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E8%AE%B0%E5%BD%95/" class="post-category">
-                                    记录
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E9%9A%8F%E7%AC%94/">
-                        <span class="chip bg-color">随笔</span>
+                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
+                        <span class="chip bg-color">高可靠性</span>
                     </a>
                     
                 </div>
