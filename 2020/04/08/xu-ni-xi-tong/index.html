@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="防火墙双机热备的配置, XY">
+    <meta name="keywords" content="虚拟系统, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>防火墙双机热备的配置 | XY</title>
+    <title>虚拟系统 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/27.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">防火墙双机热备的配置</h1>
+                    <h1 class="description center-align post-title">虚拟系统</h1>
                 </div>
             </div>
         </div>
@@ -379,8 +379,8 @@
                                 <span class="chip bg-color">防火墙</span>
                             </a>
                         
-                            <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                                <span class="chip bg-color">高可靠性</span>
+                            <a href="/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/">
+                                <span class="chip bg-color">虚拟化</span>
                             </a>
                         
                     </div>
@@ -404,7 +404,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-07
+                    2020-04-08
                 </div>
                 
 
@@ -413,14 +413,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    857
+                    2.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    9 分
                 </div>
                 
 
@@ -436,222 +436,132 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="防火墙双机热备配置"><a href="#防火墙双机热备配置" class="headerlink" title="防火墙双机热备配置"></a>防火墙双机热备配置</h2><h3 id="配置主备备份模式"><a href="#配置主备备份模式" class="headerlink" title="配置主备备份模式"></a>配置主备备份模式</h3><p><img src="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/%E4%B8%BB%E5%A4%87%E5%A4%87%E4%BB%BD%E6%8B%93%E6%89%91.JPG" alt="主备备份拓扑"></p>
-<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW的配置"><a href="#一、在FW的配置" class="headerlink" title="一、在FW的配置"></a>一、在FW的配置</h5><p><strong>前置配置</strong></p>
+                <h2 id="虚拟系统"><a href="#虚拟系统" class="headerlink" title="虚拟系统"></a>虚拟系统</h2><ul>
+<li>虚拟系统（Virtual System）是在一台物理设备上划分出的多台相互独立的逻辑设备。每个虚拟系统相当于一台真实的设备，有自己的接口、地址集、用户/组、路由表项以及策略，并可通过虚拟系统管理员进行配置和管理。</li>
+</ul>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><h4 id="虚拟系统-1"><a href="#虚拟系统-1" class="headerlink" title="虚拟系统"></a>虚拟系统</h4><p>FW上存在两种类型的虚拟系统：</p>
+<ul>
+<li><p>根系统（public）</p>
+<p>根系统是FW上缺省存在的一个特殊的虚拟系统。即使虚拟系统功能未启用，根系统也依然存在。此时，管理员对FW进行配置等同于对根系统进行配置。启用虚拟系统功能后，根系统会继承先前FW上的配置。</p>
+<p>在虚拟系统这个特性中，根系统的作用是管理其他虚拟系统，并为虚拟系统间的通信提供服务。</p>
+</li>
+<li><p>虚拟系统(VSYS)</p>
+<p>虚拟系统是在FW上划分出来的、独立运行的逻辑设备。</p>
+</li>
+</ul>
+<p>FW主要实现了几个方面的虚拟化：</p>
+<ul>
+<li>资源虚拟化：每个虚拟系统都有独享的资源，包括接口、VLAN、策略和会话等。根系统管理员分配给每个虚拟系统，由各个虚拟系统自行管理和使用。</li>
+<li>配置虚拟化：每个虚拟系统都拥有独立的虚拟系统管理员和配置界面，每个虚拟系统管理员只能管理自己所属的虚拟系统。</li>
+<li>安全功能虚拟化：每个虚拟系统都可以配置独立的安全策略及其他安全功能，只有属于该虚拟系统的报文才会受到这些配置的影响。</li>
+<li>路由虚拟化：每个虚拟系统都拥有各自的路由表，相互独立隔离。目前仅支持静态路由的虚拟化。</li>
+</ul>
+<h4 id="虚拟系统与VPN实例"><a href="#虚拟系统与VPN实例" class="headerlink" title="虚拟系统与VPN实例"></a>虚拟系统与VPN实例</h4><p>除了虚拟系统之外，FW还支持VPN实例（VPN Instance），两者都有隔离的作用，虚拟系统的主要作用是业务隔离和路由隔离（静态路由），VPN实例的主要作用是路由隔离。没有实现虚拟化的功能需要使用VPN实例来配置多实例功能，如动态路由、组播等。</p>
+<p>FW上的VPN实例包括如下两种形态：</p>
+<ul>
+<li><p>创建虚拟系统时自动生成的VPN实例</p>
+<p>创建虚拟系统时，会自动生成相同名字的VPN实例。</p>
+</li>
+<li><p>管理员手动创建的VPN实例</p>
+<p>管理员使用<strong>ip vpn-instance</strong>命令手动创建的VPN实例，该VPN实例主要用于MPLS场景中，作用是路由隔离。我们所说的用来进行路由隔离的VPN实例，指的就是管理员手动创建的VPN实例。</p>
+</li>
+</ul>
+<h4 id="管理员"><a href="#管理员" class="headerlink" title="管理员"></a>管理员</h4><p>根据虚拟系统的类型，管理员分为根系统管理员和虚拟系统管理员。</p>
+<h4 id="虚拟系统资源分配"><a href="#虚拟系统资源分配" class="headerlink" title="虚拟系统资源分配"></a>虚拟系统资源分配</h4><p>安全区域、策略、会话等实现虚拟系统业务的基础资源支持定额分配或手工分配。</p>
+<ul>
+<li>定额分配：此类资源直接按照系统规格自动分配固定的资源数，不支持用户手动分配。</li>
+<li>手工分配：此类资源支持用户通过命令行或Web界面中的资源类界面手动分配。</li>
+</ul>
+<p>其他的资源项则是各个虚拟系统一起共享抢占整机资源，同样不支持用户手动分配。</p>
+<h4 id="虚拟系统的分流"><a href="#虚拟系统的分流" class="headerlink" title="虚拟系统的分流"></a>虚拟系统的分流</h4><ul>
+<li><p>FW上未配置虚拟系统时，报文进入FW后直接根据根系统的策略和表项（会话表、MAC地址表、路由表等）对其进行处理。FW上配置了虚拟系统时，每个虚拟系统都相当于一台独立的设备，仅依据虚拟系统内的策略和表项对报文进行处理。因此，报文进入FW后，首先要确定报文与虚拟系统的归属关系，以决定其进入哪个虚拟系统进行处理。我们将确定报文与虚拟系统归属关系的过程称为分流。</p>
+</li>
+<li><p>FW支持基于接口分流、基于VLAN分流和基于VNI分流三种分流方式。接口工作在三层时，采用基于接口的分流方式；接口工作在二层时，采用基于VLAN的分流方式；虚拟系统和VXLAN结合使用时，采用基于VNI的分流方式。</p>
+</li>
+</ul>
+<h5 id="基于接口分流"><a href="#基于接口分流" class="headerlink" title="基于接口分流"></a>基于接口分流</h5><p>将接口与虚拟系统绑定后，从此接口接收到的报文都会被认为属于该虚拟系统，并根据该虚拟系统的配置进行处理。</p>
+<h5 id="基于VLAN分流"><a href="#基于VLAN分流" class="headerlink" title="基于VLAN分流"></a>基于VLAN分流</h5><p>将VLAN与虚拟系统绑定后，该VLAN内的报文都将被送入与其绑定的虚拟系统进行处理。</p>
+<h5 id="基于VNI分流"><a href="#基于VNI分流" class="headerlink" title="基于VNI分流"></a>基于VNI分流</h5><p>将VNI(VXLAN Network Identifier)与虚拟系统绑定后，该VXLAN内的报文都将被送入与其绑定的虚拟系统进行处理。</p>
+<h4 id="虚拟接口"><a href="#虚拟接口" class="headerlink" title="虚拟接口"></a>虚拟接口</h4><ul>
+<li><p>虚拟系统之间通过虚拟接口实现互访。</p>
+</li>
+<li><p>虚拟接口是创建虚拟系统时系统自动为其创建的一个逻辑接口，作为虚拟系统自身与其他虚拟系统之间通信的接口。虚拟接口的链路层和协议层始终是UP的。虚拟接口必须配置IP地址，并加入安全区域，否则无法正常工作。</p>
+</li>
+</ul>
+<h4 id="引流表"><a href="#引流表" class="headerlink" title="引流表"></a>引流表</h4><ul>
+<li><p>在虚拟系统和根系统互访的场景中，虚拟系统和根系统都会按照防火墙转发流程对报文进行处理。针对互访的业务，虚拟系统和根系统都要配置策略、都会建立会话。这样，一方面增加了配置的复杂性，另一方面，每条连接都需要两条会话，业务量大时，会造成整机的会话资源紧张。</p>
+</li>
+<li><p>报文命中引流表时，根系统不再按照防火墙转发流程处理报文，而是按路由表或引流表直接转发报文。因此，根系统中不需要为命中引流表的报文配置策略，根系统也不会为命中引流表的报文创建会话。</p>
+</li>
+</ul>
+<p><code>firewall import-flow public [ip] vpn-instance [虚拟系统名名称]</code></p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p><img src="/2020/04/08/xu-ni-xi-tong/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
+<p>实验目的：使得两个相同网段的网络不仅能相互通信还能访问内部服务器。</p>
+<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1的配置"><a href="#一、在FW1的配置" class="headerlink" title="一、在FW1的配置"></a>一、在FW1的配置</h5><p><strong>1.配置安全区域与策略</strong></p>
+<p>firewall zone trust<br> set priority 85<br> add interface Virtual-if0</p>
+<p>firewall zone dmz<br> set priority 50<br> add interface GigabitEthernet1/0/1</p>
+<p>security-policy<br> rule name 1<br>  source-zone trust<br>  destination-zone dmz<br>  action permit</p>
+<p><strong>2.开启虚拟系统功能</strong></p>
+<p> vsys enable </p>
+<p><strong>3.配置资源类</strong></p>
+<p>resource-class r1<br> resource-item-limit session reserved-number 50 maximum 100<br> resource-item-limit policy reserved-number 100</p>
+<p><strong>4.创建虚拟系统并分配资源</strong></p>
+<p>vsys name vfwa 1<br> assign interface GigabitEthernet1/0/2<br> assign resource-class r1<br> assign global-ip 100.100.100.1 100.100.100.10 exclusive</p>
+<p>vsys name vfwb 2<br> assign interface GigabitEthernet1/0/0<br> assign resource-class r1<br> assign global-ip 200.200.200.1 200.200.200.10 exclusive</p>
+<p><strong>5.配置路由</strong></p>
+<p>ip route-static 2.1.1.1 255.255.255.255 1.1.1.2<br>ip route-static 100.100.100.0 255.255.255.0 vpn-instance vfwa<br>ip route-static 200.200.200.0 255.255.255.0 vpn-instance vfwb</p>
+<p><strong>6.配置虚拟系统</strong></p>
+<p>切换至虚拟系统：switch vsys [虚拟系统名称]</p>
 <table>
 <thead>
 <tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
+<th>vfwa的配置</th>
+<th>vfwb的配置</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br><br>firewall zone dmz<br> set priority 50<br> add interface GigabitEthernet0/0/0</td>
-<td>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br><br>firewall zone dmz<br> set priority 50<br> add interface GigabitEthernet0/0/0</td>
+<td><strong>1.配置安全区域与策略</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet1/0/2<br>#<br>firewall zone untrust<br> set priority 5<br> add interface Virtual-if1<br><br>security-policy<br> rule name 1<br>  source-zone trust<br>  destination-zone untrust<br>  action permit<br> rule name 2<br>  source-zone untrust<br>  destination-zone trust<br>  action permit</td>
+<td><strong>1.配置安全区域与策略</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface Virtual-if2<br><br>security-policy<br> rule name 1<br>  source-zone trust<br>  destination-zone untrust<br>  action permit<br> rule name 2<br>  source-zone untrust<br>  destination-zone trust<br>  action permit</td>
+</tr>
+<tr>
+<td><strong>2.配置IP地址</strong><br>interface GigabitEthernet1/0/2<br> undo shutdown<br> ip binding vpn-instance vfwa<br> ip address 192.168.1.254 255.255.255.0</td>
+<td><strong>2.配置IP地址</strong><br>interface GigabitEthernet1/0/0<br> undo shutdown<br> ip binding vpn-instance vfwb<br> ip address 192.168.1.254 255.255.255.0</td>
+</tr>
+<tr>
+<td><strong>3.配置默认路由</strong><br>ip route-static 0.0.0.0 0.0.0.0 public</td>
+<td><strong>3.配置默认路由</strong><br>ip route-static 0.0.0.0 0.0.0.0 public</td>
+</tr>
+<tr>
+<td><strong>4.配置NAT-SERVER</strong><br>nat server PC1 0 global 100.100.100.1 inside 192.168.1.1 no-reverse</td>
+<td><strong>4.配置NAT-SERVER</strong><br>nat server PC2 1 global 200.200.200.1 inside 192.168.1.1 no-reverse</td>
+</tr>
+<tr>
+<td><strong>5.配置NAT地址池</strong><br>nat address-group pc2 0<br> mode pat<br> route enable<br> section 0 100.100.100.2 100.100.100.2<br><br>nat address-group rule1 2<br> mode pat<br> route enable<br> section 0 100.100.100.10 100.100.100.10</td>
+<td><strong>5.配置NAT地址池</strong><br>nat address-group pc1 1<br> mode pat<br> route enable<br> section 0 200.200.200.2 200.200.200.2<br><br>nat address-group rule1 3<br> mode pat<br> route enable<br> section 0 200.200.200.10 200.200.200.10</td>
+</tr>
+<tr>
+<td><strong>6.配置NAT策略</strong><br>nat-policy<br> rule name PC2<br>  source-zone untrust<br>  destination-zone trust<br>  destination-address 192.168.1.1 32<br>  action nat address-group pc2<br><br> rule name 1<br>  source-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  destination-address 2.1.1.1 32<br>  action nat address-group rule1</td>
+<td><strong>6.配置NAT策略</strong><br>nat-policy<br>rule name PC1<br>  source-zone untrust<br>  destination-zone trust<br>  destination-address 192.168.1.1 32<br>  action nat address-group pc1<br><br>rule name 1<br>  source-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  destination-address 2.1.1.1 32<br>  action nat address-group rule1</td>
 </tr>
 </tbody></table>
-<p><strong>1.配置OSPF</strong></p>
+<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/04/08/xu-ni-xi-tong/%E6%9F%A5%E7%9C%8B%E8%99%9A%E6%8B%9F%E7%B3%BB%E7%BB%9F.JPG" alt="查看虚拟系统信息"></p>
 <table>
 <thead>
 <tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
+<th>PC1访问PC2</th>
+<th>PC2访问PC1</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>ospf 1<br> area 0.0.0.0<br>  network 1.1.1.0 0.0.0.255<br>  network 4.1.1.0 0.0.0.255</td>
-<td>ospf 1<br> area 0.0.0.0<br>  network 2.1.1.0 0.0.0.255<br>  network 4.1.1.0 0.0.0.255</td>
+<td><img src="/2020/04/08/xu-ni-xi-tong/a-b1.JPG" alt="查看vfwa的会话表"></td>
+<td><img src="/2020/04/08/xu-ni-xi-tong/b-a1.JPG" alt="查看vfwb的会话表"></td>
 </tr>
-</tbody></table>
-<p><strong>2.配置VRRP</strong></p>
-<table>
-<thead>
 <tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>interface GigabitEthernet1/0/0<br> undo shutdown<br> ip address 4.1.1.100 255.255.255.0<br> vrrp vrid 1 virtual-ip 4.1.1.254 active</td>
-<td>interface GigabitEthernet1/0/0<br> undo shutdown<br> ip address 4.1.1.101 255.255.255.0<br> vrrp vrid 1 virtual-ip 4.1.1.254 standby</td>
+<td><img src="/2020/04/08/xu-ni-xi-tong/a-b2.JPG" alt="查看vfwb的会话表"></td>
+<td><img src="/2020/04/08/xu-ni-xi-tong/b-a2.JPG" alt="查看vfwa的会话表"></td>
 </tr>
 </tbody></table>
-<p><strong>3.配置VGMP组监控上行链路</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>hrp track interface GigabitEthernet1/0/1</td>
-<td>hrp track interface GigabitEthernet1/0/1</td>
-</tr>
-</tbody></table>
-<p><strong>4.配置心跳线</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>hrp interface GigabitEthernet0/0/0 remote 100.100.100.2</td>
-<td>hrp interface GigabitEthernet0/0/0 remote 100.100.100.1</td>
-</tr>
-</tbody></table>
-<p><strong>5.配置FW2为备机</strong></p>
-<p><code>hrp standby-device</code></p>
-<p><strong>6.开启双机热备</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>hrp enable</td>
-<td>hrp enable</td>
-</tr>
-</tbody></table>
-<p><strong>7.配置根据VGMP状态调整OSPF Cost值</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>hrp adjust ospf-cost enable</code></td>
-<td><code>hrp adjust ospf-cost enable</code></td>
-</tr>
-</tbody></table>
-<p><strong>8.配置策略</strong></p>
-<p>security-policy<br> rule name 1<br>  source-zone trust<br>  destination-zone untrust<br>  service icmp<br>  action permit<br> rule name 2<br>  source-zone local<br>  destination-zone untrust<br>  action permit</p>
-<h5 id="二、在AR1上的配置"><a href="#二、在AR1上的配置" class="headerlink" title="二、在AR1上的配置"></a>二、在AR1上的配置</h5><p><strong>1.配置OSPF</strong></p>
-<p>ospf 1<br> area 0.0.0.0<br>  network 1.1.1.0 0.0.0.255<br>  network 2.1.1.0 0.0.0.255<br>  network 3.1.1.0 0.0.0.255</p>
-<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><table>
-<thead>
-<tr>
-<th><img src="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/%E4%B8%BB%E5%A4%87%E5%A4%87%E4%BB%BDvrrp1.JPG" alt="查看VRRP组状态信息"></th>
-<th><img src="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/%E4%B8%BB%E5%A4%87%E5%A4%87%E4%BB%BDvrrp2.JPG" alt="查看VRRP组状态信息"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><img src="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/%E4%B8%BB%E5%A4%87%E5%A4%87%E4%BB%BDhrp1.JPG" alt="查看VGMP组状态信息"></td>
-<td><img src="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/%E4%B8%BB%E5%A4%87%E5%A4%87%E4%BB%BDhrp2.JPG" alt="查看VGMP组状态信息"></td>
-</tr>
-</tbody></table>
-<h3 id="配置负载分担模式"><a href="#配置负载分担模式" class="headerlink" title="配置负载分担模式"></a>配置负载分担模式</h3><p><img src="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/%E8%B4%9F%E8%BD%BD%E5%88%86%E6%8B%85%E6%8B%93%E6%89%91.JPG" alt="负载分担拓扑"></p>
-<h4 id="配置步骤-1"><a href="#配置步骤-1" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW的配置-1"><a href="#一、在FW的配置-1" class="headerlink" title="一、在FW的配置"></a>一、在FW的配置</h5><p><strong>前置配置</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet1/0/0<br>#<br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br>#<br>firewall zone dmz<br> set priority 50<br> add interface GigabitEthernet0/0/0</td>
-<td>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet1/0/0<br>#<br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br>#<br>firewall zone dmz<br> set priority 50<br> add interface GigabitEthernet0/0/0</td>
-</tr>
-</tbody></table>
-<p><strong>1.配置OSPF</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ospf 1<br> area 0.0.0.0<br>  network 1.1.1.0 0.0.0.255<br>  network 4.1.1.0 0.0.0.255</td>
-<td>ospf 1<br> area 0.0.0.0<br>  network 2.1.1.0 0.0.0.255<br>  network 4.1.1.0 0.0.0.255</td>
-</tr>
-</tbody></table>
-<p><strong>2.配置VRRP</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>interface GigabitEthernet1/0/0<br> undo shutdown<br> ip address 4.1.1.100 255.255.255.0<br> vrrp vrid 1 virtual-ip 4.1.1.253 active<br> <code>vrrp vrid 2 virtual-ip 4.1.1.254 standby</code></td>
-<td>interface GigabitEthernet1/0/0<br> undo shutdown<br> ip address 4.1.1.101 255.255.255.0<br> vrrp vrid 1 virtual-ip 4.1.1.253 standby<br> <code>vrrp vrid 2 virtual-ip 4.1.1.254 active</code></td>
-</tr>
-</tbody></table>
-<p><strong>3.配置VGMP组监控上行链路</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>hrp track interface GigabitEthernet1/0/1</td>
-<td>hrp track interface GigabitEthernet1/0/1</td>
-</tr>
-</tbody></table>
-<p><strong>4.配置心跳线</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>hrp interface GigabitEthernet0/0/0 remote 100.100.100.2</td>
-<td>hrp interface GigabitEthernet0/0/0 remote 100.100.100.1</td>
-</tr>
-</tbody></table>
-<p><strong>5.开启快速会话备份</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>hrp mirror session enable</code></td>
-<td><code>hrp mirror session enable</code></td>
-</tr>
-</tbody></table>
-<p><strong>6.开启双机热备</strong></p>
-<table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>hrp enable</td>
-<td>hrp enable</td>
-</tr>
-</tbody></table>
-<h5 id="二、在AR1上的配置-1"><a href="#二、在AR1上的配置-1" class="headerlink" title="二、在AR1上的配置"></a>二、在AR1上的配置</h5><p><strong>1.配置OSPF</strong></p>
-<p>ospf 1<br> area 0.0.0.0<br>  network 1.1.1.0 0.0.0.255<br>  network 2.1.1.0 0.0.0.255<br>  network 3.1.1.0 0.0.0.255</p>
-<h4 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h4><table>
-<thead>
-<tr>
-<th><img src="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/%E8%B4%9F%E8%BD%BD%E5%88%86%E6%8B%85vrrp1.JPG" alt="查看VRRP组状态信息"></th>
-<th><img src="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/%E8%B4%9F%E8%BD%BD%E5%88%86%E6%8B%85vrrp2.JPG" alt="查看VRRP组状态信息"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><img src="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/%E8%B4%9F%E8%BD%BD%E5%88%86%E6%8B%85hrp1.JPG" alt="查看VGMP组状态信息"></td>
-<td><img src="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/%E8%B4%9F%E8%BD%BD%E5%88%86%E6%8B%85hrp2.JPG" alt="查看VGMP组状态信息"></td>
-</tr>
-</tbody></table>
+<p><img src="/2020/04/08/xu-ni-xi-tong/ab-s.JPG" alt="PC1与PC2访问私网服务器时的防火墙会话表"></p>
 
             </div>
             <hr/>
@@ -677,7 +587,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/">https://hzyxy.github.io/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/</a>
+                    <a href="https://hzyxy.github.io/2020/04/08/xu-ni-xi-tong/">https://hzyxy.github.io/2020/04/08/xu-ni-xi-tong/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -727,8 +637,8 @@
                                     <span class="chip bg-color">防火墙</span>
                                 </a>
                             
-                                <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                                    <span class="chip bg-color">高可靠性</span>
+                                <a href="/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/">
+                                    <span class="chip bg-color">虚拟化</span>
                                 </a>
                             
                         </div>
@@ -894,9 +804,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2020/04/08/xu-ni-xi-tong/">
                     <div class="card-image">
@@ -914,9 +825,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-08
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-08
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -929,6 +840,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -959,31 +871,31 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/05/eth-trunk/">
+                <a href="/2020/04/07/fang-huo-qiang-shuang-ji-re-bei-de-pei-zhi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="Eth-Trunk">
+                        <img src="/medias/featureimages/27.jpg" class="responsive-img" alt="防火墙双机热备的配置">
                         
-                        <span class="card-title">Eth-Trunk</span>
+                        <span class="card-title">防火墙双机热备的配置</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Eth-Trunk的介绍
+                            基于VRRP的双机热备配置
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-05
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-07
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Datacom/" class="post-category">
-                                    Datacom
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
                                 </a>
                             
                             
@@ -995,6 +907,14 @@
                     
                     <a href="/tags/%E5%8D%8E%E4%B8%BA/">
                         <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
+                        <span class="chip bg-color">防火墙</span>
                     </a>
                     
                     <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
