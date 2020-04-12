@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="DDOS攻击的介绍与防范, XY">
+    <meta name="keywords" content="单包攻击的介绍与防范, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>DDOS攻击的介绍与防范 | XY</title>
+    <title>单包攻击的介绍与防范 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/24.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">DDOS攻击的介绍与防范</h1>
+                    <h1 class="description center-align post-title">单包攻击的介绍与防范</h1>
                 </div>
             </div>
         </div>
@@ -404,7 +404,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-11
+                    2020-04-10
                 </div>
                 
 
@@ -413,14 +413,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    386
+                    4.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    16 分
                 </div>
                 
 
@@ -436,18 +436,277 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="DDOS攻击的介绍与防范"><a href="#DDOS攻击的介绍与防范" class="headerlink" title="DDOS攻击的介绍与防范"></a>DDOS攻击的介绍与防范</h2><h3 id="DDoS通用攻击防范技术"><a href="#DDoS通用攻击防范技术" class="headerlink" title="DDoS通用攻击防范技术"></a>DDoS通用攻击防范技术</h3><h4 id="1-首包丢弃"><a href="#1-首包丢弃" class="headerlink" title="1.首包丢弃"></a>1.首包丢弃</h4><ul>
-<li>有些攻击采用不断变换源IP地址或者源端口号的方式发送攻击报文，通过首包丢弃，可以有效拦截这部分流量。首包丢弃与源认证结合使用，防止虚假源攻击。<ul>
-<li>正常情况下，TCP、DNS、ICMP报文都具有重传功能。如果在交互过程中报文被丢弃，则都会重传。首包丢弃正是利用了报文的重传机制，将收到的第一个报文丢弃，以判定后续是否有重传报文。</li>
-<li>支持首包丢弃后重传报文的协议包括TCP、DNS、ICMP协议。UDP协议虽然不具备重传机制，如果有应用层协议来协助实现重传时，也可以配置首包丢弃功能。</li>
+                <h2 id="单包攻击的介绍与防范"><a href="#单包攻击的介绍与防范" class="headerlink" title="单包攻击的介绍与防范"></a>单包攻击的介绍与防范</h2><h3 id="单包攻击介绍"><a href="#单包攻击介绍" class="headerlink" title="单包攻击介绍"></a>单包攻击介绍</h3><ul>
+<li>畸形报文攻击：通常指攻击者发送大量有缺陷的报文，从而造成主机或服务器在处理这类报文时系统崩溃。</li>
+<li>扫描类攻击：是一种潜在的攻击行为，并不具备直接的破坏行为，通常是攻击者发动真正攻击前的网络探测行为。</li>
+<li>特殊控制报文攻击：也是一种潜在的攻击行为，通常不具备直接的破坏行为，攻击者通过发送特殊控制报文探测网络结构，为后续发动真正的攻击做准备。</li>
+</ul>
+<h4 id="扫描类攻击"><a href="#扫描类攻击" class="headerlink" title="扫描类攻击"></a>扫描类攻击</h4><h5 id="地址扫描攻击与防范"><a href="#地址扫描攻击与防范" class="headerlink" title="地址扫描攻击与防范"></a>地址扫描攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>攻击者运用ICMP报文（如Ping和Tracert命令）探测目标地址，或者使用TCP/UDP报文对一定地址发起连接（如TCP ping），通过判断是否有应答报文，以确定哪些目标系统确实存活着并且连接在目标网络上。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>配置IP地址扫描攻击防范后，设备对接收的TCP、UDP、ICMP报文进行检测，如果某个源IP地址每秒发往不同目的IP地址的报文数超过了设定的阈值时，就认为该源IP地址在进行IP地址扫描攻击，FW将该IP地址加入黑名单。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall blacklist enable</strong>，开启黑名单功能。</li>
+<li><strong>firewall defend ip-sweep enable</strong>，开启IP地址扫描攻击防范功能。</li>
+<li><strong>firewall defend ip-sweep max-rate</strong> <em>max-rate-number</em>，配置地址扫描速率阈值。<br>当发现某台主机的地址扫描行为的速率超过了该阈值，就会将其判断为攻击者，并将其加入黑名单。<br>缺省情况下，地址扫描速率阈值为4000pps。</li>
+<li><strong>firewall defend ip-sweep blacklist-timeout</strong> <em>interval</em>，配置将地址扫描攻击者加入黑名单的老化时间。<br>当某个IP被加入到黑名单之后，需要经过老化时间之后，才会被从黑名单中删除，该IP才可以继续通信。<br>缺省情况下，将地址扫描攻击者加入黑名单的时间为20分钟，在这段时间里，攻击者发送的报文将被丢弃。用户也可以根据实际需求，调整黑名单老化时间。</li>
+<li>执行命令<code>firewall defend action discard</code>配置单包攻击的动作为丢弃。</li>
+</ol>
+</blockquote>
+<h5 id="端口扫描攻击与防范"><a href="#端口扫描攻击与防范" class="headerlink" title="端口扫描攻击与防范"></a>端口扫描攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>攻击者通过对端口进行扫描探测网络结构，探寻被攻击对象目前开放的端口，以确定攻击方式。在端口扫描攻击中，攻击者通常使用Port Scan攻击软件，发起一系列TCP/UDP连接，根据应答报文判断主机是否使用这些端口提供服务。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>配置端口扫描攻击防范后，设备对接收的TCP、UDP报文进行检测，如果某个源IP地址每秒发出的报文中目的端口不同的报文数超过了设定的阈值时，就认为该源IP地址在进行端口扫描攻击，FW将该IP地址加入黑名单。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall blacklist enable</strong>，开启黑名单功能。</li>
+<li><strong>firewall defend port-scan enable</strong>，开启端口扫描攻击防范功能。</li>
+<li><strong>firewall defend port-scan max-rate</strong> <em>max-rate-number</em>，配置端口扫描速率阈值。当发现某台主机的端口扫描行为的速率超过了该阈值，就会将其判断为攻击者，并将其加入黑名单。<br>缺省情况下，端口扫描速率阈值为4000pps。</li>
+<li><strong>firewall defend port-scan blacklist-timeout</strong> <em>interval</em>，配置将端口扫描攻击者加入黑名单的超时时间。<br>当某个IP被加入到黑名单之后，需要经过超时时间之后，才会被从黑名单中删除，该IP才可以继续通信。<br>缺省情况下，将端口扫描攻击者加入黑名单的时间为20分钟，在这段时间里，攻击者发送的报文将被丢弃。用户也可以根据实际需求，调整黑名单超时时间。</li>
+<li>执行命令<code>firewall defend action discard</code>配置单包攻击的动作为丢弃。</li>
+</ol>
+</blockquote>
+<h4 id="畸形报文攻击"><a href="#畸形报文攻击" class="headerlink" title="畸形报文攻击"></a>畸形报文攻击</h4><h5 id="Smurf攻击与防范"><a href="#Smurf攻击与防范" class="headerlink" title="Smurf攻击与防范"></a>Smurf攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>简单的Smurf攻击，用来攻击一个网络。方法是发ICMP应答请求，该请求包的目标地址设置为受害网络的广播地址或子网主机段为全0的地址，这样该网络的所有主机都对此ICMP应答请求作出答复，导致网络阻塞，这比ping大包的流量高出一或两个数量级。<br>高级的Smurf攻击，主要用来攻击目标主机。方法是将上述ICMP应答请求包的源地址改为受害主机的地址，最终导致受害主机雪崩。攻击报文的发送需要一定的流量和持续时间，才能真正构成攻击。理论上讲，网络的主机越多，攻击的效果越明显。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用Smurf攻击防范后，FW会检查ICMP请求报文的目的地址是否是A、B、C类子网主机段为全1（即广播地址）或全0的地址。如果是则丢弃该报文，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend smurf enable</strong>，开启Smurf攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="IP欺骗攻击与防范"><a href="#IP欺骗攻击与防范" class="headerlink" title="IP欺骗攻击与防范"></a>IP欺骗攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>IP欺骗攻击是一种常用的攻击方法，同时也是其他攻击方法的基础。这是由IP协议自身的特点决定的，IP协议依据IP头中的目的地址来发送IP报文，如果IP报文是本网络内的地址，则被直接发送到目的地址；如果该IP地址不是本网络地址，则被发送到网关，而不对IP包中提供的源地址做任何检查，默认为IP包中的源地址就是发送IP包主机的地址。攻击者通过向目标主机发送源IP地址伪造的报文，欺骗目标主机，从而获取更高的访问和控制权限。该攻击导致危害目标主机的资源，信息泄漏。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用IP欺骗攻击防范后，设备对报文的源IP地址进行路由表反查，检查路由表中到源IP地址的出接口和报文的入接口是否一致。如果不一致，则丢弃该报文，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend ip-spoofing enable</strong>，开启IP欺骗攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="IP-Fragment攻击与防范"><a href="#IP-Fragment攻击与防范" class="headerlink" title="IP Fragment攻击与防范"></a>IP Fragment攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>IP报文中有几个字段与分片有关：DF位、MF位、Fragment Offset、Length。如果过上述字段的值出现矛盾，而设备处理不当，会对设备造成一定影响，甚至瘫痪。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用IP分片报文检测后，设备检测IP报文中与分片有关的字段（DF位、MF位、片偏移量、总长度）是否有以下矛盾，如果出现以下情况，则记录攻击日志且丢弃。<ul>
+<li>DF位为1，而MF位也为1。</li>
+<li>DF位为1，而Offset &gt; 0。</li>
+<li>DF位为0，而分片 Offset + Length &gt; 65535。</li>
 </ul>
 </li>
 </ul>
-<h4 id="阻断和限流"><a href="#阻断和限流" class="headerlink" title="阻断和限流"></a>阻断和限流</h4><ul>
-<li>阻断：在自定义服务策略中，阻断表示将匹配自定义服务的报文全部丢弃；在默认防御策略中表示将自定义服务以外的此协议报文全部丢弃。</li>
-<li>限流：在自定义服务策略中，限流表示将匹配自定义服务的报文限制在阈值内，丢弃超过阈值的部分报文；在默认防御策略中，限流表示将自定义服务以外的此协议报文限制在阈值内，丢弃超过阈值的部分报文。</li>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend ip-fragment enable</strong>，开启IP分片报文攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="Teardrop攻击与防范"><a href="#Teardrop攻击与防范" class="headerlink" title="Teardrop攻击与防范"></a>Teardrop攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>对于一些大的IP数据包，为了满足链路层的MTU（Maximum Transmission Unit）的要求，需要传送过程中对其进行分片，分成几个IP包。在每个IP报头中有一个偏移字段和一个拆分标志（MF），其中偏移字段指出了这个片段在整个IP包中的位置。如果攻击者截取IP数据包后，把偏移字段设置成不正确的值，接收端在收到这些分拆的数据包后，就不能按数据包中的偏移字段值正确组合出被拆分的数据包，这样，接收端会不停的尝试，以至操作系统因资源耗尽而崩溃。</li>
 </ul>
-<h3 id="流量型攻击防范技术"><a href="#流量型攻击防范技术" class="headerlink" title="流量型攻击防范技术"></a>流量型攻击防范技术</h3><h4 id="TCP类报文攻击防御"><a href="#TCP类报文攻击防御" class="headerlink" title="TCP类报文攻击防御"></a>TCP类报文攻击防御</h4>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用Teardrop攻击防范后，设备会对接收到的分片报文进行分析，计算报文的偏移量是否有误。如果有误则直接丢弃该报文，并记录攻击日志。</li>
+</ul>
+<p><strong>注意</strong></p>
+<p><em>以下应用场景不能开启teardrop攻击检测功能：</em><br><em>GRE隧道穿越FW或者FW作为GRE隧道的一端。</em><br><em>这是由于GRE报文如果在网络中出现分片，则分片报文可能会满足teardrop攻击检测条件而被丢弃，导致业务异常。</em></p>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend teardrop enable</strong>，开启Teardrop攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="Ping-of-Death攻击与防范"><a href="#Ping-of-Death攻击与防范" class="headerlink" title="Ping of Death攻击与防范"></a>Ping of Death攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>Ping of Death，是利用长度超大的ICMP报文对系统进行的一种攻击。IP报文的长度字段为16位，这表明一个IP报文的最大长度为65535。对于ICMP ECHO报文，如果数据长度大于65515，就会使ICMP数据＋IP头长度(20)＋ICMP头长度（8）&gt;65535。有些路由器或系统，在接收到一个这样的报文后，由于处理发生错误，会造成系统崩溃、死机或重启。攻击者只需不断的通过Ping命令向攻击目标发送超过65535字节的报文，就可以使目标对象的TCP/IP堆栈崩溃，致使接收方死机。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用Ping of Death攻击防范后，设备会检测报文的大小是否大于65535字节，对大于65535字节的报文直接丢弃，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend ping-of-death enable</strong>，开启Ping of Death攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="Fraggle攻击与防范"><a href="#Fraggle攻击与防范" class="headerlink" title="Fraggle攻击与防范"></a>Fraggle攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>当运行Chargen服务的UDP端口（通常为19）收到一个数据包后，会产生一个字符串作为回应。当运行Echo服务的UDP端口（通常为7）收到一个数据包后，会简单地返回该包的数据内容作为回应。这两种服务可以被攻击者利用进行循环攻击。这样造成受害者系统繁忙，链路拥塞。攻击者可以向攻击目标所在的网络发送UDP报文，报文的源地址为被攻击主机的地址，目的地址为被攻击主机所在子网的广播地址或子网网络地址，目的端口号为7或19。子网中启用了此功能的每个系统都会向被攻击主机发送回应报文，从而产生大量的流量，占满带宽，导致受害网络的阻塞或受害主机的崩溃。即使子网上没有启动这些功能的系统也将产生一个ICMP不可达消息，因而仍然消耗带宽。若攻击者将UDP报文的源端口改为19，目的端口为7，这样会不停地产生大量回应报文，其危害性更大。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用Fraggle攻击防范后，设备会对收到的UDP报文进行检测。若目的端口号为7或19，设备拒绝该报文，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend fraggle enable</strong>，开启Fraggle攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="WinNuke攻击与防范"><a href="#WinNuke攻击与防范" class="headerlink" title="WinNuke攻击与防范"></a>WinNuke攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>WinNuke攻击通常向装有Windows系统的特定目标的NetBIOS端口（139）发送OOB（out-of-band）数据包，引起一个NetBIOS片断重叠，致使已与其他主机建立连接的目标主机崩溃。还有一种是IGMP分片报文，一般情况下，IGMP报文是不会分片的，所以，不少系统对IGMP分片报文的处理有问题，会使系统无法处理造成系统崩溃。。如果收到IGMP分片报文，则基本可判定受到了攻击。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li><p>启用WinNuke攻击防范后，设备将丢弃目的端口为139、URG位为1且URG指针不为空的报文，并记录攻击日志。</p>
+<p>另外，如果收到IGMP分片报文也会认为受到了WinNuke攻击，而丢弃报文并记录攻击日志。</p>
+</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend winnuke enable</strong>，开启WinNuke攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="TCP-Flag攻击与防范"><a href="#TCP-Flag攻击与防范" class="headerlink" title="TCP Flag攻击与防范"></a>TCP Flag攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>TCP报文包含6个标志位：URG、ACK、PSH、RST、SYN、FIN，不同的系统对这些标志组合的应答是不同的。不管端口是打开还是关闭，ACK与除RST外的其它任何一个状态位组合在一起，都会引起一个还没有发送请求的接收方的一个RST应答，这可用于探测主机的存在。不管端口是打开还是关闭，SYN|FIN|URG会让接收方发送一个RST|ACK应答，这可用于探测主机的存在。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用TCP报文标志位合法性检测后，设备将检查TCP报文的各个标志位URG、ACK、PSH、RST、SYN、FIN。如果出现以下情况，则丢弃该报文，并记录攻击日志：<ul>
+<li>各标志位全为1。 //圣诞树攻击</li>
+<li>各标志位全为0。</li>
+<li>SYN和FIN位同时为1。</li>
+<li>SYN和RST位同时为1。</li>
+<li>FIN位为1，而ACK位为0。</li>
+</ul>
+</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend tcp-flag enable</strong>，开启TCP报文标志位攻击防范功能。</li>
+</ol>
+</blockquote>
+<h4 id="特殊控制报文攻击"><a href="#特殊控制报文攻击" class="headerlink" title="特殊控制报文攻击"></a>特殊控制报文攻击</h4><h5 id="超大ICMP报文攻击与防范"><a href="#超大ICMP报文攻击与防范" class="headerlink" title="超大ICMP报文攻击与防范"></a>超大ICMP报文攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>超大ICMP报文攻击是指利用长度超大的ICMP报文对目标系统进行攻击。对于有些系统，在接收到超大ICMP报文后，由于处理不当，会造成系统崩溃、死机或重启。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>当启用“超大ICMP报文控制”时，还需要设置报文长度，当设备收到的ICMP报文长度超过该值时将丢弃该报文，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend large-icmp enable</strong>，开启超大ICMP报文攻击防范功能。</li>
+<li><strong>firewall defend large-icmp max-length</strong> [ <em>length</em> ]，配置超大ICMP报文攻击防范参数。<br><em>length</em>参数是判断ICMP报文是否超大的标准，即如果ICMP报文的长度超过<em>length</em>，就会被认为是超大报文而被丢弃。如果没有指定<em>length</em>参数，缺省值为4000字节。</li>
+</ol>
+</blockquote>
+<h5 id="ICMP不可达报文攻击与防范"><a href="#ICMP不可达报文攻击与防范" class="headerlink" title="ICMP不可达报文攻击与防范"></a>ICMP不可达报文攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>有的系统在收到网络或主机不可达的ICMP报文后，对于后续发往此目的地址的报文直接认为不可达，从而切断了目的地与主机的连接。攻击者利用这一点，伪造不可达ICMP报文，切断受害者与目的地的连接，造成攻击。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用ICMP不可达报文攻击防范后，设备将直接丢弃ICMP不可达报文，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend icmp-unreachable enable</strong>，开启ICMP不可达报文攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="ICMP重定向报文攻击与防范"><a href="#ICMP重定向报文攻击与防范" class="headerlink" title="ICMP重定向报文攻击与防范"></a>ICMP重定向报文攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>网络设备通常通过向同一个子网的主机发送ICMP重定向报文来请求主机改变路由。一般情况下，设备仅向同一个子网的主机而不向其他设备发送ICMP重定向报文。但一些恶意的攻击可能跨越网段向另外一个网络的主机发送虚假的重定向报文，以改变主机的路由表，干扰主机正常的IP报文发送。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用ICMP重定向报文攻击防范后，设备将直接丢弃ICMP重定向报文，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend icmp-redirect enable</strong>，开启ICMP重定向报文攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="Tracert报文攻击与防范"><a href="#Tracert报文攻击与防范" class="headerlink" title="Tracert报文攻击与防范"></a>Tracert报文攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>Tracert报文攻击是攻击者利用TTL为0时返回的ICMP超时报文，和达到目的地址时返回的ICMP端口不可达报文来发现报文到达目的地所经过的路径，它可以窥探网络的结构。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用Tracert报文攻击防范后，设备将检测到的超时的ICMP报文或UDP报文，或者目的端口不可达报文，直接丢弃，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend tracert enable</strong>，开启Tracert报文攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="源站选路选项IP报文攻击与防范"><a href="#源站选路选项IP报文攻击与防范" class="headerlink" title="源站选路选项IP报文攻击与防范"></a>源站选路选项IP报文攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>在IP路由技术中，一个IP报文的传递路径是由网络中的路由器根据报文的目的地址来决定的，但也提供了一种由报文的发送方决定报文传递路径的方法，这就是源站选路选项。源站选路选项允许源站明确指定一条到目的地的路由，覆盖掉中间路由器的路由选项。源站选路选项通常用于网络路径的故障诊断和某种特殊业务的临时传送。由于IP源站选路选项忽略了报文传输路径中的各个设备的中间转发过程，而不管转发接口的工作状态，可能被恶意攻击者利用，窥探网络结构。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用源站选路选项IP报文控制后，设备会检测收到的报文是否设置IP源站选路选项。如果是则丢弃该报文，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend source-route enable</strong>，开启带源路由选项的IP报文攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="路由记录选项IP报文攻击与防范"><a href="#路由记录选项IP报文攻击与防范" class="headerlink" title="路由记录选项IP报文攻击与防范"></a>路由记录选项IP报文攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>在IP路由技术中，提供了路由记录选项，用来记录IP报文从源地址到目的地址过程中所经过的路径，也就是一个处理此报文的路由器的列表。IP路由记录选项通常用于网络路径的故障诊断，但也会被恶意攻击者利用，窥探网络结构。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用路由记录选项IP报文控制后，设备将检测收到的报文是否设置IP路由记录选项。如果是则丢弃该报文，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend route-record enable</strong>，开启带路由记录选项的IP报文攻击防范功能。</li>
+</ol>
+</blockquote>
+<h5 id="时间戳选项IP报文攻击与防范"><a href="#时间戳选项IP报文攻击与防范" class="headerlink" title="时间戳选项IP报文攻击与防范"></a>时间戳选项IP报文攻击与防范</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>在IP路由技术中，提供了时间戳选项，记录IP报文从源到目的过程中所经过的路径和时间，也就是一个处理过此报文的路由器的列表。IP时间戳选项通常用于网络路径的故障诊断，但也会被恶意攻击者利用，窥探网络结构。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>启用时间戳选项的IP报文控制后，设备将检测收到的报文是否设置IP时间戳记录选项。如是则丢弃该报文，并记录攻击日志。</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li><strong>firewall defend tcp-timestamp</strong> { <strong>block</strong> | <strong>clear</strong> | <strong>allow</strong> }，配置对Options字段带时间戳的TCP报文的处理动作。<br>缺省情况下，放行Options字段带时间戳的TCP报文。</li>
+</ol>
+</blockquote>
+<p><strong>注意</strong></p>
+<p><em>清除TCP报文的时间戳将导致RTTM和PAWS功能无法正常使用。</em></p>
+
             </div>
             <hr/>
 
@@ -472,7 +731,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/11/ddos-gong-ji-yu-fang-fan/">https://hzyxy.github.io/2020/04/11/ddos-gong-ji-yu-fang-fan/</a>
+                    <a href="https://hzyxy.github.io/2020/04/10/dan-bao-gong-ji-de-jie-shao-yu-fang-fan/">https://hzyxy.github.io/2020/04/10/dan-bao-gong-ji-de-jie-shao-yu-fang-fan/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -689,30 +948,29 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/04/11/ddos-gong-ji-yu-fang-fan/">
+                <a href="/2020/04/11/urpf/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="DDOS攻击的介绍与防范">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="URPF">
                         
-                        <span class="card-title">DDOS攻击的介绍与防范</span>
+                        <span class="card-title">URPF</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            DDOS攻击的介绍与防范
+                            单播逆向路径转发的介绍
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -725,7 +983,6 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -756,24 +1013,24 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/11/tcp-de-jian-li-yu-duan-kai/">
+                <a href="/2020/04/09/dai-kuan-guan-li/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="TCP协议">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="带宽管理">
                         
-                        <span class="card-title">TCP协议</span>
+                        <span class="card-title">带宽管理</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            TCP协议的介绍
+                            带宽管理的介绍
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-09
                             </span>
                         <span class="publish-author">
                             
@@ -790,8 +1047,16 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/TCP/">
-                        <span class="chip bg-color">TCP</span>
+                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                        <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
+                        <span class="chip bg-color">防火墙</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%B5%81%E9%87%8F%E7%AE%A1%E7%90%86/">
+                        <span class="chip bg-color">流量管理</span>
                     </a>
                     
                 </div>
@@ -943,7 +1208,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">22.6k</span>&nbsp;字
+                class="white-color">28.2k</span>&nbsp;字
             
             
             

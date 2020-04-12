@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="TCP协议, XY">
+    <meta name="keywords" content="DDOS攻击的介绍与防御, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>TCP协议 | XY</title>
+    <title>DDOS攻击的介绍与防御 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/28.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">TCP协议</h1>
+                    <h1 class="description center-align post-title">DDOS攻击的介绍与防御</h1>
                 </div>
             </div>
         </div>
@@ -367,8 +367,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/TCP/">
-                                <span class="chip bg-color">TCP</span>
+                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                                <span class="chip bg-color">华为</span>
+                            </a>
+                        
+                            <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
+                                <span class="chip bg-color">防火墙</span>
+                            </a>
+                        
+                            <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
+                                <span class="chip bg-color">攻击防范</span>
                             </a>
                         
                     </div>
@@ -379,8 +387,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Datacom/" class="post-category">
-                                Datacom
+                            <a href="/categories/Security/" class="post-category">
+                                Security
                             </a>
                         
                     </div>
@@ -401,14 +409,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    5.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    20 分
                 </div>
                 
 
@@ -424,108 +432,178 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h2><h3 id="TCP报文"><a href="#TCP报文" class="headerlink" title="TCP报文"></a>TCP报文</h3><p><img src="/2020/04/11/tcp-de-jian-li-yu-duan-kai/1.jpg" alt></p>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>长度</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Source Port</td>
-<td>16比特</td>
-<td>源端口，标识哪个应用程序发送。</td>
-</tr>
-<tr>
-<td>Destination Port</td>
-<td>16比特</td>
-<td>目的端口，标识哪个应用程序接收。</td>
-</tr>
-<tr>
-<td>Sequence Number</td>
-<td>32比特</td>
-<td>序号字段。TCP链接中传输的数据流中每个字节都编上一个序号。序号字段的值指的是本报文段所发送的数据的第一个字节的序号。</td>
-</tr>
-<tr>
-<td>Acknowledgment Number</td>
-<td>32比特</td>
-<td>确认号，是期望收到对方的下一个报文段的数据的第1个字节的序号，即上次已成功接收到的数据字节序号加1。只有ACK标识为1，此字段有效。</td>
-</tr>
-<tr>
-<td>Data Offset</td>
-<td>4比特</td>
-<td>数据偏移，即首部长度，指出TCP报文段的数据起始处距离TCP报文段的起始处有多远，以32比特（4字节）为计算单位。最多有60字节的首部，若无选项字段，正常为20字节。</td>
-</tr>
-<tr>
-<td>Reserved</td>
-<td>6比特</td>
-<td>保留，必须填0。</td>
-</tr>
-<tr>
-<td>URG</td>
-<td>1比特</td>
-<td>紧急指针有效标识。它告诉系统此报文段中有紧急数据，应尽快传送（相当于高优先级的数据）。</td>
-</tr>
-<tr>
-<td>ACK</td>
-<td>1比特</td>
-<td>确认序号有效标识。只有当ACK=1时确认号字段才有效。当ACK=0时，确认号无效。</td>
-</tr>
-<tr>
-<td>PSH</td>
-<td>1比特</td>
-<td>标识接收方应该尽快将这个报文段交给应用层。接收到PSH =  1的TCP报文段，应尽快的交付接收应用进程，而不再等待整个缓存都填满了后再向上交付。</td>
-</tr>
-<tr>
-<td>RST</td>
-<td>1比特</td>
-<td>重建连接标识。当RST=1时，表明TCP连接中出现严重错误（如由于主机崩溃或其他原因），必须释放连接，然后再重新建立连接。</td>
-</tr>
-<tr>
-<td>SYN</td>
-<td>1比特</td>
-<td>同步序号标识，用来发起一个连接。SYN=1表示这是一个连接请求或连接接受请求。</td>
-</tr>
-<tr>
-<td>FIN</td>
-<td>1比特</td>
-<td>发端完成发送任务标识。用来释放一个连接。FIN=1表明此报文段的发送端的数据已经发送完毕，并要求释放连接。</td>
-</tr>
-<tr>
-<td>Window</td>
-<td>16比特</td>
-<td>窗口：TCP的流量控制，窗口起始于确认序号字段指明的值，这个值是接收端正期望接收的字节数。窗口最大为65535字节。</td>
-</tr>
-<tr>
-<td>Checksum</td>
-<td>16比特</td>
-<td>校验字段，包括TCP首部和TCP数据，是一个强制性的字段，一定是由发端计算和存储，并由收端进行验证。在计算检验和时，要在TCP报文段的前面加上12字节的伪首部。</td>
-</tr>
-<tr>
-<td>Urgent Pointer</td>
-<td>16比特</td>
-<td>紧急指针，只有当URG标志置1时紧急指针才有效。TCP的紧急方式是发送端向另一端发送紧急数据的一种方式。紧急指针指出在本报文段中紧急数据共有多少个字节（紧急数据放在本报文段数据的最前面）。</td>
-</tr>
-<tr>
-<td>Options</td>
-<td>可变</td>
-<td>选项字段。TCP协议最初只规定了一种选项，即最长报文段长度（数据字段加上TCP首部），又称为MSS。MSS告诉对方TCP“我的缓存所能接收的报文段的数据字段的最大长度是MSS个字节”。 新的RFC规定有以下几种选型：选项表结束，无操作，最大报文段长度，窗口扩大因子，时间戳。 窗口扩大因子：3字节，其中一个字节表示偏移值S。新的窗口值等于TCP首部中的窗口位数增大到（16+S），相当于把窗口值向左移动S位后获得实际的窗口大小。 时间戳：10字节，其中最主要的字段是时间戳值（4字节）和时间戳回送应答字段（4字节）。 选项确认选项：</td>
-</tr>
-<tr>
-<td>Padding</td>
-<td>可变</td>
-<td>填充字段，用来补位，使整个首部长度是4字节的整数倍。</td>
-</tr>
-<tr>
-<td>data</td>
-<td>可变</td>
-<td>TCP负载。</td>
-</tr>
-</tbody></table>
-<p>在TCP/IP协议中，TCP协议提供可靠的连接服务，采用三次握手建立一个连接。<br>第一次握手：建立连接时，客户端发送SYN包（SYN=a）到服务器，并进入SYN_SENT状态，等待服务器确认。<br>第二次握手：服务器收到SYN包，必须发出ACK包（ACK=a+1）来确认客户端的SYN包，同时自己也发送一个SYN包（SYN=b），即SYN-ACK包，此时服务器进入SYN_RCVD状态。<br>第三次握手：客户端收到服务器的SYN-ACK包，向服务器发送确认包ACK（ACK=b+1），此包发送完毕，客户端和服务器进入ESTABLISHED状态，完成三次握手。<br>如果服务器发出的SYN-ACK包异常，客户端会发送一个RST包给服务器，服务器重新回到LISTEN监听状态。</p>
-<p>TCP采用四次握手来关闭一个连接。<br>第一次握手：客户端发送FIN包（FIN=a）到服务器，表示客户端没有数据要向服务器发送了，同时进入FIN_WAIT_1状态，等待服务器确认。<br>第二次握手：服务器收到FIN包，必须发送ACK包（ACK=a+1）来确认客户端的FIN包，但服务器数据还没传完，所以不发送FIN包，此时服务器进入LAST_WAIT状态。<br>第三次握手：当服务器没有数据要向客户端发送时，服务器发送FIN包（FIN=b）到客户端，并进入LAST_ACK状态，等待客户端最终确认。<br>第四次握手：客户端收到FIN包，发出ACK包（ACK=b+1）来确认服务器的FIN包，进入TIME_WAIT状态，等待连接完全断掉。此包发送完毕，服务器进入CLOSED状态，完成四次握手，双方连接断开。</p>
+                <h2 id="DDOS攻击的介绍与防御"><a href="#DDOS攻击的介绍与防御" class="headerlink" title="DDOS攻击的介绍与防御"></a>DDOS攻击的介绍与防御</h2><h3 id="DDoS通用攻击防范技术"><a href="#DDoS通用攻击防范技术" class="headerlink" title="DDoS通用攻击防范技术"></a>DDoS通用攻击防范技术</h3><h4 id="首包丢弃"><a href="#首包丢弃" class="headerlink" title="首包丢弃"></a>首包丢弃</h4><ul>
+<li>有些攻击采用不断变换源IP地址或者源端口号的方式发送攻击报文，通过首包丢弃，可以有效拦截这部分流量。首包丢弃与源认证结合使用，防止虚假源攻击。<ul>
+<li>正常情况下，TCP、DNS、ICMP报文都具有重传功能。如果在交互过程中报文被丢弃，则都会重传。首包丢弃正是利用了报文的重传机制，将收到的第一个报文丢弃，以判定后续是否有重传报文。</li>
+<li>支持首包丢弃后重传报文的协议包括TCP、DNS、ICMP协议。UDP协议虽然不具备重传机制，如果有应用层协议来协助实现重传时，也可以配置首包丢弃功能。</li>
+</ul>
+</li>
+</ul>
+<h4 id="阻断和限流"><a href="#阻断和限流" class="headerlink" title="阻断和限流"></a>阻断和限流</h4><ul>
+<li>阻断：在自定义服务策略中，阻断表示将匹配自定义服务的报文全部丢弃；在默认防御策略中表示将自定义服务以外的此协议报文全部丢弃。</li>
+<li>限流：在自定义服务策略中，限流表示将匹配自定义服务的报文限制在阈值内，丢弃超过阈值的部分报文；在默认防御策略中，限流表示将自定义服务以外的此协议报文限制在阈值内，丢弃超过阈值的部分报文。</li>
+</ul>
+<h4 id="静态指纹过滤"><a href="#静态指纹过滤" class="headerlink" title="静态指纹过滤"></a>静态指纹过滤</h4><ul>
+<li>通过配置静态指纹，对命中指纹的报文进行相应的处理，从而对攻击流量进行防御<ul>
+<li>TCP/UDP/自定义服务科基于载荷（报文的数据段）提取指纹</li>
+<li>DNS保温针对域名提取指纹</li>
+<li>HTTP报文针对通用资源标识符URI（通一资源标志符）提取指纹</li>
+</ul>
+</li>
+</ul>
+<h3 id="流量型攻击防范技术"><a href="#流量型攻击防范技术" class="headerlink" title="流量型攻击防范技术"></a>流量型攻击防范技术</h3><h4 id="TCP类报文攻击防御"><a href="#TCP类报文攻击防御" class="headerlink" title="TCP类报文攻击防御"></a>TCP类报文攻击防御</h4><h5 id="SYN-Flood"><a href="#SYN-Flood" class="headerlink" title="SYN Flood"></a>SYN Flood</h5><p><strong>攻击原理</strong></p>
+<p>SYN Flood攻击是通过伪造一个源地址的SYN报文，发送给受害主机，受害主机回复SYN-ACK报文给这些地址后，不会收到ACK报文，导致受害主机保持了大量的半连接，直到超时。这些半连接可以耗尽主机资源，使受害主机无法建立正常TCP连接，从而达到攻击的目的。</p>
+<p>SYN flood攻击是虚假源攻击的典型代表，此类攻击的最显著特点就是发送海量变源或变源端口的报文到受害主机，耗尽受害主机资源或网络资源。</p>
+<p><strong>防御原理</strong></p>
+<ul>
+<li><p>源认证</p>
+<ul>
+<li>虚假源<br>1、当防火墙收到客户端发现的SYN报文时，对SYN报文进行拦截，并伪造一个带有错误序列号的<strong>SYN+ACK报文</strong>回应给客户端。<br>2、如果客户端是虚假源，则不会对错误的SYN+ACK报文进行回应。<br>3、如果客户端是真实源发送的正常请求SYN报文，当收到错误的SYN+ACK报文时，会再发出一个RST报文，让防火墙重新发一个正确的SYN+ACK报文；防火墙收到这个RST报文后，判定客户端为真实源，则将这个源加入白名单，在白名单老化前，这个源发出的报文都认为是合法的报文，防火墙直接放行，不在做验证。</li>
+<li>真实源<br>源IP加入白名单之后将继续对真实源IP进行统计分析，对异常的源IP进行限速，以防止真实源发起攻击。<br>TCP-Ratio异常限速：基于源来统计除ACK以外的其他报文总和（SYN+SYN-ACK+FIN/RST）与ACK报文的比例，当这个比例超过“TCP-Ratio比例阈值”时，判定源IP地址异常，将除ACK以外的其他报文的速率总和限制在阈值内。<br>始终限速：任何情况下，都将除ACK以外的其他报文的速率总和限制在阈值内。</li>
+</ul>
+</li>
+<li><p>TCP代理<br>TCP代理是指我们的FW部署在客户端和服务器中间，当客户端向服务器发送的SYN报文经过FW时，FW代替服务器与客户端建立三次握手。<br>TCP代理过程中，FW会对收到的每一个SYN报文进行代理和回应，并保持半连接，所以当SYN报文流量很大时，对FW的性能要求非常的高。但是TCP代理只能应用在报文来回路径一致的场景中，如果来回路径不一致，代理就会失败。</p>
+</li>
+<li><p>首包丢弃<br>正常情况下，TCP报文具有超时重传功能，如果在交互过程中报文被丢弃，则报文会重传。首包丢弃正是利用了报文的重传机制，将收到的第一个报文丢弃，如果后续有重传报文则直接放行。当重传报文速率达到告警阈值后再进入源认证流程，以减少反弹量。<br>有些攻击是不断变换源IP地址或者源端口号的，这样的攻击报文都不相同，如果使用源认证方式防御，对每个攻击报文都进行反弹处理，当攻击量很大时，反弹量也会很大，非常消耗性能，且容易造成链路拥塞。<br>首包丢弃与源认证方式结合可有效防御变换源IP或源端口号的大流量攻击。<br><strong>当前仅支持对SYN报文进行首包丢弃</strong></p>
+</li>
+</ul>
+<h5 id="SYN-ACK-Flood"><a href="#SYN-ACK-Flood" class="headerlink" title="SYN-ACK Flood"></a>SYN-ACK Flood</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li><p>一方收到SYN-ACK报文后，首先会判断该报文是不是属于三次握手范畴之内的报文。如果都没有进行第一次握手就直接收到了第二次握手的报文，那么就会向对方发送RST报文，告知对方其发来报文有误，不能建立连接。  </p>
+</li>
+<li><p>SYN-ACK Flood攻击正是利用了这一点，攻击者利用工具或者操纵僵尸主机，向目标服务器发送大量的SYN-ACK报文，这些报文都属于凭空出现的第二次握手报文，服务器忙于回复RST报文，导致资源耗尽，无法响应正常的请求。</p>
+</li>
+</ul>
+<p><strong>防御原理</strong></p>
+<ul>
+<li>对基于目的地址对SYN-ACK报文速率进行统计，当SYN-ACK报文速率超过阈值时，启动源认证防御。<br>将会发送SYN-ACK报文的源地址发送<strong>SYN报文</strong>，相当于发起了第一次握手，探测该地址是否真实存在。真实的源会向Anti-DDoS系统响应正确的SYN-ACK报文，也就是第二次握手的报文；而虚假的源则不会响应正确的SYN-ACK报文。</li>
+</ul>
+<h5 id="ACK-Flood"><a href="#ACK-Flood" class="headerlink" title="ACK Flood"></a>ACK Flood</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>指的是攻击者利用工具或者操纵僵尸主机，向目标服务器发送大量的ACK报文，服务器忙于回复这些凭空出现的第三次握手报文，导致资源耗尽，无法响应正常的请求。</li>
+</ul>
+<p><strong>防御原理</strong></p>
+<ul>
+<li><p>会话检查<br> 基本模式：对ACK报文进行会话检查时，如果过没有命中会话，允许第一个ACK报文通过，并建立会话。如果过命中会话，且序号正确，则允许报文通过，序号不正确则不允许报文通过。<em>旁路部署动态引流时，由于报文来回路径不一致，对于引流前已经建立的会话，Anti-DDoS设备上检查不到会话，此时建议采用“基本模式”。</em><br>严格模式：对ACK报文进行会话检查时，如果命中会话，并且序号正常，则允许报文通过。如果没有命中会话，则不允许通过。<em>直路部署组网中建议采用“严格模式”。</em></p>
+</li>
+<li><p>载荷检查<br>载荷检查是Anti-DDoS设备对会话检查通过的报文进行的进一步验证，如果ACK报文载荷内容全一致（如载荷内容全为1等），则丢弃该报文，因为正常报文的载荷内容不会完全一致。<br>只有启用了“会话检查”，才能启用“载荷检查”。</p>
+</li>
+</ul>
+<h5 id="FIN-RST-Flood"><a href="#FIN-RST-Flood" class="headerlink" title="FIN/RST Flood"></a>FIN/RST Flood</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>TCP交互过程中还存在FIN和RST报文，FIN报文用来关闭TCP连接，RST报文用来断开TCP连接（RST报文收到后不需要发送ACK报文，而FIN要对端发送ACK报文）。</li>
+</ul>
+<p><strong>防御原理</strong></p>
+<ul>
+<li>当FIN/RST报文速率超过阈值时，启动会话检查。<br>如果FIN/RST报文没有命中会话，直接丢弃报文；如果FIN/RST报文命中会话，如果会话是由SYN或SYN-ACK报文创建的，则允许该FIN/RST报文通过。如果会话是由其他报文创建的（例如ACK报文），则进一步检查报文序号是否正确，序号正确的报文允许通过，序号不正确的报文则被丢弃。</li>
+</ul>
+<h4 id="UDP类报文攻击防御"><a href="#UDP类报文攻击防御" class="headerlink" title="UDP类报文攻击防御"></a>UDP类报文攻击防御</h4><h5 id="UDP-Flood"><a href="#UDP-Flood" class="headerlink" title="UDP Flood"></a>UDP Flood</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>攻击者通过僵尸网络向目标服务器发起大量的UDP报文，这种UDP报文通常为大包，且速率非常快。通常会造成以下危害：<ul>
+<li>消耗网络带宽资源，严重时造成链路拥塞。 </li>
+<li>大量变源变端口的UDP Flood会导致依靠会话转发的网络设备性能降低，甚至会话耗尽，从而导致网络瘫痪。 </li>
+<li>攻击报文到达服务器开放的UDP业务端口，服务器检查报文的正确性需要消耗计算资源，影响正常业务。</li>
+</ul>
+</li>
+</ul>
+<p><strong>防御原理</strong></p>
+<p>UDP类的攻击中报文的源IP和源端口变化频繁，但报文负载一般保持不变或有规律的变化。</p>
+<ul>
+<li>关联防御<br>UDP是无连接的协议，因此无法通过源认证的方法防御UDP flood攻击。如果UDP业务流量需要通过TCP业务流量认证或控制，则当UDP业务受到攻击时，对关联的TCP业务强制启动防御，用此TCP防御产生的白名单决定同一源的UDP报文是丢弃还是转发。</li>
+<li>载荷检查和指纹学习<br>当攻击报文负载有特征时，则可以采用动态指纹学习或特征过滤防御。<ul>
+<li>载荷检查：当UDP流量超过阈值时，会触发载荷检查。如果UDP报文数据段内容完全一样，例如数据段内容都为1，则会被认为是攻击而丢弃报文。</li>
+<li>指纹学习：当UDP流量超过阈值时，会触发指纹学习。指纹由Anti-DDoS设备动态学习生成，将攻击报文的一段显著特征学习为指纹后，匹配指纹的报文会被丢弃。<br>动态指纹学习适用于以下类型的UDP Flood攻击。<br>报文载荷具有明显特征。<br>报文负载内容完全一致。</li>
+</ul>
+</li>
+<li>限流<br>FW采用限流技术对UDP flood攻击进行防范，将去往同一目的地址的UDP报文限制在阈值之内，直接丢弃超过阈值的UDP报文，以避免网络拥塞。<br>由于限流技术本身无法区分正常转发报文还是攻击报文，故建议在指纹防范技术和关联防御无法防住UDP flood时，才采用限流技术防范UDP flood。</li>
+</ul>
+<h5 id="UDP分片攻击"><a href="#UDP分片攻击" class="headerlink" title="UDP分片攻击"></a>UDP分片攻击</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>攻击者向攻击目标发送大量的UDP分片报文，通常会造成以下危害：<ul>
+<li>一般攻击效果是消耗网络带宽资源，严重时造成链路拥塞。 </li>
+<li>大量UDP分片报文会导致具有会话重组功能的网络设备性能降低。 </li>
+<li>大量变源变端口的UDP分片报文会导致依靠会话转发的网络设备性能降低，甚至会话耗尽，从而导致网络瘫痪。 </li>
+<li>攻击报文到达服务器开放的UDP业务端口，服务器检查报文的正确性需要消耗计算资源，造成服务器响应缓慢，甚至无法正常回应。</li>
+</ul>
+</li>
+</ul>
+<p><strong>防御原理</strong></p>
+<p>UDP分片分为首分片和后续分片，Anti-DDoS设备只对首分片执行防御动作，如果首分片异常被丢弃了，后续分片因找不到首分片的会话会直接被后续转发流程丢弃。UDP首分片防御方法和UDP flood防御方法一致。</p>
+<ul>
+<li>载荷检查和指纹学习<br>载荷检查：当UDP首分片流量超过阈值时，会触发载荷检查。如果UDP首分片报文数据段内容完全一样，例如数据段内容都为1，则会被认为是攻击而丢弃报文。<br>指纹学习：当UDP首分片流量超过阈值时，会触发指纹学习。指纹由Anti-DDoS设备动态学习生成，将攻击报文的一段显著特征学习为指纹后，匹配指纹的报文会被丢弃。</li>
+</ul>
+<h4 id="DNS类报文攻击防御"><a href="#DNS类报文攻击防御" class="headerlink" title="DNS类报文攻击防御"></a>DNS类报文攻击防御</h4><h5 id="DNS-Request-Flood"><a href="#DNS-Request-Flood" class="headerlink" title="DNS Request Flood"></a>DNS Request Flood</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>针对缓存服务器的攻击<br>针对缓存服务器的攻击是指攻击者直接或间接向DNS缓存服务器发送大量不存在的<strong>域名</strong>解析请求，导致DNS缓存服务器不停向授权服务器发送解析请求，最终导致DNS缓存服务器超载，影响正常业务的攻击。</li>
+<li>针对授权服务器的攻击<br>针对授权服务器的攻击是指攻击者直接或间接向DNS授权服务器发送大量不存在的<strong>子域名</strong>请求，致使DNS授权服务器严重超载，无法继续响应正常用户的DNS请求，从而达到攻击的目的攻击。</li>
+</ul>
+<p><strong>防御原理</strong></p>
+<ul>
+<li><p>针对虚假源攻击缓存服务器</p>
+<ul>
+<li>源认证方式<br>当DNS Request报文的速率超过阈值时，启动源认证防御。（源认证只针对访问受攻击域名的源IP地址实施，以减少误判和避免对正常业务的访问延时。）防火墙收到DNS请求，会代替DNS服务器响应DNS请求，并将TC标志位置1，要求DNS客户端以TCP方式发送DNS请求。如果客户端是真实源，会继续以TCP方式发送DNS请求。如果客户端是虚假源，则不会再以TCP方式发送DNS请求。<br>源认证包括以下三种模式：<ul>
+<li>基本模式：在源认证过程中Anti-DDoS设备会触发客户端以TCP报文发送DNS请求，用以验证源IP的合法性，但在一定程度上会消耗DNS缓存服务器的TCP连接资源。</li>
+<li>增强模式：原理和基本模式相同，但在源认证过程中，Anti-DDoS设备还充当代理的角色，使用一个与DNS缓存服务器路由可达的代理IP地址，将客户端发送的TCP格式的DNS请求报文转换为UDP格式并发送到DNS缓存服务器，从而减少消耗DNS缓存器的TCP连接资源。当DNS缓存服务器被人为禁止提供基于TCP的DNS域名服务时，需要选择”增强“模式。</li>
+<li>被动模式：对不支持以TCP报文发送DNS请求的客户端进行合法性认证，例如一些代理设备不响应DNS源探测报文或者在NAT场景下NAT设备不响应源探测报文。”被动“模式是将每个源IP地址发送的首包丢弃，触发重新请求，然后对DNS重传报文进行域名检查，如果后续报文和首包请求的域名相同则将源IP值加入白名单。被动模式防御方法在现网上是防御DNS缓存服务器的虚假源Request Flood攻击的<strong>首选</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>针对虚假源攻击授权服务器</p>
+<ul>
+<li><p>授权服务器源认证（即重定向方式）<br>可以有效防御DNS Request Flood虚假源攻击。重定向只针对访问受攻击域名的源IP地址实施，以减少误判和避免正常业务的访问延时。<br>1.Anti-DDoS设备基于目的地址对DNS Request报文的速率进行统计，当DNS Request报文的速率超过阈值时，启动重定向。<br>2.Anti-DDoS设备返回给请求源一个别名地址，如果请求源是虚假源，则不会回应重定向报文，认证不通过，报文丢弃。<br>3.如果请求源是真实源，则重新请求Anti-DDoS设备发送的重定向地址。认证通过，Anti-DDoS设备将此真实源加入白明单。<br>4.Anti-DDoS设备再次重定向正确的地址，请求源重新请求正确地址，报文命中白名单，直接通过Anti-DDoS设备，到达授权服务器，完成报文交互。</p>
+<p>Anti-DDoS设备再次重定向正确的地址，请求源重新请求正确地址，报文命中白名单，直接通过Anti-DDoS设备，到达授权服务器，完成报文交互。</p>
+</li>
+</ul>
+</li>
+<li><p>针对真实源攻击<br>经过上述防御过程后，通过的DNS报文还很大，则可以继续采用以下方式进行防御：<br>1.DNS请求报文限速<br>2.指定域名限速<br>3.源IP限速</p>
+</li>
+</ul>
+<h4 id="HTTP-amp-HTTPS类报文攻击防御"><a href="#HTTP-amp-HTTPS类报文攻击防御" class="headerlink" title="HTTP &amp; HTTPS类报文攻击防御"></a>HTTP &amp; HTTPS类报文攻击防御</h4><h5 id="HTTP-Flood"><a href="#HTTP-Flood" class="headerlink" title="HTTP Flood"></a>HTTP Flood</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li>攻击者通过代理服务器或僵尸主机向目标服务器发起大量的HTTP报文，请求涉及数据库操作的URI或其它消耗系统资源的URI，造成服务器资源耗尽，无法响应正常请求。</li>
+</ul>
+<p><strong>防御原理</strong></p>
+<ul>
+<li><p>HTTP Flood源认证<br>源认证防御方式是防御HTTP Flood最常用的手段。这种防御方式适用于客户端为浏览器的HTTP服务器场景，因为浏览器支持完整的HTTP协议栈，可以正常回应重定向报文或者是验证码。Anti-DDoS设备基于目的IP地址对HTTP报文进行统计，当HTTP报文达到设定的告警阈值时，启动源认证防御功能，源认证防御包含以下三种方式：</p>
+<ul>
+<li><p>基本模式：防火墙正是利用了HTTP报文的这种重定向机制，在防御HTTP Flood攻击过程中，向客户端重定向一个其它的URI。该模式可有效阻止来自非浏览器客户端的访问，如果僵尸工具没有实现完整的HTTP协议栈，不支持自动重定向，无法通过认证。而浏览器支持自动重定向，可以通过认证。</p>
+</li>
+<li><p>增强模式（验证码认证）<br>有些僵尸工具实现了重定向功能，或者攻击过程中使用的免费代理支持重定向功能，导致基本模式的防御失效，通过推送验证码的方式可以避免此类防御失效。此时通过让用户输入验证码，可以判断HTTP访问是否由真实的用户发起，而不是僵尸工具发起的访问。因为僵尸网络攻击依靠自动植入PC的僵尸工具发起，无法自动响应随机变化的验证码，故可以有效的防御攻击。为避免防御对正常用户体验的影响，此防御方式仅对超过源访问阈值的异常源实施。</p>
+<p><em>源认证对于机顶盒做视频点播场景防护、或者部分移动网络防护不适用。当客户端是机顶盒、特定移动网络时，客户端无法输入验证码，建议使用302重定向模式。</em></p>
+</li>
+<li><p>302重定向模式<br>基本模式中的重定向功能只能对整个网页进行重定向，不能针对网页中的内嵌资源（比如：图片）进行重定向。当用户请求的页面与页面内嵌资源不在同一个服务器上，内嵌资源所在服务器发生异常时，可以对嵌套资源服务器启动302重定向防御，探测访问源是否为真实浏览器。真实浏览器支持重定向功能，可以自动完成重定向过程，不会影响客户体验。</p>
+</li>
+</ul>
+</li>
+<li><p>HTTP源统计<br>是在基于目的IP流量异常的基础上，再启动针对源IP流量进行统计。Anti-DDoS设备首先对到达目的IP的流量进行统计，当目的IP流量触发告警阈值时，再启动到达这个目的IP的每个源的流量进行统计，判定具体某个源流量异常，并对源IP的流量进行防御。<br>HTTP源统计功能可以更准确的定位异常源，并对异常源发出的流量进行防御。</p>
+</li>
+<li><p>URI监测<br>是HTTP源认证防御的补充功能，当通过HTTP源认证的流量还是超过阈值时，可以启用URI监测。Anti-DDoS设备对HTTP源认证过程中加入白名单的源IP也会进行URI监测。<br>当指定时间内，某个URI的访问流量超过一定阈值时，Anti-DDoS设备启动针对源IP的URI行为监测。当这个源IP地址对某个URI的访问数与总访问数的比例超过阈值时，则将该源IP地址作为攻击源并加入动态黑名单。在配置URI监测时，可将消耗内存或计算资源多、容易受攻击的URI加入“重点监测URI”列表。</p>
+</li>
+<li><p>URI源指纹学习功能<br>指纹学习方法适用于攻击源访问的URI比较固定。因为如果要形成攻击效果，攻击者一般都事先探测，找到容易消耗系统资源的URI作为攻击目标，然后一个攻击源的一个会话上会有多个针对该URI的请求，最终呈现为该源对选定的URI发送大量的请求报文。动态指纹学习正是基于这个原理，Anti-DDoS设备对源访问的URI进行指纹学习，找到攻击目标URI指纹，如果对该URI指纹的命中次数高于设置的阈值就将该源加入黑名单</p>
+</li>
+</ul>
+<h5 id="HTTP慢速攻击"><a href="#HTTP慢速攻击" class="headerlink" title="HTTP慢速攻击"></a>HTTP慢速攻击</h5><p><strong>攻击原理</strong></p>
+<ul>
+<li><p>HTTP慢速攻击是利用HTTP现有合法机制，在建立了与HTTP服务器的连接后，尽量长时间保持该连接，不释放，达到对HTTP服务器的攻击。</p>
+</li>
+<li><p>常见的攻击有两种：</p>
+<ul>
+<li><p>Slow POST: 攻击者发送Post报文向服务器请求提交数据，将总报文长度设置为一个很大的数值，但是在随后的数据发送中，每次只发送很小的报文，这样导致服务器端一直等待攻击者发送数据。</p>
+</li>
+<li><p>Slow headers: 攻击者通过GET或者POST向服务器建立连接，但是HTTP头字段不发送结束符，之后发送其他字段进行保活。服务器会一直等待头信息中结束符而导致连接始终被占用。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>防御原理</strong></p>
+<ul>
+<li>针对HTTP慢速攻击的特点，Anti-DDoS设备对每秒钟HTTP并发连接数进行检查，当每秒钟HTTP并发连接数超过设定值时，会触发HTTP报文检查，检查出以下任意一种情况，都认定受到HTTP慢速连接攻击，则将该源IP地址判定为攻击源，加入动态黑名单，同时断开此IP地址与HTTP服务器的连接。<ul>
+<li>连续多个HTTP POST报文的总长度都很大，但是其HTTP载荷长度都很小。 </li>
+<li>连续多个HTTP GET/POST报文的报文头都没有结束标识。</li>
+</ul>
+</li>
+</ul>
 
             </div>
             <hr/>
@@ -551,7 +629,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/11/tcp-de-jian-li-yu-duan-kai/">https://hzyxy.github.io/2020/04/11/tcp-de-jian-li-yu-duan-kai/</a>
+                    <a href="https://hzyxy.github.io/2020/04/11/ddos-gong-ji-de-jie-shao-yu-fang-yu/">https://hzyxy.github.io/2020/04/11/ddos-gong-ji-de-jie-shao-yu-fang-yu/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -589,8 +667,16 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/TCP/">
-                                    <span class="chip bg-color">TCP</span>
+                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                                    <span class="chip bg-color">华为</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
+                                    <span class="chip bg-color">防火墙</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
+                                    <span class="chip bg-color">攻击防范</span>
                                 </a>
                             
                         </div>
@@ -756,29 +842,30 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/04/11/ddos-gong-ji-yu-fang-fan/">
+                <a href="/2020/04/11/ddos-gong-ji-de-jie-shao-yu-fang-yu/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="DDOS攻击的介绍与防范">
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="DDOS攻击的介绍与防御">
                         
-                        <span class="card-title">DDOS攻击的介绍与防范</span>
+                        <span class="card-title">DDOS攻击的介绍与防御</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            DDOS攻击的介绍与防范
+                            DDOS攻击的介绍与防御
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -791,15 +878,12 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
                     <a href="/tags/%E5%8D%8E%E4%B8%BA/">
                         <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
                     </a>
                     
                     <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
@@ -821,19 +905,19 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/11/urpf/">
+                <a href="/2020/04/11/tcp-xie-yi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="URPF">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="TCP协议">
                         
-                        <span class="card-title">URPF</span>
+                        <span class="card-title">TCP协议</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            单播逆向路径转发的介绍
+                            TCP协议的介绍
                         
                     </div>
                     <div class="publish-info">
@@ -844,8 +928,8 @@
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Security/" class="post-category">
-                                    Security
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
@@ -855,20 +939,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
-                        <span class="chip bg-color">攻击防范</span>
+                    <a href="/tags/TCP/">
+                        <span class="chip bg-color">TCP</span>
                     </a>
                     
                 </div>
@@ -1020,7 +1092,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">22.6k</span>&nbsp;字
+                class="white-color">28.2k</span>&nbsp;字
             
             
             
