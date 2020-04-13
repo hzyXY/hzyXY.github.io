@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="服务器负载均衡, XY">
+    <meta name="keywords" content="二层攻击的介绍与防范, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>服务器负载均衡 | XY</title>
+    <title>二层攻击的介绍与防范 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">服务器负载均衡</h1>
+                    <h1 class="description center-align post-title">二层攻击的介绍与防范</h1>
                 </div>
             </div>
         </div>
@@ -371,12 +371,12 @@
                                 <span class="chip bg-color">华为</span>
                             </a>
                         
-                            <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                <span class="chip bg-color">防火墙</span>
+                            <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                                <span class="chip bg-color">配置</span>
                             </a>
                         
-                            <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
-                                <span class="chip bg-color">负载均衡</span>
+                            <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
+                                <span class="chip bg-color">攻击防范</span>
                             </a>
                         
                     </div>
@@ -387,8 +387,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Datacom/" class="post-category">
-                                Datacom
+                            <a href="/categories/Security/" class="post-category">
+                                Security
                             </a>
                         
                     </div>
@@ -400,7 +400,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-31
+                    2020-04-12
                 </div>
                 
 
@@ -409,14 +409,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    844
+                    2.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    8 分
                 </div>
                 
 
@@ -432,52 +432,144 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="SLB"><a href="#SLB" class="headerlink" title="SLB"></a>SLB</h2><ul>
-<li><p>服务器负载均衡就是将本应由一个服务器处理的业务分发给多个服务器来处理，以此提高处理业务的效率和能力。</p>
+                <h2 id="二层攻击的介绍与防范"><a href="#二层攻击的介绍与防范" class="headerlink" title="二层攻击的介绍与防范"></a>二层攻击的介绍与防范</h2><h3 id="DHCP-Snooping"><a href="#DHCP-Snooping" class="headerlink" title="DHCP Snooping"></a>DHCP Snooping</h3><ul>
+<li>DHCP Snooping是一种DHCP安全特性，通过MAC地址限制，DHCP Snooping安全绑定、IP + MAC绑定、Option82特性等功能过滤不信任的DHCP消息，解决了设备应用DHCP时，防范利用DHCP报文进行的攻击行为。</li>
+<li>DHCP Snooping绑定表：交换机根据DHCP ACK报文生成用户的绑定表，绑定表包括用户的源IP、源MAC、端口、VLAN信息。当用户发送IP报文时，交换机查找此IP报文是否和该用户的绑定表匹配，如果是相同的，则允许报文通过，否则丢弃该IP报文。</li>
+<li>DHCP Snooping功能用于防止以下攻击：<br>1.DHCP Server仿冒者攻击<br>2.中间人攻击与IP/MAC Spoofing攻击<br>3.改变CHADDR值的攻击<br>4.仿冒DHCP续租报文攻击</li>
+</ul>
+<h4 id="DHCP-Server仿冒攻击"><a href="#DHCP-Server仿冒攻击" class="headerlink" title="DHCP Server仿冒攻击"></a>DHCP Server仿冒攻击</h4><p><strong>攻击原理</strong></p>
+<ul>
+<li>当用户网络中存在DHCP Server仿冒者时，DHCP Server仿冒者回应给DHCP Client仿冒信息，如错误的网关地址、错误的DNS服务器、错误的IP地址等，从而使DHCP Client无法访问网络。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li><p>为了避免受到DHCP Server仿冒者的攻击，可以在设备上配置DHCP Snooping功能，把用户侧的接口配置为Untrusted模式（不允许发送Reply的offer和ACK报文），把DHCP Server侧的接口配置为Trusted模式，所有从Untrusted接口到DHCP回应报文全部丢弃。</p>
 </li>
-<li><p>处理业务的服务器组成服务器集群，对外体现为一台逻辑上的服务器。对于用户来说，访问的是这台逻辑上的服务器，而不知道实际处理业务的是其他服务器，由FW决定如何分配流量给各个服务器。</p>
+<li><p>在使能DHCP Snooping功能并配置了接口的信任状态之后，设备将能够保证客户端从合法的服务器获取IP地址，这将能够有效的防止DHCP Server仿冒者攻击。但是此时却不能够定位DHCP Server仿冒者的位置，使得网络中仍然存在着安全隐患。</p>
+<p>通过配置DHCP Server探测功能，DHCP Snooping设备将会检查并在日志中记录所有DHCP回应报文中携带的DHCP Server地址与接口等信息，此后网络管理员可根据日志来判定网络中是否存在伪DHCP Server进而对网络进行维护。</p>
 </li>
 </ul>
-<h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><ul>
-<li>负载均衡算法决定了FW如何分配业务流量到服务器上</li>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li>dhcp snooping enable，使能DHCP Snooping功能。</li>
+<li>dhcp snooping server record，使能DHCP Server探测功能。<br>缺省情况下，未使能DHCP Server探测功能。</li>
+<li>interface interface-type interface-number，进入接口视图。</li>
+<li>dhcp snooping trusted，配置接口为“信任”接口。<br>缺省情况下，接口的状态为“非信任”状态。</li>
+</ol>
+</blockquote>
+<h4 id="中间人攻击与IP-MAC-Spoofing攻击"><a href="#中间人攻击与IP-MAC-Spoofing攻击" class="headerlink" title="中间人攻击与IP/MAC Spoofing攻击"></a>中间人攻击与IP/MAC Spoofing攻击</h4><p><strong>攻击原理</strong></p>
+<ul>
+<li>中间人攻击是指攻击者同时伪装DHCP Server和Client，进行正常Server和Clinet之间报文的中转，从而获得用户数据的攻击。</li>
 </ul>
-<p>FW支持的负载均衡算法如下：</p>
-<p><strong>1.简单轮询算法</strong></p>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>p为了避免受到中间人或IP/MAC Spoofing攻击，可以在设备上配置DHCP Snooping功能，使用DHCP Snooping绑定功能，只有接收到的报文的信息和绑定表中的内容一致才会被转发，否则报文将被丢弃。<ul>
+<li>静态分配给用户的IP地址，设备不会自动学习用户的MAC地址，也不能建立绑定关系表，所以需要手动建立绑定关系表。</li>
+<li>动态分配给用户的IP地址，设备会自动学习用户的MAC地址并建立绑定关系表，此时不需要配置绑定表。 </li>
+</ul>
+</li>
+</ul>
+<p><strong>配置</strong></p>
 <blockquote>
-<p>优点：实现简单，效率较高<br>缺点：不会考虑每个服务器上的实际负载<br>简单轮询算法是一个静态算法<br>适用场景为服务器的性能相近，服务类型比较简单，且每条流对服务器造成的业务负载大致相等</p>
+<p><strong>前置条件</strong><br>执行本命令之前，需确保已使用命令<strong>dhcp snooping enable</strong>使能了设备的DHCP Snooping功能。</p>
+<ol>
+<li>system-view</li>
+<li>user-bind static ip-address [<em>IP</em>] vlan [<em>vlan-id</em>]，用来配置静态绑定表</li>
+<li>使能对DHCP报文进行绑定表匹配检查的功能<br>dhcp snooping check binding enable vlan [<em>vlan-id</em>]，系统视图<br>dhcp snooping check binding enable，VLAN视图、接口视图、BD视图</li>
+</ol>
 </blockquote>
-<p><strong>2.加权轮询算法</strong></p>
+<h4 id="改变CHADDR值的DoS攻击"><a href="#改变CHADDR值的DoS攻击" class="headerlink" title="改变CHADDR值的DoS攻击"></a>改变CHADDR值的DoS攻击</h4><p><strong>攻击原理</strong></p>
+<ul>
+<li>当网络中存在DHCP饿死攻击时，攻击者改变的不是数据帧头部的源MAC，而是改变DHCP报文中的CHADDR（Client Hardware Address）值来不断申请IP地址。如果路由设备仅根据数据帧头部的源MAC来判断该报文是否合法，那么“MAC地址限制”方案不能完全起作用，这样的攻击报文还是可以被正常转发。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>为了避免受到攻击者中CHADDR字段。如果该字段跟数据帧头部的源MAC相匹配，便转发报文；否则，丢弃报文。</li>
+</ul>
+<p><strong>配置</strong></p>
 <blockquote>
-<p>加权轮询算法是将客户端的业务流量按照一定权重比依次分配到各个服务器上<br>根据服务器的不同处理能力，给每个服务器分配不同的权值，使其接受相应权值数的服务请求</p>
+<p><strong>前置条件</strong><br>执行本命令之前，需确保已使用命令<strong>dhcp snooping enable</strong>使能了设备的DHCP Snooping功能。</p>
+<ol>
+<li>使能检测DHCP Request报文帧头源MAC地址与CHADDR字段是否相同的功能。<br>dhcp snooping check mac-address enable vlan [<em>vlan-id</em>]，系统视图<br>dhcp snooping check mac-address enable，VLAN视图、接口视图、BD视图、端口组视图</li>
+</ol>
 </blockquote>
-<p><strong>3.最小连接算法</strong></p>
+<h4 id="仿冒DHCP续租报文攻击"><a href="#仿冒DHCP续租报文攻击" class="headerlink" title="仿冒DHCP续租报文攻击"></a>仿冒DHCP续租报文攻击</h4><p><strong>攻击原理</strong></p>
+<ul>
+<li>当网络中存在攻击者时，攻击者通过不断发送DHCP Request报文来冒充用户续租IP地址，这样一方面会导致一些到期的IP地址无法正常回收，另外也不是用户的真实意图。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>为了避免受到攻击者中CHADDR字段。如果该字段跟数据帧头部的源MAC相匹配，便转发报文；否则，丢弃报文。</li>
+</ul>
+<p><strong>配置</strong></p>
 <blockquote>
-<p>最小连接算法是将客户端的业务流量分配到并发连接数最小的服务器上。(并发连接数即服务器对应的实时连接数，会话新建或老化都会影响并发连接数的大小)<br>最小连接算法是动态算法<br>适用场景为服务器的性能相近，每条流对服务器造成的业务负载大致相等，但是每条流的会话存活时间不同。</p>
+<ol>
+<li>dhcp option82 { <em>insert</em> | <em>rebuild</em> } enable，使能在DHCP报文中添加Option82选项功能。</li>
+</ol>
 </blockquote>
-<p><strong>4.加权最小连接算法</strong></p>
+<h3 id="ARP-Spoofing"><a href="#ARP-Spoofing" class="headerlink" title="ARP Spoofing"></a>ARP Spoofing</h3><p><strong>攻击原理</strong></p>
+<ul>
+<li>攻击者为了改变网关设备上的ARP表项，会向网关设备发送虚假ARP请求报文。如果设备将该报文中的IP地址与MAC地址对应关系学习至ARP表项，则会误将其他主机的报文转发给攻击源。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>开启ARP欺骗攻击防范后，设备只在自己主动向其他主机发起ARP请求并得到回应的情况下才更改ARP表项，而不会学习主机主动发来的ARP请求报文。</li>
+</ul>
+<p><strong>配置</strong></p>
 <blockquote>
-<p>加权最小连接算法是将客户端的业务流量分配到加权并发连接数最小的服务器上。(加权并发连接数是考虑服务器权重后得到的实时连接数)<br>适用场景为服务器的性能不同，每一条流对服务器造成的业务负载大致相等，但是每一条流的会话存活时间不同。</p>
+<p>暂无</p>
 </blockquote>
-<p><strong>5.源IP hash算法</strong></p>
+<h3 id="IPSG"><a href="#IPSG" class="headerlink" title="IPSG"></a>IPSG</h3><ul>
+<li>lIP Source Guard是指设备在作为二层设备使用时，利用绑定表来防御<strong>IP源欺骗的攻击</strong>。当设备在转发IP报文时，将此IP报文中的源IP、源MAC、端口、VLAN信息和绑定表的信息进行比较，如果信息匹配，说明是合法用户，则允许此用户正常转发，否则认为是攻击者，丢弃该用户发送的IP报文。</li>
+<li><strong>IPSG防止不了ARP欺骗攻击</strong></li>
+<li></li>
+</ul>
+<h4 id="IP-MAC欺骗攻击"><a href="#IP-MAC欺骗攻击" class="headerlink" title="IP/MAC欺骗攻击"></a>IP/MAC欺骗攻击</h4><p><strong>攻击原理</strong></p>
+<ul>
+<li>攻击者向服务器发送带有合法用户IP和MAC的报文，令服务器误以为已经学到这个合法用户的IP和MAC，真正的合法用户不能从服务器获得服务；另外交换机会把合法用户的MAC信息刷到攻击者所在的端口，导致原本发往合法用户的流量被攻击者截获。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>IPSG利用绑定表（静态绑定表或者DHCP Snooping绑定表）实现对报文过滤的技术。设备会匹配检查接口上接收到的IP报文，只有匹配绑定表的IP报文才允许通过。</li>
+</ul>
+<p><strong>配置</strong></p>
 <blockquote>
-<p>源IP Hash算法是将客户端的IP地址进行Hash运算，得到Hash Index值。FW根据Hash Index值与Hash列表中服务器的对应关系，分配流量至服务器。<br>适用场景为各个服务器性能差别不大</p>
+<p>对于DHCP动态分配IP地址的用户：<br><strong>前置条件</strong><br>执行本命令之前，需确保已使用命令<strong>dhcp snooping enable</strong>使能了设备的DHCP Snooping功能。</p>
+<ol>
+<li>interface  [<em>interface-number</em>]</li>
+<li>ip source check user-bind enable，使能IP报文检查功能。</li>
+<li>ip source check user-bind check-item { <em>ip-address</em> | <em>mac-address</em> | <em>vlan</em> }，配置IP报文检查项。<br>缺省情况下，接口视图下的IP报文检查选项包括源IP地址、源MAC地址、VLAN和接口。</li>
+</ol>
+<p>对于静态IP用户：</p>
+<ol>
+<li>interface  [<em>interface-number</em>]</li>
+<li>ip source check user-bind enable，使能IP报文检查功能。</li>
+<li>user-bind static ip-address [<em>ip</em>] mac-address [<em>mac</em>] interface [<em>interface-number</em>]，配置静态绑定表。</li>
+</ol>
 </blockquote>
-<p><strong>6.加权源IP hash算法</strong></p>
+<h3 id="DAI"><a href="#DAI" class="headerlink" title="DAI"></a>DAI</h3><ul>
+<li>动态ARP检测是利用绑定表来防御中间人攻击的。当设备收到ARP报文时，将此ARP报文对应的源IP、源MAC、VLAN以及接口信息和绑定表的信息进行比较，如果信息匹配，说明发送该ARP报文的用户是合法用户，允许此用户的ARP报文通过，否则就认为是攻击，丢弃该ARP报文。</li>
+</ul>
+<h4 id="ARP中间人攻击"><a href="#ARP中间人攻击" class="headerlink" title="ARP中间人攻击"></a>ARP中间人攻击</h4><p><strong>攻击原理</strong></p>
+<ul>
+<li>中间人攻击（Man-in-the-middle attack）是指攻击者与通讯的两端分别创建独立的联系，并交换其所收到的数据，使通讯的两端认为与对方直接对话，但事实上整个会话都被攻击者完全控制。在中间人攻击中，攻击者可以拦截通讯双方的通话并插入新的内容。</li>
+</ul>
+<p><strong>防范原理</strong></p>
+<ul>
+<li>DAI利用绑定表（静态绑定表或者DHCP Snooping绑定表）实现对报文过滤的技术。设备会匹配检查接口上接收到的IP报文，只有匹配绑定表的IP报文才允许通过。</li>
+</ul>
+<p><strong>配置</strong></p>
 <blockquote>
-<p>加权源IP Hash算法是将客户端的IP地址进行Hash运算，得到Hash Index值，而后通过FW调整各个服务器的权重得到Hash表中服务器新的权重值。<br>适用场景为各个服务器的性能有一定的差异</p>
+<p>暂无</p>
 </blockquote>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p><img src="/2020/03/31/fu-wu-qi-fu-zai-jun-heng/topo.JPG" alt="拓扑"></p>
-<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置"><a href="#一、在FW1上的配置" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.开启SLB</strong></p>
-<blockquote>
-<p>slb enable </p>
-</blockquote>
-<p><strong>2.配置SLB</strong></p>
-<blockquote>
-<p> slb                                                                             <code>//SLB视图下</code></p>
-<p>  group 1 fwq                                                            <code>//实服务器组</code><br>   metric roundrobin                                                  <code>//算法为简单轮询</code><br>   health-check type icmp                                        <code>//健康检查</code><br>   rserver 0 rip 2.1.1.1 port 21<br>   rserver 1 rip 2.1.1.2 port 21<br>   rserver 2 rip 2.1.1.3 port 21</p>
-<p>  vserver 0 vs                                                           <code>//虚拟服务器组</code><br>   vip 0 1.1.1.100                                                     <code>//虚拟IP</code><br>   protocol tcp<br>   vport 21<br>   group fwq                                                             <code>//关联实服务器组</code></p>
-</blockquote>
-<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/31/fu-wu-qi-fu-zai-jun-heng/servermap.JPG" alt="查看FW1的server-map表"></p>
+<h4 id="端口安全"><a href="#端口安全" class="headerlink" title="端口安全"></a>端口安全</h4><ul>
+<li>端口安全（Port Security）功能将交换机接口学习到的MAC地址变为安全MAC地址（包括安全动态MAC和Sticky MAC），可以阻止除安全MAC和静态MAC之外的主机通过本接口和交换机通信，从而增强设备安全性。</li>
+</ul>
+<p><strong>基本原理</strong></p>
+<ul>
+<li>安全MAC地址分为两种：安全动态MAC与Sticky MAC。<br>安全动态MAC地址：使能端口安全而未使能Sticky MAC功能时学习到的MAC地址。缺省情况下，安全动态MAC地址不会被老化，设备重启后安全动态MAC地址会丢失，需要重新学习。<br>Sticky MAC地址：使能端口安全、Sticky MAC功能后学习到的MAC地址。Sticky MAC地址不会被老化，保存配置后重启设备，Sticky MAC地址不会丢失，无需重新学习。</li>
+</ul>
 
             </div>
             <hr/>
@@ -503,7 +595,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/03/31/fu-wu-qi-fu-zai-jun-heng/">https://hzyxy.github.io/2020/03/31/fu-wu-qi-fu-zai-jun-heng/</a>
+                    <a href="https://hzyxy.github.io/2020/04/12/er-ceng-gong-ji-de-jie-shao-yu-fang-fan/">https://hzyxy.github.io/2020/04/12/er-ceng-gong-ji-de-jie-shao-yu-fang-fan/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -545,12 +637,12 @@
                                     <span class="chip bg-color">华为</span>
                                 </a>
                             
-                                <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                    <span class="chip bg-color">防火墙</span>
+                                <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                                    <span class="chip bg-color">配置</span>
                                 </a>
                             
-                                <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
-                                    <span class="chip bg-color">负载均衡</span>
+                                <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
+                                    <span class="chip bg-color">攻击防范</span>
                                 </a>
                             
                         </div>
@@ -716,29 +808,88 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/03/31/fang-huo-qiang-yuan-jin-yuan-chu/">
+                <a href="/2020/04/12/er-ceng-gong-ji-de-jie-shao-yu-fang-fan/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/30.jpg" class="responsive-img" alt="源进源出">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="二层攻击的介绍与防范">
                         
-                        <span class="card-title">源进源出</span>
+                        <span class="card-title">二层攻击的介绍与防范</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            使得来回路径一致
+                            防火墙二层攻击的介绍与防范
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-12
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
+                                </a>
+                            
+                            
                         </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                        <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
+                        <span class="chip bg-color">攻击防范</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/04/11/ddos-gong-ji-de-jie-shao-yu-fang-yu/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="DDOS攻击的介绍与防御">
+                        
+                        <span class="card-title">DDOS攻击的介绍与防御</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            DDOS攻击的介绍与防御
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -762,65 +913,8 @@
                         <span class="chip bg-color">防火墙</span>
                     </a>
                     
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2020/03/31/shuang-xiang-nat/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/29.jpg" class="responsive-img" alt="双向NAT">
-                        
-                        <span class="card-title">双向NAT</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            双向NAT的介绍与配置
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Datacom/" class="post-category">
-                                    Datacom
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/NAT/">
-                        <span class="chip bg-color">NAT</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
+                    <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
+                        <span class="chip bg-color">攻击防范</span>
                     </a>
                     
                 </div>
