@@ -409,14 +409,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.4k
+                    3.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    11 分
                 </div>
                 
 
@@ -454,7 +454,7 @@
 <ol>
 <li>dhcp snooping enable，使能DHCP Snooping功能。</li>
 <li>dhcp snooping server record，使能DHCP Server探测功能。<br>缺省情况下，未使能DHCP Server探测功能。</li>
-<li>interface interface-type interface-number，进入接口视图。</li>
+<li>interface interface-type <em>interface-number</em>，进入接口视图。</li>
 <li>dhcp snooping trusted，配置接口为“信任”接口。<br>缺省情况下，接口的状态为“非信任”状态。</li>
 </ol>
 </blockquote>
@@ -475,7 +475,7 @@
 <p><strong>前置条件</strong><br>执行本命令之前，需确保已使用命令<strong>dhcp snooping enable</strong>使能了设备的DHCP Snooping功能。</p>
 <ol>
 <li>system-view</li>
-<li>user-bind static ip-address [<em>IP</em>] vlan [<em>vlan-id</em>]，用来配置静态绑定表</li>
+<li>user-bind static ip-address [<em>IP</em>] vlan [<em>vlan-id</em>]，配置静态绑定表</li>
 <li>使能对DHCP报文进行绑定表匹配检查的功能<br>dhcp snooping check binding enable vlan [<em>vlan-id</em>]，系统视图<br>dhcp snooping check binding enable，VLAN视图、接口视图、BD视图</li>
 </ol>
 </blockquote>
@@ -500,13 +500,23 @@
 </ul>
 <p><strong>防范原理</strong></p>
 <ul>
-<li>为了避免受到攻击者中CHADDR字段。如果该字段跟数据帧头部的源MAC相匹配，便转发报文；否则，丢弃报文。</li>
+<li><p>配置绑定表</p>
+<hr>
+</li>
+<li><p>Option 82（DHCP Relay Agent Information Option）称为中继代理信息选项，DHCP Snooping设备或DHCP Relay通过在DHCP请求报文中添加Option82选项。Option82选项仅记录了DHCP用户的精确位置信息，譬如MAC地址、所属VLAN、所连接的接口号等参数。并通过DHCP请求报文中将该信息发送给DHCP Server。</p>
+</li>
 </ul>
 <p><strong>配置</strong></p>
 <blockquote>
+<p><em>DHCP Option82必须配置在设备的用户侧</em></p>
 <ol>
+<li>interface  <em>interface-number</em></li>
 <li>dhcp option82 { <em>insert</em> | <em>rebuild</em> } enable，使能在DHCP报文中添加Option82选项功能。</li>
 </ol>
+<ul>
+<li><em>Insert方式：当设备收到DHCP请求报文时，若该报文中没有Option82选项，则插入Option82选项；若该报文中含有Option82选项，则判断Option82选项中是否包含remote-id，如果包含，则保持Option82选项不变，如果不包含，则插入remote-id。</em></li>
+<li><em>Rebuild方式：当设备收到DHCP请求报文时，若该报文中没有Option82选项，则插入Option82选项；若该报文中含有Option82选项，则删除该Option82选项并插入管理员自己在设备上配置的Option82选项。</em></li>
+</ul>
 </blockquote>
 <h3 id="ARP-Spoofing"><a href="#ARP-Spoofing" class="headerlink" title="ARP Spoofing"></a>ARP Spoofing</h3><p><strong>攻击原理</strong></p>
 <ul>
@@ -518,12 +528,17 @@
 </ul>
 <p><strong>配置</strong></p>
 <blockquote>
-<p>暂无</p>
+<ol>
+<li>arp anti-attack gratuitous-arp drop，免费arp报文丢弃</li>
+<li>arp learning strict，ARP表项严格学习<br>只有本设备主动发送的ARP请求报文的应答报文才能触发本设备学习ARP</li>
+<li>arp anti-attack entry-check fixed-all enable，ARP表项固化</li>
+<li>arp anti-attack gateway-duplicate [<em>check-all</em>] enable，使能ARP防网关冲突攻击功能</li>
+<li>arp validate source-mac，全局使能ARP报文内MAC地址一致性检查功能</li>
+</ol>
 </blockquote>
 <h3 id="IPSG"><a href="#IPSG" class="headerlink" title="IPSG"></a>IPSG</h3><ul>
-<li>lIP Source Guard是指设备在作为二层设备使用时，利用绑定表来防御<strong>IP源欺骗的攻击</strong>。当设备在转发IP报文时，将此IP报文中的源IP、源MAC、端口、VLAN信息和绑定表的信息进行比较，如果信息匹配，说明是合法用户，则允许此用户正常转发，否则认为是攻击者，丢弃该用户发送的IP报文。</li>
+<li>lP Source Guard是指设备在作为二层设备使用时，利用绑定表来防御<strong>IP源欺骗的攻击</strong>。当设备在转发IP报文时，将此IP报文中的源IP、源MAC、端口、VLAN信息和绑定表的信息进行比较，如果信息匹配，说明是合法用户，则允许此用户正常转发，否则认为是攻击者，丢弃该用户发送的IP报文。</li>
 <li><strong>IPSG防止不了ARP欺骗攻击</strong></li>
-<li></li>
 </ul>
 <h4 id="IP-MAC欺骗攻击"><a href="#IP-MAC欺骗攻击" class="headerlink" title="IP/MAC欺骗攻击"></a>IP/MAC欺骗攻击</h4><p><strong>攻击原理</strong></p>
 <ul>
@@ -561,15 +576,39 @@
 </ul>
 <p><strong>配置</strong></p>
 <blockquote>
-<p>暂无</p>
+<p>动态绑定表</p>
+<p><strong>前置条件</strong><br>执行本命令之前，需确保已使用命令<strong>dhcp snooping enable</strong>使能了设备的DHCP Snooping功能。</p>
+<ol>
+<li>arp anti-attack check user-bind enable，使能动态ARP检测功能</li>
+</ol>
+<p>静态绑定表</p>
+<ol>
+<li>user-bind static ip-address [<em>IP</em>] vlan [<em>vlan-id</em>]，配置静态绑定表</li>
+<li>arp anti-attack check user-bind enable，使能动态ARP检测功能</li>
+</ol>
 </blockquote>
-<h4 id="端口安全"><a href="#端口安全" class="headerlink" title="端口安全"></a>端口安全</h4><ul>
+<h3 id="端口安全"><a href="#端口安全" class="headerlink" title="端口安全"></a>端口安全</h3><ul>
 <li>端口安全（Port Security）功能将交换机接口学习到的MAC地址变为安全MAC地址（包括安全动态MAC和Sticky MAC），可以阻止除安全MAC和静态MAC之外的主机通过本接口和交换机通信，从而增强设备安全性。</li>
 </ul>
 <p><strong>基本原理</strong></p>
 <ul>
-<li>安全MAC地址分为两种：安全动态MAC与Sticky MAC。<br>安全动态MAC地址：使能端口安全而未使能Sticky MAC功能时学习到的MAC地址。缺省情况下，安全动态MAC地址不会被老化，设备重启后安全动态MAC地址会丢失，需要重新学习。<br>Sticky MAC地址：使能端口安全、Sticky MAC功能后学习到的MAC地址。Sticky MAC地址不会被老化，保存配置后重启设备，Sticky MAC地址不会丢失，无需重新学习。</li>
+<li><p>安全MAC地址分为两种：安全动态MAC与Sticky MAC<br><strong>安全动态MAC地址</strong>：使能端口安全而未使能Sticky MAC功能时学习到的MAC地址。缺省情况下，安全动态MAC地址不会被老化，设备重启后安全动态MAC地址会丢失，需要重新学习。<br><strong>Sticky MAC地址</strong>：使能端口安全、Sticky MAC功能后学习到的MAC地址。Sticky MAC地址不会被老化，保存配置后重启设备，Sticky MAC地址不会丢失，无需重新学习。</p>
+</li>
+<li><p>超过安全MAC地址限制数后的动作<br><strong>protect</strong>：当学习到的MAC地址数达到接口限制数时，接口丢弃源地址在MAC表以外的报文。<br><strong>restrict</strong>：当学习到的MAC地址数超过接口限制数时，接口丢弃源地址在MAC表以外的报文，并同时发出告警。<br><strong>error-down</strong>：当学习到的MAC地址数超过接口限制数时，将接口Error-Down，同时发出告警。</p>
+<ul>
+<li>接口被Error-Down时，有以下两种方式可以恢复接口状态：<br><strong>手动恢复</strong>（Error-Down发生后）<br>执行命令<strong>shutdown</strong>和<strong>undo shutdown</strong>，或者执行命令<strong>restart</strong>，重启接口。<br><strong>自动恢复</strong>（Error-Down发生前）<br>执行命令<strong>error-down auto-recovery</strong> <strong>cause</strong> <strong>portsec-reachedlimit</strong> <strong>interval</strong> <em>interval-value</em>使能接口状态自动恢复为Up的功能，并设置接口自动恢复为Up的延时时间。可以通过<strong>display error-down recovery</strong>查看接口状态自动恢复信息。</li>
 </ul>
+</li>
+</ul>
+<p><strong>配置</strong></p>
+<blockquote>
+<ol>
+<li>interface  <em>interface-number</em></li>
+<li>port-security enable，使能端口安全功能</li>
+<li>port-security protect-action { <em>protect</em> | <em>restrict</em> | <em>error-down</em> }，配置端口安全保护动作</li>
+<li>port-security maximum <em>max-number</em>，配置端口安全动态MAC学习限制数量</li>
+</ol>
+</blockquote>
 
             </div>
             <hr/>
@@ -1066,7 +1105,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">30.7k</span>&nbsp;字
+                class="white-color">31.4k</span>&nbsp;字
             
             
             
