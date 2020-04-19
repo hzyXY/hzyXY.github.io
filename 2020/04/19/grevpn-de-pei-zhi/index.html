@@ -409,7 +409,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    445
+                    423
                 </div>
                 
 
@@ -432,7 +432,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="GRE-VPN的配置"><a href="#GRE-VPN的配置" class="headerlink" title="GRE VPN的配置"></a>GRE VPN的配置</h2><p>![拓扑](GRE VPN的配置/拓扑.JPG)</p>
+                <h2 id="GRE-VPN的配置"><a href="#GRE-VPN的配置" class="headerlink" title="GRE VPN的配置"></a>GRE VPN的配置</h2><p><img src="/2020/04/19/grevpn-de-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
 <h3 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h3><h4 id="在FW上的配置"><a href="#在FW上的配置" class="headerlink" title="在FW上的配置"></a>在FW上的配置</h4><table>
 <thead>
 <tr>
@@ -457,7 +457,7 @@
 <td><strong>4.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  destination-zone dmz<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone untrust<br>  destination-zone local<br>  source-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 47<br>  action permit<br><br> rule name 3<br>  source-zone dmz<br>  destination-zone trust<br>  source-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit</td>
 </tr>
 </tbody></table>
-<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p>![查看会话表](GRE VPN的配置/PC1pingPC2.JPG)</p>
+<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/04/19/grevpn-de-pei-zhi/PC1pingPC2.JPG" alt="查看FW1的会话表"></p>
 
             </div>
             <hr/>
@@ -483,7 +483,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/19/gre-vpn-de-pei-zhi/">https://hzyxy.github.io/2020/04/19/gre-vpn-de-pei-zhi/</a>
+                    <a href="https://hzyxy.github.io/2020/04/19/grevpn-de-pei-zhi/">https://hzyxy.github.io/2020/04/19/grevpn-de-pei-zhi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -701,7 +701,7 @@
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2020/04/19/gre-vpn-de-pei-zhi/">
+                <a href="/2020/04/19/grevpn-de-pei-zhi/">
                     <div class="card-image">
                         
                         
