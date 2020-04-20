@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="目的NAT, XY">
+    <meta name="keywords" content="IPSec, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>目的NAT | XY</title>
+    <title>IPSec | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -250,7 +250,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">目的NAT</h1>
+                    <h1 class="description center-align post-title">IPSec</h1>
                 </div>
             </div>
         </div>
@@ -367,20 +367,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                <span class="chip bg-color">华为</span>
+                            <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                <span class="chip bg-color">协议</span>
                             </a>
                         
-                            <a href="/tags/NAT/">
-                                <span class="chip bg-color">NAT</span>
-                            </a>
-                        
-                            <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                                <span class="chip bg-color">配置</span>
-                            </a>
-                        
-                            <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                <span class="chip bg-color">防火墙</span>
+                            <a href="/tags/vpn/">
+                                <span class="chip bg-color">vpn</span>
                             </a>
                         
                     </div>
@@ -391,8 +383,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Datacom/" class="post-category">
-                                Datacom
+                            <a href="/categories/Security/" class="post-category">
+                                Security
                             </a>
                         
                     </div>
@@ -404,7 +396,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-30
+                    2020-04-20
                 </div>
                 
 
@@ -413,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    248
+                    1.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    5 分
                 </div>
                 
 
@@ -436,45 +428,111 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="目的NAT"><a href="#目的NAT" class="headerlink" title="目的NAT"></a>目的NAT</h2><h3 id="NAT-Server"><a href="#NAT-Server" class="headerlink" title="NAT Server"></a>NAT Server</h3><ul>
-<li><p>用来发布内网的服务或特定的服务<br>通常用于隐藏一个对外提供服务的网络设备的真实IP地址，使客户端可以通过访问一个公网地址来访问这些服务器。</p>
-<blockquote>
-<p><strong>自动生成Server-map表</strong></p>
-</blockquote>
+                <h2 id="IPSec"><a href="#IPSec" class="headerlink" title="IPSec"></a>IPSec</h2><ul>
+<li>IPSec（Internet 协议安全）是一个工业标准网络安全协议，为IP网络通信提供透明的安全服务，保护TCP/IP通信免遭窃听和篡改，可以有效抵御网络攻击，同时保持易用性。</li>
+<li>IPSec通过IPSec在IPSec对等体间建立双向安全联盟，形成一个安全互通的IPSec隧道，来实现Internet上数据的安全传输。</li>
+<li>IPSec的特点：<br>*<em>1.访问控制 *</em><br>通信对等体认证机制，对于通信的对等体进行认证，从而完成访问控制功能。<br>*<em>2.无连接的完整性、数据来源验证 *</em><br>通过报文认证，防止传输过程中数据被篡改，确保发出数据和接收数据的一致性。<br>验证数据源，以保证数据来自真实的发送者（IP报文头内的源地址）。<br>*<em>3.防重放 *</em><br>通过AH或者ESP的防重放窗口结合认证，来抵御重放攻击。<br>*<em>4.机密性（加密） *</em><br>通过ESP的加密功能以及ESP协议的报文填充功能来完成。</li>
+</ul>
+<h3 id="IPSec的组成"><a href="#IPSec的组成" class="headerlink" title="IPSec的组成"></a>IPSec的组成</h3><ul>
+<li>IPSec协议集由认证头协议AH（Authentication Header）、封装安全载荷协议ESP（Encapsulating Security Payload）、因特网密钥交换协议IKE（Internet Key Exchange）组成</li>
+<li>AH和ESP这两个安全协议用于提供安全服务，IKE协议用于密钥交换。</li>
+</ul>
+<h4 id="安全协议"><a href="#安全协议" class="headerlink" title="安全协议"></a>安全协议</h4><h5 id="安全联盟SA（Security-Association）"><a href="#安全联盟SA（Security-Association）" class="headerlink" title="安全联盟SA（Security Association）"></a>安全联盟SA（Security Association）</h5><ul>
+<li><p>IPSec安全传输数据的前提是在IPSec对等体（即运行IPSec协议的两个端点）之间成功建立安全联盟</p>
+</li>
+<li><p>安全联盟是要建立IPSec隧道的通信双方对隧道参数的约定，包括隧道两端的IP地址、隧道采用的验证方式、验证算法、验证密钥、加密算法、加密密钥、共享密钥以及生存周期等一系列参数</p>
+</li>
+<li><p>SA由一个三元组来唯一标识，这个三元组包括<strong>安全参数索引</strong>SPI（Security Parameter Index）、<strong>目的IP地址</strong>和使用的<strong>安全协议号</strong>（AH或ESP）。</p>
+</li>
+<li><p>IPSec SA是<strong>单向的逻辑连接</strong>，通常<strong>成对建立</strong>（Inbound和Outbound）。<br>因此两个IPSec对等体之间的双向通信，最少需要建立一对IPSec SA形成一个安全互通的IPSec隧道，分别对两个方向的数据流进行安全保护</p>
+</li>
+<li><p>IPSec SA的个数还与安全协议相关</p>
 </li>
 </ul>
-<p><img src="/2020/03/30/mu-de-nat/natservertopo.JPG" alt="拓扑"></p>
-<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置"><a href="#一、在FW1上的配置" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.配置安全策略</strong></p>
-<blockquote>
-<p>security-policy<br> rule name http<br>  source-zone untrust<br>  destination-zone dmz<br>  destination-address 192.168.1.1 32<br>  service http<br>  action permit</p>
-</blockquote>
-<p><strong>2.配置NAT Server</strong></p>
-<blockquote>
-<p> nat server http protocol tcp global 1.1.1.10 www inside 192.168.1.1 www no-reverse </p>
-</blockquote>
-<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/30/mu-de-nat/natserversession.JPG" alt="查看FW1的会话表"></p>
-<p><img src="/2020/03/30/mu-de-nat/natserverservermap.JPG" alt="查看FW1的server-map表"></p>
-<h3 id="Destination-NAT"><a href="#Destination-NAT" class="headerlink" title="Destination NAT"></a>Destination NAT</h3><ul>
-<li>目的NAT是指对报文中的目的地址和端口进行转换。</li>
+<h5 id="AH"><a href="#AH" class="headerlink" title="AH"></a>AH</h5><p><strong>AH（Authentication Header）</strong></p>
+<ul>
+<li><p>提供数据来源认证、数据完整性校验和报文防重放功能。</p>
+</li>
+<li><p>AH的工作原理是在每一个数据包的标准IP报头后面添加一个AH报头（AH Header）<br>AH对数据包和认证密钥进行Hash计算，接收方收到带有计算结果的数据包后，执行同样的Hash计算并与原计算结果比较，传输过程中对数据的任何更改将使计算结果无效，这样就提供了数据来源认证和数据完整性校验。</p>
+</li>
+<li><p>AH协议的完整性验证范围为整个IP报文。</p>
+</li>
 </ul>
-<blockquote>
-<p>不产生Server-map表</p>
-</blockquote>
-<p><img src="/2020/03/30/mu-de-nat/dnattopo.JPG" alt="拓扑"></p>
-<h4 id="配置步骤-1"><a href="#配置步骤-1" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置-1"><a href="#一、在FW1上的配置-1" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.配置安全策略</strong></p>
-<blockquote>
-<p>security-policy<br> rule name http<br>  source-zone untrust<br>  destination-zone dmz<br>  destination-address 192.168.1.1 32<br>  service http<br>  action permit</p>
-</blockquote>
-<p><strong>2.配置ACL</strong></p>
-<blockquote>
-<p>acl number 3000<br> rule 5 permit ip destination 8.8.8.8 0</p>
-</blockquote>
-<p><strong>3.配置目的NAT</strong></p>
-<blockquote>
-<p>firewall zone untrust<br> destination-nat 3000 address 192.168.1.1</p>
-</blockquote>
-<h4 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/30/mu-de-nat/dnatsession.JPG" alt="查看FW1的会话表"></p>
-<p><img src="/2020/03/30/mu-de-nat/dnatservermap.JPG" alt="查看FW1的server-map表"></p>
+<h5 id="ESP"><a href="#ESP" class="headerlink" title="ESP"></a>ESP</h5><p><strong>ESP（Encapsulating Security Payload）</strong></p>
+<ul>
+<li>提供数据来源认证、数据完整性校验、报文防重放和加密功能。</li>
+<li>ESP的工作原理是在每一个数据包的标准IP报头后面添加一个ESP报头（ESP Header），并在数据包后面追加一个ESP尾（ESP Tail和ESP Auth data）。<br>ESP Header：唯一标识IPSec安全联盟和防重放攻击<br>ESP Tail：将数据中的有效载荷进行加密后再封装到数据包中，以保证数据的机密性<br>ESP Auth data：用于对数据提供来源认证和完整性校验</li>
+<li>ESP没有对IP头的内容进行保护。</li>
+</ul>
+<h5 id="AH协议与ESP协议比较"><a href="#AH协议与ESP协议比较" class="headerlink" title="AH协议与ESP协议比较"></a>AH协议与ESP协议比较</h5><table>
+<thead>
+<tr>
+<th>安全特性</th>
+<th>AH</th>
+<th>ESP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>协议号</td>
+<td>51</td>
+<td>50</td>
+</tr>
+<tr>
+<td>数据完整性校验</td>
+<td>支持（验证整个IP报文）</td>
+<td>支持（传输模式：不验证IP头，隧道模式：验证整个IP报文）</td>
+</tr>
+<tr>
+<td>数据源验证</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>数据加密</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>防报文重放攻击</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>IPSec NAT-T（NAT穿越）</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+</tbody></table>
+<h5 id="IPSec封装模式"><a href="#IPSec封装模式" class="headerlink" title="IPSec封装模式"></a>IPSec封装模式</h5><ul>
+<li>封装模式是指将AH或ESP相关的字段插入到原始IP报文中，以实现对报文的认证和加密。</li>
+<li>封装模式有传输模式和隧道模式。</li>
+</ul>
+<p><strong>传输模式</strong></p>
+<p><img src="/2020/04/20/ipsec/cs.JPG" alt="传输模式下报文封装"></p>
+<p><strong>隧道模式</strong></p>
+<p><img src="/2020/04/20/ipsec/sd.JPG" alt="隧道模式下报文封装"></p>
+<p><strong>传输模式和隧道模式的区别：</strong></p>
+<ul>
+<li>从安全性来讲，隧道模式优于传输模式。它可以完全地对原始IP数据报进行验证和加密。隧道模式下可以隐藏内部IP地址，协议类型和端口。</li>
+<li>从性能来讲，隧道模式因为有一个额外的IP头，所以它将比传输模式占用更多带宽。</li>
+<li>从场景来讲，传输模式主要应用于两台主机或一台主机和一台VPN网关之间通信；隧道模式主要应用于两台VPN网关之间或一台主机与一台VPN网关之间的通信。</li>
+</ul>
+<p>当安全协议同时采用AH和ESP时，AH和ESP协议必须采用相同的封装模式。</p>
+<h4 id="IKE介绍"><a href="#IKE介绍" class="headerlink" title="IKE介绍"></a>IKE介绍</h4><ul>
+<li><p>因特网密钥交换IKE（Internet Key Exchange）协议建立在Internet安全联盟和密钥管理协议ISAKMP定义的框架上，是基于UDP（User Datagram Protocol）的应用层协议。</p>
+</li>
+<li><p>它为IPSec提供了自动协商密钥、建立和维护IKE SA、IPSec SA，能够简化IPSec的配置和维护工作</p>
+</li>
+</ul>
+<h5 id="IKEv1"><a href="#IKEv1" class="headerlink" title="IKEv1"></a>IKEv1</h5><ul>
+<li>IKEv1使用两个阶段为IPSec进行密钥协商并建立IPSec SA。<br>第一阶段，通信双方协商和建立IKE本身使用的安全通道，建立一个IKE SA。<br>第二阶段，利用这个已通过了认证和安全保护的安全通道，建立一对IPSec SA。</li>
+<li>两个对等体间仅有一个IKE SA，它是一个双向逻辑连接。</li>
+</ul>
+<h6 id="IKEv1的三个组件"><a href="#IKEv1的三个组件" class="headerlink" title="IKEv1的三个组件"></a>IKEv1的三个组件</h6><p>SKEME：定义如何通过公共密钥技术（DH算法）实现密钥交换。<br>Oakley：提供了IPSec对各种技术的支持，例如对新的加密与散列技术，但并没有具体的定义使用什么样的技术。<br>ISAKMP：定义了消息交换的体系结构，包括两个IPSec对等体间分组形式和状态转变（定义封装格式和协商包交换的方式）。</p>
+<h6 id="IKE的三个模式"><a href="#IKE的三个模式" class="headerlink" title="IKE的三个模式"></a>IKE的三个模式</h6><p>IKEv1第一阶段的两种协商模式：<br>主模式（Main Mode） 6Message<br>野蛮模式（Aggressive Mode）3Message</p>
+<p><img src="/2020/04/20/ipsec/IPSec%5Cikev11.JPG" alt="ikev11"></p>
+<p>IKEv1第二阶段的协商模式：<br>快速模式</p>
+<p><img src="/2020/04/20/ipsec/ikev12.JPG" alt="ikev12"></p>
 
             </div>
             <hr/>
@@ -500,7 +558,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/03/30/mu-de-nat/">https://hzyxy.github.io/2020/03/30/mu-de-nat/</a>
+                    <a href="https://hzyxy.github.io/2020/04/20/ipsec/">https://hzyxy.github.io/2020/04/20/ipsec/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -538,20 +596,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                    <span class="chip bg-color">华为</span>
+                                <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                    <span class="chip bg-color">协议</span>
                                 </a>
                             
-                                <a href="/tags/NAT/">
-                                    <span class="chip bg-color">NAT</span>
-                                </a>
-                            
-                                <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                                    <span class="chip bg-color">配置</span>
-                                </a>
-                            
-                                <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                    <span class="chip bg-color">防火墙</span>
+                                <a href="/tags/vpn/">
+                                    <span class="chip bg-color">vpn</span>
                                 </a>
                             
                         </div>
@@ -717,58 +767,52 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/03/31/shuang-xiang-nat/">
+                <a href="/2020/04/20/ipsec/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/29.jpg" class="responsive-img" alt="双向NAT">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="IPSec">
                         
-                        <span class="card-title">双向NAT</span>
+                        <span class="card-title">IPSec</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            双向NAT的介绍与配置
+                            IPSec的介绍
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-20
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Datacom/" class="post-category">
-                                    Datacom
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
                     </a>
                     
-                    <a href="/tags/NAT/">
-                        <span class="chip bg-color">NAT</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
+                    <a href="/tags/vpn/">
+                        <span class="chip bg-color">vpn</span>
                     </a>
                     
                 </div>
@@ -782,31 +826,31 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/03/29/yuan-nat-de-pei-zhi/">
+                <a href="/2020/04/19/grevpn-de-pei-zhi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="源NAT的配置">
+                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="GRE VPN的配置">
                         
-                        <span class="card-title">源NAT的配置</span>
+                        <span class="card-title">GRE VPN的配置</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            源NAT的配置
+                            General Routing Encapsulation VPN的配置
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-29
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-19
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Datacom/" class="post-category">
-                                    Datacom
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
                                 </a>
                             
                             
@@ -820,16 +864,12 @@
                         <span class="chip bg-color">华为</span>
                     </a>
                     
-                    <a href="/tags/NAT/">
-                        <span class="chip bg-color">NAT</span>
-                    </a>
-                    
                     <a href="/tags/%E9%85%8D%E7%BD%AE/">
                         <span class="chip bg-color">配置</span>
                     </a>
                     
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
                     </a>
                     
                 </div>
