@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="GRE VPN的配置, XY">
+    <meta name="keywords" content="GRE的介绍与配置, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>GRE VPN的配置 | XY</title>
+    <title>GRE的介绍与配置 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -250,7 +250,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">GRE VPN的配置</h1>
+                    <h1 class="description center-align post-title">GRE的介绍与配置</h1>
                 </div>
             </div>
         </div>
@@ -409,14 +409,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    423
+                    977
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    4 分
                 </div>
                 
 
@@ -432,8 +432,28 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="GRE-VPN的配置"><a href="#GRE-VPN的配置" class="headerlink" title="GRE VPN的配置"></a>GRE VPN的配置</h2><p><img src="/2020/04/19/grevpn-de-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
-<h3 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h3><h4 id="在FW上的配置"><a href="#在FW上的配置" class="headerlink" title="在FW上的配置"></a>在FW上的配置</h4><table>
+                <h2 id="GRE的介绍与配置"><a href="#GRE的介绍与配置" class="headerlink" title="GRE的介绍与配置"></a>GRE的介绍与配置</h2><ul>
+<li><p>通用路由封装（General Routing Encapsulation），简称GRE，是一种三层VPN封装技术。</p>
+</li>
+<li><p>GRE可以对某些网络层协议（如IPX、Apple Talk、IP等）的报文进行封装，使封装后的报文能够在另一种网络中（如IPv4）传输，从而解决了跨越异种网络的报文传输问题。异种报文传输的通道称为Tunnel（隧道）。</p>
+</li>
+<li><p>GRE除了可以封装网络层协议报文以外，它还具备封装组播报文的能力。由于动态路由协议中会使用组播报文，因此更多时候GRE会在需要传递组播路由数据的场景中被用到，这也是GRE被称为通用路由封装协议的原因。</p>
+</li>
+</ul>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><h4 id="GRE的封装"><a href="#GRE的封装" class="headerlink" title="GRE的封装"></a>GRE的封装</h4><p>GRE的构成可分为三个部分：</p>
+<p><strong>乘客协议</strong>：乘客协议是指用户在传输数据时所使用的原始网络协议。</p>
+<p><strong>封装协议</strong>：封装协议的作用就是用来“包装”乘客协议对应的报文，使原始报文能够在新的网络中传输。</p>
+<p><strong>运输协议</strong>：运输协议是指被封装以后的报文在新网络中传输时所使用的网络协议。</p>
+<ul>
+<li>GRE的封装操作是通过逻辑接口Tunnel完成的，Tunnel接口是一个通用的隧道接口，所以GRE协议在使用这个接口的时候，会将接口的封装协议设置为GRE协议。</li>
+</ul>
+<p>GRE的报文：[ 新IP头 | GRE 头 | IP头 | 数据 ]</p>
+<h4 id="GRE的安全选项"><a href="#GRE的安全选项" class="headerlink" title="GRE的安全选项"></a>GRE的安全选项</h4><ul>
+<li>隧道双方支持对对端设备的身份验证。建立隧道的双方事先约定好一个密钥，在传输GRE报文的时候，该密钥信息会被封装到GRE头中，接收端在收到GRE报文时会用自己的密钥和报文中的密钥进行比对。密钥一致则验证通过；密钥不一致，则表示对方身份不合法，丢弃此报文。GRE报文头中的Key标识位置1，表示启用了身份验证功能，为0表示未启用身份验证功能。</li>
+<li>命令：进入Tunnel接口视图执行 gre key { cipher <em>key-number</em> | plain <em>key-number</em> }</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p><img src="/2020/04/19/gre-de-jie-shao-yu-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
+<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="在FW上的配置"><a href="#在FW上的配置" class="headerlink" title="在FW上的配置"></a>在FW上的配置</h5><table>
 <thead>
 <tr>
 <th>在FW1的配置</th>
@@ -457,7 +477,7 @@
 <td><strong>4.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  destination-zone dmz<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone untrust<br>  destination-zone local<br>  source-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 47<br>  action permit<br><br> rule name 3<br>  source-zone dmz<br>  destination-zone trust<br>  source-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit</td>
 </tr>
 </tbody></table>
-<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/04/19/grevpn-de-pei-zhi/PC1pingPC2.JPG" alt="查看FW1的会话表"></p>
+<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/04/19/gre-de-jie-shao-yu-pei-zhi/PC1pingPC2.JPG" alt="查看FW1的会话表"></p>
 
             </div>
             <hr/>
@@ -483,7 +503,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/19/grevpn-de-pei-zhi/">https://hzyxy.github.io/2020/04/19/grevpn-de-pei-zhi/</a>
+                    <a href="https://hzyxy.github.io/2020/04/19/gre-de-jie-shao-yu-pei-zhi/">https://hzyxy.github.io/2020/04/19/gre-de-jie-shao-yu-pei-zhi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -948,7 +968,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">34.5k</span>&nbsp;字
+                class="white-color">35k</span>&nbsp;字
             
             
             
