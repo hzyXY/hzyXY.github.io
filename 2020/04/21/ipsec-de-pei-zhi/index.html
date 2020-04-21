@@ -409,7 +409,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    596
+                    602
                 </div>
                 
 
@@ -453,8 +453,8 @@
 <td><strong>3.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
 </tr>
 <tr>
-<td><strong>4.配置IKE peer</strong><br>ike peer FW2<br> pre-shared-key 123456<br> ike-proposal 1<br> remote-address 2.1.1.2</td>
-<td><strong>4.配置IKE peer</strong><br>ike peer FW1<br> pre-shared-key 123456<br> ike-proposal 1<br> remote-address 1.1.1.1</td>
+<td><strong>4.配置IKE peer</strong><br>ike peer FW2<br> undo version 2<br> pre-shared-key 123456<br> ike-proposal 1<br> remote-address 2.1.1.2</td>
+<td><strong>4.配置IKE peer</strong><br>ike peer FW1<br> undo version 2<br> pre-shared-key 123456<br> ike-proposal 1<br> remote-address 1.1.1.1</td>
 </tr>
 <tr>
 <td><strong>5.配置IPSec策略</strong><br>ipsec policy ipsec_policy 1 isakmp<br> security acl 3000<br> ike-peer FW2<br> proposal ipsec_p1</td>
