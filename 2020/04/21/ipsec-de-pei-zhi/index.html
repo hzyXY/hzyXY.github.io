@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="二层攻击的介绍与防范, XY">
+    <meta name="keywords" content="IPSec的配置, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>二层攻击的介绍与防范 | XY</title>
+    <title>IPSec的配置 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">二层攻击的介绍与防范</h1>
+                    <h1 class="description center-align post-title">IPSec的配置</h1>
                 </div>
             </div>
         </div>
@@ -375,8 +375,8 @@
                                 <span class="chip bg-color">配置</span>
                             </a>
                         
-                            <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
-                                <span class="chip bg-color">攻击防范</span>
+                            <a href="/tags/VPN/">
+                                <span class="chip bg-color">VPN</span>
                             </a>
                         
                     </div>
@@ -400,7 +400,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-12
+                    2020-04-21
                 </div>
                 
 
@@ -409,14 +409,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.1k
+                    596
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    11 分
+                    3 分
                 </div>
                 
 
@@ -432,183 +432,50 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="二层攻击的介绍与防范"><a href="#二层攻击的介绍与防范" class="headerlink" title="二层攻击的介绍与防范"></a>二层攻击的介绍与防范</h2><h3 id="DHCP-Snooping"><a href="#DHCP-Snooping" class="headerlink" title="DHCP Snooping"></a>DHCP Snooping</h3><ul>
-<li>DHCP Snooping是一种DHCP安全特性，通过MAC地址限制，DHCP Snooping安全绑定、IP + MAC绑定、Option82特性等功能过滤不信任的DHCP消息，解决了设备应用DHCP时，防范利用DHCP报文进行的攻击行为。</li>
-<li>DHCP Snooping绑定表：交换机根据DHCP ACK报文生成用户的绑定表，绑定表包括用户的源IP、源MAC、端口、VLAN信息。当用户发送IP报文时，交换机查找此IP报文是否和该用户的绑定表匹配，如果是相同的，则允许报文通过，否则丢弃该IP报文。</li>
-<li>DHCP Snooping功能用于防止以下攻击：<br>1.DHCP Server仿冒者攻击<br>2.中间人攻击与IP/MAC Spoofing攻击<br>3.改变CHADDR值的攻击<br>4.仿冒DHCP续租报文攻击</li>
-</ul>
-<h4 id="DHCP-Server仿冒攻击"><a href="#DHCP-Server仿冒攻击" class="headerlink" title="DHCP Server仿冒攻击"></a>DHCP Server仿冒攻击</h4><p><strong>攻击原理</strong></p>
-<ul>
-<li>当用户网络中存在DHCP Server仿冒者时，DHCP Server仿冒者回应给DHCP Client仿冒信息，如错误的网关地址、错误的DNS服务器、错误的IP地址等，从而使DHCP Client无法访问网络。</li>
-</ul>
-<p><strong>防范原理</strong></p>
-<ul>
-<li><p>为了避免受到DHCP Server仿冒者的攻击，可以在设备上配置DHCP Snooping功能，把用户侧的接口配置为Untrusted模式（不允许发送Reply的offer和ACK报文），把DHCP Server侧的接口配置为Trusted模式，所有从Untrusted接口到DHCP回应报文全部丢弃。</p>
-</li>
-<li><p>在使能DHCP Snooping功能并配置了接口的信任状态之后，设备将能够保证客户端从合法的服务器获取IP地址，这将能够有效的防止DHCP Server仿冒者攻击。但是此时却不能够定位DHCP Server仿冒者的位置，使得网络中仍然存在着安全隐患。</p>
-<p>通过配置DHCP Server探测功能，DHCP Snooping设备将会检查并在日志中记录所有DHCP回应报文中携带的DHCP Server地址与接口等信息，此后网络管理员可根据日志来判定网络中是否存在伪DHCP Server进而对网络进行维护。</p>
-</li>
-</ul>
-<p><strong>配置</strong></p>
-<blockquote>
-<ol>
-<li>dhcp snooping enable，使能DHCP Snooping功能。</li>
-<li>dhcp snooping server record，使能DHCP Server探测功能。<br>缺省情况下，未使能DHCP Server探测功能。</li>
-<li>interface interface-type <em>interface-number</em>，进入接口视图。</li>
-<li>dhcp snooping trusted，配置接口为“信任”接口。<br>缺省情况下，接口的状态为“非信任”状态。</li>
-</ol>
-</blockquote>
-<h4 id="中间人攻击与IP-MAC-Spoofing攻击"><a href="#中间人攻击与IP-MAC-Spoofing攻击" class="headerlink" title="中间人攻击与IP/MAC Spoofing攻击"></a>中间人攻击与IP/MAC Spoofing攻击</h4><p><strong>攻击原理</strong></p>
-<ul>
-<li>中间人攻击是指攻击者同时伪装DHCP Server和Client，进行正常Server和Clinet之间报文的中转，从而获得用户数据的攻击。</li>
-</ul>
-<p><strong>防范原理</strong></p>
-<ul>
-<li>p为了避免受到中间人或IP/MAC Spoofing攻击，可以在设备上配置DHCP Snooping功能，使用DHCP Snooping绑定功能，只有接收到的报文的信息和绑定表中的内容一致才会被转发，否则报文将被丢弃。<ul>
-<li>静态分配给用户的IP地址，设备不会自动学习用户的MAC地址，也不能建立绑定关系表，所以需要手动建立绑定关系表。</li>
-<li>动态分配给用户的IP地址，设备会自动学习用户的MAC地址并建立绑定关系表，此时不需要配置绑定表。 </li>
-</ul>
-</li>
-</ul>
-<p><strong>配置</strong></p>
-<blockquote>
-<p><strong>前置条件</strong><br>执行本命令之前，需确保已使用命令<strong>dhcp snooping enable</strong>使能了设备的DHCP Snooping功能。</p>
-<ol>
-<li>system-view</li>
-<li>user-bind static ip-address [<em>IP</em>] vlan [<em>vlan-id</em>]，配置静态绑定表</li>
-<li>使能对DHCP报文进行绑定表匹配检查的功能<br>dhcp snooping check binding enable vlan [<em>vlan-id</em>]，系统视图<br>dhcp snooping check binding enable，VLAN视图、接口视图、BD视图</li>
-</ol>
-</blockquote>
-<h4 id="改变CHADDR值的DoS攻击"><a href="#改变CHADDR值的DoS攻击" class="headerlink" title="改变CHADDR值的DoS攻击"></a>改变CHADDR值的DoS攻击</h4><p><strong>攻击原理</strong></p>
-<ul>
-<li>当网络中存在DHCP饿死攻击时，攻击者改变的不是数据帧头部的源MAC，而是改变DHCP报文中的CHADDR（Client Hardware Address）值来不断申请IP地址。如果路由设备仅根据数据帧头部的源MAC来判断该报文是否合法，那么“MAC地址限制”方案不能完全起作用，这样的攻击报文还是可以被正常转发。</li>
-</ul>
-<p><strong>防范原理</strong></p>
-<ul>
-<li>为了避免受到攻击者中CHADDR字段。如果该字段跟数据帧头部的源MAC相匹配，便转发报文；否则，丢弃报文。</li>
-</ul>
-<p><strong>配置</strong></p>
-<blockquote>
-<p><strong>前置条件</strong><br>执行本命令之前，需确保已使用命令<strong>dhcp snooping enable</strong>使能了设备的DHCP Snooping功能。</p>
-<ol>
-<li>使能检测DHCP Request报文帧头源MAC地址与CHADDR字段是否相同的功能。<br>dhcp snooping check mac-address enable vlan [<em>vlan-id</em>]，系统视图<br>dhcp snooping check mac-address enable，VLAN视图、接口视图、BD视图、端口组视图</li>
-</ol>
-</blockquote>
-<h4 id="仿冒DHCP续租报文攻击"><a href="#仿冒DHCP续租报文攻击" class="headerlink" title="仿冒DHCP续租报文攻击"></a>仿冒DHCP续租报文攻击</h4><p><strong>攻击原理</strong></p>
-<ul>
-<li>当网络中存在攻击者时，攻击者通过不断发送DHCP Request报文来冒充用户续租IP地址，这样一方面会导致一些到期的IP地址无法正常回收，另外也不是用户的真实意图。</li>
-</ul>
-<p><strong>防范原理</strong></p>
-<ul>
-<li><p>配置绑定表</p>
-<hr>
-</li>
-<li><p>Option 82（DHCP Relay Agent Information Option）称为中继代理信息选项，DHCP Snooping设备或DHCP Relay通过在DHCP请求报文中添加Option82选项。Option82选项仅记录了DHCP用户的精确位置信息，譬如MAC地址、所属VLAN、所连接的接口号等参数。并通过DHCP请求报文中将该信息发送给DHCP Server。</p>
-</li>
-</ul>
-<p><strong>配置</strong></p>
-<blockquote>
-<p><em>DHCP Option82必须配置在设备的用户侧</em></p>
-<ol>
-<li>interface  <em>interface-number</em></li>
-<li>dhcp option82 { <em>insert</em> | <em>rebuild</em> } enable，使能在DHCP报文中添加Option82选项功能。</li>
-</ol>
-<ul>
-<li><em>Insert方式：当设备收到DHCP请求报文时，若该报文中没有Option82选项，则插入Option82选项；若该报文中含有Option82选项，则判断Option82选项中是否包含remote-id，如果包含，则保持Option82选项不变，如果不包含，则插入remote-id。</em></li>
-<li><em>Rebuild方式：当设备收到DHCP请求报文时，若该报文中没有Option82选项，则插入Option82选项；若该报文中含有Option82选项，则删除该Option82选项并插入管理员自己在设备上配置的Option82选项。</em></li>
-</ul>
-</blockquote>
-<h3 id="ARP-Spoofing"><a href="#ARP-Spoofing" class="headerlink" title="ARP Spoofing"></a>ARP Spoofing</h3><p><strong>攻击原理</strong></p>
-<ul>
-<li>攻击者为了改变网关设备上的ARP表项，会向网关设备发送虚假ARP请求报文。如果设备将该报文中的IP地址与MAC地址对应关系学习至ARP表项，则会误将其他主机的报文转发给攻击源。</li>
-</ul>
-<p><strong>防范原理</strong></p>
-<ul>
-<li>开启ARP欺骗攻击防范后，设备只在自己主动向其他主机发起ARP请求并得到回应的情况下才更改ARP表项，而不会学习主机主动发来的ARP请求报文。</li>
-</ul>
-<p><strong>配置</strong></p>
-<blockquote>
-<ol>
-<li>arp anti-attack gratuitous-arp drop，免费arp报文丢弃</li>
-<li>arp learning strict，ARP表项严格学习<br>只有本设备主动发送的ARP请求报文的应答报文才能触发本设备学习ARP</li>
-<li>arp anti-attack entry-check fixed-all enable，ARP表项固化</li>
-<li>arp anti-attack gateway-duplicate [<em>check-all</em>] enable，使能ARP防网关冲突攻击功能</li>
-<li>arp validate source-mac，全局使能ARP报文内MAC地址一致性检查功能</li>
-</ol>
-</blockquote>
-<h3 id="IPSG"><a href="#IPSG" class="headerlink" title="IPSG"></a>IPSG</h3><ul>
-<li>lP Source Guard是指设备在作为二层设备使用时，利用绑定表来防御<strong>IP源欺骗的攻击</strong>。当设备在转发IP报文时，将此IP报文中的源IP、源MAC、端口、VLAN信息和绑定表的信息进行比较，如果信息匹配，说明是合法用户，则允许此用户正常转发，否则认为是攻击者，丢弃该用户发送的IP报文。</li>
-<li><strong>IPSG防止不了ARP欺骗攻击</strong></li>
-</ul>
-<h4 id="IP-MAC欺骗攻击"><a href="#IP-MAC欺骗攻击" class="headerlink" title="IP/MAC欺骗攻击"></a>IP/MAC欺骗攻击</h4><p><strong>攻击原理</strong></p>
-<ul>
-<li>攻击者向服务器发送带有合法用户IP和MAC的报文，令服务器误以为已经学到这个合法用户的IP和MAC，真正的合法用户不能从服务器获得服务；另外交换机会把合法用户的MAC信息刷到攻击者所在的端口，导致原本发往合法用户的流量被攻击者截获。</li>
-</ul>
-<p><strong>防范原理</strong></p>
-<ul>
-<li>IPSG利用绑定表（静态绑定表或者DHCP Snooping绑定表）实现对报文过滤的技术。设备会匹配检查接口上接收到的IP报文，只有匹配绑定表的IP报文才允许通过。</li>
-</ul>
-<p><strong>配置</strong></p>
-<blockquote>
-<p>对于DHCP动态分配IP地址的用户：<br><strong>前置条件</strong><br>执行本命令之前，需确保已使用命令<strong>dhcp snooping enable</strong>使能了设备的DHCP Snooping功能。</p>
-<ol>
-<li>interface  [<em>interface-number</em>]</li>
-<li>ip source check user-bind enable，使能IP报文检查功能。</li>
-<li>ip source check user-bind check-item { <em>ip-address</em> | <em>mac-address</em> | <em>vlan</em> }，配置IP报文检查项。<br>缺省情况下，接口视图下的IP报文检查选项包括源IP地址、源MAC地址、VLAN和接口。</li>
-</ol>
-<p>对于静态IP用户：</p>
-<ol>
-<li>interface  [<em>interface-number</em>]</li>
-<li>ip source check user-bind enable，使能IP报文检查功能。</li>
-<li>user-bind static ip-address [<em>ip</em>] mac-address [<em>mac</em>] interface [<em>interface-number</em>]，配置静态绑定表。</li>
-</ol>
-</blockquote>
-<h3 id="DAI"><a href="#DAI" class="headerlink" title="DAI"></a>DAI</h3><ul>
-<li>动态ARP检测是利用绑定表来防御中间人攻击的。当设备收到ARP报文时，将此ARP报文对应的源IP、源MAC、VLAN以及接口信息和绑定表的信息进行比较，如果信息匹配，说明发送该ARP报文的用户是合法用户，允许此用户的ARP报文通过，否则就认为是攻击，丢弃该ARP报文。</li>
-</ul>
-<h4 id="ARP中间人攻击"><a href="#ARP中间人攻击" class="headerlink" title="ARP中间人攻击"></a>ARP中间人攻击</h4><p><strong>攻击原理</strong></p>
-<ul>
-<li>中间人攻击（Man-in-the-middle attack）是指攻击者与通讯的两端分别创建独立的联系，并交换其所收到的数据，使通讯的两端认为与对方直接对话，但事实上整个会话都被攻击者完全控制。在中间人攻击中，攻击者可以拦截通讯双方的通话并插入新的内容。</li>
-</ul>
-<p><strong>防范原理</strong></p>
-<ul>
-<li>DAI利用绑定表（静态绑定表或者DHCP Snooping绑定表）实现对报文过滤的技术。设备会匹配检查接口上接收到的IP报文，只有匹配绑定表的IP报文才允许通过。</li>
-</ul>
-<p><strong>配置</strong></p>
-<blockquote>
-<p>动态绑定表</p>
-<p><strong>前置条件</strong><br>执行本命令之前，需确保已使用命令<strong>dhcp snooping enable</strong>使能了设备的DHCP Snooping功能。</p>
-<ol>
-<li>arp anti-attack check user-bind enable，使能动态ARP检测功能</li>
-</ol>
-<p>静态绑定表</p>
-<ol>
-<li>user-bind static ip-address [<em>IP</em>] vlan [<em>vlan-id</em>]，配置静态绑定表</li>
-<li>arp anti-attack check user-bind enable，使能动态ARP检测功能</li>
-</ol>
-</blockquote>
-<h3 id="端口安全"><a href="#端口安全" class="headerlink" title="端口安全"></a>端口安全</h3><ul>
-<li>端口安全（Port Security）功能将交换机接口学习到的MAC地址变为安全MAC地址（包括安全动态MAC和Sticky MAC），可以阻止除安全MAC和静态MAC之外的主机通过本接口和交换机通信，从而增强设备安全性。</li>
-</ul>
-<p><strong>基本原理</strong></p>
-<ul>
-<li><p>安全MAC地址分为两种：安全动态MAC与Sticky MAC<br><strong>安全动态MAC地址</strong>：使能端口安全而未使能Sticky MAC功能时学习到的MAC地址。缺省情况下，安全动态MAC地址不会被老化，设备重启后安全动态MAC地址会丢失，需要重新学习。<br><strong>Sticky MAC地址</strong>：使能端口安全、Sticky MAC功能后学习到的MAC地址。Sticky MAC地址不会被老化，保存配置后重启设备，Sticky MAC地址不会丢失，无需重新学习。</p>
-</li>
-<li><p>超过安全MAC地址限制数后的动作<br><strong>protect</strong>：当学习到的MAC地址数达到接口限制数时，接口丢弃源地址在MAC表以外的报文。<br><strong>restrict</strong>：当学习到的MAC地址数超过接口限制数时，接口丢弃源地址在MAC表以外的报文，并同时发出告警。<br><strong>error-down</strong>：当学习到的MAC地址数超过接口限制数时，将接口Error-Down，同时发出告警。</p>
-<ul>
-<li>接口被Error-Down时，有以下两种方式可以恢复接口状态：<br><strong>手动恢复</strong>（Error-Down发生后）<br>执行命令<strong>shutdown</strong>和<strong>undo shutdown</strong>，或者执行命令<strong>restart</strong>，重启接口。<br><strong>自动恢复</strong>（Error-Down发生前）<br>执行命令<strong>error-down auto-recovery</strong> <strong>cause</strong> <strong>portsec-reachedlimit</strong> <strong>interval</strong> <em>interval-value</em>使能接口状态自动恢复为Up的功能，并设置接口自动恢复为Up的延时时间。可以通过<strong>display error-down recovery</strong>查看接口状态自动恢复信息。</li>
-</ul>
-</li>
-</ul>
-<p><strong>配置</strong></p>
-<blockquote>
-<ol>
-<li>interface  <em>interface-number</em></li>
-<li>port-security enable，使能端口安全功能</li>
-<li>port-security protect-action { <em>protect</em> | <em>restrict</em> | <em>error-down</em> }，配置端口安全保护动作</li>
-<li>port-security maximum <em>max-number</em>，配置端口安全动态MAC学习限制数量</li>
-</ol>
-</blockquote>
+                <h2 id="IPSec的配置"><a href="#IPSec的配置" class="headerlink" title="IPSec的配置"></a>IPSec的配置</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p><img src="/2020/04/21/ipsec-de-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
+<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="在FW上的配置"><a href="#在FW上的配置" class="headerlink" title="在FW上的配置"></a>在FW上的配置</h5><table>
+<thead>
+<tr>
+<th>在FW1的配置</th>
+<th>在FW2的配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1.配置感兴趣流</strong><br>acl number 3000<br> rule 5 permit ip source 192.168.1.0 0.0.0.255 destination 192.168.2.0 0.0.0.255</td>
+<td><strong>1.配置感兴趣流</strong><br>acl number 3000<br> rule 5 permit ip source 192.168.2.0 0.0.0.255 destination 192.168.1.0 0.0.0.255</td>
+</tr>
+<tr>
+<td><strong>2.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
+<td><strong>2.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
+</tr>
+<tr>
+<td><strong>3.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
+<td><strong>3.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
+</tr>
+<tr>
+<td><strong>4.配置IKE peer</strong><br>ike peer FW2<br> pre-shared-key 123456<br> ike-proposal 1<br> remote-address 2.1.1.2</td>
+<td><strong>4.配置IKE peer</strong><br>ike peer FW1<br> pre-shared-key 123456<br> ike-proposal 1<br> remote-address 1.1.1.1</td>
+</tr>
+<tr>
+<td><strong>5.配置IPSec策略</strong><br>ipsec policy ipsec_policy 1 isakmp<br> security acl 3000<br> ike-peer FW2<br> proposal ipsec_p1</td>
+<td><strong>5.配置IPSec策略</strong><br>ipsec policy ipsec_policy 1 isakmp<br> security acl 3000<br> ike-peer FW1<br> proposal ipsec_p1</td>
+</tr>
+<tr>
+<td><strong>6.在接口应用IPSec策略</strong><br>interface GigabitEthernet1/0/1<br> undo shutdown<br> ip address 1.1.1.1 255.255.255.0<br> ipsec policy ipsec_policy</td>
+<td><strong>6.在接口应用IPSec策略</strong><br>interface GigabitEthernet1/0/1<br> undo shutdown<br> ip address 2.1.1.2 255.255.255.0<br> ipsec policy ipsec_policy</td>
+</tr>
+<tr>
+<td><strong>7.引导流量</strong><br>ip route-static 192.168.2.0 255.255.255.0 1.1.1.2</td>
+<td><strong>7.引导流量</strong><br>ip route-static 192.168.1.0 255.255.255.0 2.1.1.1</td>
+</tr>
+<tr>
+<td><strong>8.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 50<br>  service protocol udp source-port 500 destination-port 500<br>  action permit</td>
+<td><strong>8.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 50<br>  service protocol udp source-port 500 destination-port 500<br>  action permit</td>
+</tr>
+</tbody></table>
+<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/04/21/ipsec-de-pei-zhi/ikesa.JPG" alt="查看FW1所建立的IKE SA"></p>
+<p><img src="/2020/04/21/ipsec-de-pei-zhi/ipsecsa.JPG" alt="查看FW1所建立的IPSec SA"></p>
+<p><img src="/2020/04/21/ipsec-de-pei-zhi/sessiontable.JPG" alt="查看FW1的会话表"></p>
 
             </div>
             <hr/>
@@ -634,7 +501,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/12/er-ceng-gong-ji-de-jie-shao-yu-fang-fan/">https://hzyxy.github.io/2020/04/12/er-ceng-gong-ji-de-jie-shao-yu-fang-fan/</a>
+                    <a href="https://hzyxy.github.io/2020/04/21/ipsec-de-pei-zhi/">https://hzyxy.github.io/2020/04/21/ipsec-de-pei-zhi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -680,8 +547,8 @@
                                     <span class="chip bg-color">配置</span>
                                 </a>
                             
-                                <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
-                                    <span class="chip bg-color">攻击防范</span>
+                                <a href="/tags/VPN/">
+                                    <span class="chip bg-color">VPN</span>
                                 </a>
                             
                         </div>
@@ -847,29 +714,30 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/04/19/gre-de-jie-shao-yu-pei-zhi/">
+                <a href="/2020/04/21/ipsec-de-pei-zhi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="GRE的介绍与配置">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="IPSec的配置">
                         
-                        <span class="card-title">GRE的介绍与配置</span>
+                        <span class="card-title">IPSec的配置</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            General Routing Encapsulation的介绍与配置
+                            IPSec的配置
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-19
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-21
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -882,6 +750,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -908,24 +777,24 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/11/ddos-gong-ji-de-jie-shao-yu-fang-yu/">
+                <a href="/2020/04/20/ipsec/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="DDOS攻击的介绍与防御">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="IPSec">
                         
-                        <span class="card-title">DDOS攻击的介绍与防御</span>
+                        <span class="card-title">IPSec</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            DDOS攻击的介绍与防御
+                            IPSec的介绍
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-20
                             </span>
                         <span class="publish-author">
                             
@@ -942,16 +811,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
                     </a>
                     
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
-                        <span class="chip bg-color">攻击防范</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
                     </a>
                     
                 </div>
