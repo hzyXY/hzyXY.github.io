@@ -405,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.6k
+                    2.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    9 分
                 </div>
                 
 
@@ -519,20 +519,39 @@
 </ul>
 <p>当安全协议同时采用AH和ESP时，AH和ESP协议必须采用相同的封装模式。</p>
 <h4 id="IKE介绍"><a href="#IKE介绍" class="headerlink" title="IKE介绍"></a>IKE介绍</h4><ul>
-<li><p>因特网密钥交换IKE（Internet Key Exchange）协议建立在Internet安全联盟和密钥管理协议ISAKMP定义的框架上，是基于UDP（User Datagram Protocol）的应用层协议。</p>
-</li>
-<li><p>它为IPSec提供了自动协商密钥、建立和维护IKE SA、IPSec SA，能够简化IPSec的配置和维护工作</p>
-</li>
+<li>因特网密钥交换IKE（Internet Key Exchange）协议建立在Internet安全联盟和密钥管理协议ISAKMP定义的框架上，是基于UDP（User Datagram Protocol）的应用层协议。</li>
+<li>它为IPSec提供了自动协商密钥、建立和维护IKE SA、IPSec SA，能够简化IPSec的配置和维护工作</li>
 </ul>
+<p><strong>IKE的安全机制</strong></p>
+<p>1.身份认证<br>身份认证确认通信双方的身份（对等体的IP地址或名称），包括预共享密钥PSK（pre-shared key）认证、数字证书RSA（rsa-signature）认证和数字信封认证。</p>
+<p>2.身份保护<br>身份数据在密钥产生之后加密传送，实现了对身份数据的保护。<br>IKE支持的加密算法有：DES、3DES、AES-128、AES-192、AES-256、SM1和SM4。</p>
+<p>3.DH<br>DH是一种公共密钥交换方法，它用于产生密钥材料，并通过ISAKMP消息在发送和接收设备之间进行密钥材料交换。然后，两端设备各自计算出完全相同的对称密钥。该对称密钥用于计算加密和验证的密钥。在任何时候，通信双方都不交换真正的密钥。DH密钥交换是IKE的精髓所在。</p>
+<p>4.完善的前向安全性PFS（Perfect Forward Secrecy）<br>通过执行一次额外的DH交换，确保即使IKE SA中使用的密钥被泄露，IPSec SA中使用的密钥也不会受到损害。</p>
 <h5 id="IKEv1"><a href="#IKEv1" class="headerlink" title="IKEv1"></a>IKEv1</h5><ul>
-<li>IKEv1使用两个阶段为IPSec进行密钥协商并建立IPSec SA。<br>第一阶段，通信双方协商和建立IKE本身使用的安全通道，建立一个IKE SA。<br>第二阶段，利用这个已通过了认证和安全保护的安全通道，建立一对IPSec SA。</li>
+<li><p>IKEv1使用两个阶段为IPSec进行密钥协商并建立IPSec SA。<br>第一阶段，目的就是建立一个IKE SA，这条安全通道可以保证IKEv1阶段2的协商能够安全进行。KEv1阶段1主要协商下面三个任务：<br>1.协商建立IKE SA所使用的参数。</p>
+<p>2.使用DH算法交换与密钥相关的信息（生成各种密钥的材料）</p>
+<p>3.对等体之间验证彼此身份</p>
+<ul>
 <li>两个对等体间仅有一个IKE SA，它是一个双向逻辑连接。</li>
 </ul>
+<p>第二阶段，目的就是建立用来传输数据的IPSec SA，阶段二通过快速模式完成。在快速模式中，对等体两端协商IPSec SA的各项参数，并为数据传输衍生出密钥。</p>
+</li>
+</ul>
 <h6 id="IKEv1的三个组件"><a href="#IKEv1的三个组件" class="headerlink" title="IKEv1的三个组件"></a>IKEv1的三个组件</h6><p>SKEME：定义如何通过公共密钥技术（DH算法）实现密钥交换。<br>Oakley：提供了IPSec对各种技术的支持，例如对新的加密与散列技术，但并没有具体的定义使用什么样的技术。<br>ISAKMP：定义了消息交换的体系结构，包括两个IPSec对等体间分组形式和状态转变（定义封装格式和协商包交换的方式）。</p>
-<h6 id="IKE的三个模式"><a href="#IKE的三个模式" class="headerlink" title="IKE的三个模式"></a>IKE的三个模式</h6><p>IKEv1第一阶段的两种协商模式：<br>主模式（Main Mode） 6Message<br>野蛮模式（Aggressive Mode）3Message</p>
-<p><img src="/2020/04/20/ipsec/IPSec%5Cikev11.JPG" alt="ikev11"></p>
-<p>IKEv1第二阶段的协商模式：<br>快速模式</p>
-<p><img src="/2020/04/20/ipsec/ikev12.JPG" alt="ikev12"></p>
+<h6 id="IKE的三个模式"><a href="#IKE的三个模式" class="headerlink" title="IKE的三个模式"></a>IKE的三个模式</h6><p><strong>IKEv1第一阶段的两种协商模式：</strong><br>主模式（Main Mode） 6Message<br>野蛮模式（Aggressive Mode）3Message</p>
+<p><img src="/2020/04/20/ipsec/ikev11.JPG" alt="主模式和野蛮模式"></p>
+<p><strong>主模式中</strong></p>
+<p>第一个包和第二个包用来协商IKE SA所使用的加密算法、认证算法、认证方法和DH组标识。</p>
+<p>第三个包和第四个包用交换密钥和生成密钥<br>SKEYID=PRF(preshared key, Ni|Nr)：基础密钥,可推导下面三个密钥。<br>SKEYID_a=PRF(SKEYID, SKEYID_d|gir|CKY-i|CKY-r|1)：ISAKMP消息完整性验证密钥<br>SKEYID_e=PRF(SKEYID, SKEYID_a|gir|CKY-i|CKY-r|2)：ISAKMP消息加密密钥，后面第五、第六个包就是它加密的。<br>SKEYID_d=PRF(SKEYID, gir|CKY-i|CKY-r|0)：用于衍生出IPSec报文加密和验证密钥——最终是由这个密钥保证IPSec封装的数据报文的安全性。</p>
+<p>第五个包和第六个包用来身份的认证</p>
+<p><strong>主模式和野蛮模式的区别：</strong><br>1、主模式6个包协商能力强，野蛮模式3个包，野蛮模式加速更快。<br>2、主模式不支持动态IP的场景、野蛮模式支持动态IP的场景。<br>3、主模式ID密文加密，野蛮ID明文加密安全性级别低。<br>4、当IPSec隧道中存在NAT设备时，需要启动NAT穿越功能，而NAT转换回改变对等体的IP地址，由于野蛮模式不依赖IP地址标识身份，使得采用预共享密钥验证时，NAT穿越只能在野蛮模式中实现。</p>
+<p>野蛮模式在文档中标注的是三个报文都不加密，但是实际使用时第三个数据包会被加密。</p>
+<p><strong>IKEv1第二阶段的协商模式：</strong><br>快速模式</p>
+<p><img src="/2020/04/20/ipsec/ikev12.JPG" alt="快速模式"></p>
+<p>IKEv1协商阶段2通过三条ISAKMP消息完成双方IPSec SA的建立：</p>
+<p>第一个包：协商发起方发送本端的安全参数和身份认证信息。<br>安全参数包括被保护的数据流和IPSec安全提议等需要协商的参数。身份认证信息包括第一阶段计算出的密钥和第二阶段产生的密钥材料等，可以再次认证对等体。</p>
+<p>第二个包：协商响应方发送确认的安全参数和身份认证信息并生成新的密钥。<br>IPSec SA数据传输需要的加密、验证密钥由第一阶段产生的密钥、SPI、协议等参数衍生得出，以保证每个IPSec SA都有自己独一无二的密钥。<br>如果启用PFS，则需要再次应用DH算法计算出一个共享密钥，然后参与上述计算，因此在参数协商时要为PFS协商DH密钥组。</p>
+<p>第三个包：发送方发送确认信息，确认与响应方可以通信，协商结束。</p>
 
             </div>
             <hr/>
@@ -1021,7 +1040,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">33.4k</span>&nbsp;字
+                class="white-color">34.5k</span>&nbsp;字
             
             
             
