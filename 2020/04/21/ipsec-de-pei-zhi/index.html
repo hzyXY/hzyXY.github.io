@@ -409,14 +409,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    602
+                    1.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    6 分
                 </div>
                 
 
@@ -432,7 +432,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="IPSec的配置"><a href="#IPSec的配置" class="headerlink" title="IPSec的配置"></a>IPSec的配置</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p><img src="/2020/04/21/ipsec-de-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
+                <h2 id="IPSec的配置"><a href="#IPSec的配置" class="headerlink" title="IPSec的配置"></a>IPSec的配置</h2><h3 id="（主模式双方采用固定IP）配置"><a href="#（主模式双方采用固定IP）配置" class="headerlink" title="（主模式双方采用固定IP）配置"></a>（主模式双方采用固定IP）配置</h3><p><img src="/2020/04/21/ipsec-de-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
 <h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="在FW上的配置"><a href="#在FW上的配置" class="headerlink" title="在FW上的配置"></a>在FW上的配置</h5><table>
 <thead>
 <tr>
@@ -473,9 +473,57 @@
 <td><strong>8.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 50<br>  service protocol udp source-port 500 destination-port 500<br>  action permit</td>
 </tr>
 </tbody></table>
-<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/04/21/ipsec-de-pei-zhi/ikesa.JPG" alt="查看FW1所建立的IKE SA"></p>
-<p><img src="/2020/04/21/ipsec-de-pei-zhi/ipsecsa.JPG" alt="查看FW1所建立的IPSec SA"></p>
-<p><img src="/2020/04/21/ipsec-de-pei-zhi/sessiontable.JPG" alt="查看FW1的会话表"></p>
+<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/04/21/ipsec-de-pei-zhi/gikesa.JPG" alt="查看FW1所建立的IKE SA"></p>
+<p><img src="/2020/04/21/ipsec-de-pei-zhi/gipsecsa.JPG" alt="查看FW1所建立的IPSec SA"></p>
+<p><img src="/2020/04/21/ipsec-de-pei-zhi/gsessiontable.JPG" alt="查看FW1的会话表"></p>
+<h3 id="（主模式一端采用固定IP场景）配置"><a href="#（主模式一端采用固定IP场景）配置" class="headerlink" title="（主模式一端采用固定IP场景）配置"></a>（主模式一端采用固定IP场景）配置</h3><p><img src="/2020/04/21/ipsec-de-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
+<h4 id="配置步骤-1"><a href="#配置步骤-1" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="在FW上的配置-1"><a href="#在FW上的配置-1" class="headerlink" title="在FW上的配置"></a>在FW上的配置</h5><table>
+<thead>
+<tr>
+<th>在FW1的配置（固定IP）</th>
+<th>在FW2的配置（动态IP）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>**无需配置感兴趣流**</code></td>
+<td><strong>1.配置感兴趣流</strong><br>acl number 3000<br> rule 5 permit ip source 192.168.2.0 0.0.0.255 destination 192.168.1.0 0.0.0.255</td>
+</tr>
+<tr>
+<td><strong>1.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
+<td><strong>2.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
+</tr>
+<tr>
+<td><strong>2.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
+<td><strong>3.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
+</tr>
+<tr>
+<td><strong>3.配置IKE peer</strong><br><code>ike peer any</code><br> undo version 2<br> pre-shared-key 123456<br> ike-proposal 1</td>
+<td><strong>4.配置IKE peer</strong><br>ike peer FW1<br> undo version 2<br> pre-shared-key 123456<br> ike-proposal 1<br> <code>remote-address 1.1.1.1</code></td>
+</tr>
+<tr>
+<td><strong><code>4.配置IPSec策略模板</code></strong><br><code>ipsec policy-template ipsec_t 1</code><br> <code>ike-peer any</code><br> <code>proposal ipsec_p1</code><br> <code>route inject dynamic</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>**5.配置IPSec策略并引用IPSec策略模板**&lt;br /&gt;ipsec policy ipsec_policy 1 isakmp template ipsec_t</code></td>
+<td><strong>5.配置IPSec策略</strong><br>ipsec policy ipsec_policy 1 isakmp<br> security acl 3000<br> ike-peer FW1<br> proposal ipsec_p1</td>
+</tr>
+<tr>
+<td><strong>6.在接口应用IPSec策略</strong><br>interface GigabitEthernet1/0/1<br> undo shutdown<br> ip address 1.1.1.1 255.255.255.0<br> ipsec policy ipsec_policy</td>
+<td><strong>6.在接口应用IPSec策略</strong><br>interface GigabitEthernet1/0/1<br> undo shutdown<br> ip address 2.1.1.2 255.255.255.0<br> ipsec policy ipsec_policy</td>
+</tr>
+<tr>
+<td><code>**无需配置静态路由引导流量**</code></td>
+<td><strong>7.引导流量</strong><br>ip route-static 192.168.1.0 255.255.255.0 2.1.1.1</td>
+</tr>
+<tr>
+<td><strong>7.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 50<br>  service protocol udp source-port 500 destination-port 500<br>  action permit</td>
+<td><strong>8.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 50<br>  service protocol udp source-port 500 destination-port 500<br>  action permit</td>
+</tr>
+</tbody></table>
+<h4 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/04/21/ipsec-de-pei-zhi/dikesa.JPG" alt="查看FW1所建立的IKE SA"></p>
+<p><img src="/2020/04/21/ipsec-de-pei-zhi/dipsecsa.JPG" alt="查看FW1所建立的IPSec SA"></p>
+<p><img src="/2020/04/21/ipsec-de-pei-zhi/dsessiontable.JPG" alt="查看FW1的会话表"></p>
 
             </div>
             <hr/>
@@ -968,7 +1016,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">35.6k</span>&nbsp;字
+                class="white-color">36.2k</span>&nbsp;字
             
             
             
