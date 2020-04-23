@@ -449,7 +449,7 @@
 <li><p>IPSec SA的个数还与安全协议相关</p>
 </li>
 </ul>
-<h5 id="AH"><a href="#AH" class="headerlink" title="AH"></a>AH</h5><p><strong>AH（Authentication Header）</strong></p>
+<h5 id="AH"><a href="#AH" class="headerlink" title="AH"></a>AH</h5><p><strong>AH（Authentication Header）</strong>UDP51</p>
 <ul>
 <li><p>提供数据来源认证、数据完整性校验和报文防重放功能。</p>
 </li>
@@ -458,7 +458,7 @@
 <li><p>AH协议的完整性验证范围为整个IP报文。</p>
 </li>
 </ul>
-<h5 id="ESP"><a href="#ESP" class="headerlink" title="ESP"></a>ESP</h5><p><strong>ESP（Encapsulating Security Payload）</strong></p>
+<h5 id="ESP"><a href="#ESP" class="headerlink" title="ESP"></a>ESP</h5><p><strong>ESP（Encapsulating Security Payload）</strong>UDP50</p>
 <ul>
 <li>提供数据来源认证、数据完整性校验、报文防重放和加密功能。</li>
 <li>ESP的工作原理是在每一个数据包的标准IP报头后面添加一个ESP报头（ESP Header），并在数据包后面追加一个ESP尾（ESP Tail和ESP Auth data）。<br>ESP Header：唯一标识IPSec安全联盟和防重放攻击<br>ESP Tail：将数据中的有效载荷进行加密后再封装到数据包中，以保证数据的机密性<br>ESP Auth data：用于对数据提供来源认证和完整性校验</li>
@@ -521,6 +521,7 @@
 <h4 id="IKE介绍"><a href="#IKE介绍" class="headerlink" title="IKE介绍"></a>IKE介绍</h4><ul>
 <li>因特网密钥交换IKE（Internet Key Exchange）协议建立在Internet安全联盟和密钥管理协议ISAKMP定义的框架上，是基于UDP（User Datagram Protocol）的应用层协议。</li>
 <li>它为IPSec提供了自动协商密钥、建立和维护IKE SA、IPSec SA，能够简化IPSec的配置和维护工作</li>
+<li>端口号：UDP500</li>
 </ul>
 <p><strong>IKE的安全机制</strong></p>
 <p>1.身份认证<br>身份认证确认通信双方的身份（对等体的IP地址或名称），包括预共享密钥PSK（pre-shared key）认证、数字证书RSA（rsa-signature）认证和数字信封认证。</p>
@@ -1042,7 +1043,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">36.2k</span>&nbsp;字
+                class="white-color">37.4k</span>&nbsp;字
             
             
             

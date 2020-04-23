@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="带宽管理, XY">
+    <meta name="keywords" content="IPSec与NAT-T, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>带宽管理 | XY</title>
+    <title>IPSec与NAT-T | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">带宽管理</h1>
+                    <h1 class="description center-align post-title">IPSec与NAT-T</h1>
                 </div>
             </div>
         </div>
@@ -371,12 +371,16 @@
                                 <span class="chip bg-color">华为</span>
                             </a>
                         
-                            <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                <span class="chip bg-color">防火墙</span>
+                            <a href="/tags/NAT/">
+                                <span class="chip bg-color">NAT</span>
                             </a>
                         
-                            <a href="/tags/%E6%B5%81%E9%87%8F%E7%AE%A1%E7%90%86/">
-                                <span class="chip bg-color">流量管理</span>
+                            <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                                <span class="chip bg-color">配置</span>
+                            </a>
+                        
+                            <a href="/tags/VPN/">
+                                <span class="chip bg-color">VPN</span>
                             </a>
                         
                     </div>
@@ -387,8 +391,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Datacom/" class="post-category">
-                                Datacom
+                            <a href="/categories/Security/" class="post-category">
+                                Security
                             </a>
                         
                     </div>
@@ -400,7 +404,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-09
+                    2020-04-22
                 </div>
                 
 
@@ -409,14 +413,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.1k
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    10 分
+                    5 分
                 </div>
                 
 
@@ -432,127 +436,82 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="带宽管理"><a href="#带宽管理" class="headerlink" title="带宽管理"></a>带宽管理</h2><ul>
-<li>带宽管理指的是FW基于入接口/源安全区域、出接口/目的安全区域、源地址/地区、目的地址/地区、用户、服务、应用、URL分类、时间段和报文DSCP优先级信息，对通过自身的流量进行管理和控制。</li>
+                <h2 id="IPSecNAT-T"><a href="#IPSecNAT-T" class="headerlink" title="IPSecNAT-T"></a>IPSecNAT-T</h2><ul>
+<li>部署IPSec VPN网络时，如果发起者位于一个私网内部，远端位于公网侧，而它希望与远端响应者直接建立一条IPSec隧道。为保证存在NAT设备的IPSec隧道能够正常建立，这就涉及到IPSec的NAT穿越问题。</li>
 </ul>
-<p>带宽管理提供带宽限制、带宽保证和连接数限制功能，可以提高带宽利用率，避免带宽耗尽。</p>
-<ul>
-<li><p>带宽限制</p>
-<p>限制网络中非关键业务占用的带宽，避免此类业务消耗大量带宽资源，影响其他业务。</p>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><ul>
+<li><p>由于AH对数据进行的完整性检查会对包括IP地址在内的整个IP包进行Hash运算，而地址转换会改变IP地址，从而破坏AH的Hash值。因此使用AH的IPSec隧道无法穿越NAT设备。</p>
 </li>
-<li><p>带宽保证</p>
-<p>保证网络中关键业务所需的带宽，当线路繁忙时，确保此类业务不受影响。</p>
+<li><p>ESP对数据进行的完整性检查不包括外部的IP头，若只进行地址转换时，ESP可以正常工作。但ESP是三层协议，无法设置端口，所以执行允许端口转换的NAT时ESP也存在问题。NAT穿越采用了增加UDP头封装ESP报文的方法解决这个问题。</p>
 </li>
-<li><p>连接数限制（包括并发连接数限制和每秒新建连接速率限制）</p>
-<p>限制业务的连接数，有利于降低该业务占用的带宽，还可以节省设备的会话资源。</p>
+<li><p>传输模式下，NAT穿越在原报文的IP头和ESP头间增加一个标准的UDP报头；隧道模式下，NAT穿越在新IP头和ESP头间增加一个标准的UDP报头。</p>
 </li>
-</ul>
-<h3 id="总体流程"><a href="#总体流程" class="headerlink" title="总体流程"></a>总体流程</h3><p>FW通过带宽策略、带宽通道和接口带宽来实现带宽管理功能</p>
-<ul>
-<li><p>带宽通道</p>
-<p>带宽通道定义了被管理的对象所能够使用的带宽资源，将被带宽策略引用。</p>
+<li><p>当ESP报文穿越NAT设备时，NAT设备对该报文的外层IP头和增加的UDP报头进行地址和端口号转换；转换后的报文到达IPSec隧道对端后，与普通IPSec处理方式相同。</p>
 </li>
-<li><p>带宽策略</p>
-<p>带宽策略定义了被管理的对象和动作，并引用带宽通道。</p>
-</li>
-<li><p>接口带宽</p>
-<p>接口带宽定义了接口入方向和出方向的实际带宽，流量发生拥塞时，启用队列调度机制。</p>
+<li><p>NAT Keepalive报文的作用：防止NAT表项老化，NAT设备上的NAT会话表项有一定的存活时间，如果IPSec隧道建立后长时间没有报文进行NAT穿越，NAT设备会删除该NAT会话表项，这将导致在NAT设备外网侧的对等体无法继续传输数据。</p>
 </li>
 </ul>
-<p>整体的处理流程如下：</p>
-<ol>
-<li>流量匹配带宽策略，经过带宽策略的分流后，进入相应的带宽通道进行处理。带宽通道的处理包括：<ul>
-<li>丢弃超过了预先定义的最大带宽的流量。</li>
-<li>限制业务的连接数。</li>
-<li>标记流量的优先级，作为后续队列调度的依据。</li>
-</ul>
-</li>
-<li>受入接口带宽的限制，如果流量大于入接口带宽，将根据带宽通道中设置的转发优先级对流量进行队列调度，保证高优先级的报文被优先发送。</li>
-<li>流量最终从出接口发送时，受出接口带宽的限制。如果流量大于出接口带宽，将根据转发优先级对流量进行队列调度，保证高优先级的报文被优先发送。</li>
-</ol>
-<h3 id="带宽通道"><a href="#带宽通道" class="headerlink" title="带宽通道"></a>带宽通道</h3><p>流量匹配带宽策略后进入带宽通道，带宽通道定义了具体的带宽资源，是进行带宽管理的基础。</p>
-<p>通过带宽通道，可以将物理的带宽资源从逻辑上划分为多个虚拟的带宽资源。带宽通道使用多个参数来对带宽资源进行描述和控制，包括整体的保证带宽和最大带宽、每IP/每用户的最大带宽、连接数限制和DSCP优先级重标记。此外，带宽通道还可以实现带宽资源的闲时复用。</p>
-<h4 id="整体的保证带宽和最大带宽"><a href="#整体的保证带宽和最大带宽" class="headerlink" title="整体的保证带宽和最大带宽"></a>整体的保证带宽和最大带宽</h4><p>整体的保证带宽是指进入带宽通道的流量可获得的最小带宽资源，整体的最大带宽是指进入带宽通道的流量可获得的最大带宽资源。流量进入带宽通道后，FW将当前流量与带宽通道中设置的保证带宽/最大带宽进行比较，采取不同的处理方式：</p>
-<ul>
-<li>如果流量小于保证带宽，这部分流量在出接口发送环节能够确保被转发。</li>
-<li>如果流量大于最大带宽，则直接丢弃超出最大带宽的流量。</li>
-<li>超出保证带宽的流量，在出接口发送环节将会与其它带宽通道中同类型的流量自由竞争带宽资源。带宽通道的优先级越高，就会更优先获得剩余带宽资源。获得带宽资源后发送流量，否则丢弃流量。</li>
-</ul>
-<h4 id="每IP-每用户的保证带宽和最大带宽"><a href="#每IP-每用户的保证带宽和最大带宽" class="headerlink" title="每IP/每用户的保证带宽和最大带宽"></a>每IP/每用户的保证带宽和最大带宽</h4><p>当带宽通道被带宽策略引用后，FW会基于IP地址或用户，对符合带宽策略匹配条件的流量进行统计，每IP/每用户的保证带宽和最大带宽的作用与整体带宽类似，只是作用范围细化至每IP/用户范围。</p>
-<h4 id="连接数限制（并发连接总数限制和新建连接速率限制）"><a href="#连接数限制（并发连接总数限制和新建连接速率限制）" class="headerlink" title="连接数限制（并发连接总数限制和新建连接速率限制）"></a>连接数限制（并发连接总数限制和新建连接速率限制）</h4><p>通信双方建立的连接在FW上体现为会话，一条会话对应一个连接。FW通过限制自身生成的会话数量，来实现连接数限制功能，主要作用包括：</p>
-<ul>
-<li>P2P（Point to Point）业务会产生大量的连接，限制其连接数有利于减少P2P业务的流量，降低带宽占用。</li>
-<li>在部署了内网服务器的场景中，连接数限制功能可以辅助FW防范针对内网服务器的DDoS（Distributed Denial Of Service）攻击。</li>
-<li>节省FW上的会话资源。</li>
-</ul>
-<p>带宽通道中可以配置整体的最大连接数，也可以配置针对源IP或用户的最大连接数。</p>
-<h4 id="上下行带宽独立控制和整体控制"><a href="#上下行带宽独立控制和整体控制" class="headerlink" title="上下行带宽独立控制和整体控制"></a>上下行带宽独立控制和整体控制</h4><p>在上面提到的最大带宽、保证带宽和连接数限制均支持上下行分别配置。</p>
-<p>在带宽通道中，上下行代表的含义跟带宽策略本身有关：流量传输方向与带宽策略同向时，定义为上行；与带宽策略反向时，定义为下行。</p>
-<p>例如，如果需要限制trust到untrust的流量，可以有以下两种方式：</p>
-<ul>
-<li>带宽策略的源区域为trust，目的区域为untrust，带宽通道中配置对上行带宽进行管控（与带宽策略同向）。</li>
-<li>带宽策略的源区域为untrust，目的区域为trust，带宽通道中配置对下行带宽进行管控（与带宽策略反向）。</li>
-</ul>
-<p>此外，除了上下行带宽独立控制这种细粒度的管控方式，FW还提供了基于上行和下行流量之和的带宽管控方式。</p>
-<h4 id="DSCP优先级重标记"><a href="#DSCP优先级重标记" class="headerlink" title="DSCP优先级重标记"></a>DSCP优先级重标记</h4><p>DSCP优先级重标记是指修改报文中DSCP（Differentiated Services Code Point）字段的值。DSCP字段也称为DSCP优先级，是网络设备进行流量分类的依据。位于报文传输路径上的各个网络设备，可以通过DSCP优先级来区分流量，进而对不同DSCP优先级的流量采取差异化的处理。</p>
-<p>FW支持在带宽策略中配置DSCP作为匹配条件，也可以在带宽通道中对符合条件的报文修改其DSCP字段值，便于FW的上下行设备根据修改后的DSCP优先级来区分流量。</p>
-<h4 id="策略独占和策略共享"><a href="#策略独占和策略共享" class="headerlink" title="策略独占和策略共享"></a>策略独占和策略共享</h4><p>带宽通道被带宽策略引用后，整体最大带宽、整体保证带宽和整体最大连接数就会在带宽策略中起作用，其工作方式包括策略独占和策略共享两种：</p>
-<ul>
-<li><p>策略独占</p>
-<p>每一个引用带宽通道的带宽策略都独自受到该带宽通道的约束，即符合该带宽策略匹配条件的流量，独享最大带宽资源。</p>
-</li>
-<li><p>策略共享</p>
-<p>所有引用带宽通道的带宽策略都共同受到该带宽通道的约束，即符合多条带宽策略匹配条件的流量，共享最大带宽资源。</p>
-</li>
-</ul>
-<h4 id="带宽复用"><a href="#带宽复用" class="headerlink" title="带宽复用"></a>带宽复用</h4><p>指的是多条流量进入同一个带宽通道后，带宽通道内带宽资源的动态分配方式。当带宽通道中某一条流量没有使用带宽资源时，该空闲的带宽资源可以借给其它流量使用；如果有流量需要使用带宽资源时，可以压缩其它流量的带宽，从而将带宽资源抢占回来。</p>
-<p>带宽复用包括下面几种情况：</p>
-<ul>
-<li>多条流量匹配到了同一个带宽策略，多条流量之间可以实现带宽复用。</li>
-<li>多个带宽策略以策略共享的方式引用带宽通道，则匹配了带宽策略的多条流量之间可以实现带宽复用。</li>
-<li>匹配了父子策略中的多个子策略的多条流量之间可以实现带宽复用。</li>
-</ul>
-<h4 id="流量转发优先级"><a href="#流量转发优先级" class="headerlink" title="流量转发优先级"></a>流量转发优先级</h4><p>FW支持为带宽通道配置流量转发优先级。当流量转发优先级配置为“中（4）”时，默认采用流量监管（Traffic Policing）的方式进行带宽限制；当带宽通道中的流量转发优先级不为“中（4）”时，默认采用流量整形（Traffic Shaping）的方式进行带宽限制。此时，超过带宽上限值的峰值流量和突发流量报文的转发优先级会被修改，优先级大于4的报文会被优先发送，优先级小于4的报文则会被延后发送。</p>
-<ul>
-<li>流量监管（Traffic Policing）通过CAR机制限制网络中的峰值流量和突发流量，若某个连接的报文流量超过带宽通道中设置的带宽上限值，则报文会被直接丢弃。</li>
-<li>流量整形（Traffic Shaping）则通过队列机制，将超过带宽上限值的峰值流量和突发流量报文延迟传输，在限制网络中突发流量的同时调整流量的输出速率，使报文以比较均匀的速度向外发送。</li>
-</ul>
-<p>在流量整形（Traffic Shaping）方式下，缓冲区的数据量和缓冲时长受队列长度容量的约束，一旦缓冲区的数据量超出队列长度容量的阈值，则数据报文会被丢弃。</p>
-<h3 id="带宽策略"><a href="#带宽策略" class="headerlink" title="带宽策略"></a>带宽策略</h3><ul>
-<li><p>带宽策略决定了对网络中的哪些流量进行带宽管理，以及如何进行带宽管理。</p>
-</li>
-<li><p>带宽策略中引用带宽通道，所有符合带宽策略匹配条件的流量，都只能使用该带宽通道所定义的带宽资源。</p>
-</li>
-</ul>
-<h4 id="规则的组成信息"><a href="#规则的组成信息" class="headerlink" title="规则的组成信息"></a>规则的组成信息</h4><p>带宽策略是多个带宽策略规则的集合，带宽策略规则由条件和动作组成。</p>
-<p>条件指的是FW匹配报文的依据，包括：</p>
-<ul>
-<li>源安全区域/入接口</li>
-<li>目的安全区域/出接口</li>
-<li>源地址/地区</li>
-<li>目的地址/地区</li>
-<li>用户</li>
-<li>服务</li>
-<li>应用</li>
-<li>URL分类</li>
-<li>时间段</li>
-<li>DSCP优先级</li>
-</ul>
-<p>动作指的是FW对报文采取的处理方式，包括：</p>
-<ul>
-<li><p>限流</p>
-<p>对符合条件的流量进行管理。当动作为限流时，还需在带宽策略中引用带宽通道，对流量的具体管理措施由该带宽通道决定。</p>
-</li>
-<li><p>不限流</p>
-<p>对符合条件的流量不进行管理。</p>
-</li>
-</ul>
-<p>默认情况下，FW上存在一条缺省的带宽策略，所有匹配条件均为任意（any），动作为不限流。</p>
-<h4 id="多级策略"><a href="#多级策略" class="headerlink" title="多级策略"></a>多级策略</h4><p>FW的带宽策略功能支持多级配置方式，即在一条带宽策略下，还可以继续配置多条带宽子策略。目前FW支持四级策略，对于多条同级策略，FW按照界面上的排列顺序从上到下依次匹配，只要匹配了一条策略的所有条件，则执行带宽通道的动作，不再继续匹配剩下的规则；对于多级策略，流量先匹配子策略，再去匹配父策略。</p>
-<h3 id="接口带宽"><a href="#接口带宽" class="headerlink" title="接口带宽"></a>接口带宽</h3><p>配置接口带宽，限制FW的接口在入方向和出方向上能够使用的带宽资源。</p>
-<p>FW作为大中型企业的出口网关时，企业向运营商申请的带宽资源一般都小于FW出接口的物理带宽。如果FW无法感知出接口上所能够使用的最大带宽资源，导致发出去的流量到达对端设备后产生拥塞，严重的话将会造成丢包。</p>
-<p>通过配置接口出方向上的带宽限制功能，可以使出接口的实际带宽与运营商所提供的带宽资源相匹配。当流量超过接口可以使用的实际带宽时，FW可以感知拥塞，触发队列调度机制，优先转发关键业务的流量。</p>
-<p>此外，也可以配置接口入方向上的实际带宽，当FW接收其它设备发送的流量时，限制进入接口的流量。</p>
+<p>  IPSec NAT穿越的端口号：UDP4500 //可命令更改</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p><img src="/2020/04/22/ipsecnat-t/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
+<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="在FW上的配置"><a href="#在FW上的配置" class="headerlink" title="在FW上的配置"></a>在FW上的配置</h5><table>
+<thead>
+<tr>
+<th>在FW1的配置</th>
+<th>在FW2的配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1.配置感兴趣流</strong><br>acl number 3000<br> rule 5 permit ip source 192.168.1.0 0.0.0.255 destination 192.168.2.0 0.0.0.255</td>
+<td><strong>1.配置感兴趣流</strong><br>acl number 3000<br> rule 5 permit ip source 192.168.2.0 0.0.0.255 destination 192.168.1.0 0.0.0.255</td>
+</tr>
+<tr>
+<td><strong>2.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
+<td><strong>2.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
+</tr>
+<tr>
+<td><strong>3.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
+<td><strong>3.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
+</tr>
+<tr>
+<td><strong>4.配置IKE peer</strong><br>ike peer FW2<br> undo version 2<br> pre-shared-key 123456<br> ike-proposal 1<br> remote-address 2.1.1.2</td>
+<td><strong>4.配置IKE peer</strong><br>ike peer AR1<br> undo version 2<br> pre-shared-key 123456<br> ike-proposal 1<br> <code>remote-address 1.1.1.1</code><br> <code>remote-address authentication-address 192.168.3.1</code></td>
+</tr>
+<tr>
+<td><strong>5.配置IPSec策略</strong><br>ipsec policy ipsec_policy 1 isakmp<br> security acl 3000<br> ike-peer FW2<br> proposal ipsec_p1</td>
+<td><strong>5.配置IPSec策略</strong><br>ipsec policy ipsec_policy 1 isakmp<br> security acl 3000<br> ike-peer AR1<br> proposal ipsec_p1</td>
+</tr>
+<tr>
+<td><strong>6.在接口应用IPSec策略</strong><br>interface GigabitEthernet1/0/1<br> undo shutdown<br> ip address 192.168.3.1 255.255.255.0<br> ipsec policy ipsec_policy</td>
+<td><strong>6.在接口应用IPSec策略</strong><br>interface GigabitEthernet1/0/0<br> undo shutdown<br> ip address 2.1.1.2 255.255.255.0<br> ipsec policy ipsec_policy</td>
+</tr>
+<tr>
+<td><strong>7.引导流量</strong><br>ip route-static 192.168.2.0 255.255.255.0 192.168.3.254</td>
+<td><strong>7.引导流量</strong><br>ip route-static 192.168.1.0 255.255.255.0 2.1.1.1</td>
+</tr>
+<tr>
+<td><strong>8.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 2.1.1.2 32<br>  source-address 192.168.3.1 32<br>  destination-address 2.1.1.2 32<br>  destination-address 192.168.3.1 32<br>  service protocol udp source-port 500 4500 destination-port 500 4500<br>  action permit</td>
+<td><strong>8.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol udp<br>  action permit</td>
+</tr>
+</tbody></table>
+<h5 id="二、在AR1上的配置"><a href="#二、在AR1上的配置" class="headerlink" title="二、在AR1上的配置"></a>二、在AR1上的配置</h5><p><strong>1.配置ACL</strong></p>
+<p>acl number 3000<br> rule 5 permit ip source 192.168.1.0 0.0.0.255<br> rule 10 permit ip source 192.168.3.0 0.0.0.255 </p>
+<p><strong>2.配置Easy IP</strong></p>
+<p>interface GigabitEthernet0/0/1<br> ip address 1.1.1.1 255.255.255.0<br> nat outbound 3000</p>
+<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><table>
+<thead>
+<tr>
+<th><img src="/2020/04/22/ipsecnat-t/FW1ikesa.JPG" alt="查看FW1所建立的IKE SA"></th>
+<th><img src="/2020/04/22/ipsecnat-t/FW2ikesa.JPG" alt="查看FW2所建立的IKE SA"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="/2020/04/22/ipsecnat-t/FW1ipsecsa.JPG" alt="查看FW1所建立的IPSec SA"></td>
+<td><img src="/2020/04/22/ipsecnat-t/FW2ipsecsa.JPG" alt="查看FW2所建立的IPSec SA"></td>
+</tr>
+</tbody></table>
+<p><img src="/2020/04/22/ipsecnat-t/FW1sesstable.JPG" alt="查看FW1的会话表"></p>
+<p><img src="/2020/04/22/ipsecnat-t/FW2sesstable.JPG" alt="查看FW2的会话表"></p>
+<p><img src="/2020/04/22/ipsecnat-t/zbjg.JPG" alt="第五个包开始从UDP500变成UDPUDP4500"></p>
 
             </div>
             <hr/>
@@ -578,7 +537,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/09/dai-kuan-guan-li/">https://hzyxy.github.io/2020/04/09/dai-kuan-guan-li/</a>
+                    <a href="https://hzyxy.github.io/2020/04/22/ipsecnat-t/">https://hzyxy.github.io/2020/04/22/ipsecnat-t/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -620,12 +579,16 @@
                                     <span class="chip bg-color">华为</span>
                                 </a>
                             
-                                <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                    <span class="chip bg-color">防火墙</span>
+                                <a href="/tags/NAT/">
+                                    <span class="chip bg-color">NAT</span>
                                 </a>
                             
-                                <a href="/tags/%E6%B5%81%E9%87%8F%E7%AE%A1%E7%90%86/">
-                                    <span class="chip bg-color">流量管理</span>
+                                <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                                    <span class="chip bg-color">配置</span>
+                                </a>
+                            
+                                <a href="/tags/VPN/">
+                                    <span class="chip bg-color">VPN</span>
                                 </a>
                             
                         </div>
@@ -791,29 +754,30 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/04/10/dan-bao-gong-ji-de-jie-shao-yu-fang-fan/">
+                <a href="/2020/04/22/ipsecnat-t/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="单包攻击的介绍与防范">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="IPSec与NAT-T">
                         
-                        <span class="card-title">单包攻击的介绍与防范</span>
+                        <span class="card-title">IPSec与NAT-T</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            防火墙单包攻击的介绍与防范
+                            IPSec NAT穿越技术的介绍与配置
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-10
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-22
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -826,6 +790,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -833,16 +798,16 @@
                         <span class="chip bg-color">华为</span>
                     </a>
                     
+                    <a href="/tags/NAT/">
+                        <span class="chip bg-color">NAT</span>
+                    </a>
+                    
                     <a href="/tags/%E9%85%8D%E7%BD%AE/">
                         <span class="chip bg-color">配置</span>
                     </a>
                     
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
-                        <span class="chip bg-color">攻击防范</span>
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
                     </a>
                     
                 </div>
@@ -856,24 +821,24 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/08/xu-ni-xi-tong/">
+                <a href="/2020/04/21/ipsec-de-pei-zhi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="虚拟系统">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="IPSec的配置">
                         
-                        <span class="card-title">虚拟系统</span>
+                        <span class="card-title">IPSec的配置</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            虚拟系统的介绍与配置
+                            IPSec的配置
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-08
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-21
                             </span>
                         <span class="publish-author">
                             
@@ -898,12 +863,8 @@
                         <span class="chip bg-color">配置</span>
                     </a>
                     
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/">
-                        <span class="chip bg-color">虚拟化</span>
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
                     </a>
                     
                 </div>
