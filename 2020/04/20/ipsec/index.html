@@ -405,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.6k
+                    5.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    20 分
                 </div>
                 
 
@@ -518,7 +518,7 @@
 <li>从场景来讲，传输模式主要应用于两台主机或一台主机和一台VPN网关之间通信；隧道模式主要应用于两台VPN网关之间或一台主机与一台VPN网关之间的通信。</li>
 </ul>
 <p>当安全协议同时采用AH和ESP时，AH和ESP协议必须采用相同的封装模式。</p>
-<h4 id="IKE介绍"><a href="#IKE介绍" class="headerlink" title="IKE介绍"></a>IKE介绍</h4><ul>
+<h4 id="IKE"><a href="#IKE" class="headerlink" title="IKE"></a>IKE</h4><ul>
 <li>因特网密钥交换IKE（Internet Key Exchange）协议建立在Internet安全联盟和密钥管理协议ISAKMP定义的框架上，是基于UDP（User Datagram Protocol）的应用层协议。</li>
 <li>它为IPSec提供了自动协商密钥、建立和维护IKE SA、IPSec SA，能够简化IPSec的配置和维护工作</li>
 <li>端口号：UDP500</li>
@@ -539,20 +539,260 @@
 </li>
 </ul>
 <h6 id="IKEv1的三个组件"><a href="#IKEv1的三个组件" class="headerlink" title="IKEv1的三个组件"></a>IKEv1的三个组件</h6><p>SKEME：定义如何通过公共密钥技术（DH算法）实现密钥交换。<br>Oakley：提供了IPSec对各种技术的支持，例如对新的加密与散列技术，但并没有具体的定义使用什么样的技术。<br>ISAKMP：定义了消息交换的体系结构，包括两个IPSec对等体间分组形式和状态转变（定义封装格式和协商包交换的方式）。</p>
-<h6 id="IKE的三个模式"><a href="#IKE的三个模式" class="headerlink" title="IKE的三个模式"></a>IKE的三个模式</h6><p><strong>IKEv1第一阶段的两种协商模式：</strong><br>主模式（Main Mode） 6Message<br>野蛮模式（Aggressive Mode）3Message</p>
+<h6 id="IKEv1第一阶段的两种协商模式"><a href="#IKEv1第一阶段的两种协商模式" class="headerlink" title="IKEv1第一阶段的两种协商模式"></a><strong>IKEv1第一阶段的两种协商模式</strong></h6><p><strong>主模式（Main Mode）</strong> 6Message</p>
 <p><img src="/2020/04/20/ipsec/ikev11.JPG" alt="主模式和野蛮模式"></p>
-<p><strong>主模式中</strong></p>
-<p>第一个包和第二个包用来协商IKE SA所使用的加密算法、认证算法、认证方法和DH组标识。</p>
-<p>第三个包和第四个包用交换密钥和生成密钥<br>SKEYID=PRF(preshared key, Ni|Nr)：基础密钥,可推导下面三个密钥。<br>SKEYID_a=PRF(SKEYID, SKEYID_d|gir|CKY-i|CKY-r|1)：ISAKMP消息完整性验证密钥<br>SKEYID_e=PRF(SKEYID, SKEYID_a|gir|CKY-i|CKY-r|2)：ISAKMP消息加密密钥，后面第五、第六个包就是它加密的。<br>SKEYID_d=PRF(SKEYID, gir|CKY-i|CKY-r|0)：用于衍生出IPSec报文加密和验证密钥——最终是由这个密钥保证IPSec封装的数据报文的安全性。</p>
-<p>第五个包和第六个包用来身份的认证</p>
-<p><strong>主模式和野蛮模式的区别：</strong><br>1、主模式6个包协商能力强，野蛮模式3个包，野蛮模式加速更快。<br>2、主模式不支持动态IP的场景、野蛮模式支持动态IP的场景。<br>3、主模式ID密文加密，野蛮ID明文加密安全性级别低。<br>4、当IPSec隧道中存在NAT设备时，需要启动NAT穿越功能，而NAT转换回改变对等体的IP地址，由于野蛮模式不依赖IP地址标识身份，使得采用预共享密钥验证时，NAT穿越只能在野蛮模式中实现。</p>
+<p>参数说明<br>HDR：一个ISAKMP头，HDR*表示ISAKMP后面的载荷是加密的<br>SA:带有一个或多个建议的安全关联载荷<br>KE：密钥交换载荷<br>IDX：标识载荷，通常为IP地址。X=i表示发起者，X=r表示响应者<br>HASH：杂凑载荷，进行身份数据验证。<br>SIG：签名载荷<br>CERT：证书载荷<br>Nx：代表随机数，通过KE交换素材得到的公共的K值。x=i为发起者，x=r为响应者<br>K值为推导SKEYID使用<br>&lt; P &gt;_b：载荷P的主体，就是没有通用头的载荷<br>CKY-I（CKY-R）：ISAKMP头中的发起者（响应者）cookie<br>gXi或gXr：发起者或响应者的DH公开值<br>Prf（key，msg）：使用密钥key和输入信息msg的伪随机数函数，如HMAC</p>
+<p>主模式</p>
+<p>使用预共享密钥作为验证时的报文交互：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Message</th>
+<th align="center">Initiator</th>
+<th align="center"></th>
+<th align="center">Responder</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">HDR, SA</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center">&lt;—-</td>
+<td align="center">HDR, SA</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">HDR, KE, Ni</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"></td>
+<td align="center">&lt;—-</td>
+<td align="center">HDR, KE, Nr</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">HDR*, IDii, HASH_I</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center"></td>
+<td align="center">&lt;—-</td>
+<td align="center">HDR*, IDir, HASH_R</td>
+</tr>
+</tbody></table>
+<p>符号说明：<br>HDR：一个ISAKMP头，HDR*表示ISAKMP后面的载荷是加密的<br>SA：是有一个或多个提议的SA协商负载。发起方可能提供多个协商的提议；应答方只能用一个提议来回答。<br>KE：是包含了用于Diffie-Hellman交换的公共信息的密钥交换负载。没有对KE负载的数据进行特殊的编码（如TLV）。<br>Nx：是当前时间（nonce）负载；其中x可以是i和r，分别代表ISAKMP的发起者和响应者。<br>IDx：x是x的身份识别负载。x可以是“ii”或“ir”，分别表示第一阶段协商中的ISAKMP发起者和响应者；也可以是“ui”或“ur”，分别表示第二阶段的用户发起者和响应者。<br>HASH_I(R)：为了验证交换中的双方，协议的发起者产生HASH_I，响应者产生HASH_R</p>
+<ul>
+<li>HASH_I= prf(SKEYID, g<sup>xi</sup> | g<sup>xr</sup> | CKY-I | CKY-R | SAi_b | IDii_b )<br>HASH_R = prf(SKEYID, g<sup>xr</sup> | g<sup>xi</sup> | CKY-R | CKY-I | SAi_b | IDir_b )</li>
+</ul>
+<p>prf(key, msg)是key的伪随机函数——通常是key的hash函数——用于产生表现有伪随机性的确<br>定的输出。prf用于导出密钥和验证（即作为有密钥的MAC）。</p>
+<p><strong>交互流程概述</strong></p>
+<p>第一个包和第二个包用于策略交换，发起方发送一个或多个IKE安全提议，响应方查找最先匹配的IKE安全提议，并将这个IKE安全提议回应给发起方。</p>
+<p>第三个包和第四个包用于密钥信息交换，双方交换Diffie-Hellman公共值和nonce值，IKE SA的认证/加密密钥在这个阶段产生。<br>SKEYID = prf(pre-shared-key, Ni_b | Nr_b)：基础密钥,可推导下面三个密钥。<br>SKEYID_a = prf(SKEYID, SKEYID_d | g<sup>xy</sup> | CKY-I | CKY-R | 1)：ISAKMP消息完整性验证密钥<br>SKEYID_e = prf(SKEYID, SKEYID_a | g<sup>xy</sup> | CKY-I | CKY-R | 2)：ISAKMP消息加密密钥，后面第五、第六个包就是它加密的。<br> SKEYID_d = prf(SKEYID, g<sup>xy</sup> | CKY-I | CKY-R | 0)：用于衍生出IPSec报文加密和验证密钥——最终是由这个密钥保证IPSec封装的数据报文的安全性。</p>
+<p>第五个包和第六个包p用于身份和认证信息交换（双方使用生成的密钥发送信息），双方进行身份认证和对整个主模式交换内容的认证。</p>
+<p><strong>野蛮模式（Aggressive Mode）</strong>3Message</p>
+<p>使用预共享密钥作为验证时的报文交互：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Message</th>
+<th align="center">Initiator</th>
+<th align="center"></th>
+<th align="center">Responder</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">HDR, SA, KE, Ni, IDii</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center">&lt;—-</td>
+<td align="center">HDR, SA, KE, Nr, IDir, HASH_R</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">HDR, HASH_I</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>符号说明：<br>HDR：一个ISAKMP头，HDR*表示ISAKMP后面的载荷是加密的<br>SA：是有一个或多个提议的SA协商负载。发起方可能提供多个协商的提议；应答方只能用一个<br>提议来回答。<br>KE：是包含了用于Diffie-Hellman交换的公共信息的密钥交换负载。没有对KE负载的数据进行特殊的编码（如TLV）。<br>Nx：是当前时间（nonce）负载；其中x可以是i和r，分别代表ISAKMP的发起者和响应者。<br>IDx：x是x的身份识别负载。x可以是“ii”或“ir”，分别表示第一阶段协商中的ISAKMP发起者和响应者；也可以是“ui”或“ur”，分别表示第二阶段的用户发起者和响应者。<br>HASH_I(R)：为了验证交换中的双方，协议的发起者产生HASH_I，响应者产生HASH_R</p>
+<p><strong>主模式和野蛮模式的区别</strong><br>1、主模式6个包协商，野蛮模式3个包，野蛮模式协商更快。<br>2、主模式不支持动态IP的场景、野蛮模式支持动态IP的场景。<br>3、主模式ID密文加密，野蛮ID明文加密安全性级别低。<br>4、当IPSec隧道中存在NAT设备时，需要启动NAT穿越功能，而NAT转换回改变对等体的IP地址，由于野蛮模式不依赖IP地址标识身份，使得采用预共享密钥验证时，NAT穿越只能在野蛮模式中实现。</p>
 <p>野蛮模式在文档中标注的是三个报文都不加密，但是实际使用时第三个数据包会被加密。</p>
-<p><strong>IKEv1第二阶段的协商模式：</strong><br>快速模式</p>
+<h6 id="IKEv1第二阶段的协商模式"><a href="#IKEv1第二阶段的协商模式" class="headerlink" title="IKEv1第二阶段的协商模式"></a>IKEv1第二阶段的协商模式</h6><p><strong>快速模式</strong> 3Message</p>
+<p>报文交互流程：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Message</th>
+<th align="center">Initiator</th>
+<th align="center"></th>
+<th align="center">Responder</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">HDR*, HASH(1), SA, Ni<br>[, KE ] [, IDci, IDcr ]</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center">&lt;—-</td>
+<td align="center">HDR*, HASH(2), SA, Nr<br>[, KE ] [, IDci, IDcr ]</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">HDR*, HASH(3)</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>符号说明：<br>HDR*：ISAKMP后面的载荷是加密的<br>HASH（以及衍生物，如HASH（2）或HASH_I）是hash负载。</p>
+<ul>
+<li>HASH(1) = prf(SKEYID_a, M-ID | SA | Ni [ | KE ] [ | IDci | IDcr )<br>HASH(2) = prf(SKEYID_a, M-ID | Ni_b | SA | Nr [ | KE ] [ | IDci | IDcr )<br>HASH(3) = prf(SKEYID_a, 0 | M-ID | Ni_b | Nr_b)</li>
+</ul>
+<p>SA：是有一个或多个提议的SA协商负载。发起方可能提供多个协商的提议；应答方只能用一个<br>提议来回答。<br>Nx：是当前时间（nonce）负载；其中x可以是i和r，分别代表ISAKMP的发起者和响应者。<br>KE：是包含了用于Diffie-Hellman交换的公共信息的密钥交换负载。没有对KE负载的数据进行特殊的编码（如TLV）。<br>IDci、IDcr：如果ISAKMP代表另一方作为客户协商代表，则双方的身份必须传递为IDci和IDcr</p>
 <p><img src="/2020/04/20/ipsec/ikev12.JPG" alt="快速模式"></p>
 <p>IKEv1协商阶段2通过三条ISAKMP消息完成双方IPSec SA的建立：</p>
 <p>第一个包：协商发起方发送本端的安全参数和身份认证信息。<br>安全参数包括被保护的数据流和IPSec安全提议等需要协商的参数。身份认证信息包括第一阶段计算出的密钥和第二阶段产生的密钥材料等，可以再次认证对等体。</p>
 <p>第二个包：协商响应方发送确认的安全参数和身份认证信息并生成新的密钥。<br>IPSec SA数据传输需要的加密、验证密钥由第一阶段产生的密钥、SPI、协议等参数衍生得出，以保证每个IPSec SA都有自己独一无二的密钥。<br>如果启用PFS，则需要再次应用DH算法计算出一个共享密钥，然后参与上述计算，因此在参数协商时要为PFS协商DH密钥组。</p>
+<ul>
+<li>如果不需要PFS，并且没有KE负载交换，则新的密钥材料定义为：<br>KEYMAT = prf(SKEYID_d, protocol | SPI | Ni_b | Nr_b)。</li>
+<li>如果需要PFS且有KE负载交换，则新密钥材料定义为：<br>KEYMAT = prf(SKEYID_d, g(qm)<sup>xy</sup> | protocol | SPI | Ni_b | Nr_b)</li>
+</ul>
 <p>第三个包：发送方发送确认信息，确认与响应方可以通信，协商结束。</p>
+<h5 id="IKEv2"><a href="#IKEv2" class="headerlink" title="IKEv2"></a>IKEv2</h5><h6 id="IKEv1的不足"><a href="#IKEv1的不足" class="headerlink" title="IKEv1的不足"></a>IKEv1的不足</h6><ol>
+<li>从协议本身来看，原有标准所提供的某些功能很少被使用，甚至根本不用，其数据结构存在进一步简化的空间。</li>
+<li>从系统资源来看，高强度的密钥在提供更安全性的同时对系统资源意味着更大的运算负担，有必要在现实考虑尽量避免使用大强度的密钥计算。</li>
+<li>SA建立时需要多轮协商，为节约通信资源，应减少传送信息和交换次数，从而提高IKE的效率</li>
+<li>IKE本身的特性决定了其有可能遭受拒绝服务攻击、重放攻击、中间人攻击等危险。</li>
+</ol>
+<h6 id="IKEv2的改进"><a href="#IKEv2的改进" class="headerlink" title="IKEv2的改进"></a>IKEv2的改进</h6><ol>
+<li>IKEv2整合了IKEv1的主体协议（RFC2407，2408，2409、NAT穿越（NAT Traversal）、遗传认证（Legacy Authentication）、远程地址采集（Remote Address Acquisition））等协议，形成了完整的IKE协议。保留了IKEv1的基本功能，同时兼顾了高效性、安全性、健壮性和复杂性的需要，大幅精简了原有协议</li>
+<li>协商次数的减少。在保证安全性的前提下，如主模式中IKEv1第一阶段和第二阶段一共交换的消息条数由9条，但IKEv2只需4条就可以成功建立ike sa与ipsec sa。且不再分为第一阶段与第二阶段。不再有主模式与野蛮模式</li>
+<li>载荷的变化。支持数字签名、PSK和EAP认证。不支持RSA-enr</li>
+<li>为了防御来自网络的Dos攻击，IKEv2规定通信双方任何一端不能通过任何路由信息（ICMP消息）或未加密保护的IKE消息（报错消息）来判定另一方是否已经无法通信，通告需要确认。</li>
+<li>不兼容IKEv1</li>
+<li>IKEv2明确提出了对NAT穿越的支持</li>
+</ol>
+<h6 id="IKEv2的交换过程"><a href="#IKEv2的交换过程" class="headerlink" title="IKEv2的交换过程"></a>IKEv2的交换过程</h6><ul>
+<li>IKEv2协议中，通信双方协商由3个交换来完成：初始交换（Initial Exchange）、建立子交换（CREATE_CHILD_SA_Exchange）、通知交换（Information Exchange）。</li>
+</ul>
+<p><strong>初始交换</strong></p>
+<p>使用证书作为验证时的报文交互：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Message</th>
+<th align="center">Initiator</th>
+<th align="center"></th>
+<th align="center">Responder</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">HDR,SAi1,KEi,Ni</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center">&lt;—-</td>
+<td align="center">HDR,SArl,KEr,Nr,[CERTREQ]</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">HDR,SK{IDi,[CERT,] [CERTREQ,] [IDr,]<br>AUTH,SAi2,TSi,TSr}</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"></td>
+<td align="center">&lt;—-</td>
+<td align="center">HDR,SK{IDr,[CERT],<br>AUTH,SAi2,TSi,TSr}</td>
+</tr>
+</tbody></table>
+<p>符号说明：<br>HDR：IKE头，HDR包含安全参数索引(SPI)，版本号，和不同种类的标志。<br>SAi1：SAil载荷声明了发起者支持IKE_SA的加密算法。<br>KE：KE载荷发送发起者的Diffie—Hellman值。<br>N：发起者的临时随机数，i为发起者，r为响应者。<br>SAr1：表示响应者支持发起者所提出的IKE_SA的加密算法。<br>CERTREQ：证书请求。<br>SK：加密。<br>ID：i为发起者标识，r为响应者标识。<br>CERT：证书。<br>AUTH：认证。<br>SAi2：SAi2载荷声明了发起者支持IPSec_SA的加密算法。<br>TS：流量选择器<br>SAr2：表示响应者支持发起者所提出的IPSec_SA的加密算法。</p>
+<p><img src="/2020/04/20/ipsec/ikev21.JPG" alt="IKEv2初始交换过程"></p>
+<ul>
+<li>第一、二包就是ikev1的1、2、3、4个包的IKE协商、DH交换密钥，第三、四个包就是IPSec SA安全参数+密钥信息</li>
+</ul>
+<p>第一个包和第二个包属于第一次交换（称为IKE_SA_INIT交换），以明文方式完成IKE SA的参数协商，包括协商加密和验证算法，交换临时随机数和DH交换。IKE_SA_INIT交换后生成一个共享密钥材料，通过这个共享密钥材料可以衍生出IPSec SA的所有密钥。<br>第三个包和第四个包属于第二次交换（称为IKE_AUTH交换），以加密方式完成身份认证、对前两条信息的认证和IPSec SA的参数协商。IKEv2支持RSA签名认证、预共享密钥认证以及扩展认证方法EAP（Extensible Authentication Protocol）。发起者通过在消息3中省去认证载荷来表明需要使用EAP认证。</p>
+<p>在IKEv2的第三个消息和第四个消息中，双方都会向对方发送一个AUTH Payload来证明自己的身份。这个过程是通过对各自发送的第一个消息进行签名来实现的。比如，如果一个Responder想证明自己的身份，那么，当它发送IKE_SA_INIT消息时，需要把这个消息完整的缓存下来。然后在发送IKE_SA_AUTH之前，将缓存的IKE_SA_INIT消息和Nonce_I，以及它自身的ID的MAC值连接到一起，再用PRF算法算出一个结果，便是AUTH值。</p>
+<p><strong>建立子SA交换</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">Message</th>
+<th align="center">Initiator</th>
+<th align="center"></th>
+<th align="center">Responder</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">HDR，SK{[N],SA,Ni,[KEi],<br>[TSi,TSr]}</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center">&lt;—-</td>
+<td align="center">HDR,SK{SA,Nr,[KEr],<br>[TSi,TSr]}</td>
+</tr>
+</tbody></table>
+<p>参数说明：<br>HDR：IKE头，HDR包含安全参数索引(SPI)，版本号，和不同种类的标志。<br>SK：加密。<br>N：通知。<br>SA:如果这个CREATE_CHILD_SA交换是为一个不为IKE_SA的，已建立的SA重新协商密钥时，第一个REKEY SA类型的N载荷必须表明这是SA重新分配密钥。如果这个CREATE_CHILD—SA交换不是给一个已经存在的SA重新分配密钥，这N载荷必 须被忽略。<br>N：发起者的临时随机数，i为发起者，r为响应者。<br>KE：KE载荷发送发起者的Diffie—Hellman值。<br>TS：流量选择器</p>
+<ul>
+<li>当一个IKE SA需要创建多对IPSec SA时，需要使用创建子SA交换来协商多于一对的IPSec SA。另外，创建子SA交换还可以用于IKE SA的重协商。</li>
+<li>创建子SA交换必须在初始交换完成后进行，交换消息由初始交换协商的密钥进行保护。</li>
+<li>如果启用PFS，类似于IKEv1，创建子SA交换需要额外进行一次DH交换，生成新的密钥材料。生成密钥材料后，子SA的所有密钥都从这个密钥材料衍生出来。</li>
+</ul>
+<p><strong>通知交换*</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">Message</th>
+<th align="center">Initiator</th>
+<th align="center"></th>
+<th align="center">Responder</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">HDR,SK{[N],[D],[CP]…}</td>
+<td align="center">—-&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center">&lt;—-</td>
+<td align="center">HDR,SK{[N],[D],[CP]…}</td>
+</tr>
+</tbody></table>
+<p>参数说明：<br>HDR：IKE头，HDR包含安全参数索引(SPI)，版本号，和不同种类的标志。<br>SK：加密。<br>N：通知。<br>D：删除。<br>CP：配置</p>
+<ul>
+<li>运行IKE协商的两端有时会传递一些控制信息，例如错误信息或者通告信息。通知交换就是实现这个功能的。通知交换中的消息包含通知、删除和配置载荷，收到通知消息的一方必须进行响应，响应消息中可能不包含任何载荷，发起消息也可以不包含任何载荷，发起者通过这个方法判断对方是否存活。</li>
+<li>通知交换必须在IKE SA保护下进行，也就是说通知交换只能发生在初始交换之后。控制信息可能是IKE SA的，那么通知交换必须由该IKE SA来保护进行；也可能是某子SA的，那么该通知交换必须由生成该子SA的IKE SA来保护进行。</li>
+</ul>
 
             </div>
             <hr/>
@@ -1043,7 +1283,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">37.4k</span>&nbsp;字
+                class="white-color">40.3k</span>&nbsp;字
             
             
             
