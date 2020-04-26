@@ -405,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.6k
+                    5.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    20 分
+                    19 分
                 </div>
                 
 
@@ -539,10 +539,8 @@
 </li>
 </ul>
 <h6 id="IKEv1的三个组件"><a href="#IKEv1的三个组件" class="headerlink" title="IKEv1的三个组件"></a>IKEv1的三个组件</h6><p>SKEME：定义如何通过公共密钥技术（DH算法）实现密钥交换。<br>Oakley：提供了IPSec对各种技术的支持，例如对新的加密与散列技术，但并没有具体的定义使用什么样的技术。<br>ISAKMP：定义了消息交换的体系结构，包括两个IPSec对等体间分组形式和状态转变（定义封装格式和协商包交换的方式）。</p>
-<h6 id="IKEv1第一阶段的两种协商模式"><a href="#IKEv1第一阶段的两种协商模式" class="headerlink" title="IKEv1第一阶段的两种协商模式"></a><strong>IKEv1第一阶段的两种协商模式</strong></h6><p><strong>主模式（Main Mode）</strong> 6Message</p>
-<p><img src="/2020/04/20/ipsec/ikev11.JPG" alt="主模式和野蛮模式"></p>
-<p>参数说明<br>HDR：一个ISAKMP头，HDR*表示ISAKMP后面的载荷是加密的<br>SA:带有一个或多个建议的安全关联载荷<br>KE：密钥交换载荷<br>IDX：标识载荷，通常为IP地址。X=i表示发起者，X=r表示响应者<br>HASH：杂凑载荷，进行身份数据验证。<br>SIG：签名载荷<br>CERT：证书载荷<br>Nx：代表随机数，通过KE交换素材得到的公共的K值。x=i为发起者，x=r为响应者<br>K值为推导SKEYID使用<br>&lt; P &gt;_b：载荷P的主体，就是没有通用头的载荷<br>CKY-I（CKY-R）：ISAKMP头中的发起者（响应者）cookie<br>gXi或gXr：发起者或响应者的DH公开值<br>Prf（key，msg）：使用密钥key和输入信息msg的伪随机数函数，如HMAC</p>
-<p>主模式</p>
+<h6 id="IKEv1第一阶段的两种协商模式"><a href="#IKEv1第一阶段的两种协商模式" class="headerlink" title="IKEv1第一阶段的两种协商模式"></a><strong>IKEv1第一阶段的两种协商模式</strong></h6><p><img src="/2020/04/20/ipsec/ikev11.JPG" alt="主模式和野蛮模式"></p>
+<p><strong>主模式（Main Mode）</strong> 6Message</p>
 <p>使用预共享密钥作为验证时的报文交互：</p>
 <table>
 <thead>
@@ -1283,7 +1281,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">40.3k</span>&nbsp;字
+                class="white-color">40.1k</span>&nbsp;字
             
             
             

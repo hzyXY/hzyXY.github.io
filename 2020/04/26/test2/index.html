@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="URPF, XY">
+    <meta name="keywords" content="test2, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>URPF | XY</title>
+    <title>test2 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">URPF</h1>
+                    <h1 class="description center-align post-title">test2</h1>
                 </div>
             </div>
         </div>
@@ -375,14 +375,6 @@
                                 <span class="chip bg-color">配置</span>
                             </a>
                         
-                            <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                <span class="chip bg-color">防火墙</span>
-                            </a>
-                        
-                            <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
-                                <span class="chip bg-color">攻击防范</span>
-                            </a>
-                        
                     </div>
                     
                 </div>
@@ -404,7 +396,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-11
+                    2020-04-26
                 </div>
                 
 
@@ -413,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1k
+                    1
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    1 分
                 </div>
                 
 
@@ -436,55 +428,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="URPF"><a href="#URPF" class="headerlink" title="URPF"></a>URPF</h2><ul>
-<li><p>URPF（Unicast Reverse Path Forwarding）单播逆向路径转发，其主要功能是防止基于源地址欺骗的网络攻击行为。</p>
-</li>
-<li><p>一般情况下，FW接收到报文，获取报文的目的地址，针对目的地址查找转发表，如果找到了就转发报文，否则丢弃该报文。而URPF通过获取报文的源地址和入接口，在转发表中查找源地址对应的接口是否与入接口匹配，如果不匹配，则认为源地址是伪装的，直接丢弃该报文。通过这种方式，URPF能够有效地防范网络中通过修改报文源IP地址而进行恶意攻击行为的发生。</p>
-</li>
-</ul>
-<p><strong>作用：</strong> 基于源地址欺骗发起的网络攻击，已经成为Internet上一种非常普遍的攻击形式。使用URPF技术可以解决源地址欺骗造成的网络安全问题。</p>
-<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><h4 id="URPF的两种模式"><a href="#URPF的两种模式" class="headerlink" title="URPF的两种模式:"></a>URPF的两种模式:</h4><p><strong>松散模式：</strong>不检查FIB表中的接口与IP地址是否匹配，只要存在针对源地址的路由，报文就可以通过。<br>建议：在不能保证路由对称的环境下使用URPF的松散模式</p>
-<p><strong>严格模式：</strong>不仅要在路由表中存在相应表项，且FIB表中接口与IP地址一定匹配才能通过URPF检查<br>建议：在路由对称的环境下使用URPF严格模式</p>
-<ul>
-<li>URPF的其他特性：<br>1.如果用户希望某些特殊报文在任何情况下都可以通过URPF的检查，即不受URPF丢弃的控制，可以在ACL中指定这些特殊的源地址。<br>2.许多用户的FW可能只有一条缺省路由指向ISP，此时，需要配置允许匹配缺省路由选项。</li>
-</ul>
-<h4 id="URPF的处理流程"><a href="#URPF的处理流程" class="headerlink" title="URPF的处理流程"></a>URPF的处理流程</h4><ol>
-<li><p>如果报文的源地址在FW的FIB表中存在。</p>
-<ul>
-<li>对于strict型检查，反向查找报文出接口，若只有一个出接口和报文的入接口一一匹配，则报文通过检查；否则报文将被丢弃。当有多个出接口和报文的入接口相匹配时，必须使用loose型检查。（反向查找是指查找以该报文源IP地址为目的IP地址的报文的出接口）</li>
-<li>对于loose型检查，当报文的源地址在FW的FIB表中存在（不管反向查找的出接口和报文的入接口是否一致），报文就通过检查；否则报文将被丢弃。</li>
-</ul>
-</li>
-<li><p>如果报文的源地址在FW的FIB表中不存在，则检查是否配置了缺省路由及URPF的allow-default-route参数。</p>
-<ul>
-<li><p>对于配置了缺省路由，但没有配置参数allow-default-route的情况。</p>
-<p>不管是strict型检查还是loose型检查，只要报文的源地址在FW的FIB表中不存在，该报文都将被拒绝。</p>
-</li>
-<li><p>对于配置了缺省路由，同时又配置了参数allow-default-route的情况。</p>
-<ul>
-<li>如果是strict型检查，当缺省路由的出接口与报文入接口一致时，报文将通过URPF的检查，正常转发；否则报文被拒绝。</li>
-<li>如果是loose型检查，报文都将通过URPF的检查，进行正常的转发。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>当且仅当报文被拒绝后，才去匹配ACL。如果ACL允许通过，则报文继续进行正常的转发；如果被ACL拒绝，则报文被丢弃。</p>
-</li>
-</ol>
-<p><strong>注意</strong><br><em>URPF不能与全局选路策略或策略路由智能选路功能同时使用，否则可能导致FW丢弃报文。</em></p>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ol>
-<li><p><strong>interface</strong> <em>interface-type interface-number</em>，进入接口视图。</p>
-<p>可以开启URPF功能的接口包括GE接口、VLAN IF接口、Eth-Trunk接口、Tunnel接口和子接口。</p>
-</li>
-<li><p>开启接口URPF功能。</p>
-<ul>
-<li>IPv4网络中执行命令<strong>ip urpf</strong> { <strong>loose</strong> | <strong>strict</strong> } [ <strong>allow-default-route</strong> ] [ <strong>acl</strong> <em>acl-number</em> ]</li>
-<li>IPv6网络中执行命令<strong>ipv6 urpf</strong> { <strong>loose</strong> | <strong>strict</strong> } [ <strong>allow-default-route</strong> ] [ <strong>acl6</strong> <em>acl-number</em> ]</li>
-</ul>
-</li>
-</ol>
-<p>URPF导致的丢包可以通过<strong>display firewall statistics system discarded</strong>或<strong>display firewall ipv6 statistics system discarded</strong>命令查看<strong>URPF packets discarded</strong>字段。</p>
-
+                <h2 id="test2"><a href="#test2" class="headerlink" title="test2"></a>test2</h2>
             </div>
             <hr/>
 
@@ -509,7 +453,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/11/urpf/">https://hzyxy.github.io/2020/04/11/urpf/</a>
+                    <a href="https://hzyxy.github.io/2020/04/26/test2/">https://hzyxy.github.io/2020/04/26/test2/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -553,14 +497,6 @@
                             
                                 <a href="/tags/%E9%85%8D%E7%BD%AE/">
                                     <span class="chip bg-color">配置</span>
-                                </a>
-                            
-                                <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                    <span class="chip bg-color">防火墙</span>
-                                </a>
-                            
-                                <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
-                                    <span class="chip bg-color">攻击防范</span>
                                 </a>
                             
                         </div>
@@ -726,46 +662,52 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/04/11/tcp-xie-yi/">
+                <a href="/2020/04/26/test2/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="TCP协议">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="test2">
                         
-                        <span class="card-title">TCP协议</span>
+                        <span class="card-title">test2</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            TCP协议的介绍
+                            test2
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-26
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Datacom/" class="post-category">
-                                    Datacom
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
-                        <span class="chip bg-color">协议</span>
+                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                        <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
                     </a>
                     
                 </div>
@@ -779,24 +721,24 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/10/dan-bao-gong-ji-de-jie-shao-yu-fang-fan/">
+                <a href="/2020/04/26/test/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="单包攻击的介绍与防范">
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="test">
                         
-                        <span class="card-title">单包攻击的介绍与防范</span>
+                        <span class="card-title">test</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            防火墙单包攻击的介绍与防范
+                            test
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-26
                             </span>
                         <span class="publish-author">
                             
@@ -819,14 +761,6 @@
                     
                     <a href="/tags/%E9%85%8D%E7%BD%AE/">
                         <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
-                        <span class="chip bg-color">攻击防范</span>
                     </a>
                     
                 </div>
