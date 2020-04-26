@@ -413,14 +413,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6
+                    835
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    2 分
                 </div>
                 
 
@@ -436,7 +436,80 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="IPSec-VPN高可靠性"><a href="#IPSec-VPN高可靠性" class="headerlink" title="IPSec VPN高可靠性"></a>IPSec VPN高可靠性</h2>
+                <h2 id="IPSec-VPN高可靠性"><a href="#IPSec-VPN高可靠性" class="headerlink" title="IPSec VPN高可靠性"></a>IPSec VPN高可靠性</h2><ul>
+<li>IPSec隧道由网络设备和网络链路组成，设备故障或者链路故障都会导致IPSec隧道中断，因此在设计IPSec VPN高可靠性时既要考虑保护链路，也需要考虑保护网络设备。</li>
+</ul>
+<h3 id="IPSec-VPN高可靠性分类"><a href="#IPSec-VPN高可靠性分类" class="headerlink" title="IPSec VPN高可靠性分类"></a>IPSec VPN高可靠性分类</h3><ul>
+<li>IPSec高可靠性设计可以分为两类，一种是<strong>链路冗余</strong>，另一种是<strong>主备网关备份</strong>。其中链路冗余又可分为主备链路备份和隧道化链路备份。</li>
+</ul>
+<h4 id="主备链路备份"><a href="#主备链路备份" class="headerlink" title="主备链路备份"></a>主备链路备份</h4><ul>
+<li>两台IPSec网关之间不止一条IPSec VPN隧道，分别配置，VPN建立在不同物理接口上。</li>
+<li>链路故障探测切换可配置IP-Link来实现。</li>
+<li>多条隧道独立工作，互相备份，备份模式可以是主备模式，也可以是负载分担模式，通过路由优先级控制。</li>
+<li>在双方物理接口资源比较充裕的情况下可以使用这种模式，但是不建议。</li>
+</ul>
+<h4 id="隧道化链路备份"><a href="#隧道化链路备份" class="headerlink" title="隧道化链路备份"></a>隧道化链路备份</h4><ul>
+<li><p>两台IPSec网关之间只有一条IPSec VPN隧道配置，VPN建立在隧道上，IPSec网关上有多个物理出口到达对端，某个物理口上的链路故障时，业务能自动切到另外一个物理口上。</p>
+</li>
+<li><p>隧道化链路备份方案，网关上只需创建一个IPSec策略。</p>
+</li>
+<li><p>相比主备链路备份的模式，配置更加简单，不需要配置两个IPSec策略，但IP-Link配置还是有必要的，可以避免ISP的原因导致的业务不通。</p>
+</li>
+<li><p>Tunnel接口配置IPSec的时候需要用到IP地址，这个IP需要用公网IP，并且保证这个IP对方可达。</p>
+</li>
+</ul>
+<h4 id="主备网关备份"><a href="#主备网关备份" class="headerlink" title="主备网关备份"></a>主备网关备份</h4><ul>
+<li>FWA与FWB需要建立主备模式双机热备，备的网关可以同步主网关上的IPSec策略。</li>
+<li>FWA与FWB需要建立两个VRRP，一个为内网服务，一个为外网服务</li>
+</ul>
+<h4 id="总结比较"><a href="#总结比较" class="headerlink" title="总结比较"></a>总结比较</h4><table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center"><strong>主备链路备份链路冗余</strong></th>
+<th align="center"><strong>隧道化链路备份</strong></th>
+<th align="center"><strong>主备网关备份</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>组网方式</strong></td>
+<td align="center">2：2模式2：1模式</td>
+<td align="center">2：1模式</td>
+<td align="center">双网关</td>
+</tr>
+<tr>
+<td align="center"><strong>可靠性</strong></td>
+<td align="center">高</td>
+<td align="center">高</td>
+<td align="center">最高</td>
+</tr>
+<tr>
+<td align="center"><strong>优点</strong></td>
+<td align="center">使用物理接口IP</td>
+<td align="center">配置简单</td>
+<td align="center">可靠性高，不仅保护链路，还保护设备</td>
+</tr>
+<tr>
+<td align="center"><strong>缺点</strong></td>
+<td align="center">配置较多</td>
+<td align="center">需要额外的公网IP</td>
+<td align="center">成本较高</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>基于物理链路冗余使用物理接口的IP，不需要额外的IP，相对来说配置较多，需要配置2个IPSec策略，并绑定到对应物理端口。</p>
+</li>
+<li><p>隧道化链路备份只需要配置Tunnel，使用Tunnel配置IPSec策略，配置相对简单。Tunnel需要一个公网IP地址，保证对端可以访问到这个地址，然后才能建立IPSec隧道。</p>
+</li>
+<li><p>主备网关备份保护需要2个网关设备，成本较高，但是可靠性比较高。</p>
+</li>
+<li><p>在实际应用中，大中型企业一般都会采用双网关，可以选择主备网关备份的方案。</p>
+</li>
+<li><p>小型企业一般在总部使用物理口链路冗余，分部单物理口，公网地址比较充裕的情况下可以使用隧道化链路备份。</p>
+</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>模拟器问题无法做出</p>
+<h4 id="主备链路备份-1"><a href="#主备链路备份-1" class="headerlink" title="主备链路备份"></a>主备链路备份</h4><h4 id="隧道化链路备份-1"><a href="#隧道化链路备份-1" class="headerlink" title="隧道化链路备份"></a>隧道化链路备份</h4><h4 id="主备网关备份-1"><a href="#主备网关备份-1" class="headerlink" title="主备网关备份"></a>主备网关备份</h4>
             </div>
             <hr/>
 
@@ -944,7 +1017,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">40.1k</span>&nbsp;字
+                class="white-color">40.9k</span>&nbsp;字
             
             
             
