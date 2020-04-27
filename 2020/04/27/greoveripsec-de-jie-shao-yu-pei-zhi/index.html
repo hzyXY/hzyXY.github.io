@@ -1,0 +1,1273 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="GRE Over IPSec, XY">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>GRE Over IPSec | XY</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+
+    <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+<script type="text/javascript" src="/js/fireworks.js"></script>
+
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">XY</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">XY</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">GRE Over IPSec</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                                <span class="chip bg-color">华为</span>
+                            </a>
+                        
+                            <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                                <span class="chip bg-color">配置</span>
+                            </a>
+                        
+                            <a href="/tags/VPN/">
+                                <span class="chip bg-color">VPN</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Security/" class="post-category">
+                                Security
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-04-27
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    12 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="GRE-Over-IPSec"><a href="#GRE-Over-IPSec" class="headerlink" title="GRE Over IPSec"></a>GRE Over IPSec</h2><ul>
+<li>GRE可以封装组播数据并在GRE隧道中传输。而IPSec目前只能对单播数据进行加密保护，因此对于诸如路由协议、语音、视频等组播数据需要在IPSec隧道中传输的情况，可以通过建立GRE隧道，并对组播数据进行GRE封装，然后对封装后的报文进行IPSec的加密处理，就实现了组播数据在IPSec隧道中的加密传输。</li>
+<li>GRE over IPSec可以结合GRE和IPSec两种技术的优点，使网络既可以支持多种上层协议和组播报文，又可以支持报文加密、身份认证机制和数据完整性校验。</li>
+<li>当网关之间采用GRE over IPSec连接时，先进行GRE封装，再进行IPSec封装。GRE over IPSec使用的封装模式为可以是隧道模式也可以是传输模式。因为隧道模式跟传输模式相比增加了IPSec头，导致报文长度更长，更容易导致分片，所以推荐采用传输模式GRE over IPSec。</li>
+<li>配置Tunnel逻辑接口时，需要指定GRE隧道使用的源地址及目的地址。配置到对端网络内网网段的路由时，下一跳为Tunnel口。<br>配置GRE over IPSec时，与单独配置GRE和IPSec没有太大的区别。唯一需要注意的地方是，通过ACL定义需要保护的数据流时，不能再以总部和分部内部私网地址为匹配条件，而是必须匹配经过GRE封装后的报文，即定义报文的源地址为GRE隧道的源地址，目的地址为GRE隧道的目的地址。</li>
+</ul>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><h4 id="GRE的优缺点"><a href="#GRE的优缺点" class="headerlink" title="GRE的优缺点"></a>GRE的优缺点</h4><p><strong>GRE的优点</strong><br>1.支持多种上层协议<br>2.支持主播</p>
+<p><strong>GRE的缺点</strong><br>1.不支持加密<br>2.软弱的身份认证机制<br>3.软弱的数据完整性校验</p>
+<h4 id="IPSec的优缺点"><a href="#IPSec的优缺点" class="headerlink" title="IPSec的优缺点"></a>IPSec的优缺点</h4><p><strong>IPSec的优点</strong><br>1.支持加密<br>2.支持身份认证机制<br>3.支持数据完整性校验</p>
+<p><strong>IPSec的缺点</strong><br>1.只支持IP协议的封装，不支持多种上层协议<br>2.不支持主播</p>
+<h4 id="GRE-over-IPSec报文封装"><a href="#GRE-over-IPSec报文封装" class="headerlink" title="GRE over IPSec报文封装"></a>GRE over IPSec报文封装</h4><p><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/fz0.png" alt="传输模式报文封装"></p>
+<ul>
+<li><strong>传输模式tunnel接口不可借用用私网IP地址</strong></li>
+</ul>
+<p><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/fz1.png" alt="隧道模式报文封装"></p>
+<ul>
+<li>隧道模式使用新的IPSec报文头来封装经过GRE封装后的消息，封装后的消息共有三个报文头：原始报文头、GRE报文头和IPSec报文头，Internet上的设备根据最外层的IPSec报文头来转发该消息。</li>
+<li>封装GRE报文头时，源和目的地址可以与IPSec报文头中的源和目的地址相同，即使用公网地址来封装；也可以使用私网地址封装GRE报文头，例如，创建Loopback接口并配置私网地址，然后在GRE中借用Loopback接口的地址来封装。</li>
+<li>在GRE over IPSec中，无论IPSec采用传输模式还是隧道模式，都可以保护两个网络之间通信的消息。这是因为GRE已经进行了一次封装，原始报文就可以是两个网络之间的报文。</li>
+<li>注意：隧道模式与传输模式相比多增加了新的IPSec报文头，导致报文长度更长，更容易导致分片。如果网络环境要求报文不能分片，推荐使用传输模式。</li>
+</ul>
+<p><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/fz2.png" alt="GRE over IPSec报文封装和隧道协商过程"></p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="IPSec安全策略方式"><a href="#IPSec安全策略方式" class="headerlink" title="IPSec安全策略方式"></a>IPSec安全策略方式</h4><p><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
+<h5 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h5><h6 id="一、在FW上的配置"><a href="#一、在FW上的配置" class="headerlink" title="一、在FW上的配置"></a>一、在FW上的配置</h6><table>
+<thead>
+<tr>
+<th>在FW1的配置</th>
+<th>在FW2的配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1.配置LoopBack接口</strong><br>interface LoopBack0<br> ip address 172.16.1.1 255.255.255.0</td>
+<td><strong>1.配置LoopBack接口</strong><br>interface LoopBack0<br> ip address 172.16.2.1 255.255.255.0</td>
+</tr>
+<tr>
+<td><strong>2.配置Tunnel接口的封装参数</strong><br>interface Tunnel1<br> ip address 100.100.100.1 255.255.255.0<br> tunnel-protocol gre<br> source LoopBack0<br> destination 172.16.2.1</td>
+<td><strong>2.配置Tunnel接口的封装参数</strong><br>interface Tunnel1<br> ip address 100.100.100.2 255.255.255.0<br> tunnel-protocol gre<br> source LoopBack0<br> destination 172.16.1.1</td>
+</tr>
+<tr>
+<td><strong>3.配置路由，引导流量</strong><br>ip route-static 192.168.2.0 255.255.255.0 Tunnel1</td>
+<td><strong>3.配置路由，引导流量</strong><br>ip route-static 192.168.1.0 255.255.255.0 Tunnel1</td>
+</tr>
+<tr>
+<td><strong>4.配置感兴趣流</strong><br>acl number 3000<br> rule 5 permit ip source 172.16.1.0 0.0.0.255 destination 172.16.2.0 0.0.0.255</td>
+<td><strong>4.配置感兴趣流</strong><br>acl number 3000<br> rule 5 permit ip source 172.16.2.0 0.0.0.255 destination 172.16.1.0 0.0.0.255</td>
+</tr>
+<tr>
+<td><strong>5.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
+<td><strong>5.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
+</tr>
+<tr>
+<td><strong>6.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
+<td><strong>6.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
+</tr>
+<tr>
+<td><strong>7.配置IKE peer</strong><br>ike peer FW2<br> undo version 2<br>pre-shared-key 123456<br>ike-proposal 1<br>remote-address 2.1.1.2</td>
+<td><strong>7.配置IKE peer</strong><br>ike peer FW1<br> undo version 2<br>pre-shared-key 123456<br>ike-proposal 1<br> remote-address 1.1.1.1</td>
+</tr>
+<tr>
+<td><strong>8.配置IPSec策略</strong><br>ipsec policy FW2 1 isakmp<br> security acl 3000<br> ike-peer FW2<br> proposal ipsec_p1</td>
+<td><strong>8.配置IPSec策略</strong><br>ipsec policy FW1 1 isakmp<br> security acl 3000<br> ike-peer FW1<br> proposal ipsec_p1</td>
+</tr>
+<tr>
+<td><strong>9.在接口应用IPSec策略</strong><br>interface GigabitEthernet1/0/1<br> undo shutdown<br> ip address 1.1.1.1 255.255.255.0<br> ipsec policy FW2</td>
+<td><strong>9.在接口应用IPSec策略</strong><br>interface GigabitEthernet1/0/1<br> undo shutdown<br> ip address 2.1.1.2 255.255.255.0<br> ipsec policy FW1</td>
+</tr>
+<tr>
+<td><strong>10.配置安全区域</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet0/0/0<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br> add interface Tunnel1</td>
+<td><strong>10.配置安全区域</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet0/0/0<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br> add interface Tunnel1</td>
+</tr>
+<tr>
+<td><strong>11.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol udp source-port 500 destination-port 500<br>  action permit<br><br> rule name 3<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  service protocol 50<br>  action permit</td>
+<td><strong>11.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol udp source-port 500 destination-port 500<br>  action permit<br><br> rule name 3<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 50<br>  action permit</td>
+</tr>
+</tbody></table>
+<h5 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h5><table>
+<thead>
+<tr>
+<th><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1ikesa1.JPG" alt="查看FW1所建立的IKE SA"></th>
+<th><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1ikesa2.JPG" alt="查看FW2所建立的IKE SA"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1ipsecsa1.JPG" alt="查看FW1所建立的IPSec SA"></td>
+<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1ipsecsa2.JPG" alt="查看FW2所建立的IPSec SA"></td>
+</tr>
+<tr>
+<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1sessiontable1.JPG" alt="查看FW1的会话表"></td>
+<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1sessiontable2.JPG" alt="查看FW2的会话表"></td>
+</tr>
+</tbody></table>
+<h4 id="IPSec安全框架方式"><a href="#IPSec安全框架方式" class="headerlink" title="IPSec安全框架方式"></a>IPSec安全框架方式</h4><p><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
+<h5 id="配置步骤-1"><a href="#配置步骤-1" class="headerlink" title="配置步骤"></a>配置步骤</h5><h6 id="一、在FW上的配置-1"><a href="#一、在FW上的配置-1" class="headerlink" title="一、在FW上的配置"></a>一、在FW上的配置</h6><table>
+<thead>
+<tr>
+<th>在FW1的配置</th>
+<th>在FW2的配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1.配置Tunnel接口的封装参数</strong><br>interface Tunnel1<br> ip address 100.100.100.1 255.255.255.0<br> tunnel-protocol gre<br> source GigabitEthernet1/0/1<br> destination 2.1.1.2</td>
+<td><strong>1.配置Tunnel接口的封装参数</strong><br>interface Tunnel1<br> ip address 200.200.200.1 255.255.255.0<br> tunnel-protocol gre<br> source GigabitEthernet1/0/1<br> destination 1.1.1.1</td>
+</tr>
+<tr>
+<td><strong>2.配置ospf</strong><br>ospf 1<br> area 0.0.0.0<br>  network 100.100.100.0 0.0.0.255<br>  network 192.168.1.0 0.0.0.255</td>
+<td><strong>2.配置ospf</strong><br>ospf 1<br> area 0.0.0.0<br>  network 192.168.2.0 0.0.0.255<br>  network 200.200.200.0 0.0.0.255</td>
+</tr>
+<tr>
+<td><strong>3.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> encapsulation-mode transport<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
+<td><strong>3.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> encapsulation-mode transport<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
+</tr>
+<tr>
+<td><strong>4.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
+<td><strong>4.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
+</tr>
+<tr>
+<td><strong>5.配置IKE peer</strong><br>ike peer FW2<br> undo version 2<br>pre-shared-key 123456<br>ike-proposal 1</td>
+<td><strong>5.配置IKE peer</strong><br>ike peer FW1<br> undo version 2<br>pre-shared-key<br>ike-proposal 1</td>
+</tr>
+<tr>
+<td><strong>6.配置IPSec安全框架</strong><br>ipsec profile profile1<br> ike-peer FW2<br> proposal ipsec_p1</td>
+<td><strong>6.配置IPSec安全框架</strong><br>ipsec profile profile1<br> ike-peer FW1<br> proposal ipsec_p1</td>
+</tr>
+<tr>
+<td><strong>7.在接口应用IPSec安全框架</strong><br>interface Tunnel1<br> ip address 100.100.100.1 255.255.255.0<br> tunnel-protocol gre<br> source GigabitEthernet1/0/1<br> destination 2.1.1.2<br> ipsec profile profile1</td>
+<td><strong>7.在接口应用IPSec安全框架</strong><br>interface Tunnel1<br> ip address 200.200.200.1 255.255.255.0<br> tunnel-protocol gre<br> source GigabitEthernet1/0/1<br> destination 1.1.1.1<br> ipsec profile profile1</td>
+</tr>
+<tr>
+<td><strong>8.配置安全区域</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet0/0/0<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br> add interface Tunnel1</td>
+<td><strong>8.配置安全区域</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet0/0/0<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br> add interface Tunnel1</td>
+</tr>
+<tr>
+<td><strong>9.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol udp source-port 500 destination-port 500<br>  service protocol 47<br>  action permit<br><br> rule name 3<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  service protocol 50<br>  action permit</td>
+<td><strong>9.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol udp source-port 500 destination-port 500<br>  service protocol 47<br>  action permit<br><br> rule name 3<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 50<br>  action permit</td>
+</tr>
+</tbody></table>
+<h5 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h5><table>
+<thead>
+<tr>
+<th><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/ospf1.JPG" alt="查看FW1ospf的邻居"></th>
+<th><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/ospf2.JPG" alt="查看FW2ospf的邻居"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2ikesa1.JPG" alt="查看FW1所建立的IKE SA"></td>
+<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2ikesa2.JPG" alt="查看FW2所建立的IKE SA"></td>
+</tr>
+<tr>
+<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2ipsecsa1.JPG" alt="查看FW1所建立的IPSec SA"></td>
+<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2ipsecsa2.JPG" alt="查看FW2所建立的IPSec SA"></td>
+</tr>
+<tr>
+<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2sessiontable1.JPG" alt="查看FW1的会话表"></td>
+<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2sessiontable2.JPG" alt="查看FW2的会话表"></td>
+</tr>
+</tbody></table>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hzyxy.github.io" rel="external nofollow noreferrer">XY</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hzyxy.github.io/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/">https://hzyxy.github.io/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://hzyxy.github.io" target="_blank">XY</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                                    <span class="chip bg-color">华为</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                                    <span class="chip bg-color">配置</span>
+                                </a>
+                            
+                                <a href="/tags/VPN/">
+                                    <span class="chip bg-color">VPN</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="GRE Over IPSec">
+                        
+                        <span class="card-title">GRE Over IPSec</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            GRE Over IPSec的介绍与配置
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                        <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
+                    </a>
+                    
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/04/26/ipsec-vpn-gao-ke-kao-xing/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="IPSec VPN高可靠性">
+                        
+                        <span class="card-title">IPSec VPN高可靠性</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            IPSec VPN高可靠性技术的介绍与配置
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-26
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                        <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
+                        <span class="chip bg-color">高可靠性</span>
+                    </a>
+                    
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h1,h2, h3, h4,h5,h6'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1,h2, h3, h4,h5,h6').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="https://hzyxy.github.io" target="_blank">XY</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">43.3k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2020";
+                    var startMonth = "2";
+                    var startDate = "29";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/hzyXY" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1422767050@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1422767050" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1422767050" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

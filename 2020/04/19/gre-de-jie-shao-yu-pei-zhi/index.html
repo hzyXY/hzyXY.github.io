@@ -409,7 +409,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    978
+                    955
                 </div>
                 
 
@@ -433,12 +433,10 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="GRE的介绍与配置"><a href="#GRE的介绍与配置" class="headerlink" title="GRE的介绍与配置"></a>GRE的介绍与配置</h2><ul>
-<li><p>通用路由封装（General Routing Encapsulation），简称GRE，是一种三层VPN封装技术。</p>
-</li>
-<li><p>GRE可以对某些网络层协议（如IPX、Apple Talk、IP等）的报文进行封装，使封装后的报文能够在另一种网络中（如IPv4）传输，从而解决了跨越异种网络的报文传输问题。异种报文传输的通道称为Tunnel（隧道）。</p>
-</li>
-<li><p>GRE除了可以封装网络层协议报文以外，它还具备封装组播报文的能力。由于动态路由协议中会使用组播报文，因此更多时候GRE会在需要传递组播路由数据的场景中被用到，这也是GRE被称为通用路由封装协议的原因。</p>
-</li>
+<li>通用路由封装（General Routing Encapsulation），简称GRE，是一种三层VPN封装技术。</li>
+<li>GRE可以对某些网络层协议（如IPX、Apple Talk、IP等）的报文进行封装，使封装后的报文能够在另一种网络中（如IPv4）传输，从而解决了跨越异种网络的报文传输问题。异种报文传输的通道称为Tunnel（隧道）。</li>
+<li>GRE除了可以封装网络层协议报文以外，它还具备封装组播报文的能力。由于动态路由协议中会使用组播报文，因此更多时候GRE会在需要传递组播路由数据的场景中被用到，这也是GRE被称为通用路由封装协议的原因。</li>
+<li>IP协议号：17</li>
 </ul>
 <h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><h4 id="GRE的封装"><a href="#GRE的封装" class="headerlink" title="GRE的封装"></a>GRE的封装</h4><p>GRE的构成可分为三个部分：</p>
 <p><strong>乘客协议</strong>：乘客协议是指用户在传输数据时所使用的原始网络协议。</p>
@@ -465,8 +463,8 @@
 <td><strong>1.配置Tunnel接口的封装参数</strong><br>interface Tunnel0<br> ip address 200.200.200.1 255.255.255.0<br> tunnel-protocol gre<br> source 2.1.1.2<br> destination 1.1.1.1</td>
 </tr>
 <tr>
-<td><strong>2.配置路由，将需要经过GRE隧道传输的流量引入到GRE隧道中</strong><br>ip route-static 192.168.2.0 255.255.255.0 Tunnel0</td>
-<td><strong>2.配置路由，将需要经过GRE隧道传输的流量引入到GRE隧道中</strong><br>ip route-static 192.168.1.0 255.255.255.0 Tunnel0</td>
+<td><strong>2.配置路由，引导流量</strong><br>ip route-static 192.168.2.0 255.255.255.0 Tunnel0</td>
+<td><strong>2.配置路由，引导流量</strong><br>ip route-static 192.168.1.0 255.255.255.0 Tunnel0</td>
 </tr>
 <tr>
 <td><strong>3.配置安全区域</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br><br>firewall zone dmz<br> set priority 50<br> add interface Tunnel0</td>
@@ -968,7 +966,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">40.9k</span>&nbsp;字
+                class="white-color">43.3k</span>&nbsp;字
             
             
             
