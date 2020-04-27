@@ -409,14 +409,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    955
+                    1.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    5 分
                 </div>
                 
 
@@ -433,10 +433,10 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="GRE的介绍与配置"><a href="#GRE的介绍与配置" class="headerlink" title="GRE的介绍与配置"></a>GRE的介绍与配置</h2><ul>
-<li>通用路由封装（General Routing Encapsulation），简称GRE，是一种三层VPN封装技术。</li>
+<li>通用路由封装（General Routing Encapsulation），简称GRE，GRE是Tunnel（隧道）技术的一种，属于第三层隧道协议。GRE隧道是一个虚拟的点到点的连接，为封装的数据报文提供了一条传输通路。</li>
 <li>GRE可以对某些网络层协议（如IPX、Apple Talk、IP等）的报文进行封装，使封装后的报文能够在另一种网络中（如IPv4）传输，从而解决了跨越异种网络的报文传输问题。异种报文传输的通道称为Tunnel（隧道）。</li>
 <li>GRE除了可以封装网络层协议报文以外，它还具备封装组播报文的能力。由于动态路由协议中会使用组播报文，因此更多时候GRE会在需要传递组播路由数据的场景中被用到，这也是GRE被称为通用路由封装协议的原因。</li>
-<li>IP协议号：17</li>
+<li>IP协议号：47</li>
 </ul>
 <h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><h4 id="GRE的封装"><a href="#GRE的封装" class="headerlink" title="GRE的封装"></a>GRE的封装</h4><p>GRE的构成可分为三个部分：</p>
 <p><strong>乘客协议</strong>：乘客协议是指用户在传输数据时所使用的原始网络协议。</p>
@@ -445,7 +445,24 @@
 <ul>
 <li>GRE的封装操作是通过逻辑接口Tunnel完成的，Tunnel接口是一个通用的隧道接口，所以GRE协议在使用这个接口的时候，会将接口的封装协议设置为GRE协议。</li>
 </ul>
-<p>GRE的报文：[ 新IP头 | GRE 头 | IP头 | 数据 ]</p>
+<p>GRE的报文：[ IP | GRE | IP | Payload ]</p>
+<h4 id="GRE的实现——隧道接口"><a href="#GRE的实现——隧道接口" class="headerlink" title="GRE的实现——隧道接口"></a>GRE的实现——隧道接口</h4><ul>
+<li><p>隧道接口包含以下元素：<br>1.源地址：报文传输协议中的源地址。从负责封装后报文传输的网络来看，隧道的源地址就是实际发送报文的接口IP地址。<br>2.目的地址：报文传输协议中的目的地址。从负责封装后报文传输的网络来看，隧道本端的目的地址就是隧道目的端的源地址。<br>3.隧道接口IP地址：为了在隧道接口上启用动态路由协议，或使用静态路由协议发布隧道接口，要为隧道接口分配IP地址。隧道接口的IP地址可以不是公网地址，甚至可以借用其他接口的IP地址以节约IP地址。但是当Tunnel接口借用IP地址时，由于Tunnel接口本身没有IP地址，无法在此接口上启用动态路由协议，必须配置静态路由或策略路由才能实现路由器间的连通性。<br>4.封装类型：隧道接口的封装类型是指该隧道接口对报文进行的封装方式。一般情况下有四种封装方式，分别是GRE、MPLS TE、IPv6-IPv4和IPv4-IPv6。</p>
+</li>
+<li><p>经过手工配置，成功建立隧道之后，就可以将隧道接口看成是一个物理接口，可以在其上运行动态路由协议或配置静态路由。</p>
+</li>
+</ul>
+<h4 id="GRE应用场景"><a href="#GRE应用场景" class="headerlink" title="GRE应用场景"></a>GRE应用场景</h4><p>GRE特性主要用于以下应用场景：</p>
+<ul>
+<li><p>GRE over IPSec</p>
+</li>
+<li><p>IPv6 over IPv4隧道</p>
+</li>
+<li><p>扩大跳数受限的网络工作范围</p>
+</li>
+<li><p>GRE VPN</p>
+</li>
+</ul>
 <h4 id="GRE的安全选项"><a href="#GRE的安全选项" class="headerlink" title="GRE的安全选项"></a>GRE的安全选项</h4><ul>
 <li>隧道双方支持对对端设备的身份验证。建立隧道的双方事先约定好一个密钥，在传输GRE报文的时候，该密钥信息会被封装到GRE头中，接收端在收到GRE报文时会用自己的密钥和报文中的密钥进行比对。密钥一致则验证通过；密钥不一致，则表示对方身份不合法，丢弃此报文。GRE报文头中的Key标识位置1，表示启用了身份验证功能，为0表示未启用身份验证功能。</li>
 <li>命令：进入Tunnel接口视图执行 gre key { cipher <em>key-number</em> | plain <em>key-number</em> }</li>
@@ -966,7 +983,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">43.3k</span>&nbsp;字
+                class="white-color">43.8k</span>&nbsp;字
             
             
             
