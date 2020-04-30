@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="源NAT, XY">
+    <meta name="keywords" content="PPPoE, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>源NAT | XY</title>
+    <title>PPPoE | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">源NAT</h1>
+                    <h1 class="description center-align post-title">PPPoE</h1>
                 </div>
             </div>
         </div>
@@ -367,12 +367,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                <span class="chip bg-color">华为</span>
-                            </a>
-                        
-                            <a href="/tags/NAT/">
-                                <span class="chip bg-color">NAT</span>
+                            <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                <span class="chip bg-color">协议</span>
                             </a>
                         
                     </div>
@@ -383,8 +379,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Datacom/" class="post-category">
-                                Datacom
+                            <a href="/categories/DATACOM/" class="post-category">
+                                DATACOM
                             </a>
                         
                     </div>
@@ -396,7 +392,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-01
+                    2020-04-30
                 </div>
                 
 
@@ -405,14 +401,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    767
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    2 分
                 </div>
                 
 
@@ -428,102 +424,66 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="源NAT"><a href="#源NAT" class="headerlink" title="源NAT"></a>源NAT</h2><hr>
-
-<ul>
-<li>源NAT是指对报文中的源地址进行转换。<br>通过源NAT技术将私网IP地址转换成公网IP地址，使私网用户可以利用公网地址访问Internet。</li>
-</ul>
-<h3 id="NAT-No-PAT"><a href="#NAT-No-PAT" class="headerlink" title="NAT No-PAT"></a>NAT No-PAT</h3><ul>
-<li><p>NAT No-PAT是一种NAT转换时只转换地址，不转换端口，实现私网地址到公网地址一对一的地址转换方式。</p>
-<p> <u>如果地址池中的地址已经全部分配出去，则剩余内网主机访问外网时不会进行NAT转换，直到地址池中有空闲地址时才会进行NAT转换</u></p>
+                <h2 id="PPPoE"><a href="#PPPoE" class="headerlink" title="PPPoE"></a>PPPoE</h2><ul>
+<li><p>以太网上的点对点协议 PPPoE（Point-to-Point Protocol over Ethernet）它利用以太网将多个主机组成网络，通过一个远端接入设备接入因特网，并对接入的每个主机实现控制、计费功能。极高的性价比使PPPoE被广泛应用于包括小区组网等一系列应用中。</p>
+</li>
+<li><p>PPPoE提供了在以太网上建立PPPoE会话以及封装PPP数据包的方法。PPPoE要求在通信双方之间建立的是点到点关系，而不是在以太网和其他多路访问环境中所出现的多点关系。</p>
+</li>
+<li><p>PPP（Point-to-Point）应用虽然很广泛，但是不能应用于以太网，因此提出了PPPoE技术。PPPoE是对PPP的扩展，它可以使PPP协议应用于以太网。</p>
+</li>
+<li><p>PPPoE提供通过简单桥接的接入服务器把一个网络的多个主机连接到远程接入服务器的功能。</p>
 </li>
 </ul>
-<p><strong>FW上会生成两个Server-map表项</strong>：  </p>
-<blockquote>
-<p><strong>正向Server-map表项</strong>保证特定私网用户访问Internet时，快速转换地址，提高了FW处理效率。<br><strong>反向Server-map表项</strong>允许Internet上的用户主动访问私网用户，将报文进行地址转换。</p>
-</blockquote>
-<p><strong>NAT NO-PAT有两种:</strong>  </p>
-<blockquote>
-<p>  <strong>本地（Local）NO-PAT</strong><br>本地NO-PAT生成的Server-Map表中包含安全区域参数，只有此安全区域的Server可以访问内网Host。<br><strong>全局（Global）NO-PAT</strong><br>  全局NO-PAT生成的Server-Map表中不包含安全区域参数，一旦建立，所有安全区域的Server都可以访问内网Host。</p>
-</blockquote>
-<ul>
-<li>适用场景：<strong>上网用户较少</strong>且公网地址数与同时上网的<strong>用户数量相同</strong>。</li>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><ul>
+<li>PPPoE协议采用客户端-服务器（Client/Server）方式，它将PPP报文封装在以太网帧之内，在以太网上提供点对点的连接。</li>
 </ul>
-<h3 id="NAPT"><a href="#NAPT" class="headerlink" title="NAPT"></a>NAPT</h3><ul>
-<li><p>NAPT是一种转换时同时转换地址和端口，实现多个私网地址共用一个或多个公网地址的地址转换方式。</p>
-<p><u>由于地址转换的同时还进行端口的转换，可以实现多个私网用户共同使用一个公网IP地址上网，FW根据端口区分不同用户，所以可以支持同时上网的用户数量更多。</u></p>
+<h4 id="PPPoE连接建立过程"><a href="#PPPoE连接建立过程" class="headerlink" title="PPPoE连接建立过程"></a>PPPoE连接建立过程</h4><h5 id="Discovery阶段"><a href="#Discovery阶段" class="headerlink" title="Discovery阶段"></a>Discovery阶段</h5><ul>
+<li><p>当主机开始通过PPPoE接入服务器时，它必须先识别接入端的以太网MAC地址，建立PPPoE的Session_ID。这就是Discovery阶段的目的。</p>
+</li>
+<li><p>Discovery阶段由四个过程组成。完成之后通信双方都会知道PPPoE的Session_ID以及对方以太网地址，它们共同确定了唯一的PPPoE会话。</p>
 </li>
 </ul>
-<blockquote>
-<p>NAPT方式不会生成Server-map表</p>
-</blockquote>
-<ul>
-<li>适用场景：<strong>公网地址数量少</strong>，需要上网的<strong>私网用户数量大</strong>。</li>
-</ul>
-<h3 id="Smart-NAT"><a href="#Smart-NAT" class="headerlink" title="Smart NAT"></a>Smart NAT</h3><ul>
-<li><p>Smart NAT是No-PAT方式的一种<strong>补充</strong></p>
-<p> <u>Smart NAT是一种可以在No-PAT的NAT模式下，指定某个IP地址预留做NAPT方式的地址转换方式。</u></p>
-</li>
-</ul>
-<blockquote>
-<p>Smart NAT的产生：<br>使用No-PAT方式时，进行地址池的一对一转换。随着内部用户数量的不断增加，地址池中的地址数可能不再能满足用户上网需求，部分用户将得不到转换地址而无法访问Internet。</p>
-</blockquote>
-<ul>
-<li>由于地址转换的同时还进行端口的转换（<strong>先是No-PAT的地址用尽后才会使用预留地址进行NAPT的转换</strong>），可以实现多个私网用户共同使用一个公网IP地址上网，FW根据端口区分不同用户，所以可以支持同时上网的用户数量更多。</li>
-</ul>
-<blockquote>
-<p>NAPT方式不会生成Server-map表，No-PAT会生成Server-map表</p>
-</blockquote>
-<ul>
-<li>适用场景：<strong>平时上网的用户数量少</strong>，公网IP地址数量与同时上网用户数<strong>基本相同</strong>，<strong>但个别时段上网用户数激增</strong>。</li>
-</ul>
-<h3 id="Easy-IP"><a href="#Easy-IP" class="headerlink" title="Easy IP"></a>Easy IP</h3><ul>
-<li><p>Easy IP是一种<strong>利用出接口的公网IP地址作为NAT转后的地址</strong>，同时转换地址和端口的地址转换方式。  </p>
-<ul>
-<li><input checked disabled type="checkbox"> 接口IP是动态获取的场景下也可使用  </li>
-<li><input checked disabled type="checkbox"> 支持端口的转换 </li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>Easy IP的产生：使用No-PAT或NAPT方式时均需要多个静态的公网IP地址，且需要配置地址池，会造成大量IP地址的浪费。当公网IP地址为动态获取时，NAT的地址池很难得到正确的配置。</p>
-</blockquote>
-<ul>
-<li><p>适用场景：当<strong>接口的公网IP是动态获取</strong>的状态下，只想使用这一个公网IP进行上网，并且<strong>私网用户数量多</strong>。</p>
-</li>
-<li><p>Easy IP不会产生Server-map</p>
-</li>
-</ul>
-<h3 id="三元组NAT"><a href="#三元组NAT" class="headerlink" title="三元组NAT"></a>三元组NAT</h3><ul>
-<li><p>三元组NAT是一种转换时<strong>同时转换地址和端口</strong>，实现多个私网地址共用一个或多个公网地址的地址转换方式且允许Internet上的用户主动访问私网用户。</p>
-<ul>
-<li><input checked disabled type="checkbox"> 三元组NAT的<strong>端口不能复用</strong>，保证了内部PC对外呈现的端口的一致性，不会动态变化，但是公网地址利用率低。</li>
-<li><input checked disabled type="checkbox"> 支持外部设备通过转换后的地址和端口<strong>主动访问内部PC</strong>。FW即使没有配置相应的安全策略，也允许此类访问报文通过。</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>三元组NAT的产生：当内网PC访问Internet时，如果FW采用五元组NAT（NAPT）方式进行地址转换，外部设备无法通过转换后的地址和端口主动访问内部PC。</p>
-</blockquote>
-<ul>
-<li><strong>缺省情况下，端点无关过滤功能处于开启状态。</strong></li>
-</ul>
-<blockquote>
-<p>开启时公网用户访问私网用户时匹配目的Server-map表，不进行安全策略处理。<br>关闭时匹配安全策略规则，由安全策略规则决定是否转发报文。</p>
-</blockquote>
-<ul>
-<li>三元组NAT可产生<strong>正向</strong>与<strong>反向</strong>的Server-map。</li>
-</ul>
-<ul>
-<li><p>三元组NAT有两种：</p>
-<ul>
-<li><input checked disabled type="checkbox"> 本地（Local）三元组NAT</li>
-<li><input checked disabled type="checkbox"> 全局（Global）三元组NAT</li>
-</ul>
-</li>
-<li><p>FW支持Smart三元组NAT功能，可以根据报文的目的端口来选择分配端口的模式，在一定程度上提高公网地址的利用率。当报文的目的端口属于设置的端口范围之内，就采用NAPT模式来分配端口，如果报文的目的端口不属于设置的端口范围之内，则采用三元组NAT模式来分配端口。</p>
-</li>
-</ul>
+<p><strong>Discovery阶段的四个过程如下：</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>PPPoE Client</th>
+<th></th>
+<th>PPPoE Server</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>PADI</td>
+<td>===&gt;</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>&lt;===</td>
+<td>PADO</td>
+</tr>
+<tr>
+<td>3</td>
+<td>PADR</td>
+<td>===&gt;</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+<td>&lt;===</td>
+<td>PADS</td>
+</tr>
+</tbody></table>
+<p>1.主机在本以太网内广播一个PADI（PPPoE Active Discovery Initial）报文，在此报文中包含主机想要得到的服务类型信息。</p>
+<p>2.以太网内的服务器收到这个PADI报文后，将其中请求的服务与自己能提供的服务进行比较，可以提供此服务的服务器发回PADO（PPPoE Active Discovery Offer）报文。</p>
+<p>3.主机收到服务器的PADO报文，向它发回一个会话请求报文PADR（PPPoE Active Discovery Request）。</p>
+<p>4.服务器产生一个唯一的会话标识，标识和主机的这段PPPoE会话。并把此会话标识通过会话确认报文PADS（PPPoE Active Discovery Session-confirmation）发回给主机，如果没有错误，双方进入PPPoE Session阶段。<br>接入服务器发送确认数据包后，它就可以进入到PPPoE会话阶段。当主机接收到该确认数据包后，它就可以进入PPPoE会话阶段。</p>
+<h5 id="Session阶段"><a href="#Session阶段" class="headerlink" title="Session阶段"></a>Session阶段</h5><p>当PPPoE进入Session阶段后，PPP报文就可以作为PPPoE帧的净荷封装在以太网帧发送到对端，Session_ID必须是Discovery阶段确定的ID，MAC地址必须是对端的MAC地址，PPP报文从Protocol ID开始。这时所有的以太网数据包都是单播的。</p>
+<p>在Session阶段，主机或服务器任何一方都可以发送PADT（PPPoE Active Discovery Terminate）报文通知对方结束本Session。</p>
 
             </div>
             <hr/>
@@ -549,7 +509,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/03/01/yuan-nat/">https://hzyxy.github.io/2020/03/01/yuan-nat/</a>
+                    <a href="https://hzyxy.github.io/2020/04/30/pppoe/">https://hzyxy.github.io/2020/04/30/pppoe/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -587,12 +547,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                    <span class="chip bg-color">华为</span>
-                                </a>
-                            
-                                <a href="/tags/NAT/">
-                                    <span class="chip bg-color">NAT</span>
+                                <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                    <span class="chip bg-color">协议</span>
                                 </a>
                             
                         </div>
@@ -758,58 +714,48 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/03/29/yuan-nat-de-pei-zhi/">
+                <a href="/2020/04/30/pppoe/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="源NAT的配置">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="PPPoE">
                         
-                        <span class="card-title">源NAT的配置</span>
+                        <span class="card-title">PPPoE</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            源NAT的配置
+                            PPPOE的介绍
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-29
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-30
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Datacom/" class="post-category">
-                                    Datacom
+                            <a href="/categories/DATACOM/" class="post-category">
+                                    DATACOM
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/NAT/">
-                        <span class="chip bg-color">NAT</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
                     </a>
                     
                 </div>
@@ -823,31 +769,31 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/02/29/wo-de-di-yi-pian-bo-ke/">
+                <a href="/2020/04/28/dsvpn/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="我的第一篇博客">
+                        <img src="/medias/featureimages/31.jpg" class="responsive-img" alt="DS VPN">
                         
-                        <span class="card-title">我的第一篇博客</span>
+                        <span class="card-title">DS VPN</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            上线
+                            DS VPN的介绍与配置
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-29
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-28
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
                                 </a>
                             
                             
@@ -857,8 +803,16 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                        <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
+                    </a>
+                    
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
                     </a>
                     
                 </div>
