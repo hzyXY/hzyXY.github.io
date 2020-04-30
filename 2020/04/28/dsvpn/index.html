@@ -585,14 +585,14 @@
 </tr>
 <tr>
 <td><img src="/2020/04/28/dsvpn/nhipsecsa.JPG" alt="查看Hub所建立的IPSec SA"><img src="/2020/04/28/dsvpn/nhipsecsa2.JPG" alt="查看Hub所建立的IPSec SA（续）"></td>
-<td><img src="/2020/04/28/dsvpn/nspokeipsecsa1.JPG" alt="查看Hub所建立的IPSec SA"><img src="/2020/04/28/dsvpn/nspokeipsecsa2.JPG" alt="查看Hub所建立的IPSec SA（续）"></td>
+<td><img src="/2020/04/28/dsvpn/nspokeipsecsa1.JPG" alt="查看Spoke所建立的IPSec SA"><img src="/2020/04/28/dsvpn/nspokeipsecsa2.JPG" alt="查看Spoke所建立的IPSec SA（续）"></td>
 </tr>
 <tr>
-<td><img src="/2020/04/28/dsvpn/nhnhrp.JPG" alt="nhnhrp"></td>
-<td><img src="/2020/04/28/dsvpn/nspokenhrp.JPG" alt="nspokenhrp"></td>
+<td><img src="/2020/04/28/dsvpn/nhnhrp.JPG" alt="查看Hub所建立的NHRP peer表"></td>
+<td><img src="/2020/04/28/dsvpn/nspokenhrp.JPG" alt="查看Spoke所建立的NHRP peer表"></td>
 </tr>
 </tbody></table>
-<h4 id="跨NAT-DS-VPN-IPSec保护（Shortcut方式）"><a href="#跨NAT-DS-VPN-IPSec保护（Shortcut方式）" class="headerlink" title="跨NAT DS VPN IPSec保护（Shortcut方式）"></a>跨NAT DS VPN IPSec保护（Shortcut方式）</h4><p><img src="/2020/04/28/dsvpn/%E6%8B%93%E6%89%91s.JPG" alt="拓扑"></p>
+<h4 id="跨NAT-DS-VPN-IPSec保护（Shortcut方式）分支隧道建立失败"><a href="#跨NAT-DS-VPN-IPSec保护（Shortcut方式）分支隧道建立失败" class="headerlink" title="跨NAT DS VPN IPSec保护（Shortcut方式）分支隧道建立失败"></a>跨NAT DS VPN IPSec保护（Shortcut方式）分支隧道建立失败</h4><p><img src="/2020/04/28/dsvpn/%E6%8B%93%E6%89%91s.JPG" alt="拓扑"></p>
 <h4 id="配置步骤-1"><a href="#配置步骤-1" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在AR1（Hub）上的配置-1"><a href="#一、在AR1（Hub）上的配置-1" class="headerlink" title="一、在AR1（Hub）上的配置"></a>一、在AR1（Hub）上的配置</h5><table>
 <thead>
 <tr>
@@ -674,40 +674,25 @@
 <td><strong>4.配置NAT-Server</strong><br>nat server spoke2 0 global 3.1.1.1 inside 192.168.3.1</td>
 </tr>
 </tbody></table>
-<h4 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h4><table>
+<h4 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h4><p><strong>分支隧道建立失败</strong></p>
+<table>
 <thead>
 <tr>
-<th></th>
-<th></th>
+<th><img src="/2020/04/28/dsvpn/shikesa.JPG" alt="查看Hub所建立的IKE SA"></th>
+<th><img src="/2020/04/28/dsvpn/ssikesa.JPG" alt="查看Spoke所建立的IKE SA"></th>
 </tr>
 </thead>
 <tbody><tr>
-<td></td>
-<td></td>
+<td><img src="/2020/04/28/dsvpn/shipsecsa2.JPG" alt="查看Hub所建立的IPSec SA"><img src="/2020/04/28/dsvpn/shipsecsa.JPG" alt="查看Hub所建立的IPSec SA续"></td>
+<td><img src="/2020/04/28/dsvpn/ssipsecsa.JPG" alt="查看Spoke所建立的IPSec SA"></td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td><img src="/2020/04/28/dsvpn/shnhrp.JPG" alt="查看Hub所建立的NHRP peer表"></td>
+<td><img src="/2020/04/28/dsvpn/ssnhrp.JPG" alt="查看Spoke所建立的NHRP peer表"></td>
 </tr>
 <tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
+<td><img src="/2020/04/28/dsvpn/shospf.JPG" alt="查看Hub的OSPF邻居"></td>
+<td><img src="/2020/04/28/dsvpn/ssospf.JPG" alt="查看Spoke的OSPF邻居"></td>
 </tr>
 </tbody></table>
 
