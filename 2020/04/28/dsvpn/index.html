@@ -495,8 +495,8 @@
 <li><strong>Normal方式</strong>，源Spoke可以学习到目的Spoke的Tunnel地址。因此，源Spoke可以直接根据目的Spoke的Tunnel地址来查找目的Spoke的公网地址，生成目的Spoke的Tunnel地址与公网地址的NHRP映射表。</li>
 <li><strong>shortcut方式</strong>，所有Spoke的路由下一跳全部都是Hub的Tunnel地址，源Spoke无法学习到目的Spoke的Tunnel地址。因此，源Spoke只能根据报文的目的地址来查找目的Spoke的公网地址，生成目的Spoke的子网地址与公网地址的NHRP映射表。</li>
 </ul>
-<p><img src="/2020/04/28/dsvpn/DSVPN%5Cn.png" alt="建立Spoke与Spoke之间的mGRE隧道（Normal方式）"></p>
-<p><img src="/2020/04/28/dsvpn/DSVPN%5Cs.png" alt="建立Spoke与Spoke之间的mGRE隧道（shortcut方式）"></p>
+<p><img src="/2020/04/28/dsvpn/n.png" alt="建立Spoke与Spoke之间的mGRE隧道（Normal方式）"></p>
+<p><img src="/2020/04/28/dsvpn/s.png" alt="建立Spoke与Spoke之间的mGRE隧道（shortcut方式）"></p>
 <h4 id="DS-VPN-IPSec保护"><a href="#DS-VPN-IPSec保护" class="headerlink" title="DS VPN IPSec保护"></a>DS VPN IPSec保护</h4><ul>
 <li><p>DSVPN采用mGRE隧道传输数据，但mGRE隧道不对数据加密，因而在Internet上传送不安全。为此，建议在部署DSVPN的同时部署IPSec保护，实现分支间直接通信的数据能够得到安全传输。</p>
 </li>
@@ -1181,7 +1181,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">47.9k</span>&nbsp;字
+                class="white-color">51.8k</span>&nbsp;字
             
             
             

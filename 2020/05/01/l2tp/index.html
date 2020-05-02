@@ -1,0 +1,1716 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="L2TP, XY">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>L2TP | XY</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+
+    <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+<script type="text/javascript" src="/js/fireworks.js"></script>
+
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">XY</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">XY</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">L2TP</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/VPN/">
+                                <span class="chip bg-color">VPN</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                <span class="chip bg-color">协议</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Security/" class="post-category">
+                                Security
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-05-01
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.9k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    14 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="L2TP"><a href="#L2TP" class="headerlink" title="L2TP"></a>L2TP</h2><ul>
+<li><p>L2TP（Layer 2 Tunneling Protocol） VPN是一种用于承载PPP报文的隧道技术，L2TP提供了对PPP链路层数据帧的隧道（Tunnel）传输支持，允许二层链路端点和PPP会话点驻留在不同设备上，扩展了PPP模型。</p>
+</li>
+<li><p>在L2TP中，用户通过PPP拨号到LAC（L2TP Access Concentrator，L2TP访问集中器）（即NAS设备，Network Access Server）上，LAC通过L2TP隧道将PPP报文透明传输到LNS（L2TP Network Server，L2TP网络服务器），LNS随即与用户建立PPP连接。 即PPP的二层链路端点为LAC，而PPP的会话终止点为LNS。</p>
+</li>
+<li><p>该技术主要应用在远程办公场景中为出差员工远程访问企业内网资源提供接入服务。</p>
+</li>
+<li><p>L2TP VPN隧道本身无数据加密功能，为了确保用户数据不被窃取，实际应用中建议使用IPSec技术对L2TP VPN提供加密保护</p>
+</li>
+</ul>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><h4 id="L2TP的角色"><a href="#L2TP的角色" class="headerlink" title="L2TP的角色"></a>L2TP的角色</h4><p>在L2TP中，网络组件包括用户、LAC、LNS这三个组件</p>
+<p><strong>用户（也可称作接入用户、客户端、拨号用户）</strong></p>
+<ul>
+<li><p>在L2TP组网模型中，用户是需要登录私网的设备，通常是一个拨号用户的主机或私有网络的一台路由设备。用户是发起PPP协商的终端设备，既是PPP二层链路的一端又是PPP会话的一端。</p>
+</li>
+<li><p>用户可以通过私网与LAC连接，或者接入Internet直接与总部服务器建立连接。</p>
+</li>
+</ul>
+<p><strong>LAC</strong></p>
+<ul>
+<li><p>LAC是附属在交换网络上的具有PPP端系统和L2TP协议处理能力的设备，主要用于为PPP类型的用户提供接入服务。</p>
+</li>
+<li><p>LAC位于LNS和用户之间，用于在LNS和用户之间传递信息包。它把从用户收到的信息包按照L2TP协议进行封装并送往LNS，同时也将从LNS收到的信息包进行解封装并送往用户。</p>
+</li>
+<li><p>LAC与用户之间采用本地连接或PPP链路，VPDN应用中通常为PPP链路。</p>
+</li>
+</ul>
+<p><strong>LNS</strong></p>
+<ul>
+<li><p>LNS既是PPP端系统，又是L2TP协议的服务器端，通常作为一个企业内部网的边缘设备。</p>
+</li>
+<li><p>LNS作为L2TP隧道的另一侧端点，是LAC的对端设备，是LAC进行隧道传输的PPP会话的逻辑终止端点。通过在公网中建立L2TP隧道，将用户的PPP连接的另一端由原来的LAC在逻辑上延伸到了企业网内部的LNS。</p>
+</li>
+</ul>
+<h4 id="L2TP的优点"><a href="#L2TP的优点" class="headerlink" title="L2TP的优点"></a>L2TP的优点</h4><p><strong>1.灵活的身份验证机制以及高度的安全性</strong></p>
+<ul>
+<li><p>L2TP协议本身并不提供连接的安全性，但它可依赖于PPP提供的认证（比如CHAP、PAP等），因此具有PPP所具有的所有安全特性。</p>
+</li>
+<li><p>可根据特定的网络安全要求，在L2TP之上采用通道加密技术、端对端数据加密或应用层数据加密等方案来提高数据的安全性。比如，采用IPSec技术对隧道数据加密。</p>
+</li>
+</ul>
+<p><strong>2.多协议传输</strong></p>
+<ul>
+<li>L2TP传输PPP数据包，PPP本身可以传输多协议，而不仅仅是IP。可以在PPP数据包内封装多种协议。</li>
+</ul>
+<p><strong>3.支持RADIUS服务器的验证</strong></p>
+<ul>
+<li>LAC端将用户名和密码发往RADIUS服务器进行验证申请，由RADIUS服务器负责接收用户的验证请求，完成验证。</li>
+</ul>
+<p><strong>4.支持内部地址分配</strong></p>
+<ul>
+<li>LNS可放置于企业网的防火墙之后，对用户地址进行动态分配和管理。</li>
+</ul>
+<p><strong>5.可靠性</strong></p>
+<ul>
+<li>L2TP协议支持备份LNS，当一个主LNS不可达之后，LAC可以重新与备份LNS建立连接，增加了VPN服务的可靠性和容错性。</li>
+</ul>
+<h4 id="L2TP的控制消息和数据消息"><a href="#L2TP的控制消息和数据消息" class="headerlink" title="L2TP的控制消息和数据消息"></a>L2TP的控制消息和数据消息</h4><ul>
+<li><strong>控制消息：</strong>控制消息用于隧道和会话连接的建立、维护以及传输控制，位于隧道和会话建立过程中。控制消息的传输是可靠传输，并且支持对控制消息的流量控制和拥塞控制。控制消息包括控制报文、会话报文等。<ul>
+<li>控制报文：用于建立和拆除、维持隧道。</li>
+<li>会话报文：用于建立和拆除会话。</li>
+</ul>
+</li>
+<li><strong>数据消息：</strong>用于承载用户的PPP连接数据报文，并在隧道上进行传输。<ul>
+<li>数据消息的传输是不可靠传输，若数据报文丢失，不予重传。不支持对数据消息的流量控制和拥塞控制。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/05/01/l2tp/%E6%B6%88%E6%81%AF.JPG" alt="消息类别"></p>
+<h4 id="L2TP认证方式"><a href="#L2TP认证方式" class="headerlink" title="L2TP认证方式"></a>L2TP认证方式</h4><p>L2TP支持使用PAP和CHAP两种方式进行PPP认证。</p>
+<ul>
+<li><p>NAS-Initiated VPN场景：L2TP可对用户进行两次PPP认证，第一次发生在LAC侧，第二次发生在LNS侧。只有一种情况LNS侧不对接入用户进行二次认证，即启用LCP重协商后，不在相应的VT接口上配置认证。这时，用户只在LAC侧接受一次认证。</p>
+</li>
+<li><p>LAC自动拨号场景：LAC侧不对用户进行认证，只在LNS侧对LAC配置的用户进行PPP认证（PAP或CHAP）。</p>
+</li>
+<li><p>Client-Initiated VPN场景：在LNS侧对用户进行PPP认证（PAP或CHAP）</p>
+</li>
+</ul>
+<h3 id="L2TP的应用场景"><a href="#L2TP的应用场景" class="headerlink" title="L2TP的应用场景"></a>L2TP的应用场景</h3><h4 id="NAS-Initiated-场景"><a href="#NAS-Initiated-场景" class="headerlink" title="NAS-Initiated 场景"></a>NAS-Initiated 场景</h4><ul>
+<li><strong>拨号用户访问企业内网</strong></li>
+</ul>
+<p><img src="/2020/05/01/l2tp/NAS-Initiated.png" alt="NAS-Initiated场景下L2TP VPN隧道建立过程"></p>
+<h5 id="交互流程"><a href="#交互流程" class="headerlink" title="交互流程"></a>交互流程</h5><ol>
+<li>拨号用户与NAS建立PPPoE连接</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>PPPoE Client</th>
+<th></th>
+<th>NAS(PPPoE Server)</th>
+<th></th>
+<th>LNS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>PADI</td>
+<td>===&gt;</td>
+<td></td>
+<td></td>
+<td></td>
+<td>发送PADI广播报文，寻找PPPoE Server</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>&lt;===</td>
+<td>PADO</td>
+<td></td>
+<td></td>
+<td>返回PADO报文，告知PPPoE Client可以与自己建立PPPoE连接</td>
+</tr>
+<tr>
+<td>3</td>
+<td>PADR</td>
+<td>===&gt;</td>
+<td></td>
+<td></td>
+<td></td>
+<td>发送PADR报文，向PPPoE Server请求建立PPPoE会话所需的会话ID</td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+<td>&lt;===</td>
+<td>PADS</td>
+<td></td>
+<td></td>
+<td>返回PADS报文，告知PPPoE Client使用“1”作为Session ID</td>
+</tr>
+<tr>
+<td>5</td>
+<td>PPP Negotiation</td>
+<td></td>
+<td>PPP Negotiation</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li>NAS与LNS建立L2TP VPN隧道</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>PPPoE Client</th>
+<th></th>
+<th>NAS(PPPoE Server)</th>
+<th></th>
+<th>LNS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td>SCCRQ</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送SCCRQ报文，告知LNS我使用的Tunnel ID。NAS发送SCCRQ报文时使用的初始Tunnel ID为0；NAS在发送SCCRQ报文时会<strong>任选一个空闲端口</strong>作为源端口向LNS的1701端口发送报文；LNS收到报文后，使用1701端口向NAS的指定端口回送报文。双方的端口选定后，在隧道保持连通的时间段内不再改变。</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td>&lt;===</td>
+<td>SCCRP</td>
+<td>返回SCCRP报文，告知LAC我使用的Tunnel ID</td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td></td>
+<td>SCCCN</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送SCCCN确认报文。隧道双方Tunnel ID协商结束，L2TP VPN隧道建立完毕</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>NAS与LNS建立L2TP会话</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>PPPoE Client</th>
+<th></th>
+<th>NAS(PPPoE Server)</th>
+<th></th>
+<th>LNS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td>ICRQ</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送ICRQ报文，告知LNS我使用的Session ID。NAS发送ICRQ报文时使用的初始Session ID为0</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td>&lt;===</td>
+<td>ICRP</td>
+<td>返回ICRP报文，告知NAS我使用的Session ID</td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td></td>
+<td>ICCN</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送ICCN确认报文。隧道双方Session ID协商结束，L2TP会话建立完毕。</td>
+</tr>
+</tbody></table>
+<ol start="4">
+<li>拨号用户与LNS建立PPP连接</li>
+</ol>
+<p>拨号用户通过与LNS建立PPP连接获取LNS分配的企业内网IP地址。</p>
+<p><strong>可选</strong> LNS对拨号用户进行身份认证。<br>在NAS-Initiated场景中，用户身份认证有两种方案，一种是仅使用NAS对用户做身份认证，另一种是NAS和LNS分别对用户做身份认证（也叫二次认证）。认证方案的选择由LNS侧的配置控制，LNS侧有如下三种身份认证方式。</p>
+<ul>
+<li><p>代理认证</p>
+<p>表示仅使用NAS进行用户认证，LNS不再对用户进行二次身份认证。例如，步骤<a href="http://localhost:7890/pages/AZJ0102D/01/AZJ0102D/01/resources/admin/sec_admin_l2tp_0005.html?ft=0&fe=10&hib=6.2.11.4.1.3.1&id=ZH-CN_CONCEPT_0178927503#ZH-CN_CONCEPT_0178927503__step1" target="_blank" rel="noopener">1</a>中，拨号用户与NAS建立PPPoE连接时，NAS已经使用PAP/CHAP方式对拨号用户做了身份认证，则此处LNS将不做二次认证。</p>
+</li>
+<li><p>强制CHAP认证</p>
+<p>表示NAS认证完用户身份以后，LNS要求用户使用CHAP方式重新进行身份认证，该方式属于二次身份认证。</p>
+</li>
+<li><p>LCP重协商</p>
+<p>表示LNS不信任NAS的认证结果，要求用户重新与LNS进行LCP协商并进行身份认证，该方式属于二次身份认证。</p>
+</li>
+</ul>
+<p>LNS默认使用的是代理认证方式，即不对用户做二次认证。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>PPPoE Client</th>
+<th></th>
+<th>NAS(PPPoE Server)</th>
+<th></th>
+<th>LNS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>IPCP Request</td>
+<td>===&gt;</td>
+<td></td>
+<td>===&gt;</td>
+<td></td>
+<td>请求LNS向其分配企业内网IP地址</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>&lt;===</td>
+<td></td>
+<td>&lt;===</td>
+<td>IPCP ACK</td>
+<td>返回IPCP ACK消息，此消息中携带了为拨号用户分配的企业内网IP地址（即LNS地址池中的IP地址），PPP连接建立完成</td>
+</tr>
+</tbody></table>
+<h5 id="报文封装"><a href="#报文封装" class="headerlink" title="报文封装"></a>报文封装</h5><p><img src="/2020/05/01/l2tp/NAS-Initiated%E5%B0%81%E8%A3%85.png" alt="NAS-Initiated报文封装"></p>
+<ol>
+<li><p>拨号用户发出的原始数据经过PPP头和PPPoE头封装后发往NAS设备。</p>
+<p>由于PPPoE是点到点连接，PPPoE连接建立以后，拨号用户本地PC不用进行路由选择，直接将封装后的报文发送给NAS设备。</p>
+</li>
+<li><p>NAS设备使用VT（Virtual-Template）接口拆除报文的PPPoE头，再进行L2TP封装，然后按照到Internet的公网路由将封装后的数据发送出去。</p>
+</li>
+<li><p>LNS设备接收到报文以后，拆除报文的L2TP头和PPP头，然后按照到企业内网的路由进行报文转发。</p>
+</li>
+<li><p>企业总部服务器收到拨号用户的报文后，向拨号用户返回响应报文。</p>
+</li>
+</ol>
+<h4 id="Client-Initiated-场景"><a href="#Client-Initiated-场景" class="headerlink" title="Client-Initiated 场景"></a>Client-Initiated 场景</h4><ul>
+<li><strong>移动办公用户访问企业内网</strong></li>
+</ul>
+<p><img src="/2020/05/01/l2tp/Client-Initiated.png" alt="Client-Initiated场景下L2TP VPN隧道建立过程"></p>
+<h5 id="交互流程-1"><a href="#交互流程-1" class="headerlink" title="交互流程"></a>交互流程</h5><ol>
+<li>移动办公用户与LNS建立L2TP VPN隧道</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Client</th>
+<th></th>
+<th>LNS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>SCCRQ</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送SCCRQ报文，告知Client我使用的Tunnel ID。Client发送SCCRQ报文时使用的初始Tunnel ID为0。同上</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>&lt;===</td>
+<td>SCCRP</td>
+<td>返回SCCRP报文，告知LClient我使用的Tunnel ID</td>
+</tr>
+<tr>
+<td>3</td>
+<td>SCCCN</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送SCCCN确认报文。隧道双方Tunnel ID协商结束，L2TP VPN隧道建立完毕</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li>移动办公用户与LNS建立L2TP会话。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Client</th>
+<th></th>
+<th>LNS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>ICRQ</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送ICRQ报文，告知LNS我使用的Session ID</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>&lt;===</td>
+<td>ICRP</td>
+<td>返回ICRP报文，告知Client我使用的Session ID</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ICCN</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送ICCN确认报文。隧道双方Session ID协商结束，L2TP会话建立完毕</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>移动办公用户与LNS建立PPP连接。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Client</th>
+<th></th>
+<th>LNS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>LCP Request</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送LCP Request请求报文，协商链路层参数</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>&lt;===</td>
+<td>LCP ACK</td>
+<td>LNS返回LCP ACK确认报文后，链路层参数协商完成</td>
+</tr>
+<tr>
+<td>3</td>
+<td>PAP Request</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送PAP Request报文，请求LNS进行身份认证</td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+<td>&lt;===</td>
+<td>PAP ACK</td>
+<td>LNS返回认证结果PAP ACK报文，身份认证完成</td>
+</tr>
+<tr>
+<td>5</td>
+<td>IPCP Request</td>
+<td>===&gt;</td>
+<td></td>
+<td>身份认证通过后，Client向LNS发送IPCP Request消息，请求LNS向其分配企业内网IP地址</td>
+</tr>
+<tr>
+<td>6</td>
+<td></td>
+<td>&lt;===</td>
+<td>IPCP ACK</td>
+<td>LNS向Client返回IPCP ACK消息，此消息中携带了为Client分配的企业内网IP地址（即地址池中的IP地址），PPP连接建立完成</td>
+</tr>
+</tbody></table>
+<h5 id="报文封装-1"><a href="#报文封装-1" class="headerlink" title="报文封装"></a>报文封装</h5><p><img src="/2020/05/01/l2tp/Client-Initiated%E5%B0%81%E8%A3%85.png" alt="Client-Initiated报文封装"></p>
+<ol>
+<li><p>移动办公用户向企业总部服务器发送业务报文。</p>
+<p>业务报文进行PPP封装和L2TP封装，然后按照移动办公用户PC的本地路由转发给LNS。</p>
+</li>
+<li><p>LNS接收到报文以后，使用VT接口拆除报文的L2TP头和PPP头，然后按照到企业内网的路由将报文转发给企业总部服务器。</p>
+</li>
+<li><p>企业总部服务器收到移动办公用户的报文后，向移动办公用户返回响应报文。</p>
+</li>
+</ol>
+<h4 id="LAC-Auto-Initiated-场景"><a href="#LAC-Auto-Initiated-场景" class="headerlink" title="LAC-Auto-Initiated 场景"></a>LAC-Auto-Initiated 场景</h4><p><img src="/2020/05/01/l2tp/LAC%E8%87%AA%E5%8A%A8%E6%8B%A8%E5%8F%B7.png" alt="LAC自动拨号场景下L2TP VPN隧道建立过程"></p>
+<h5 id="交互流程-2"><a href="#交互流程-2" class="headerlink" title="交互流程"></a>交互流程</h5><ol>
+<li>LAC与LNS建立L2TP VPN隧道</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>LAC</th>
+<th></th>
+<th>LNS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>SCCRQ</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送SCCRQ报文，告知LNS我使用的Tunnel ID</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>&lt;===</td>
+<td>SCCRP</td>
+<td>返回SCCRP报文，，告知LAC我使用的Tunnel ID</td>
+</tr>
+<tr>
+<td>3</td>
+<td>SCCCN</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送SCCCN确认报文,隧道双方Tunnel ID协商结束，L2TP VPN隧道建立完毕</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li>LAC与LNS建立L2TP会话</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>LAC</th>
+<th></th>
+<th>LNS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>ICRQ</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送ICRQ报文，告知LNS我使用的Session ID</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>&lt;===</td>
+<td>ICRP</td>
+<td>返回ICRP报文，，告知LAC我使用的Session ID</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ICCN</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送ICCN确认报文。隧道双方Session ID协商结束，L2TP会话建立完毕</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>LAC与LNS建立PPP连接</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>LAC</th>
+<th></th>
+<th>LNS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>LCP Request</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送LCP Request请求报文，协商链路层参数</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>&lt;===</td>
+<td>LCP ACK</td>
+<td>LNS返回LCP ACK确认报文后，链路层参数协商完成</td>
+</tr>
+<tr>
+<td>3</td>
+<td>PAP Request</td>
+<td>===&gt;</td>
+<td></td>
+<td>发送PAP Request报文，请求LNS进行身份认证</td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+<td>&lt;===</td>
+<td>PAP ACK</td>
+<td>LNS返回认证结果PAP ACK报文，身份认证完成</td>
+</tr>
+<tr>
+<td>5</td>
+<td>IPCP Request</td>
+<td>===&gt;</td>
+<td></td>
+<td>身份认证通过后，Client向LNS发送IPCP Request消息，请求LNS向其分配企业内网IP地址</td>
+</tr>
+<tr>
+<td>6</td>
+<td></td>
+<td>&lt;===</td>
+<td>IPCP ACK</td>
+<td>LNS向Client返回IPCP ACK消息，此消息中携带了为Client分配的企业内网IP地址（即地址池中的IP地址），PPP连接建立完成</td>
+</tr>
+</tbody></table>
+<h5 id="报文封装-2"><a href="#报文封装-2" class="headerlink" title="报文封装"></a>报文封装</h5><p><img src="/2020/05/01/l2tp/LAC%E8%87%AA%E5%8A%A8%E6%8B%A8%E5%8F%B7%E6%8A%A5%E6%96%87%E5%B0%81%E8%A3%85.png" alt="LAC-Auto-Initiated报文封装"></p>
+<ol>
+<li><p>企业分支员工向总部内网服务器发送访问请求。</p>
+<p>分支员工的PC按照本地路由将请求报文转发给LAC。</p>
+</li>
+<li><p>LAC收到报文后使用VT（Virtual-Template）接口对此报文进行PPP封装和L2TP封装。</p>
+<p>报文封装完成后，LAC再按照到Internet的公网路由将封装好的报文发送出去。</p>
+</li>
+<li><p>LNS设备接收到报文以后，使用VT接口拆除报文的L2TP头和PPP头，然后按照到企业内网的路由将报文转发给总部内网服务器。</p>
+</li>
+<li><p>企业总部服务器收到分支员工的报文后，向分支员工返回响应报文。</p>
+</li>
+</ol>
+<h4 id="三种场景比较"><a href="#三种场景比较" class="headerlink" title="三种场景比较"></a>三种场景比较</h4><table>
+<thead>
+<tr>
+<th><strong>项目</strong></th>
+<th><strong>Client-Initiated VPN</strong></th>
+<th><strong>NAS-Initiated VPN</strong></th>
+<th><strong>LAC-Auto-Initiated VPN</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>协商方式</td>
+<td>L2TP Client和LNS协商建立L2TP隧道和L2TP会话、建立PPP连接</td>
+<td>接入用户使用PPPoE拨号触发LAC和LNS之间协商建立L2TP隧道和L2TP会话，接入用户和LNS协商建立PPP连接</td>
+<td>LAC主动拨号，和LNS协商建立L2TP隧道和L2TP会话、建立PPP连接</td>
+</tr>
+<tr>
+<td>隧道和会话关系</td>
+<td>每个L2TP Client和LNS之间均建立一条L2TP隧道，每条隧道中仅承载一条L2TP会话和PPP连接</td>
+<td>LAC和LNS的连接可存在多条L2TP隧道，一条L2TP隧道中可承载多条L2TP会话</td>
+<td>LAC和LNS之间建立一条永久的L2TP隧道，且仅承载一条永久的L2TP会话和PPP连接</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>LNS对L2TP Client进行PPP认证（PAP或CHAP），安全性较高</td>
+<td>LAC对接入用户进行认证，LNS对接入用户进行二次认证（可选），安全性最高</td>
+<td>LAC不对用户进行认证，LNS对LAC配置的用户进行PPP认证（PAP或CHAP），安全性低</td>
+</tr>
+<tr>
+<td>回程路由配置</td>
+<td>LNS上会自动下发UNR路由，指导回程报文进入L2TP隧道，无需手动配置</td>
+<td>LNS上会自动下发UNR路由，指导回程报文进入L2TP隧道，无需手动配置</td>
+<td>LNS上需要手动配置目的地址为网段的静态路由，或者在LAC上配置easy-IP方式的源NAT</td>
+</tr>
+</tbody></table>
+<h3 id="L2TP-over-IPSec"><a href="#L2TP-over-IPSec" class="headerlink" title="L2TP over IPSec"></a>L2TP over IPSec</h3><ul>
+<li><p>L2TP over IPSec是IPSec应用中一种常见的扩展方式，它可以综合两种VPN的优势，通过L2TP实现用户验证和地址分配，并利用IPSec保障安全性。</p>
+</li>
+<li><p>当采用L2TP over IPSec进行VPN通信时，首先进行IPSec协商，建立IKE SA和IPSec SA；然后再使用L2TP进行用户认证，认证通过后建立L2TP隧道。</p>
+</li>
+<li><p>报文在隧道中传输时先进行L2TP封装再进行IPSec封装。</p>
+</li>
+</ul>
+<h4 id="L2TP-over-IPSec传输模式"><a href="#L2TP-over-IPSec传输模式" class="headerlink" title="L2TP over IPSec传输模式"></a>L2TP over IPSec传输模式</h4><p>![L2TP over IPSec传输模式](L2TP/L2TP over IPSec传输模式.png)</p>
+<ul>
+<li>在传输模式中，AH头或ESP头被插入到新的IP头与UDP头之间。</li>
+<li>传输模式不改变L2TP封装后的报文头，IPSec隧道的源和目的地址就是L2TP封装后的源和目的地址。</li>
+</ul>
+<h4 id="L2TP-over-IPSec隧道模式"><a href="#L2TP-over-IPSec隧道模式" class="headerlink" title="L2TP over IPSec隧道模式"></a>L2TP over IPSec隧道模式</h4><p>![L2TP over IPSec隧道模式](L2TP/L2TP over IPSec隧道模式.png)</p>
+<ul>
+<li><p>在隧道模式中，AH头或ESP头被插到新的IP头之前，另外再生成一个新的报文头放到AH头或ESP头之前。</p>
+</li>
+<li><p>隧道模式与传输模式相比多增加了新的IPSec报文头，导致报文长度更长，更容易导致分片。如果网络环境要求报文不能分片，推荐使用传输模式。</p>
+</li>
+</ul>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hzyxy.github.io" rel="external nofollow noreferrer">XY</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hzyxy.github.io/2020/05/01/l2tp/">https://hzyxy.github.io/2020/05/01/l2tp/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://hzyxy.github.io" target="_blank">XY</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/VPN/">
+                                    <span class="chip bg-color">VPN</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                    <span class="chip bg-color">协议</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/05/01/l2tp/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="L2TP">
+                        
+                        <span class="card-title">L2TP</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            L2TP的介绍
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-01
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/04/30/pppoe/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="PPPoE">
+                        
+                        <span class="card-title">PPPoE</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            PPPOE的介绍
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-30
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/DATACOM/" class="post-category">
+                                    DATACOM
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h1,h2, h3, h4,h5,h6'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1,h2, h3, h4,h5,h6').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="https://hzyxy.github.io" target="_blank">XY</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">51.8k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2020";
+                    var startMonth = "2";
+                    var startDate = "29";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/hzyXY" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1422767050@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1422767050" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1422767050" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
