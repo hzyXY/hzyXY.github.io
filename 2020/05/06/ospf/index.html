@@ -401,14 +401,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    928
+                    3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    11 分
                 </div>
                 
 
@@ -540,7 +540,7 @@
 </thead>
 <tbody><tr>
 <td>Network Mask</td>
-<td>发送该报文接口所在网段掩码</td>
+<td>发送该报文的接口的掩码</td>
 </tr>
 <tr>
 <td>Hello Interval</td>
@@ -548,29 +548,158 @@
 </tr>
 <tr>
 <td>OPTIONS</td>
-<td>选项位，用于支持不同的功能<br><br>DN：避免在MPLS VPN中出现环路<br><br>O：该字段指出始发路由器支持Opaque LSA（类型9、类型10和类型11）<br><br>DC：置为则<br><br>E：置位为1则表示支持5类LSA<br><br>N：置为为1则表示支持7类LSA<br><br></td>
+<td>选项位，用于支持不同的功能<br><br>DN bit：用于在MPLS VPN防止环路<br><br>O bit：表示始发路由器支持Opaque LSA（类型9、类型10和类型11）<br><br>DC bit：当始发路由器支持按需链路上的OSPF的能力时，该位将被设置。（即ospf不发送hello报文，但邻居不老化）<br><br>L bit：表明是否支持8类LSA<br>N bit：表示此路由器在此接口上是否支持泛洪7类外部路由，即7类LSA。是否为NSSA区域。<br><br>MC bit：如果置位则表示支持MOSPF，即组播数据包的转发能力。<br><br>E bit：表示此路由器在此接口上是否支持泛洪5类外部路由，即5类LSA<br><br>MT bit：表示始发路由器是否支持多拓扑OSPF</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td>Router Prionity</td>
+<td>描述此接口的优先级</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td>Router Dead Interval</td>
+<td>告诉邻居40s后收不到我的hello包就当我失效了，死亡时间默认为hello时间的4倍</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td>Designated Router</td>
+<td>DR路由器接口的IP，0.0.0.0表示无</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
+<td>Backup Designated Router</td>
+<td>BDR路由器接口的IP，0.0.0.0表示无</td>
 </tr>
 </tbody></table>
+<h5 id="任何情况下建立邻居关系的基本要求"><a href="#任何情况下建立邻居关系的基本要求" class="headerlink" title="任何情况下建立邻居关系的基本要求"></a>任何情况下建立邻居关系的基本要求</h5><ol>
+<li>router id 不能冲突</li>
+<li>area id 要一样（v-link例外）</li>
+<li>auth type 一样</li>
+<li>auth data 一样</li>
+<li>hello interval 一样</li>
+<li>dead interval 一样</li>
+<li>option 中 N bit，E bit取值一致（区域类型决定取值）</li>
+</ol>
+<h5 id="建立邻居关系的进阶要求"><a href="#建立邻居关系的进阶要求" class="headerlink" title="建立邻居关系的进阶要求"></a>建立邻居关系的进阶要求</h5><h6 id="P2P"><a href="#P2P" class="headerlink" title="P2P"></a>P2P</h6><ul>
+<li>在P2P（PPP，HDLC）的网络类型邻居关系建立条件：P2P网络类型不对hello报文的掩码长度是否一致做检测<ul>
+<li>地址在一个网段，但掩码不一致能建立邻接关系 比如：10.1.12.1/30 ——10.1.12.2/24</li>
+<li>不在一个网段能建立邻居关系，路由也能计算 1.1.1.1/24 ——2.2.2.2/30</li>
+<li>一个接口包含另一个接口的IP也能建立邻居关系，路由也能计算 10.1.12.1/30——10.1.12.10/24</li>
+</ul>
+</li>
+</ul>
+<h6 id="广播型，NBMA网络类型"><a href="#广播型，NBMA网络类型" class="headerlink" title="广播型，NBMA网络类型"></a>广播型，NBMA网络类型</h6><ul>
+<li>广播型，NBMA网络类型要对hello报文的掩码长度做一致性检测<ul>
+<li>如果不在一个网段，邻居关系无法建立</li>
+<li>如果不在一个网段，但一个接口包含另一个接口的IP，邻居关系无法建立</li>
+<li>如果链路地址都在一个网段，但彼此掩码不一致，邻居 关系无法建立</li>
+<li>如果链路地址都在一个网段，并且掩码相同，邻居关系可以正常建立</li>
+</ul>
+</li>
+</ul>
+<h6 id="P2MP"><a href="#P2MP" class="headerlink" title="P2MP"></a>P2MP</h6><ul>
+<li>P2MP（默认情况下IP地址必须在同一网段，并且掩码相同才能建立邻居关系，但可以通过命令[<em>ospf p2mp-mask-ignore</em>]忽略掩码的检测,但也要求在同一网段。）<ul>
+<li>两边地址必须同一网段，因为DD，LSR，LSU报文在P2MP网络上是单播发送如果过不在一个网段，导致后续的DD，LSR，LSU无法发送</li>
+<li>在一个网络，但掩码不一致，邻居无法建立，使用<em>ospf p2mp-mask-ignore</em>可解决问题</li>
+<li>接口不在一个网段，无法建立邻居关系，使用<em>ospf p2mp-mask-ignore</em>无法解决问题</li>
+<li>接口不在一个网络，但接口包含另一个接口，无法建立邻居关系，使用<em>ospf p2mp-mask-ignore</em>无法解决问题</li>
+</ul>
+</li>
+</ul>
+<h6 id="MTU对邻居关系的影响"><a href="#MTU对邻居关系的影响" class="headerlink" title="MTU对邻居关系的影响"></a>MTU对邻居关系的影响</h6><p>如果过链路是PPP，在PPP上的链路会自动协商链路的MTU，使得链路两边的MTU值一致，取接口最小MTU值作为链路的MTU，默认DD报文的MTU为0，都小于链路的MTU，因此邻居关系正常建立，如果过使用了ospf mtu-enable，那么在DD报文中MTU值为链路协商后的MTU，因此还是保持一致，邻居也可以正常建立。</p>
+<p>如果过链路是HDLC，由于缺乏MTU的协商机制，所以当两边的MTU不一致，并且用ospf mtu-enable时，如果过DD报文中的MTU值大于接收DD报文的接口本地的MTU值时，邻居关系无法正常建立，另据关系将卡在exstar的状态。</p>
+<h3 id="OSPF-邻居状态机"><a href="#OSPF-邻居状态机" class="headerlink" title="OSPF 邻居状态机"></a>OSPF 邻居状态机</h3><p>DD报文中携带的链路状态信息(LSA)头部要解决的问题</p>
+<p>lsa type    link state id    adv router 解决有LSA没有问题</p>
+<p>seq num    check sum    age 解决LSA新旧问题</p>
+<p>图</p>
+<table>
+<thead>
+<tr>
+<th>状态机</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Down</td>
+<td>邻居会话的初始阶段。表明没有在邻居失效时间间隔内收到来自邻居设备的Hello报文。</td>
+</tr>
+<tr>
+<td>Attempt</td>
+<td>处于本状态时，定期向手工配置的邻居发送Hello报文。<strong>说明：</strong>Attempt状态只适用于NBMA类型的接口。</td>
+</tr>
+<tr>
+<td>Init</td>
+<td>本状态表示已经收到了邻居的Hello报文，但是对端并没有收到本端发送的Hello报文。</td>
+</tr>
+<tr>
+<td>2-way</td>
+<td>互为邻居。本状态表示双方互相收到了对端发送的Hello报文，建立了邻居关系。如果不形成邻接关系则邻居状态机就停留在此状态，否则进入Exstart状态。</td>
+</tr>
+<tr>
+<td>Exstart</td>
+<td>协商主/从关系。建立主/从关系主要是为了保证在后续的DD报文交换中能够有序的发送。初始DD序列号也是在此状态下决定的。在此状态下发送的DD报文不包含链路状态描述。</td>
+</tr>
+<tr>
+<td>Exchange</td>
+<td>交换DD报文。本端设备将本地的LSDB用DD报文来描述，并发给邻居设备。</td>
+</tr>
+<tr>
+<td>Loading</td>
+<td>正在同步LSDB。两端设备发送LSR报文向邻居请求对方的LSA，同步LSDB。</td>
+</tr>
+<tr>
+<td>Full</td>
+<td>建立邻接。两端设备的LSDB已同步，本端设备和邻居设备建立了邻接状态。</td>
+</tr>
+</tbody></table>
+<p><strong>注意</strong></p>
+<ol>
+<li>Drother之间会停留在2-way状态</li>
+<li>Exstar中协商主从关系的作用：，因为DD报文不周期性发送，且ospf协议是直接封装在IP报文之上的，IP协议是不保证可靠传递的。为了保证DD报文的可靠传输，ospf协议就设计主从选举的机制来保证后续DD报文的可靠传输。</li>
+<li>在Exstart状态中需要进行主从选举，选举的依据就是router id，所以router id不能冲突。</li>
+<li>在Exchange状态中，DD报文的隐式确认：从路由器总是用主路由器的seq num向主路由器发送DD报文。主路由器总是用从路由器的DD的seq num+1向从路由器发送DD报文。隐式确认保证DD报文交互的可靠性。</li>
+</ol>
+<h3 id="OSPF-LSA"><a href="#OSPF-LSA" class="headerlink" title="OSPF LSA"></a>OSPF LSA</h3><h4 id="LSA头部"><a href="#LSA头部" class="headerlink" title="LSA头部"></a>LSA头部</h4><p>图</p>
+<h4 id="LSA类型"><a href="#LSA类型" class="headerlink" title="LSA类型"></a>LSA类型</h4><table>
+<thead>
+<tr>
+<th>LSA类型</th>
+<th>LSA作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Router-LSA（Type1）</td>
+<td>每个设备都会产生，描述了设备自身直连端口的链路状态和开销，在所属的区域内传播。</td>
+</tr>
+<tr>
+<td>Network-LSA（Type2）</td>
+<td>由DR（Designated Router）产生，描述本网段的链路状态，在所属的区域内传播。</td>
+</tr>
+<tr>
+<td>Network-summary-LSA（Type3）</td>
+<td>由ABR产生，描述区域内某个网段的路由，并通告给其他区域（除了Totally Stub和Totally NSSA区域）。例如：ABR同时属于Area0和Area1，Area0内存在网段10.1.1.0，Area1内存在网段11.1.1.0，ABR为Area0生成到网段11.1.1.0的Type3 LSA；ABR为Area1生成到网段10.1.1.0的Type3 LSA。</td>
+</tr>
+<tr>
+<td>ASBR-summary-LSA（Type4）</td>
+<td>由ABR产生，描述本区域到其他区域中的ASBR的路由，通告给除ASBR所在区域的其他区域（除了Stub区域、Totally Stub、NSSA区域和Totally NSSA区域）。</td>
+</tr>
+<tr>
+<td>AS-external-LSA（Type5）</td>
+<td>由ASBR产生，描述到AS外部的路由，通告到所有的区域（除了Stub区域、Totally Stub、NSSA区域和Totally NSSA区域）。</td>
+</tr>
+<tr>
+<td>NSSA LSA（Type7）</td>
+<td>由ASBR产生，描述到AS外部的路由，仅在NSSA区域内传播。</td>
+</tr>
+<tr>
+<td>Opaque LSA（Type9/Type10/Type11）</td>
+<td>Opaque LSA提供用于OSPF的扩展的通用机制。其中：Type9 LSA仅在接口所在网段范围内传播。用于支持GR的Grace LSA就是Type9 LSA的一种。Type10 LSA在区域内传播。用于支持TE的LSA就是Type10 LSA的一种。Type11 LSA在自治域内传播，目前还没有实际应用的例子。</td>
+</tr>
+</tbody></table>
+<h5 id="Router-LSA（Type1）"><a href="#Router-LSA（Type1）" class="headerlink" title="Router-LSA（Type1）"></a>Router-LSA（Type1）</h5><p>Type：LSA类型</p>
+<p>LinkState ID：自己的Router ID</p>
+<p>AdvRouter： 谁产生这条LSA的Router ID</p>
+<p>Link ID：链路ID</p>
+<p>Data：数据</p>
+<p>Link Type：链路类型</p>
+<p>Metric：开销</p>
+<p>类型1的LSA的Link type 分为4种：<br>stubnet：描述路由器自身直连网段的网络号以及掩码，开销。Link ID就是直连网络的网路号；data就是直连网络的子网掩码；metric就是自身直连网络的开销值。<br>P-2-P：用于描述点到点链路上的邻居。Link ID就是邻居的Router id；data就是自身与邻居相连接口的地址；metric就是到邻居的开销。</p>
 
             </div>
             <hr/>
@@ -1047,7 +1176,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">52.7k</span>&nbsp;字
+                class="white-color">54.7k</span>&nbsp;字
             
             
             
