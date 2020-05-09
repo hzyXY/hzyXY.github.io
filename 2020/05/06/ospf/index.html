@@ -401,14 +401,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3k
+                    3.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    11 分
+                    13 分
                 </div>
                 
 
@@ -652,7 +652,7 @@
 <ol>
 <li>Drother之间会停留在2-way状态</li>
 <li>Exstar中协商主从关系的作用：，因为DD报文不周期性发送，且ospf协议是直接封装在IP报文之上的，IP协议是不保证可靠传递的。为了保证DD报文的可靠传输，ospf协议就设计主从选举的机制来保证后续DD报文的可靠传输。</li>
-<li>在Exstart状态中需要进行主从选举，选举的依据就是router id，所以router id不能冲突。</li>
+<li>所以router id不能冲突的原因：1.在Exstart状态中需要进行主从选举，选举的依据就是router id。2.产生的1类LSA三要素相同导致不能区分。 </li>
 <li>在Exchange状态中，DD报文的隐式确认：从路由器总是用主路由器的seq num向主路由器发送DD报文。主路由器总是用从路由器的DD的seq num+1向从路由器发送DD报文。隐式确认保证DD报文交互的可靠性。</li>
 </ol>
 <h3 id="OSPF-LSA"><a href="#OSPF-LSA" class="headerlink" title="OSPF LSA"></a>OSPF LSA</h3><h4 id="LSA头部"><a href="#LSA头部" class="headerlink" title="LSA头部"></a>LSA头部</h4><p>图</p>
@@ -665,11 +665,11 @@
 </thead>
 <tbody><tr>
 <td>Router-LSA（Type1）</td>
-<td>每个设备都会产生，描述了设备自身直连端口的链路状态和开销，在所属的区域内传播。</td>
+<td>每个设备都会产生一条，描述了设备自身直连端口的链路状态和开销，只在所属的区域内传播。</td>
 </tr>
 <tr>
 <td>Network-LSA（Type2）</td>
-<td>由DR（Designated Router）产生，描述本网段的链路状态，在所属的区域内传播。</td>
+<td>由DR（Designated Router）产生，每个DR都会产生一条，用于描述广播型网络和NBMA网络， 这种LSA描述了所有连接着伪节点的路由器，只在所属的区域内传播。</td>
 </tr>
 <tr>
 <td>Network-summary-LSA（Type3）</td>
@@ -692,14 +692,24 @@
 <td>Opaque LSA提供用于OSPF的扩展的通用机制。其中：Type9 LSA仅在接口所在网段范围内传播。用于支持GR的Grace LSA就是Type9 LSA的一种。Type10 LSA在区域内传播。用于支持TE的LSA就是Type10 LSA的一种。Type11 LSA在自治域内传播，目前还没有实际应用的例子。</td>
 </tr>
 </tbody></table>
-<h5 id="Router-LSA（Type1）"><a href="#Router-LSA（Type1）" class="headerlink" title="Router-LSA（Type1）"></a>Router-LSA（Type1）</h5><p>Type：LSA类型</p>
+<h5 id="Router-LSA（Type1）"><a href="#Router-LSA（Type1）" class="headerlink" title="Router-LSA（Type1）"></a>Router-LSA（Type1）</h5><p>LSA类型：Router LSA 路由器LSA<br>作用：用于说明自身哪些链路启用了OSPF以及这些链路的状态<br>产生路由器：每个运行了OSPF的路由器都会产生<br>LSA传输的范围：同一个区域内部<br>LinkState ID：自己本身的Router-id<br>AdvRouter：自己本身的Router-id<br>ADV是否变化：在传输过程中不会发生变化<br>Link-date：链路信息</p>
+<p>Type：LSA类型</p>
 <p>LinkState ID：自己的Router ID</p>
 <p>AdvRouter： 谁产生这条LSA的Router ID</p>
-<p>Link ID：链路ID</p>
-<p>Data：数据</p>
-<p>Link Type：链路类型</p>
-<p>Metric：开销</p>
-<p>类型1的LSA的Link type 分为4种：<br>stubnet：描述路由器自身直连网段的网络号以及掩码，开销。Link ID就是直连网络的网路号；data就是直连网络的子网掩码；metric就是自身直连网络的开销值。<br>P-2-P：用于描述点到点链路上的邻居。Link ID就是邻居的Router id；data就是自身与邻居相连接口的地址；metric就是到邻居的开销。</p>
+<p><strong>类型1的LSA的Link type 分为4种</strong></p>
+<ol>
+<li>stubnet：描述路由器自身直连网段的网络号以及掩码，开销。Link ID就是直连网络的网路号；data就是直连网络的子网掩码；metric就是自身直连网络的开销值。</li>
+<li>P-2-P：用于描述点到点链路上的邻居。Link ID就是邻居的Router id；data就是自身与邻居相连接口的地址；metric就是到邻居的开销。</li>
+<li>TransNet：用于描述和某个伪节点（当路由器看待）相连，代表此路由器存在一个广播型或是NBMA型的链路。link id是伪节点的标识符，用DR的接口的地址充当，data是与伪节点相连接口的地址，metric是到伪节点的开销。<br>伪节点的作用：在广播，NBMA中虚拟出一个伪节点，简化网络复杂度，提升算法性能。</li>
+<li>Virtual：用于描述v-link上的邻居（p2p，link id是v-link对端路由器的router-id，data是本端接口地址，metric是v-link的开销。</li>
+</ol>
+<p>结论：<br>凡是link type p2p link-id 都对应一个link state id相同的1类LSA<br>凡是link type trannet  link id 都会由一个对应的link state id相同2类LSA</p>
+<h5 id="Network-LSA（Type2）"><a href="#Network-LSA（Type2）" class="headerlink" title="Network-LSA（Type2）"></a>Network-LSA（Type2）</h5><p>用于描述伪节点连接着那些路由器，由DR路由器产生</p>
+<p>LSA类型：Net LSA 网络LSA<br>作用：用于说明DR的管理范围<br>产生的路由器：只能是DR<br>LSA的传输范围：一个区域内部<br>LinkState ID：DR路由器的接口地址<br>AdvRouter：DR的Router ID<br>AdvRouter是否变化：不会变化<br>Link-date:<br>    DR路由器的接口上的子网掩码<br>    伪节点连接节点的Router ID</p>
+<p>Type：LSA类型</p>
+<p>LinkState ID：DR接口的IP地址</p>
+<p>AdvRouter： DR的Router id</p>
+<p>区域内路由通过1类LSA和2类LSA实行SPF算法得到，100%无环，区域内防环通过SPF算法实现。</p>
 
             </div>
             <hr/>
@@ -1176,7 +1186,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">54.7k</span>&nbsp;字
+                class="white-color">55.2k</span>&nbsp;字
             
             
             
