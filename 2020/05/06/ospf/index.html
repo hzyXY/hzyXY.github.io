@@ -401,14 +401,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.5k
+                    4.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    13 分
+                    15 分
                 </div>
                 
 
@@ -428,6 +428,7 @@
 <li>开放式最短路径优先OSPF（Open Shortest Path First）是IETF组织开发的一个基于链路状态的内部网关协议（Interior Gateway Protocol）</li>
 <li>OSPF基于IP协议，协议号 89</li>
 <li>目前，OSPFv2仅支持IPv4，OSPFv3仅支持IPv6</li>
+<li>COST值以出接口方向做累加</li>
 </ul>
 <h3 id="OSPF协议具有以下特点："><a href="#OSPF协议具有以下特点：" class="headerlink" title="OSPF协议具有以下特点："></a>OSPF协议具有以下特点：</h3><ul>
 <li>OSPF把自治系统AS（Autonomous System）划分成逻辑意义上的一个或多个区域；</li>
@@ -530,7 +531,7 @@
 </ul>
 <p><strong>Hello报文</strong></p>
 <p><img src="/2020/05/06/ospf/hello.JPG" alt="hello报文参数"></p>
-<p><strong>字段说明</strong></p>
+<p><strong>字段说明</strong> </p>
 <table>
 <thead>
 <tr>
@@ -693,7 +694,7 @@
 </tr>
 </tbody></table>
 <h5 id="Router-LSA（Type1）"><a href="#Router-LSA（Type1）" class="headerlink" title="Router-LSA（Type1）"></a>Router-LSA（Type1）</h5><p>LSA类型：Router LSA 路由器LSA<br>作用：用于说明自身哪些链路启用了OSPF以及这些链路的状态<br>产生路由器：每个运行了OSPF的路由器都会产生<br>LSA传输的范围：同一个区域内部<br>LinkState ID：自己本身的Router-id<br>AdvRouter：自己本身的Router-id<br>ADV是否变化：在传输过程中不会发生变化<br>Link-date：链路信息</p>
-<p>Type：LSA类型</p>
+<p>Type：LSA类型为Router</p>
 <p>LinkState ID：自己的Router ID</p>
 <p>AdvRouter： 谁产生这条LSA的Router ID</p>
 <p><strong>类型1的LSA的Link type 分为4种</strong></p>
@@ -706,10 +707,22 @@
 <p>结论：<br>凡是link type p2p link-id 都对应一个link state id相同的1类LSA<br>凡是link type trannet  link id 都会由一个对应的link state id相同2类LSA</p>
 <h5 id="Network-LSA（Type2）"><a href="#Network-LSA（Type2）" class="headerlink" title="Network-LSA（Type2）"></a>Network-LSA（Type2）</h5><p>用于描述伪节点连接着那些路由器，由DR路由器产生</p>
 <p>LSA类型：Net LSA 网络LSA<br>作用：用于说明DR的管理范围<br>产生的路由器：只能是DR<br>LSA的传输范围：一个区域内部<br>LinkState ID：DR路由器的接口地址<br>AdvRouter：DR的Router ID<br>AdvRouter是否变化：不会变化<br>Link-date:<br>    DR路由器的接口上的子网掩码<br>    伪节点连接节点的Router ID</p>
-<p>Type：LSA类型</p>
+<p>Type：LSA类型为Network</p>
 <p>LinkState ID：DR接口的IP地址</p>
 <p>AdvRouter： DR的Router id</p>
 <p>区域内路由通过1类LSA和2类LSA实行SPF算法得到，100%无环，区域内防环通过SPF算法实现。</p>
+<h5 id="Network-summary-LSA（Type3）"><a href="#Network-summary-LSA（Type3）" class="headerlink" title="Network-summary-LSA（Type3）"></a>Network-summary-LSA（Type3）</h5><p>ABR路由器通过自身类型1的LSA的B比特位，表明自己是ABR<br>LSA类型：Net summary LSA网络汇总LSA    sum-net<br>作用：通告域间路由<br>产生的路由器：ABR，区域边界路由器<br>LSA的传输范围：同一个区域内部<br>LinkState ID：区域间路由的前缀<br>AdvRouter：ABR的RID<br>AdvRouter是否变化：每经过一个ABR，都会发生变化<br>Link-date：域间路由的子网掩码</p>
+<p>Type：LSA类型为Sum-net</p>
+<p>LinkState ID：网络号</p>
+<p>AdvRouter： ABR的Router id</p>
+<p>Net mask：携带路由的掩码信息</p>
+<p>Metric：ABR到此路由的开销</p>
+<p>怎么判断一台路由是否是ABR？如果是ABR将会在拓扑数据库中的1类LSA中的Options字段中说明自己是ABR。在报文中是在一类LSA消息中的Flags字段中B bit位置位说明自身是ABR。</p>
+<p>路由器 如何说明自身是ABR、ASBR或是否存在v-link<br>type1-lsa Flages<br>v bit    0代表路由器没有v-link    1代表此路由器上配置了v-link<br>E bit    0代表此路由器不是ASBR    1代表此路由器是ASBR<br>B bit    0代表此路由器不是ABR    1代表此路由器是ABR</p>
+<p>ABR 将直连区域的的区域内路由（1，2LSA计算出来的路由），转化成其他区域的3类LSA（路由信息，描述ABR到这些路由的开销）</p>
+<p>区域间路由计算：<br>ABR将区域0中的3类LSA转化成非骨干区域的3类LSA。<br>ABR将非骨干区域的3类LSA转化成其他非骨干区域的3类LSA<br>ABR不能将非骨干区域的3类LSA再次转化骨干区域的3类LSA，实现区域间的防环<br>区域0的3类LSA优于非骨干区域的3类LSA计算路由<br>ABR如果过能用1类计算出来的路由，就不会用3类来计算这条路由<br>自身到ABR的下一跳就是去往区域间路由的下一跳<br>自身到ABR的开销+ABR到区域间路由的开销等于自身到区域间路由的开销<br>ABR在区域0存在活动邻居时，不会考虑使用非骨干区域的3类LSA计算区域间的路由。原因是1类优于3类，骨干区域的3类优于非骨干区域的3类</p>
+<h4 id="OSPF的防环"><a href="#OSPF的防环" class="headerlink" title="OSPF的防环"></a>OSPF的防环</h4><p>域内主要用SPF算法</p>
+<p>域间主要用规则</p>
 
             </div>
             <hr/>
@@ -1186,7 +1199,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">55.2k</span>&nbsp;字
+                class="white-color">55.8k</span>&nbsp;字
             
             
             
