@@ -401,14 +401,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.1k
+                    5.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    15 分
+                    19 分
                 </div>
                 
 
@@ -674,7 +674,7 @@
 </tr>
 <tr>
 <td>Network-summary-LSA（Type3）</td>
-<td>由ABR产生，描述区域内某个网段的路由，并通告给其他区域（除了Totally Stub和Totally NSSA区域）。例如：ABR同时属于Area0和Area1，Area0内存在网段10.1.1.0，Area1内存在网段11.1.1.0，ABR为Area0生成到网段11.1.1.0的Type3 LSA；ABR为Area1生成到网段10.1.1.0的Type3 LSA。</td>
+<td>由ABR产生，描述区域内某一个网段的路由，并通告给其他区域（除了Totally Stub和Totally NSSA区域）。例如：ABR同时属于Area0和Area1，Area0内存在网段10.1.1.0，Area1内存在网段11.1.1.0，ABR为Area0生成到网段11.1.1.0的Type3 LSA；ABR为Area1生成到网段10.1.1.0的Type3 LSA。</td>
 </tr>
 <tr>
 <td>ASBR-summary-LSA（Type4）</td>
@@ -720,9 +720,41 @@
 <p>怎么判断一台路由是否是ABR？如果是ABR将会在拓扑数据库中的1类LSA中的Options字段中说明自己是ABR。在报文中是在一类LSA消息中的Flags字段中B bit位置位说明自身是ABR。</p>
 <p>路由器 如何说明自身是ABR、ASBR或是否存在v-link<br>type1-lsa Flages<br>v bit    0代表路由器没有v-link    1代表此路由器上配置了v-link<br>E bit    0代表此路由器不是ASBR    1代表此路由器是ASBR<br>B bit    0代表此路由器不是ABR    1代表此路由器是ABR</p>
 <p>ABR 将直连区域的的区域内路由（1，2LSA计算出来的路由），转化成其他区域的3类LSA（路由信息，描述ABR到这些路由的开销）</p>
-<p>区域间路由计算：<br>ABR将区域0中的3类LSA转化成非骨干区域的3类LSA。<br>ABR将非骨干区域的3类LSA转化成其他非骨干区域的3类LSA<br>ABR不能将非骨干区域的3类LSA再次转化骨干区域的3类LSA，实现区域间的防环<br>区域0的3类LSA优于非骨干区域的3类LSA计算路由<br>ABR如果过能用1类计算出来的路由，就不会用3类来计算这条路由<br>自身到ABR的下一跳就是去往区域间路由的下一跳<br>自身到ABR的开销+ABR到区域间路由的开销等于自身到区域间路由的开销<br>ABR在区域0存在活动邻居时，不会考虑使用非骨干区域的3类LSA计算区域间的路由。原因是1类优于3类，骨干区域的3类优于非骨干区域的3类</p>
+<p>区域间路由计算：<br>ABR将区域0中的3类LSA转化成非骨干区域的3类LSA。<br>ABR将非骨干区域的3类LSA转化成其他非骨干区域的3类LSA<br>ABR不能将非骨干区域的3类LSA再次转化骨干区域的3类LSA，实现区域间的防环<br>区域0的3类LSA优于非骨干区域的3类LSA计算路由<br>ABR如果过能用1类计算出来的路由，就不会用3类来计算这条路由<br>自身到ABR的下一跳就是去往区域间路由的下一跳<br>自身到ABR的开销+ABR到区域间路由的开销等于自身到区域间路由的开销<br>ABR在区域0存在活动邻居时，不会考虑使用非骨干区域的3类LSA计算区域间的路由。原因是1类优于3类，骨干区域的3类优于非骨干区域的3类<br>在区域0中ABR产生某条路由的3类LSA后，不会使用其他ABR产生的这条路由的3类LSA计算路由</p>
+<h5 id="ASBR-summary-LSA（Type4）"><a href="#ASBR-summary-LSA（Type4）" class="headerlink" title="ASBR-summary-LSA（Type4）"></a>ASBR-summary-LSA（Type4）</h5><p>4类LSA的产生：<br>由ASBR所在区域ABR向其他区域产生，如果过有多个ABR，都产生4类的LSA，用于描述自身到ASBR的开销</p>
+<h6 id="4类LSA防环以及选路机制"><a href="#4类LSA防环以及选路机制" class="headerlink" title="4类LSA防环以及选路机制"></a>4类LSA防环以及选路机制</h6><p>ABR通过1类LSA和4类LSA都能计算到ASBR的路径时，选择到ASBR开销小的路径，作为外部路由的路径，没有1类LSA优于4类LSA的规则。<br>ABR通过优先使用区域0的4类LSA计算外部路由，区域0的4类优于非骨干的4类<br>当ABR在区域0有活动邻居时，不会用非骨干区域的4类LSA，计算外部路由</p>
+<h5 id="AS-external-LSA（Type5）"><a href="#AS-external-LSA（Type5）" class="headerlink" title="AS-external-LSA（Type5）"></a>AS-external-LSA（Type5）</h5><p>外部路由计算方式，转化地址为0.0.0.0时<br>外部路由的cost=自身到达ASBR的cost+引入外部路由时的cost<br>下一跳：去往ASBR下一跳，为外部路由的下一跳。</p>
+<p>外部路由计算方式，转化地址不为0.0.0.0时<br>外部路由的cos=自身到达FA地址的cost+引入外部路由时的cost<br>下一跳：去往FA下一跳，为外部路由的下一跳</p>
+<p>FA地址作用：唯一作用实现OSPF网络路径优化</p>
+<blockquote>
+<p>5类LSA什么时候FA地址不为0？不为0的时候，FA地址时什么？<br>如果同时满足以下3个条件，则FA地址不为0：</p>
+<ol>
+<li>引入的这条外部路由，其对应的出接口启用了OSPF</li>
+<li>引入的这条外部路由，其对应的出接口未设置为passive-interface（silent-interface）</li>
+<li>引入的这条外部路由，其对应的出接口的OSPF网络类型为Broadcast或NBMA</li>
+</ol>
+<p>FA地址是外部路由的下一跳为5类LSA的FA地址</p>
+</blockquote>
+<p>metric type=2 在路由表中只显示引入时的外部路由开销，不体现AS内部所经过的路径开销计算在内<br>metric type=1 在路由表中显示引入时外部开销与在AS内部所经过的路径开销之和</p>
+<p>4类和5类的能不能单独出现？<strong>可以</strong><br>单区域的OSPF网络引入外部 路由时，不需要4类的LSA，存在5类LSA<br>空引入外部路由时或引入的外部路由在ASBR上被全部过滤时 ，会产生4类，而不存在5类</p>
+<h6 id="5类LSA如何防环？"><a href="#5类LSA如何防环？" class="headerlink" title="5类LSA如何防环？"></a>5类LSA如何防环？</h6><p>5类自身没有防环机制<br>与ASBR同一区域的路由器可以通过SPF算法实现外部路由防环<br>没有与ASBR在同一个区域的路由器通过4类的LSA防环</p>
+<h6 id="区域间路由汇总"><a href="#区域间路由汇总" class="headerlink" title="区域间路由汇总"></a>区域间路由汇总</h6><p>不能在区域内做路由汇总的原因：路由汇总针对的是路由条目，区域内的路由都是都是用1类2类LSA计算出来的，1类和2类LSA是无法做汇总，是要在区域内泛洪的。所以无法在区域内做路由汇总</p>
+<p>ABR的汇总：只能针对直连区域的1类2类LSA产生的路由进行汇总，已经成为3类的LSA是无法进行ABR的汇总。</p>
+<p>汇总路由的COST值，继承明细路由中COST值最大的</p>
+<p>ABR产生汇总的3类LSA后，自身路由表不会汇总路由</p>
+<p>明细路由都不存在时，汇总路由才不会产生</p>
 <h4 id="OSPF的防环"><a href="#OSPF的防环" class="headerlink" title="OSPF的防环"></a>OSPF的防环</h4><p>域内主要用SPF算法</p>
 <p>域间主要用规则</p>
+<h4 id="OSPF的选路"><a href="#OSPF的选路" class="headerlink" title="OSPF的选路"></a>OSPF的选路</h4><p>LSA1 &gt; LSA3（区域0） &gt;  LSA3(非骨干) &gt; LSA5/LSA7(type 1 &gt; typy 2) </p>
+<h5 id="LSA5和LSA7选路机制"><a href="#LSA5和LSA7选路机制" class="headerlink" title="LSA5和LSA7选路机制"></a>LSA5和LSA7选路机制</h5><p>转发度量值分为两种：<br>1.当转发地址为0.0.0.0，则转发度量值为到ASBR的cost<br>2.当转发地址不为0.0.0.0，则转发度量值为到转发地址的cost值</p>
+<p>转发度量值：到ASBR的开销<br>种子度量值：ASBR引入外部路由的开销</p>
+<h6 id="Cost-type2"><a href="#Cost-type2" class="headerlink" title="Cost-type2"></a>Cost-type2</h6><p>默认为类型2</p>
+<p>转发地址为0.0.0.0或不为0.0.0.0都遵循以下规则：</p>
+<p>如果引入种子开销相同，转发度量值相同，则负载分担<br>如果引入种子开销相同，转发度量值不同，则选择转发度量值小的优先<br>如果引入种子开销不同，转发度量值相同，则选择种子度量值小的优先<br>如果引入种子开销不同，转发度量值不同，则选择种子度量值小的优先</p>
+<p><strong>总结</strong><br>Cost-type2通过可以在不影响AS内部拓扑结构的情况下，选择“最佳的”出接口来使用。通常用于不关心内部转发路径时，选择一个“最佳的”路径，通常可以实现人为对业务出口的控制。</p>
+<h6 id="Cost-type1"><a href="#Cost-type1" class="headerlink" title="Cost-type1"></a>Cost-type1</h6><p>转发地址为0.0.0.0或不为0.0.0.0都遵循以下规则：</p>
+<p>如果过引入种子开销相同，转发度量值相同，则负载分担<br>其他情况根据种子开销和转发度量值之和，和值小的优先，如果过和值相同则负载分担。</p>
+<p>Cost-type1总是比Cost-type2的优先，不区分是5类还是7类的LSA</p>
 
             </div>
             <hr/>
@@ -1199,7 +1231,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">55.8k</span>&nbsp;字
+                class="white-color">57k</span>&nbsp;字
             
             
             
