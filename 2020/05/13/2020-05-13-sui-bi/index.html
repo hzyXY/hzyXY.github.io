@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="服务器负载均衡, XY">
+    <meta name="keywords" content="2020-05-13随笔, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>服务器负载均衡 | XY</title>
+    <title>2020-05-13随笔 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,7 +245,7 @@
 <script src="/libs/cryptojs/crypto-js.min.js"></script>
 <script>
     (function() {
-        let pwd = '';
+        let pwd = 'fc3bbfb9461ddc1946c4fb354e05ec02bfadf09b5976aec547ed767d0571fd1c';
         if (pwd && pwd.length > 0) {
             if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
                 alert('密码错误，将返回主页！');
@@ -258,12 +258,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/28.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">服务器负载均衡</h1>
+                    <h1 class="description center-align post-title">2020-05-13随笔</h1>
                 </div>
             </div>
         </div>
@@ -380,16 +380,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                <span class="chip bg-color">华为</span>
-                            </a>
-                        
-                            <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                <span class="chip bg-color">防火墙</span>
-                            </a>
-                        
-                            <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
-                                <span class="chip bg-color">负载均衡</span>
+                            <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                                <span class="chip bg-color">记录</span>
                             </a>
                         
                     </div>
@@ -400,8 +392,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Datacom/" class="post-category">
-                                Datacom
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                随笔
                             </a>
                         
                     </div>
@@ -413,7 +405,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-31
+                    2020-05-13
                 </div>
                 
 
@@ -422,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    844
+                    1
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    1 分
                 </div>
                 
 
@@ -445,52 +437,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="SLB"><a href="#SLB" class="headerlink" title="SLB"></a>SLB</h2><ul>
-<li><p>服务器负载均衡就是将本应由一个服务器处理的业务分发给多个服务器来处理，以此提高处理业务的效率和能力。</p>
-</li>
-<li><p>处理业务的服务器组成服务器集群，对外体现为一台逻辑上的服务器。对于用户来说，访问的是这台逻辑上的服务器，而不知道实际处理业务的是其他服务器，由FW决定如何分配流量给各个服务器。</p>
-</li>
-</ul>
-<h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><ul>
-<li>负载均衡算法决定了FW如何分配业务流量到服务器上</li>
-</ul>
-<p>FW支持的负载均衡算法如下：</p>
-<p><strong>1.简单轮询算法</strong></p>
-<blockquote>
-<p>优点：实现简单，效率较高<br>缺点：不会考虑每个服务器上的实际负载<br>简单轮询算法是一个静态算法<br>适用场景为服务器的性能相近，服务类型比较简单，且每条流对服务器造成的业务负载大致相等</p>
-</blockquote>
-<p><strong>2.加权轮询算法</strong></p>
-<blockquote>
-<p>加权轮询算法是将客户端的业务流量按照一定权重比依次分配到各个服务器上<br>根据服务器的不同处理能力，给每个服务器分配不同的权值，使其接受相应权值数的服务请求</p>
-</blockquote>
-<p><strong>3.最小连接算法</strong></p>
-<blockquote>
-<p>最小连接算法是将客户端的业务流量分配到并发连接数最小的服务器上。(并发连接数即服务器对应的实时连接数，会话新建或老化都会影响并发连接数的大小)<br>最小连接算法是动态算法<br>适用场景为服务器的性能相近，每条流对服务器造成的业务负载大致相等，但是每条流的会话存活时间不同。</p>
-</blockquote>
-<p><strong>4.加权最小连接算法</strong></p>
-<blockquote>
-<p>加权最小连接算法是将客户端的业务流量分配到加权并发连接数最小的服务器上。(加权并发连接数是考虑服务器权重后得到的实时连接数)<br>适用场景为服务器的性能不同，每一条流对服务器造成的业务负载大致相等，但是每一条流的会话存活时间不同。</p>
-</blockquote>
-<p><strong>5.源IP hash算法</strong></p>
-<blockquote>
-<p>源IP Hash算法是将客户端的IP地址进行Hash运算，得到Hash Index值。FW根据Hash Index值与Hash列表中服务器的对应关系，分配流量至服务器。<br>适用场景为各个服务器性能差别不大</p>
-</blockquote>
-<p><strong>6.加权源IP hash算法</strong></p>
-<blockquote>
-<p>加权源IP Hash算法是将客户端的IP地址进行Hash运算，得到Hash Index值，而后通过FW调整各个服务器的权重得到Hash表中服务器新的权重值。<br>适用场景为各个服务器的性能有一定的差异</p>
-</blockquote>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p><img src="/2020/03/31/fu-wu-qi-fu-zai-jun-heng/topo.JPG" alt="拓扑"></p>
-<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置"><a href="#一、在FW1上的配置" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.开启SLB</strong></p>
-<blockquote>
-<p>slb enable </p>
-</blockquote>
-<p><strong>2.配置SLB</strong></p>
-<blockquote>
-<p> slb                                                                             <code>//SLB视图下</code></p>
-<p>  group 1 fwq                                                            <code>//实服务器组</code><br>   metric roundrobin                                                  <code>//算法为简单轮询</code><br>   health-check type icmp                                        <code>//健康检查</code><br>   rserver 0 rip 2.1.1.1 port 21<br>   rserver 1 rip 2.1.1.2 port 21<br>   rserver 2 rip 2.1.1.3 port 21</p>
-<p>  vserver 0 vs                                                           <code>//虚拟服务器组</code><br>   vip 0 1.1.1.100                                                     <code>//虚拟IP</code><br>   protocol tcp<br>   vport 21<br>   group fwq                                                             <code>//关联实服务器组</code></p>
-</blockquote>
-<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/31/fu-wu-qi-fu-zai-jun-heng/servermap.JPG" alt="查看FW1的server-map表"></p>
+                <p>aaaa</p>
 
             </div>
             <hr/>
@@ -516,7 +463,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/03/31/fu-wu-qi-fu-zai-jun-heng/">https://hzyxy.github.io/2020/03/31/fu-wu-qi-fu-zai-jun-heng/</a>
+                    <a href="https://hzyxy.github.io/2020/05/13/2020-05-13-sui-bi/">https://hzyxy.github.io/2020/05/13/2020-05-13-sui-bi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -554,16 +501,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                    <span class="chip bg-color">华为</span>
-                                </a>
-                            
-                                <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                    <span class="chip bg-color">防火墙</span>
-                                </a>
-                            
-                                <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
-                                    <span class="chip bg-color">负载均衡</span>
+                                <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                                    <span class="chip bg-color">记录</span>
                                 </a>
                             
                         </div>
@@ -729,50 +668,48 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/03/31/fang-huo-qiang-yuan-jin-yuan-chu/">
+                <a href="/2020/05/13/2020-05-13-sui-bi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/41.jpg" class="responsive-img" alt="源进源出">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="2020-05-13随笔">
                         
-                        <span class="card-title">源进源出</span>
+                        <span class="card-title">2020-05-13随笔</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            使得来回路径一致
+                            随笔
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-13
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Cyber-security/" class="post-category">
-                                    Cyber security
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                    随笔
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
+                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                        <span class="chip bg-color">记录</span>
                     </a>
                     
                 </div>
@@ -786,24 +723,24 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/03/31/shuang-xiang-nat/">
+                <a href="/2020/05/06/ospf/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="双向NAT">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="OSPF">
                         
-                        <span class="card-title">双向NAT</span>
+                        <span class="card-title">OSPF</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            双向NAT的介绍与配置
+                            OSPF的介绍
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-06
                             </span>
                         <span class="publish-author">
                             
@@ -820,20 +757,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/NAT/">
-                        <span class="chip bg-color">NAT</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
                     </a>
                     
                 </div>
