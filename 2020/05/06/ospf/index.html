@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6.2k
+                    7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    23 分
+                    26 分
                 </div>
                 
 
@@ -762,9 +762,22 @@
 <p>7类LSA产生FA地址特点</p>
 <p>1.如果和5类的LSA的FA地址生成条件相同，则FA地址也和5类FA地址相同<br>2.如果和5类的LSA的FA地址生成条件不同，则FA地址为ASBR上某个加入到OSPF进程的接口地址。（地址大的环回口优先，其次是物理接口）</p>
 </blockquote>
+<p>为什么7类LSA引进来的都带有FA地址（七类默认的不带转发地址）？而5类LSA要在满足条件下才有转发地址？<br>有做7转5的advrouter是会变成abr的router id。如果不带转发地址，而去往abr的cost大于去往fa地址时就会产生次优路径。所以7类LSA都基本带有转发地址。</p>
+<h4 id="OSPF的网络类型"><a href="#OSPF的网络类型" class="headerlink" title="OSPF的网络类型"></a>OSPF的网络类型</h4><h5 id="点到点P2P类型"><a href="#点到点P2P类型" class="headerlink" title="点到点P2P类型"></a>点到点P2P类型</h5><p>当链路层协议是PPP、HDLC时，缺省情况下，OSPF人认为网络类型是P2P。在该类型的网络中，以组播形式（224.0.0.5）发送协议报文（Hello报文，DD报文，LSR报文，LSU报文、LSACK报文）。</p>
+<h6 id="P2P网络类型的特点"><a href="#P2P网络类型的特点" class="headerlink" title="P2P网络类型的特点"></a>P2P网络类型的特点</h6><ol>
+<li>hello报文时间为10s</li>
+<li>组播更新</li>
+<li>由于是组播更新，不用手动指定邻居，可以自动发现</li>
+<li>3层是由广播的，2层也一定要有广播能力。（FR map后一定要加Broadcast）</li>
+<li>不需要选举DR和BDR</li>
+<li>不需要手工加MAP映射</li>
+</ol>
+<h5 id="点到多点P2MP类型（Point-to-Multipoint）"><a href="#点到多点P2MP类型（Point-to-Multipoint）" class="headerlink" title="点到多点P2MP类型（Point-to-Multipoint）"></a>点到多点P2MP类型（Point-to-Multipoint）</h5><p>没有一种链路层协议会被缺省认为是Point-to-Multipoint类型。点到多点必须是由其他的网络类型强制更改的。常用做法是将非全连通的NBMA改为点到多点的网络。在该类型的网络中以组播形式（224.0.0.5）发送Hello报文，以单播形式发送其他协议报文（DD报文、LSR报文、LSU报文、LSACK报文）。邻居自动发现，无需选择DR，BDR。</p>
+<h5 id="NBMA类型（Non-broadcast-multiple-access）"><a href="#NBMA类型（Non-broadcast-multiple-access）" class="headerlink" title="NBMA类型（Non-broadcast multiple access）"></a>NBMA类型（Non-broadcast multiple access）</h5><p>当链路层协议是ATM，FR时，缺省情况下，OSPF认为网络类型是NBMA。在该类型的网络中，以单播形式发送协议报文（Hello报文、DD报文、LSR报文、LSU报文、LSACK报文）。邻居无法自动建立，手动建立邻居关系，需要选择DR，BDR。</p>
+<h5 id="广播类型"><a href="#广播类型" class="headerlink" title="广播类型"></a>广播类型</h5><p>当链路层协议是Ethernet，FDDI时，缺省情况下，OSPF认为网络类型是Broadcast。在该类型的网络中，通常以组播形式发送Hello报文，LSU报文和LSACK报文。其中，224.0.0.5的组播地址为OSPF路由器的预留IP组播地址；224.0.0.6的组播地址为OSPF DR的预留IP组播地址。以单播形式发送DD报文和LSR报文。邻居可以自动建立，需要选择DR，BDR。</p>
 <h4 id="OSPF的防环"><a href="#OSPF的防环" class="headerlink" title="OSPF的防环"></a>OSPF的防环</h4><p>域内主要用SPF算法</p>
 <p>域间主要用规则</p>
-<h4 id="OSPF的选路"><a href="#OSPF的选路" class="headerlink" title="OSPF的选路"></a>OSPF的选路</h4><p>LSA1 &gt; LSA3（区域0） &gt;  LSA3(非骨干) &gt; LSA5/LSA7(type 1 &gt; typy 2) </p>
+<h4 id="OSPF的选路"><a href="#OSPF的选路" class="headerlink" title="OSPF的选路"></a>OSPF的选路</h4><p>LSA1 &gt; LSA3（区域0） &gt;  LSA3(非骨干) &gt; LSA5/LSA7(cost type 1 &gt; cost typy 2) </p>
 <h5 id="LSA5和LSA7选路机制"><a href="#LSA5和LSA7选路机制" class="headerlink" title="LSA5和LSA7选路机制"></a>LSA5和LSA7选路机制</h5><p>转发度量值分为两种：<br>1.当转发地址为0.0.0.0，则转发度量值为到ASBR的cost<br>2.当转发地址不为0.0.0.0，则转发度量值为到转发地址的cost值</p>
 <p>转发度量值：到ASBR的开销<br>种子度量值：ASBR引入外部路由的开销</p>
 <p>当转发地址不同，但到转发地址的开销相同，则负载分担，5类7类都遵循此特点</p>
@@ -795,9 +808,12 @@
 <p>完全stub区域Hello报文 option E=0 N=0</p>
 <p>内部路由器不可以变成ASBR</p>
 <h5 id="NSSA区域"><a href="#NSSA区域" class="headerlink" title="NSSA区域"></a>NSSA区域</h5><p>Not So Stubby Area 不那么完全的末节区域</p>
-<p>当NSSA区域存在多个ABR，默认router id大的做7转5。</p>
+<p>允许本区域存在ASBR，不泛洪5类LSA，不产生4类LSA，会产生7类LSA，ABR还会产生一条七类的默认路由</p>
+<p>当NSSA区域存在多个ABR，默认router id大的做7转5，泛洪到其他区域。不允许其他区域的5类LSA泛洪到NSSA区域,。</p>
 <p>当存在多条7类LSA，在7转5的时候，只产生1条5类LSA，即将最优的7类进行7转5。</p>
 <p>当到达转发地址的路由是负载分担，则计算的外部路由也会负载分担</p>
+<p>当NSSA区域的ABR收到一条七类的LSA和一条5类的LSA时，并且转发地址相同时。优先使用7类的进行外部路由计算。可能因为能用1类LSA去到转发地址。</p>
+<h5 id="完全NSSA区域"><a href="#完全NSSA区域" class="headerlink" title="完全NSSA区域"></a>完全NSSA区域</h5><p>允许本区域存在ASBR，不泛洪5类LSA，不产生4类LSA，不通告明细3类LSA，会产生7类LSA，完全NSSA区域的ABR会同时产生1条3类默认路由和一条七类的默认路由（3类优于7类）</p>
 
             </div>
             <hr/>
@@ -1272,7 +1288,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">59k</span>&nbsp;字
+                class="white-color">59.8k</span>&nbsp;字
             
             
             
