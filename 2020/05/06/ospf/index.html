@@ -414,7 +414,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7k
+                    7.2k
                 </div>
                 
 
@@ -773,7 +773,23 @@
 <li>不需要手工加MAP映射</li>
 </ol>
 <h5 id="点到多点P2MP类型（Point-to-Multipoint）"><a href="#点到多点P2MP类型（Point-to-Multipoint）" class="headerlink" title="点到多点P2MP类型（Point-to-Multipoint）"></a>点到多点P2MP类型（Point-to-Multipoint）</h5><p>没有一种链路层协议会被缺省认为是Point-to-Multipoint类型。点到多点必须是由其他的网络类型强制更改的。常用做法是将非全连通的NBMA改为点到多点的网络。在该类型的网络中以组播形式（224.0.0.5）发送Hello报文，以单播形式发送其他协议报文（DD报文、LSR报文、LSU报文、LSACK报文）。邻居自动发现，无需选择DR，BDR。</p>
+<p>生成帧中继的主机路由当成stubnet它的目的是为了什么？<br>为了能够在分支机构中不存在虚链路的情况下还能实现通信，而无需人工添加到达这些分支机构的静态映射，简化了配置。</p>
 <h5 id="NBMA类型（Non-broadcast-multiple-access）"><a href="#NBMA类型（Non-broadcast-multiple-access）" class="headerlink" title="NBMA类型（Non-broadcast multiple access）"></a>NBMA类型（Non-broadcast multiple access）</h5><p>当链路层协议是ATM，FR时，缺省情况下，OSPF认为网络类型是NBMA。在该类型的网络中，以单播形式发送协议报文（Hello报文、DD报文、LSR报文、LSU报文、LSACK报文）。邻居无法自动建立，手动建立邻居关系，需要选择DR，BDR。</p>
+<p>NBMA是为了不支持组播广播能力的FR的全互联量身定做的</p>
+<p>星型NBMA网络，FR map有brocast没brocast参数都可以。</p>
+<ol>
+<li>中心做DR，不需要BDR，分支做DRother</li>
+<li>邻居手动指定</li>
+<li>伪节点算法，需要在分支之间彼此增加映射</li>
+</ol>
+<p>结论：<br>星型FR网络，并不适用NBMA网络类型来组网。<br>全互联FR网络，适用NBMA网络类型来组网。</p>
+<p>星型NBMA网络，修改为brocast的网络，前提是FR map有brocast参数即可。</p>
+<ol>
+<li>中心做DR，不需要BDR，分支做DRother</li>
+<li>邻居自动发现</li>
+<li>伪节点算法，需要在分支之间彼此增加映射</li>
+</ol>
+<p>星型的NBMA网络。使用P2MP是最合适组网。</p>
 <h5 id="广播类型"><a href="#广播类型" class="headerlink" title="广播类型"></a>广播类型</h5><p>当链路层协议是Ethernet，FDDI时，缺省情况下，OSPF认为网络类型是Broadcast。在该类型的网络中，通常以组播形式发送Hello报文，LSU报文和LSACK报文。其中，224.0.0.5的组播地址为OSPF路由器的预留IP组播地址；224.0.0.6的组播地址为OSPF DR的预留IP组播地址。以单播形式发送DD报文和LSR报文。邻居可以自动建立，需要选择DR，BDR。</p>
 <h4 id="OSPF的防环"><a href="#OSPF的防环" class="headerlink" title="OSPF的防环"></a>OSPF的防环</h4><p>域内主要用SPF算法</p>
 <p>域间主要用规则</p>
@@ -1288,7 +1304,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">59.8k</span>&nbsp;字
+                class="white-color">60k</span>&nbsp;字
             
             
             
