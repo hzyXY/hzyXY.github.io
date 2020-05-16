@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.2k
+                    7.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    26 分
+                    27 分
                 </div>
                 
 
@@ -763,7 +763,7 @@
 <p>1.如果和5类的LSA的FA地址生成条件相同，则FA地址也和5类FA地址相同<br>2.如果和5类的LSA的FA地址生成条件不同，则FA地址为ASBR上某个加入到OSPF进程的接口地址。（地址大的环回口优先，其次是物理接口）</p>
 </blockquote>
 <p>为什么7类LSA引进来的都带有FA地址（七类默认的不带转发地址）？而5类LSA要在满足条件下才有转发地址？<br>有做7转5的advrouter是会变成abr的router id。如果不带转发地址，而去往abr的cost大于去往fa地址时就会产生次优路径。所以7类LSA都基本带有转发地址。</p>
-<h4 id="OSPF的网络类型"><a href="#OSPF的网络类型" class="headerlink" title="OSPF的网络类型"></a>OSPF的网络类型</h4><h5 id="点到点P2P类型"><a href="#点到点P2P类型" class="headerlink" title="点到点P2P类型"></a>点到点P2P类型</h5><p>当链路层协议是PPP、HDLC时，缺省情况下，OSPF人认为网络类型是P2P。在该类型的网络中，以组播形式（224.0.0.5）发送协议报文（Hello报文，DD报文，LSR报文，LSU报文、LSACK报文）。</p>
+<h3 id="OSPF的网络类型"><a href="#OSPF的网络类型" class="headerlink" title="OSPF的网络类型"></a>OSPF的网络类型</h3><h5 id="点到点P2P类型"><a href="#点到点P2P类型" class="headerlink" title="点到点P2P类型"></a>点到点P2P类型</h5><p>当链路层协议是PPP、HDLC时，缺省情况下，OSPF人认为网络类型是P2P。在该类型的网络中，以组播形式（224.0.0.5）发送协议报文（Hello报文，DD报文，LSR报文，LSU报文、LSACK报文）。</p>
 <h6 id="P2P网络类型的特点"><a href="#P2P网络类型的特点" class="headerlink" title="P2P网络类型的特点"></a>P2P网络类型的特点</h6><ol>
 <li>hello报文时间为10s</li>
 <li>组播更新</li>
@@ -791,22 +791,22 @@
 </ol>
 <p>星型的NBMA网络。使用P2MP是最合适组网。</p>
 <h5 id="广播类型"><a href="#广播类型" class="headerlink" title="广播类型"></a>广播类型</h5><p>当链路层协议是Ethernet，FDDI时，缺省情况下，OSPF认为网络类型是Broadcast。在该类型的网络中，通常以组播形式发送Hello报文，LSU报文和LSACK报文。其中，224.0.0.5的组播地址为OSPF路由器的预留IP组播地址；224.0.0.6的组播地址为OSPF DR的预留IP组播地址。以单播形式发送DD报文和LSR报文。邻居可以自动建立，需要选择DR，BDR。</p>
-<h4 id="OSPF的防环"><a href="#OSPF的防环" class="headerlink" title="OSPF的防环"></a>OSPF的防环</h4><p>域内主要用SPF算法</p>
+<h3 id="OSPF的防环"><a href="#OSPF的防环" class="headerlink" title="OSPF的防环"></a>OSPF的防环</h3><p>域内主要用SPF算法</p>
 <p>域间主要用规则</p>
-<h4 id="OSPF的选路"><a href="#OSPF的选路" class="headerlink" title="OSPF的选路"></a>OSPF的选路</h4><p>LSA1 &gt; LSA3（区域0） &gt;  LSA3(非骨干) &gt; LSA5/LSA7(cost type 1 &gt; cost typy 2) </p>
-<h5 id="LSA5和LSA7选路机制"><a href="#LSA5和LSA7选路机制" class="headerlink" title="LSA5和LSA7选路机制"></a>LSA5和LSA7选路机制</h5><p>转发度量值分为两种：<br>1.当转发地址为0.0.0.0，则转发度量值为到ASBR的cost<br>2.当转发地址不为0.0.0.0，则转发度量值为到转发地址的cost值</p>
+<h3 id="OSPF的选路"><a href="#OSPF的选路" class="headerlink" title="OSPF的选路"></a>OSPF的选路</h3><p>LSA1 &gt; LSA3（区域0） &gt;  LSA3(非骨干) &gt; LSA5/LSA7(cost type 1 &gt; cost typy 2) </p>
+<h4 id="LSA5和LSA7选路机制"><a href="#LSA5和LSA7选路机制" class="headerlink" title="LSA5和LSA7选路机制"></a>LSA5和LSA7选路机制</h4><p>转发度量值分为两种：<br>1.当转发地址为0.0.0.0，则转发度量值为到ASBR的cost<br>2.当转发地址不为0.0.0.0，则转发度量值为到转发地址的cost值</p>
 <p>转发度量值：到ASBR的开销<br>种子度量值：ASBR引入外部路由的开销</p>
 <p>当转发地址不同，但到转发地址的开销相同，则负载分担，5类7类都遵循此特点</p>
-<h6 id="Cost-type2"><a href="#Cost-type2" class="headerlink" title="Cost-type2"></a>Cost-type2</h6><p>默认为类型2</p>
+<h5 id="Cost-type2"><a href="#Cost-type2" class="headerlink" title="Cost-type2"></a>Cost-type2</h5><p>默认为类型2</p>
 <p>转发地址为0.0.0.0或不为0.0.0.0都遵循以下规则：</p>
 <p>如果引入种子开销相同，转发度量值相同，则负载分担<br>如果引入种子开销相同，转发度量值不同，则选择转发度量值小的优先<br>如果引入种子开销不同，转发度量值相同，则选择种子度量值小的优先<br>如果引入种子开销不同，转发度量值不同，则选择种子度量值小的优先</p>
 <p>类型5或类型7的LSA，当转发地址非0时，优先使用种子开销小的LSA计算路由，如果过种子开销值相同，则优先选择到转发地址开销值小的LSA计算路由。如果过种子开销相同，转发地址也开销相同，转发地址相同或不同，则负载分担。<br>如果ASBR上去往外部同一条路由开销相同，则使用转发地址大的产生类型5或是类型7的LSA</p>
 <p><strong>总结</strong><br>Cost-type2通过可以在不影响AS内部拓扑结构的情况下，选择“最佳的”出接口来使用。通常用于不关心内部转发路径时，选择一个“最佳的”路径，通常可以实现人为对业务出口的控制。</p>
-<h6 id="Cost-type1"><a href="#Cost-type1" class="headerlink" title="Cost-type1"></a>Cost-type1</h6><p>转发地址为0.0.0.0或不为0.0.0.0都遵循以下规则：</p>
+<h5 id="Cost-type1"><a href="#Cost-type1" class="headerlink" title="Cost-type1"></a>Cost-type1</h5><p>转发地址为0.0.0.0或不为0.0.0.0都遵循以下规则：</p>
 <p>如果过引入种子开销相同，转发度量值相同，则负载分担<br>其他情况根据种子开销和转发度量值之和，和值小的优先，如果过和值相同则负载分担。</p>
 <p>Cost-type1总是比Cost-type2的优先，不区分是5类还是7类的LSA</p>
 <p>类型5和类型7的LSA，当转发地址非0时，如果过种子开销相同，转发地址开销相同，转发地址相同，则负载分担。<br>类型5和类型7的LSA，当转发地址非0时，如果过种子开销相同，转发地址开销相同，转发地址不同，也负载分担。<br>类型5和类型7的LSA，使用最终计算出来的COST值最低的路由，作为最佳路由，不关心转发地址开销值和种子开销值。</p>
-<h4 id="OSPF的特殊区域"><a href="#OSPF的特殊区域" class="headerlink" title="OSPF的特殊区域"></a>OSPF的特殊区域</h4><ul>
+<h3 id="OSPF的特殊区域"><a href="#OSPF的特殊区域" class="headerlink" title="OSPF的特殊区域"></a>OSPF的特殊区域</h3><ul>
 <li><p>特殊区域包括Stub区域，完全Stub区域，NSSA区域，完全NSSA区域</p>
 </li>
 <li><p>共同点：不允许5类LSA进行泛洪</p>
@@ -814,22 +814,41 @@
 <li><p>作用：减少外部LSA的数量，节省内存和CPU资源，增强网络的稳定性。</p>
 </li>
 </ul>
-<h5 id="Stub区域"><a href="#Stub区域" class="headerlink" title="Stub区域"></a>Stub区域</h5><p>不泛洪5类LSA，不产生4类LSA，会产生一条3类的LSA为默认路由</p>
+<h4 id="Stub区域"><a href="#Stub区域" class="headerlink" title="Stub区域"></a>Stub区域</h4><p>不泛洪5类LSA，不产生4类LSA，会产生一条3类的LSA为默认路由</p>
 <p>常规区域hello option E=1 N=1</p>
 <p>stub区域Hello报文 option E=0 N=0</p>
 <p>dd报文不携带5类LSA，4类LSA</p>
 <p>内部路由器不可以变成ASBR</p>
-<h5 id="完全Stub区域"><a href="#完全Stub区域" class="headerlink" title="完全Stub区域"></a>完全Stub区域</h5><p>不泛洪5类LSA，不产生4类LSA，不通告明细3类LSA，只会产生一条默认的3类的LSA。</p>
+<h4 id="完全Stub区域"><a href="#完全Stub区域" class="headerlink" title="完全Stub区域"></a>完全Stub区域</h4><p>不泛洪5类LSA，不产生4类LSA，不通告明细3类LSA，只会产生一条默认的3类的LSA。</p>
 <p>常规区域hello option E=1 N=1</p>
 <p>完全stub区域Hello报文 option E=0 N=0</p>
 <p>内部路由器不可以变成ASBR</p>
-<h5 id="NSSA区域"><a href="#NSSA区域" class="headerlink" title="NSSA区域"></a>NSSA区域</h5><p>Not So Stubby Area 不那么完全的末节区域</p>
+<h4 id="NSSA区域"><a href="#NSSA区域" class="headerlink" title="NSSA区域"></a>NSSA区域</h4><p>Not So Stubby Area 不那么完全的末节区域</p>
 <p>允许本区域存在ASBR，不泛洪5类LSA，不产生4类LSA，会产生7类LSA，ABR还会产生一条七类的默认路由</p>
 <p>当NSSA区域存在多个ABR，默认router id大的做7转5，泛洪到其他区域。不允许其他区域的5类LSA泛洪到NSSA区域,。</p>
 <p>当存在多条7类LSA，在7转5的时候，只产生1条5类LSA，即将最优的7类进行7转5。</p>
 <p>当到达转发地址的路由是负载分担，则计算的外部路由也会负载分担</p>
 <p>当NSSA区域的ABR收到一条七类的LSA和一条5类的LSA时，并且转发地址相同时。优先使用7类的进行外部路由计算。可能因为能用1类LSA去到转发地址。</p>
-<h5 id="完全NSSA区域"><a href="#完全NSSA区域" class="headerlink" title="完全NSSA区域"></a>完全NSSA区域</h5><p>允许本区域存在ASBR，不泛洪5类LSA，不产生4类LSA，不通告明细3类LSA，会产生7类LSA，完全NSSA区域的ABR会同时产生1条3类默认路由和一条七类的默认路由（3类优于7类）</p>
+<h4 id="完全NSSA区域"><a href="#完全NSSA区域" class="headerlink" title="完全NSSA区域"></a>完全NSSA区域</h4><p>允许本区域存在ASBR，不泛洪5类LSA，不产生4类LSA，不通告明细3类LSA，会产生7类LSA，完全NSSA区域的ABR会同时产生1条3类默认路由和一条七类的默认路由（3类优于7类）</p>
+<h3 id="OSPF虚链路"><a href="#OSPF虚链路" class="headerlink" title="OSPF虚链路"></a>OSPF虚链路</h3><p>虚链路只能穿越一个区域</p>
+<p>虚链路通过单播传递报文</p>
+<p>虚链路不检测掩码和地址是否在同一个网段</p>
+<p>即使交互报文时，源地址和目的地址完全不同，依然可以正常进行ospf报文交互</p>
+<p>怎么检测虚链路的状态变化？</p>
+<ol>
+<li>通过周期性发送hello包</li>
+<li>通过transit区域的LSA1的变化，判断vlink是否可达，靠SPF算法，比hello机制更快。</li>
+<li>直连接口失效</li>
+</ol>
+<h4 id="虚链路的使用场景"><a href="#虚链路的使用场景" class="headerlink" title="虚链路的使用场景"></a>虚链路的使用场景</h4><p>一般虚链路用于临时的连接或者备用的连接，设计中应该避免虚连接的出现，使用隧道技术可以在某些场景下代替虚链路，如GRE隧道，或者是通过不同的OSPF进程实现重引入。</p>
+<ol>
+<li>用于连接非直连的非骨干区域</li>
+<li>用于连接不连续的区域</li>
+<li>用于两个非骨干区域的连接（思科不支持）</li>
+<li>用于区域0的备用链路</li>
+<li>路径优化时使用</li>
+</ol>
+<p>通过虚链路得到的3类LSA不会重传到所经过的区域</p>
 
             </div>
             <hr/>
@@ -1304,7 +1323,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">60k</span>&nbsp;字
+                class="white-color">60.4k</span>&nbsp;字
             
             
             
