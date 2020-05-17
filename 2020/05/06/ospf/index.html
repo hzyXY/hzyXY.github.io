@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.5k
+                    7.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    27 分
+                    29 分
                 </div>
                 
 
@@ -848,8 +848,20 @@
 <li>用于区域0的备用链路</li>
 <li>路径优化时使用</li>
 </ol>
+<h4 id="OSPF虚链路的防环"><a href="#OSPF虚链路的防环" class="headerlink" title="OSPF虚链路的防环"></a>OSPF虚链路的防环</h4><p>虚链路的缺点：容易产生环路</p>
+<ol>
+<li>通过虚链路的到的1类LSA所计算出的路由，不会转换成虚链路所在区域的3类LSA，目的是为了防环</li>
+<li>无法再虚链路所在的区域对区域0的路由实现汇总</li>
+<li>即存在vlink的ABR得到一条3类LSA（非自身产生的），那么该LSA在自身区域0中存在，此时也要求此3类LSA也必须在vlink穿越的transtit区域的LSDB中也存在，否则将不适用此3类LSA计算路由</li>
+<li>存在vlink的ABR，通过vlink传来的3类LSA和vlink所经过的区域的其他ABR传来的3类LSA，在满足条件3的情况下，优先选择cost小的计算区域间的路由（这时候不一定区域0的3类LSA优于非骨干区域的3类LSA）</li>
+</ol>
 <p>通过虚链路得到的3类LSA不会重传到所经过的区域</p>
-
+<h3 id="OSPF路由过滤"><a href="#OSPF路由过滤" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h3><h4 id="OSPF路由过滤-1"><a href="#OSPF路由过滤-1" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h4><ol>
+<li>filter-policy在ABR上如果对直连的区域1类LSA所产生的做过滤后，将不会产生此路由的3类LSA，ABR本地实现此路由过滤，并且此路由不会泛洪到其他区域。</li>
+<li>在ABR上使用filter-policy对区域0的3类LSA所产生的路由也能实现路由的过滤，此路由不会出现在ABR的路由表中，并且ABR不会为直连的非骨干区域产生对应的此路由的3类LSA。</li>
+<li>filter-policy import方向 可以过滤任何类型的LSA所产生的路由，但不会过滤此路由的LSA（上面那两个是特殊）。</li>
+</ol>
+<h4 id="LSA过滤"><a href="#LSA过滤" class="headerlink" title="LSA过滤"></a>LSA过滤</h4><h4 id="LSA泛洪控制"><a href="#LSA泛洪控制" class="headerlink" title="LSA泛洪控制"></a>LSA泛洪控制</h4><h3 id="OSPF外部路由汇总"><a href="#OSPF外部路由汇总" class="headerlink" title="OSPF外部路由汇总"></a>OSPF外部路由汇总</h3><h3 id="OSPF认证"><a href="#OSPF认证" class="headerlink" title="OSPF认证"></a>OSPF认证</h3>
             </div>
             <hr/>
 
@@ -1323,7 +1335,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">60.4k</span>&nbsp;字
+                class="white-color">60.8k</span>&nbsp;字
             
             
             
