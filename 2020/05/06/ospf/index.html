@@ -414,7 +414,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.9k
+                    8k
                 </div>
                 
 
@@ -856,11 +856,17 @@
 <li>存在vlink的ABR，通过vlink传来的3类LSA和vlink所经过的区域的其他ABR传来的3类LSA，在满足条件3的情况下，优先选择cost小的计算区域间的路由（这时候不一定区域0的3类LSA优于非骨干区域的3类LSA）</li>
 </ol>
 <p>通过虚链路得到的3类LSA不会重传到所经过的区域</p>
-<h3 id="OSPF路由过滤"><a href="#OSPF路由过滤" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h3><h4 id="OSPF路由过滤-1"><a href="#OSPF路由过滤-1" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h4><ol>
+<h3 id="OSPF路由过滤"><a href="#OSPF路由过滤" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h3><h4 id="OSPF路由过滤-1"><a href="#OSPF路由过滤-1" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h4><p><strong>filter-policy（OSPF）</strong></p>
+<ol>
 <li>filter-policy在ABR上如果对直连的区域1类LSA所产生的做过滤后，将不会产生此路由的3类LSA，ABR本地实现此路由过滤，并且此路由不会泛洪到其他区域。</li>
 <li>在ABR上使用filter-policy对区域0的3类LSA所产生的路由也能实现路由的过滤，此路由不会出现在ABR的路由表中，并且ABR不会为直连的非骨干区域产生对应的此路由的3类LSA。</li>
-<li>filter-policy import方向 可以过滤任何类型的LSA所产生的路由，但不会过滤此路由的LSA（上面那两个是特殊）。</li>
+<li>filter-policy import方向 可以过滤任何类型的LSA所产生的路由，但不会过滤此路由的LSA（上面那两个是特殊）</li>
+<li>filter-policy export方向（设置对引入的路由在向外发布时进行过滤）仅能在ASBR上配置，因为5类LSA是由ASBR产生的</li>
 </ol>
+<h5 id="区域间过滤"><a href="#区域间过滤" class="headerlink" title="区域间过滤"></a>区域间过滤</h5><p><strong>filter （OSPF区域）</strong></p>
+<p>此命令仅在ABR上配置。</p>
+<p><strong>filter export</strong>命令用来配置对区域内出方向的Type3 LSA进行过滤。（1、3类均可过滤）</p>
+<p><strong>filter import</strong>命令用来配置对区域内入方向的Type3 LSA进行过滤。（1、3类均可过滤）</p>
 <h4 id="LSA过滤"><a href="#LSA过滤" class="headerlink" title="LSA过滤"></a>LSA过滤</h4><h4 id="LSA泛洪控制"><a href="#LSA泛洪控制" class="headerlink" title="LSA泛洪控制"></a>LSA泛洪控制</h4><h3 id="OSPF外部路由汇总"><a href="#OSPF外部路由汇总" class="headerlink" title="OSPF外部路由汇总"></a>OSPF外部路由汇总</h3><h3 id="OSPF认证"><a href="#OSPF认证" class="headerlink" title="OSPF认证"></a>OSPF认证</h3>
             </div>
             <hr/>
@@ -1335,7 +1341,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">60.8k</span>&nbsp;字
+                class="white-color">60.9k</span>&nbsp;字
             
             
             
