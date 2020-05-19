@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    8k
+                    8.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    29 分
+                    30 分
                 </div>
                 
 
@@ -618,10 +618,7 @@
 </ul>
 <h6 id="MTU对邻居关系的影响"><a href="#MTU对邻居关系的影响" class="headerlink" title="MTU对邻居关系的影响"></a>MTU对邻居关系的影响</h6><p>如果过链路是PPP，在PPP上的链路会自动协商链路的MTU，使得链路两边的MTU值一致，取接口最小MTU值作为链路的MTU，默认DD报文的MTU为0，都小于链路的MTU，因此邻居关系正常建立，如果过使用了ospf mtu-enable，那么在DD报文中MTU值为链路协商后的MTU，因此还是保持一致，邻居也可以正常建立。</p>
 <p>如果过链路是HDLC，由于缺乏MTU的协商机制，所以当两边的MTU不一致，并且用ospf mtu-enable时，如果过DD报文中的MTU值大于接收DD报文的接口本地的MTU值时，邻居关系无法正常建立，另据关系将卡在exstar的状态。</p>
-<h3 id="OSPF-邻居状态机"><a href="#OSPF-邻居状态机" class="headerlink" title="OSPF 邻居状态机"></a>OSPF 邻居状态机</h3><p>DD报文中携带的链路状态信息(LSA)头部要解决的问题</p>
-<p>lsa type    link state id    adv router 解决有LSA没有问题</p>
-<p>seq num    check sum    age 解决LSA新旧问题</p>
-<p>图</p>
+<h3 id="OSPF-邻居状态机"><a href="#OSPF-邻居状态机" class="headerlink" title="OSPF 邻居状态机"></a>OSPF 邻居状态机</h3><p><img src="/2020/05/06/ospf/%E9%82%BB%E5%B1%85%E7%8A%B6%E6%80%81%E6%9C%BA.png" alt="邻居状态机"></p>
 <table>
 <thead>
 <tr>
@@ -669,7 +666,10 @@
 <li>所以router id不能冲突的原因：1.在Exstart状态中需要进行主从选举，选举的依据就是router id。2.产生的1类LSA三要素相同导致不能区分。 </li>
 <li>在Exchange状态中，DD报文的隐式确认：从路由器总是用主路由器的seq num向主路由器发送DD报文。主路由器总是用从路由器的DD的seq num+1向从路由器发送DD报文。隐式确认保证DD报文交互的可靠性。</li>
 </ol>
-<h3 id="OSPF-LSA"><a href="#OSPF-LSA" class="headerlink" title="OSPF LSA"></a>OSPF LSA</h3><h4 id="LSA头部"><a href="#LSA头部" class="headerlink" title="LSA头部"></a>LSA头部</h4><p>图</p>
+<p>DD报文中携带的链路状态信息(LSA)头部要解决的问题</p>
+<p>lsa type    link state id    adv router 解决有LSA没有问题</p>
+<p>seq num    check sum    age 解决LSA新旧问题</p>
+<h3 id="OSPF-LSA"><a href="#OSPF-LSA" class="headerlink" title="OSPF LSA"></a>OSPF LSA</h3><h4 id="LSA头部"><a href="#LSA头部" class="headerlink" title="LSA头部"></a>LSA头部</h4><p><img src="/2020/05/06/ospf/LSAheader.JPG" alt="LSA头部参数"></p>
 <h4 id="LSA类型"><a href="#LSA类型" class="headerlink" title="LSA类型"></a>LSA类型</h4><table>
 <thead>
 <tr>
@@ -856,18 +856,50 @@
 <li>存在vlink的ABR，通过vlink传来的3类LSA和vlink所经过的区域的其他ABR传来的3类LSA，在满足条件3的情况下，优先选择cost小的计算区域间的路由（这时候不一定区域0的3类LSA优于非骨干区域的3类LSA）</li>
 </ol>
 <p>通过虚链路得到的3类LSA不会重传到所经过的区域</p>
-<h3 id="OSPF路由过滤"><a href="#OSPF路由过滤" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h3><h4 id="OSPF路由过滤-1"><a href="#OSPF路由过滤-1" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h4><p><strong>filter-policy（OSPF）</strong></p>
+<h3 id="OSPF路由过滤"><a href="#OSPF路由过滤" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h3><h4 id="OSPF路由、LSA过滤"><a href="#OSPF路由、LSA过滤" class="headerlink" title="OSPF路由、LSA过滤"></a>OSPF路由、LSA过滤</h4><p><strong>filter-policy（OSPF）</strong></p>
 <ol>
 <li>filter-policy在ABR上如果对直连的区域1类LSA所产生的做过滤后，将不会产生此路由的3类LSA，ABR本地实现此路由过滤，并且此路由不会泛洪到其他区域。</li>
 <li>在ABR上使用filter-policy对区域0的3类LSA所产生的路由也能实现路由的过滤，此路由不会出现在ABR的路由表中，并且ABR不会为直连的非骨干区域产生对应的此路由的3类LSA。</li>
 <li>filter-policy import方向 可以过滤任何类型的LSA所产生的路由，但不会过滤此路由的LSA（上面那两个是特殊）</li>
 <li>filter-policy export方向（设置对引入的路由在向外发布时进行过滤）仅能在ASBR上配置，因为5类LSA是由ASBR产生的</li>
 </ol>
-<h5 id="区域间过滤"><a href="#区域间过滤" class="headerlink" title="区域间过滤"></a>区域间过滤</h5><p><strong>filter （OSPF区域）</strong></p>
+<h5 id="区域间LSA过滤"><a href="#区域间LSA过滤" class="headerlink" title="区域间LSA过滤"></a>区域间LSA过滤</h5><p><strong>filter （OSPF区域）</strong></p>
 <p>此命令仅在ABR上配置。</p>
 <p><strong>filter export</strong>命令用来配置对区域内出方向的Type3 LSA进行过滤。（1、3类均可过滤）</p>
 <p><strong>filter import</strong>命令用来配置对区域内入方向的Type3 LSA进行过滤。（1、3类均可过滤）</p>
-<h4 id="LSA过滤"><a href="#LSA过滤" class="headerlink" title="LSA过滤"></a>LSA过滤</h4><h4 id="LSA泛洪控制"><a href="#LSA泛洪控制" class="headerlink" title="LSA泛洪控制"></a>LSA泛洪控制</h4><h3 id="OSPF外部路由汇总"><a href="#OSPF外部路由汇总" class="headerlink" title="OSPF外部路由汇总"></a>OSPF外部路由汇总</h3><h3 id="OSPF认证"><a href="#OSPF认证" class="headerlink" title="OSPF认证"></a>OSPF认证</h3>
+<h4 id="LSA泛洪控制"><a href="#LSA泛洪控制" class="headerlink" title="LSA泛洪控制"></a>LSA泛洪控制</h4><p>ospf filter-lsa-out all在进程中仅对p2mp网络类型的邻居生效</p>
+<p>ospf filter-lsa-out all在接口中优先在进程中</p>
+<p>ospf filter-lsa-out all接口中不关心网络类型，都可以用。</p>
+<h3 id="OSPF外部路由汇总"><a href="#OSPF外部路由汇总" class="headerlink" title="OSPF外部路由汇总"></a>OSPF外部路由汇总</h3><p>ASBR汇总：</p>
+<p>如果引入的明细路由cost type类型不一致，则默认为type2<br>如果引入的明细路由cost type类型一致，则继承明细路由的cost type</p>
+<h3 id="OSPF认证"><a href="#OSPF认证" class="headerlink" title="OSPF认证"></a>OSPF认证</h3><p>认证模式分为3种：</p>
+<ol>
+<li>null 认证</li>
+</ol>
+<p>type = 0 默认空认证</p>
+<ol start="2">
+<li>明文认证</li>
+</ol>
+<p>type = 1 不能实现为伪造，篡改做判断</p>
+<ol start="3">
+<li>md5认证</li>
+</ol>
+<p>key id、key值需要一致</p>
+<p>新增的字段：key id、data length（加密数据长度）、sequence Number（防重放攻击序列号）、data（哈希值）</p>
+<p>type = 2 可防止报文篡改、伪造、重放攻击</p>
+<p>哈希值=报文中的明文字段+key id+key值</p>
+<p>认证实现：</p>
+<p>一边做区域认证，一边接口认证是否可以建立邻居？</p>
+<p>可以，只要认证类型相同，密码相同。</p>
+<ol>
+<li>接口认证</li>
+</ol>
+<p>接口认证优于区域认证</p>
+<ol start="2">
+<li>区域认证</li>
+</ol>
+<p>vlink当作一个接口来做认证，vlink怎样都是属于区域0的。</p>
+
             </div>
             <hr/>
 
@@ -1341,7 +1373,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">60.9k</span>&nbsp;字
+                class="white-color">61.7k</span>&nbsp;字
             
             
             
