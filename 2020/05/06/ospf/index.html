@@ -763,8 +763,8 @@
 <p>1.如果和5类的LSA的FA地址生成条件相同，则FA地址也和5类FA地址相同<br>2.如果和5类的LSA的FA地址生成条件不同，则FA地址为ASBR上某个加入到OSPF进程的接口地址。（地址大的环回口优先，其次是物理接口）</p>
 </blockquote>
 <p>为什么7类LSA引进来的都带有FA地址（七类默认的不带转发地址）？而5类LSA要在满足条件下才有转发地址？<br>有做7转5的advrouter是会变成abr的router id。如果不带转发地址，而去往abr的cost大于去往fa地址时就会产生次优路径。所以7类LSA都基本带有转发地址。</p>
-<h3 id="OSPF的网络类型"><a href="#OSPF的网络类型" class="headerlink" title="OSPF的网络类型"></a>OSPF的网络类型</h3><h5 id="点到点P2P类型"><a href="#点到点P2P类型" class="headerlink" title="点到点P2P类型"></a>点到点P2P类型</h5><p>当链路层协议是PPP、HDLC时，缺省情况下，OSPF人认为网络类型是P2P。在该类型的网络中，以组播形式（224.0.0.5）发送协议报文（Hello报文，DD报文，LSR报文，LSU报文、LSACK报文）。</p>
-<h6 id="P2P网络类型的特点"><a href="#P2P网络类型的特点" class="headerlink" title="P2P网络类型的特点"></a>P2P网络类型的特点</h6><ol>
+<h3 id="OSPF的网络类型"><a href="#OSPF的网络类型" class="headerlink" title="OSPF的网络类型"></a>OSPF的网络类型</h3><h4 id="点到点P2P类型"><a href="#点到点P2P类型" class="headerlink" title="点到点P2P类型"></a>点到点P2P类型</h4><p>当链路层协议是PPP、HDLC时，缺省情况下，OSPF人认为网络类型是P2P。在该类型的网络中，以组播形式（224.0.0.5）发送协议报文（Hello报文，DD报文，LSR报文，LSU报文、LSACK报文）。</p>
+<h4 id="P2P网络类型的特点"><a href="#P2P网络类型的特点" class="headerlink" title="P2P网络类型的特点"></a>P2P网络类型的特点</h4><ol>
 <li>hello报文时间为10s</li>
 <li>组播更新</li>
 <li>由于是组播更新，不用手动指定邻居，可以自动发现</li>
@@ -772,9 +772,9 @@
 <li>不需要选举DR和BDR</li>
 <li>不需要手工加MAP映射</li>
 </ol>
-<h5 id="点到多点P2MP类型（Point-to-Multipoint）"><a href="#点到多点P2MP类型（Point-to-Multipoint）" class="headerlink" title="点到多点P2MP类型（Point-to-Multipoint）"></a>点到多点P2MP类型（Point-to-Multipoint）</h5><p>没有一种链路层协议会被缺省认为是Point-to-Multipoint类型。点到多点必须是由其他的网络类型强制更改的。常用做法是将非全连通的NBMA改为点到多点的网络。在该类型的网络中以组播形式（224.0.0.5）发送Hello报文，以单播形式发送其他协议报文（DD报文、LSR报文、LSU报文、LSACK报文）。邻居自动发现，无需选择DR，BDR。</p>
+<h4 id="点到多点P2MP类型（Point-to-Multipoint）"><a href="#点到多点P2MP类型（Point-to-Multipoint）" class="headerlink" title="点到多点P2MP类型（Point-to-Multipoint）"></a>点到多点P2MP类型（Point-to-Multipoint）</h4><p>没有一种链路层协议会被缺省认为是Point-to-Multipoint类型。点到多点必须是由其他的网络类型强制更改的。常用做法是将非全连通的NBMA改为点到多点的网络。在该类型的网络中以组播形式（224.0.0.5）发送Hello报文，以单播形式发送其他协议报文（DD报文、LSR报文、LSU报文、LSACK报文）。邻居自动发现，无需选择DR，BDR。</p>
 <p>生成帧中继的主机路由当成stubnet它的目的是为了什么？<br>为了能够在分支机构中不存在虚链路的情况下还能实现通信，而无需人工添加到达这些分支机构的静态映射，简化了配置。</p>
-<h5 id="NBMA类型（Non-broadcast-multiple-access）"><a href="#NBMA类型（Non-broadcast-multiple-access）" class="headerlink" title="NBMA类型（Non-broadcast multiple access）"></a>NBMA类型（Non-broadcast multiple access）</h5><p>当链路层协议是ATM，FR时，缺省情况下，OSPF认为网络类型是NBMA。在该类型的网络中，以单播形式发送协议报文（Hello报文、DD报文、LSR报文、LSU报文、LSACK报文）。邻居无法自动建立，手动建立邻居关系，需要选择DR，BDR。</p>
+<h4 id="NBMA类型（Non-broadcast-multiple-access）"><a href="#NBMA类型（Non-broadcast-multiple-access）" class="headerlink" title="NBMA类型（Non-broadcast multiple access）"></a>NBMA类型（Non-broadcast multiple access）</h4><p>当链路层协议是ATM，FR时，缺省情况下，OSPF认为网络类型是NBMA。在该类型的网络中，以单播形式发送协议报文（Hello报文、DD报文、LSR报文、LSU报文、LSACK报文）。邻居无法自动建立，手动建立邻居关系，需要选择DR，BDR。</p>
 <p>NBMA是为了不支持组播广播能力的FR的全互联量身定做的</p>
 <p>星型NBMA网络，FR map有brocast没brocast参数都可以。</p>
 <ol>
@@ -790,7 +790,7 @@
 <li>伪节点算法，需要在分支之间彼此增加映射</li>
 </ol>
 <p>星型的NBMA网络。使用P2MP是最合适组网。</p>
-<h5 id="广播类型"><a href="#广播类型" class="headerlink" title="广播类型"></a>广播类型</h5><p>当链路层协议是Ethernet，FDDI时，缺省情况下，OSPF认为网络类型是Broadcast。在该类型的网络中，通常以组播形式发送Hello报文，LSU报文和LSACK报文。其中，224.0.0.5的组播地址为OSPF路由器的预留IP组播地址；224.0.0.6的组播地址为OSPF DR的预留IP组播地址。以单播形式发送DD报文和LSR报文。邻居可以自动建立，需要选择DR，BDR。</p>
+<h4 id="广播类型"><a href="#广播类型" class="headerlink" title="广播类型"></a>广播类型</h4><p>当链路层协议是Ethernet，FDDI时，缺省情况下，OSPF认为网络类型是Broadcast。在该类型的网络中，通常以组播形式发送Hello报文，LSU报文和LSACK报文。其中，224.0.0.5的组播地址为OSPF路由器的预留IP组播地址；224.0.0.6的组播地址为OSPF DR的预留IP组播地址。以单播形式发送DD报文和LSR报文。邻居可以自动建立，需要选择DR，BDR。</p>
 <h3 id="OSPF的防环"><a href="#OSPF的防环" class="headerlink" title="OSPF的防环"></a>OSPF的防环</h3><p>域内主要用SPF算法</p>
 <p>域间主要用规则</p>
 <h3 id="OSPF的选路"><a href="#OSPF的选路" class="headerlink" title="OSPF的选路"></a>OSPF的选路</h3><p>LSA1 &gt; LSA3（区域0） &gt;  LSA3(非骨干) &gt; LSA5/LSA7(cost type 1 &gt; cost typy 2) </p>
