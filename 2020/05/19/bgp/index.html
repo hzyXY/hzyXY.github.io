@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.3k
+                    5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    18 分
                 </div>
                 
 
@@ -442,7 +442,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="BGP"><a href="#BGP" class="headerlink" title="BGP"></a>BGP</h2><ul>
-<li>BGP协议不产生路由，值时用来传输路由</li>
+<li>BGP协议不产生路由，只用来传输路由</li>
 <li>BGP只会传输自己”正在使用“的路由</li>
 <li>BGP是一个路径矢量路由协议，并且是一个无环路径；AS-PATH在一个AS内部以及AS之间都有不同的防环机制。</li>
 <li>BGP是一个应用程协议，使用的是TCP协议，端口号为179，单播。是唯一使用TCP的路由协议</li>
@@ -497,7 +497,29 @@
 <p>如果过参数协商成功，就会发送keepalive报文，进行隐式确认，收到该报文后，就进入到open-confirm状态。</p>
 <p>如果过在5s之内依然是没有收到Keep-alive报文的话，就进入到active状态。</p>
 <p>不同意open-send报文中的内容，即参数协商不成功，就不会发送给open-confirm回去；一般就是AS号不同，此时邻居表中看到的状态是：不停的idle和active状态之间翻滚。</p>
-<h5 id="Established"><a href="#Established" class="headerlink" title="Established"></a>Established</h5><h4 id="BGP产生路由的方法"><a href="#BGP产生路由的方法" class="headerlink" title="BGP产生路由的方法"></a>BGP产生路由的方法</h4><p>在路由表中都要有对应的路由条目，不能凭空产生。</p>
+<h5 id="Established"><a href="#Established" class="headerlink" title="Established"></a>Established</h5><h4 id="BGP数据库"><a href="#BGP数据库" class="headerlink" title="BGP数据库"></a>BGP数据库</h4><p>IP路由表（IP-RIB）</p>
+<ul>
+<li>全局路由信息库，包括所有IP路由信息</li>
+</ul>
+<p>指导转发s</p>
+<p>BGP路由表（Loc-RIB）</p>
+<ul>
+<li>BGP路由信息库，包括本地BGP Speaker选择的路由信息</li>
+</ul>
+<p>邻居表</p>
+<ul>
+<li>对等体邻居清单列表</li>
+</ul>
+<p>Adj-RIB-In</p>
+<ul>
+<li>对等体宣告给本地Speaker的未处理的路由信息库</li>
+</ul>
+<p>Adj-RIB-Out</p>
+<ul>
+<li>本地Speaker宣告给指定对等体的路由信息库</li>
+</ul>
+<h5 id="BGP路由信息处理"><a href="#BGP路由信息处理" class="headerlink" title="BGP路由信息处理"></a>BGP路由信息处理</h5><p>图</p>
+<h4 id="BGP产生路由的方法"><a href="#BGP产生路由的方法" class="headerlink" title="BGP产生路由的方法"></a>BGP产生路由的方法</h4><p>在路由表中都要有对应的路由条目，不能凭空产生。</p>
 <ol>
 <li><p>network命令宣告</p>
 </li>
@@ -516,24 +538,101 @@
 <li>只发送更新的BGP路由</li>
 </ol>
 <h4 id="BGP路由下一跳的特点"><a href="#BGP路由下一跳的特点" class="headerlink" title="BGP路由下一跳的特点"></a>BGP路由下一跳的特点</h4><ol>
-<li><p>自身起源的BGP路由的下一跳为向邻居发送BGP报文的源地址。</p>
-</li>
-<li><p>通过EBGP邻居得到的路由在传递给IBGP邻居时，下一跳默认不变。</p>
-</li>
-<li><p>通过IBGP邻居得到的路由在传递给EBGP邻居时，下一跳改为自身向EBGP邻居发送BGP报文的源地址。</p>
-</li>
-<li><p><strong>第三方下一跳优化</strong><br>在同一个广播域中存在IBG邻居和EBGP邻居，通过IBGP邻居得到的路由传递给EBGP邻居下一跳默认不变。（并不常见）</p>
-</li>
-<li><p>peer x.x.x.x next-hop-local将EBGP邻居得到的路由，发送给IBGP邻居x.x.x.x时，下一跳修改为向此IBGP邻居发送BGP报文的源地址。此命令在IBGP邻居之间生效。</p>
-</li>
+<li>自身起源的BGP路由的下一跳为向邻居发送BGP报文的源地址。</li>
+<li>通过EBGP邻居得到的路由在传递给IBGP邻居时，下一跳默认不变。</li>
+<li>通过IBGP邻居得到的路由在传递给EBGP邻居时，下一跳改为自身向EBGP邻居发送BGP报文的源地址。</li>
+<li>从EBGP邻居得到的路由，传递给成员EBGP邻居时，默认下一跳不变，可以使用next-hop-local进行修改。<br>从IBGP邻居得到的BGP路由，传递给联盟内的EBGP邻居时，默认下一跳不变，也无法使用next-hop-local修改下一跳属性。<br>从IBGP邻居得到的路由，传递给成员EBGP时，默认下一跳不变，无法使用next-hop-local进行修改。<br>（华为设备默认规则，思科可以在这两种情况下都可以修改）</li>
+<li>从成员EBGP邻居得到的路由，传递给成员IBGP邻居时，默认下一跳不变，无法使用next-hop-local进行修改。</li>
+<li><strong>第三方下一跳优化</strong><br>在同一个广播域中存在IBG邻居和EBGP邻居，通过IBGP邻居得到的路由传递给EBGP邻居下一跳默认不变。（并不常见）<br>如果过加了peer x.x.x.x next-hop-local则会变。（但不适合）</li>
+<li>peer x.x.x.x next-hop-local将EBGP邻居得到的路由，发送给IBGP邻居x.x.x.x时，下一跳修改为向此IBGP邻居发送BGP报文的源地址。此命令在IBGP邻居之间生效。</li>
+<li>通过RR反射的BGP路由，下一跳不会改变，使用next-hop-local也不会。</li>
 </ol>
+<p>什么叫BGP反射的路由？</p>
+<p>打破IBGP水平分割规则被RR传递的路由，称之为反射的路由。</p>
 <h4 id="解决BGP黑洞"><a href="#解决BGP黑洞" class="headerlink" title="解决BGP黑洞"></a>解决BGP黑洞</h4><ol>
-<li>在缺少BGP路由的路由器上，添加这些BGP路由的静态路由</li>
-<li>将BGP路由引入到AS内部的IGP协议中</li>
-<li>AS内部的路由器都运行BGP协议，建立IBGP邻居</li>
+<li>在缺少BGP路由的路由器上，添加这些BGP路由的静态路由<br>缺点：缺乏扩展性，配置工作量极大，不方便维护，不适用于大型网络。</li>
+<li>将BGP路由引入到AS内部的IGP协议中<br>优点：实施简单，配置工作量很少<br>缺点：1.有环路风险。2.IGP协议管理路由的能力有限，IGP路由算法复杂，计算大量路由时，比较消耗设备资源。3.BGP路由出现震荡，对IGP协议的稳定性也会产生附带影响。4.IGP协议控制路由的能力有限，通常只能根据cost进行选路控制，在AS内部无法灵活进行路径的控制。</li>
+<li><strong>AS内部的路由器都运行BGP协议，建立IBGP邻居</strong><br>优点：1.IGP路由和BGP路由分层工作，互不影响，网络的稳定性增强。2.每台路由器都可以根据自身的需要进行灵活的路由选路控制，方便进行路由的管理和控制。<br>缺点：每台路由器都要进行BGP协议的配置，IBGP邻居数量多时，配置工作量比较大。每台路由器需要维护的TCP会话数量比较多，较消耗设备资源。</li>
 <li>AS边缘路由器在IBGP邻居之间建立LSP建立隧道</li>
-<li>GRE隧道</li>
+<li>AS边缘路由器在IBGP邻居之间建立GRE隧道</li>
 </ol>
+<p>优点：利用隧道来解决BGP路由黑洞，AS内部路由器无需维护大量的BGP路由信息，对设备资源要求不高。配置相对简单。<br>缺点：1.隧道建好后，报文只能在隧道路径中进行转发，路径管理和控制能力较弱。2.如果是GRE隧道，由于它是一种点到点的静态隧道，所以扩展性比较差，通常可以由LSP隧道来代替。3.LSP隧道是动态的隧道，建立和维护都可以自动完成，只需要全网运行LDP协议进行隧道的建立 。</p>
+<h3 id="BGP与IBGP交互——BGP同步"><a href="#BGP与IBGP交互——BGP同步" class="headerlink" title="BGP与IBGP交互——BGP同步"></a>BGP与IBGP交互——BGP同步</h3><p>默认关闭</p>
+<p>解决路由黑洞问题</p>
+<p>从EBGP邻居接收到的路由，传给所以有的EBGP和IBGP邻居。</p>
+<p>从IBGP邻居接收到的路由，不会传给其他IBGP邻居。</p>
+<p>从IBGP邻居接收到的路由，传不传给EBGP邻居？<br>开启同步后：路由的下一跳可达才传，还要有这下一跳路由，才传出去。<br><strong>通过BGP得到的路由也能通过IGP得到的话就认为同步</strong> </p>
+<p>同步功能是在AS内部没有全网运行BGP协议时，用于检测是否可能存在BGP路由黑洞的一种机制。</p>
+<p>路由器主观判断，可能别的路由器没有这条路由还是不通。如只配了个静态。</p>
+<h3 id="BGP反射器"><a href="#BGP反射器" class="headerlink" title="BGP反射器"></a>BGP反射器</h3><h5 id="不同角色的对等体"><a href="#不同角色的对等体" class="headerlink" title="不同角色的对等体"></a>不同角色的对等体</h5><p>IBGP对等体可以有三种角色</p>
+<ol>
+<li>路由反射器（Route Reflector）</li>
+<li>客户机（Client）</li>
+<li>非客户机（Non-Client）</li>
+</ol>
+<h5 id="对等体之间的关系"><a href="#对等体之间的关系" class="headerlink" title="对等体之间的关系"></a>对等体之间的关系</h5><p>Client只需维护与RR之间的IBGP会话</p>
+<p>RR与RR之间需要建立IBGP的全互连</p>
+<p>Non-Client与Non-Client之间需要建立IBGP全互连</p>
+<p>RR与Non-Client之间需要建立IBGP全互联</p>
+<h5 id="路由反射宣告原则"><a href="#路由反射宣告原则" class="headerlink" title="路由反射宣告原则"></a>路由反射宣告原则</h5><ol>
+<li>从非客户机得到的路由只会传给客户机，不会传给非客户机</li>
+<li>从客户机得到的路由，传给客户机与非客户机</li>
+</ol>
+<h3 id="BGP路由属性"><a href="#BGP路由属性" class="headerlink" title="BGP路由属性"></a>BGP路由属性</h3><p>BGP路由属性是一套参数，它是对特定的路由进一步的描述</p>
+<ul>
+<li>公认必遵<br>所有BGP路由器可以识别，且必须存在Update消息中<br>如果缺少这种属性，路由信息就会出错</li>
+<li>公认任意<br>所有BGP路由器都可以识别，但不要求必须存在Update消息中<br>即就算缺少这类属性，路由信息也不会出错</li>
+<li>可选过度<br>在AS之间具有可传递性的属性<br>BGP路由器可以不支持此属性，但它仍然会接收这类属性，并传递给其他对等体</li>
+<li>可选非过度<br>如果过BGP路由器不支持此属性，则相应的这类属性会被忽略，且不会传递给其他对等体</li>
+</ul>
+<h4 id="常用于修改BGP路由属性的方法"><a href="#常用于修改BGP路由属性的方法" class="headerlink" title="常用于修改BGP路由属性的方法"></a>常用于修改BGP路由属性的方法</h4><ol>
+<li>network 引用route-policy 修改本地起源BGP路由的BGP属性</li>
+<li>import    引用route-policy 修改本地起源BGP路由的BGP属性</li>
+<li>peer export&amp;import 引用route-policy 修改发送给BGP邻居或者从BGP邻居接收的BGP路由属性。</li>
+<li>aggregate 引用attribute-policy修改手动汇总的BGP路由属性</li>
+</ol>
+<p>export import 方向上引用route-policy 时，要注意不匹配node的路由，默认被拒绝发送或则接收。</p>
+<h4 id="BGP路径选择"><a href="#BGP路径选择" class="headerlink" title="BGP路径选择"></a>BGP路径选择</h4><ol>
+<li>preferred-value（协议首选值)</li>
+</ol>
+<p>默认情况下华为设备通过network，import，aggregate命令引入BGP表中的路由，协议首选值为0，通过其他BGP邻居传来的BGP路由本地默认设置为0.只能是import方向设置协议首选值，适用于IBGP，EBGP，不能在export方向应用。</p>
+<p>只在本地有效，不传出去</p>
+<p>使用场景：控制出口链路</p>
+<ol start="2">
+<li>Local_Pref（本地优先级）</li>
+</ol>
+<ul>
+<li><p>属于公认任意属性</p>
+</li>
+<li><p>如果协议首选值相同则比较Local_Pref</p>
+</li>
+</ul>
+<p>本地优先级，长度为32bit，值越大越好，该属性值可以在本地（本地AS）内传输，不能传输到AS外部，默认值为100</p>
+<p>作用：一般在AS的多个边界出口路由器上进行配置，针对不同的路由设置不同的优先级，以实现让内部IBGP路由器选择一个更加合适的出口路由器。</p>
+<p>去往同一目地地多条路由中设置本地优先级，在IBGP对等体之间进行传递，不会应用于EBGP对等体之间。不会传出自己地AS，但是在成员EBGP邻居中可以传递，不会传递到出联盟之外地AS，取值范围0-4294967295之间，值越大，表明路由越优先。</p>
+<p>IBGP邻居之间在in或者out方向都可以对local_pre属性做修改<br>EBGP邻居之间只能在in方向做local_pre属性地修改<br>成员EBGP邻居之间可以在in或者out方向对local_pre属性做修改</p>
+<p>缺省情况下从所有EBGP邻居收到地路径属性中包含local_prefernce缺省认为也是100，但BGP表中显示为空（适用华为设备）</p>
+<p>缺省情况下本地起源的路由也不包含local_pefernce缺省认为也是100，BGP表显示为空。（适用华为设备）</p>
+<p>如果显示为空则代表传输时没有携带此属性</p>
+<p>华为default local_prefernce的作用</p>
+<ol>
+<li>修改本地起源的bgp路由的默认值，但在bgp表中显示为空，在将此路由传递给ibgp邻居时local_pre的值根据此命令设置。</li>
+<li>默认情况下local_pre属性不传递给ebgp邻居，此命令对从ebgp邻居接收到的路由设置一个local_pre值，本地bgp表中显示为空，并传递给其他的ibgp邻居。（EBGP邻居传递过来的路由有效）</li>
+<li>本地起源路由，从ebgp传递来的路由，手动汇总的路由生效</li>
+<li>route-policy优先于default local_prefernce</li>
+</ol>
+<p>修改本地优先级的方法：</p>
+<p>针对特定的邻居适用route-policy</p>
+<ol>
+<li>没有RR的情况下<br>此时无论是针对EBGP邻居，还是针对IBGP邻居都可以进行更改。针对EBGP邻居时在入向进行修改<br>针对IBGP邻居，成员EBGP邻居，针对出向与入向都可以进行修改</li>
+</ol>
+<ol start="2">
+<li><p>存在RR的情况（经过不完整测试者此规则针对local-pref，orgin，med属性都适用，其他属性没测试）<br>针对EBGP邻居发来的路由，入向策略可以进行修改<br>针对非客户端发送来的路由，RR上做入向策略可以对本地优先级修改<br>针对非客户端发送来的路由，RR上做出向策略发向客户端时，不能修改本地优先级，从非客户端来的路由携带什么属性，到了客户端依然时那些属性，但发向联盟EBGP邻居时可以修改。<br>针对非客户端发送来的路由，RR上做出向策略发向EBGP邻居（联盟EBGP邻居）时，可以修改<br>针对非客户端发送来的路由，在客户端做入向策略，可以修改掉本地优先级。</p>
+<p>针对客户端发送来的路由，在RR上做入向策略，可以进行属性的修改，并且可以传递给客户端和非客户端。<br>针对客户端发送来的路由，在RR上做出向的策略，发送非客户端时，不能修改该本地优先级<br>针对客户端发送来的路由，在RR上做出向的策略，发送EBGP（联盟EBGP）能修改该本地优先级。<br>针对客户端发送来的路由，在RR上出向策略，发向RR的客户端的时间，不能修改本地优先级。</p>
+</li>
+</ol>
+<p>注：RR在IBGP邻居路由器之间，只是用来简单的打破水平分割，当做一个转接点，将IBGP的路由没有任何变化的传递给自己的其他IBGP邻居；只是用来简单的转发，仅此而已。</p>
+<p>总结：RR在入方向可以修改BGP路由属性，出方向对于反射的路由不能修改该BGP属性，非反射路由可以修改。</p>
 
             </div>
             <hr/>
@@ -1008,7 +1107,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">65.1k</span>&nbsp;字
+                class="white-color">67.8k</span>&nbsp;字
             
             
             
