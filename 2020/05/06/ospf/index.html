@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    8.3k
+                    9.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    30 分
+                    33 分
                 </div>
                 
 
@@ -546,7 +546,6 @@
 <li>默认情况下，在P2P，BRO网络中10s发送一次，是周期性发送。NBMA，P2MP网络中30s发送一次，是周期性发送</li>
 <li>作用：用于建立邻居关系和维护邻居关系</li>
 </ul>
-<p><strong>Hello报文</strong></p>
 <p><img src="/2020/05/06/ospf/hello.JPG" alt="hello报文参数"></p>
 <p><strong>字段说明</strong> </p>
 <table>
@@ -583,6 +582,10 @@
 <tr>
 <td>Backup Designated Router</td>
 <td>BDR路由器接口的IP，0.0.0.0表示无</td>
+</tr>
+<tr>
+<td>Active Neighbor</td>
+<td>活跃的邻居列表，使用Route-id标识</td>
 </tr>
 </tbody></table>
 <h5 id="任何情况下建立邻居关系的基本要求"><a href="#任何情况下建立邻居关系的基本要求" class="headerlink" title="任何情况下建立邻居关系的基本要求"></a>任何情况下建立邻居关系的基本要求</h5><ol>
@@ -622,6 +625,48 @@
 </ul>
 <h6 id="MTU对邻居关系的影响"><a href="#MTU对邻居关系的影响" class="headerlink" title="MTU对邻居关系的影响"></a>MTU对邻居关系的影响</h6><p>如果过链路是PPP，在PPP上的链路会自动协商链路的MTU，使得链路两边的MTU值一致，取接口最小MTU值作为链路的MTU，默认DD报文的MTU为0，都小于链路的MTU，因此邻居关系正常建立，如果过使用了ospf mtu-enable，那么在DD报文中MTU值为链路协商后的MTU，因此还是保持一致，邻居也可以正常建立。</p>
 <p>如果过链路是HDLC，由于缺乏MTU的协商机制，所以当两边的MTU不一致，并且用ospf mtu-enable时，如果过DD报文中的MTU值大于接收DD报文的接口本地的MTU值时，邻居关系无法正常建立，另据关系将卡在exstar的状态。</p>
+<h4 id="DD报文"><a href="#DD报文" class="headerlink" title="DD报文"></a>DD报文</h4><p>首个DBD报文不携带任何LSA摘要信息，仅用来协商主从关系</p>
+<p><img src="/2020/05/06/ospf/firstdbd.JPG" alt="首个DBD报文参数"></p>
+<p><img src="/2020/05/06/ospf/secdbd.JPG" alt="第二个DBD报文参数"></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Interface MTU</td>
+<td>接口MTU值</td>
+</tr>
+<tr>
+<td>Options</td>
+<td>与hello包相同</td>
+</tr>
+<tr>
+<td>DB Description</td>
+<td>DD报文描述置位<br><br>(I) Init：如果置位表示是第一个DD报文<br><br>(M) More：如果置位表示后续还有带有LSA摘要信息的DD报文<br><br>(MS) Master：如果置位表示发送该DD报文的是Master</td>
+</tr>
+<tr>
+<td>DD Sequence</td>
+<td>DD报文序列号，用于标识DD报文，只有Master产生序列号，每发送一次加1。从路由器收到主路由的DD报文后会使用回主路由器上一个DD报文的序列号来进行隐式确认。</td>
+</tr>
+</tbody></table>
+<p>注意：</p>
+<p>DD报文中携带的链路状态信息(LSA)头部要解决的问题</p>
+<p>lsa type    link state id    adv router 解决有LSA没有问题</p>
+<p>seq num    check sum    age 解决LSA新旧问题</p>
+<h4 id="LSR报文"><a href="#LSR报文" class="headerlink" title="LSR报文"></a>LSR报文</h4><ul>
+<li>从DBD报文中的LSA摘要信息中可得知自己缺少的LSA从而发送LSA请求报文请求所缺的LSA</li>
+<li>里面包含了所请求报文的三要素（有没有问题）</li>
+</ul>
+<p><img src="/2020/05/06/ospf/LSR.JPG" alt="LSR报文参数"></p>
+<h4 id="LSU报文"><a href="#LSU报文" class="headerlink" title="LSU报文"></a>LSU报文</h4><p>用于回应邻居的LSR报文中所缺少的LSA，LSU报文中包含了完整的LSA信息</p>
+<p><img src="/2020/05/06/ospf/LSU.JPG" alt="LSU报文参数"></p>
+<h4 id="LSAck报文"><a href="#LSAck报文" class="headerlink" title="LSAck报文"></a>LSAck报文</h4><ul>
+<li>用于回应LSU中自己所接收的报文，仅有LSA摘要信息。</li>
+</ul>
+<p><img src="/2020/05/06/ospf/LSAck.JPG" alt="LSAck报文参数"></p>
 <h3 id="OSPF-邻居状态机"><a href="#OSPF-邻居状态机" class="headerlink" title="OSPF 邻居状态机"></a>OSPF 邻居状态机</h3><p><img src="/2020/05/06/ospf/%E9%82%BB%E5%B1%85%E7%8A%B6%E6%80%81%E6%9C%BA.png" alt="邻居状态机"></p>
 <table>
 <thead>
@@ -670,10 +715,14 @@
 <li>所以router id不能冲突的原因：1.在Exstart状态中需要进行主从选举，选举的依据就是router id。2.产生的1类LSA三要素相同导致不能区分。 </li>
 <li>在Exchange状态中，DD报文的隐式确认：从路由器总是用主路由器的seq num向主路由器发送DD报文。主路由器总是用从路由器的DD的seq num+1向从路由器发送DD报文。隐式确认保证DD报文交互的可靠性。</li>
 </ol>
-<p>DD报文中携带的链路状态信息(LSA)头部要解决的问题</p>
-<p>lsa type    link state id    adv router 解决有LSA没有问题</p>
-<p>seq num    check sum    age 解决LSA新旧问题</p>
-<h3 id="OSPF-LSA"><a href="#OSPF-LSA" class="headerlink" title="OSPF LSA"></a>OSPF LSA</h3><h4 id="LSA头部"><a href="#LSA头部" class="headerlink" title="LSA头部"></a>LSA头部</h4><p><img src="/2020/05/06/ospf/LSAheader.JPG" alt="LSA头部参数"></p>
+<h3 id="OSPF-LSA"><a href="#OSPF-LSA" class="headerlink" title="OSPF LSA"></a>OSPF LSA</h3><h4 id="LSA新旧对比"><a href="#LSA新旧对比" class="headerlink" title="LSA新旧对比"></a>LSA新旧对比</h4><ol>
+<li>首先比较序列号（有32位，从0x80000001到0x7fffffff），如果序列号越高，则越新。</li>
+<li>如果序列号相同，则比较校验和，校验和越高越新。</li>
+<li>如果校验和相同，则比较存活时间（LS Age），如果这些LSA中只有一条存活时间为3600s，则认为该LSA是最新的。</li>
+<li>如果所有LSA的存活时间都小于45分钟的话，则选择存活时间最小的放入自己的LSDB中。</li>
+<li>如果上述条件都一样的话，则认为这两条LSA是相同的，将本地的LSA保留。</li>
+</ol>
+<h4 id="LSA头部"><a href="#LSA头部" class="headerlink" title="LSA头部"></a>LSA头部</h4><p><img src="/2020/05/06/ospf/LSAheader.JPG" alt="LSA头部参数"></p>
 <h4 id="LSA类型"><a href="#LSA类型" class="headerlink" title="LSA类型"></a>LSA类型</h4><table>
 <thead>
 <tr>
@@ -795,8 +844,16 @@
 </ol>
 <p>星型的NBMA网络。使用P2MP是最合适组网。</p>
 <h4 id="广播类型"><a href="#广播类型" class="headerlink" title="广播类型"></a>广播类型</h4><p>当链路层协议是Ethernet，FDDI时，缺省情况下，OSPF认为网络类型是Broadcast。在该类型的网络中，通常以组播形式发送Hello报文，LSU报文和LSACK报文。其中，224.0.0.5的组播地址为OSPF路由器的预留IP组播地址；224.0.0.6的组播地址为OSPF DR的预留IP组播地址。以单播形式发送DD报文和LSR报文。邻居可以自动建立，需要选择DR，BDR。</p>
-<h3 id="OSPF的防环"><a href="#OSPF的防环" class="headerlink" title="OSPF的防环"></a>OSPF的防环</h3><p>域内主要用SPF算法</p>
-<p>域间主要用规则</p>
+<h3 id="OSPF的防环"><a href="#OSPF的防环" class="headerlink" title="OSPF的防环"></a>OSPF的防环</h3><h4 id="区域内路由防环"><a href="#区域内路由防环" class="headerlink" title="区域内路由防环"></a>区域内路由防环</h4><p>域内主要用SPF算法</p>
+<p>一类LSA和二类LSA通过SPF算法进行防环</p>
+<h4 id="区域间路由防环"><a href="#区域间路由防环" class="headerlink" title="区域间路由防环"></a>区域间路由防环</h4><p>由于OSPF区域间路由计算本质上还是一种DV算法，无法通过SPF算法进行区域间的放环，所以其核心思想是，保证骨干区域连续，非骨干区域和骨干区域直接相连，非骨干区域之间的流量只能通过骨干区域传递，从而避免有过多的路由计算从而导致环路，具体规则有以下几种：</p>
+<ul>
+<li>不论cost值大小，LSA1和LSA2计算的路由优于LSA3计算的路由。</li>
+<li>优先使用骨干区域的LSA3计算路由，优于非骨干区域的LSA3。</li>
+<li>非骨干区域的LSA3不会再次传回骨干区域。</li>
+<li>LSA3只能通过ABR进行泛洪，非ABR不会在区域间泛洪LSA3。</li>
+</ul>
+<h4 id="区域外路由防环"><a href="#区域外路由防环" class="headerlink" title="区域外路由防环"></a>区域外路由防环</h4><p>（1）LSA5在整个AS内部泛洪的时候link id，adv router，type都不会发生改变，特殊区域除外。<br>（2）与ASBR在同一区域的路由器可以直接通过SPF算法计算出一条无环的去往ASBR的路径。<br>（3）其它区域路由器是通过LSA4计算自身到达ASBR的路径和开销，而LSA4和LSA3的放环机制类似，其本质是描述ABR到达ASBR的开销，对于其他区域计算到达外部路由开销实际上是自身到达本区域ABR开销加上ABR到达ASBR开销加上ASBR到达外部路由开销，由于自身到达ABR的路径可以保证无环，而LSA4又和LSA3具有类似的放环机制，所以可以保证ABR到达ASBR无环，进而可以确定其他区域路由器到达外部路由是无环的。</p>
 <h3 id="OSPF的选路"><a href="#OSPF的选路" class="headerlink" title="OSPF的选路"></a>OSPF的选路</h3><p>LSA1 &gt; LSA3（区域0） &gt;  LSA3(非骨干) &gt; LSA5/LSA7(cost type 1 &gt; cost typy 2) </p>
 <h4 id="LSA5和LSA7选路机制"><a href="#LSA5和LSA7选路机制" class="headerlink" title="LSA5和LSA7选路机制"></a>LSA5和LSA7选路机制</h4><p>转发度量值分为两种：<br>1.当转发地址为0.0.0.0，则转发度量值为到ASBR的cost<br>2.当转发地址不为0.0.0.0，则转发度量值为到转发地址的cost值</p>
 <p>转发度量值：到ASBR的开销<br>种子度量值：ASBR引入外部路由的开销</p>
@@ -1381,7 +1438,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">67.9k</span>&nbsp;字
+                class="white-color">70.8k</span>&nbsp;字
             
             
             

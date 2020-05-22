@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5k
+                    7.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    18 分
+                    25 分
                 </div>
                 
 
@@ -521,14 +521,10 @@
 <h5 id="BGP路由信息处理"><a href="#BGP路由信息处理" class="headerlink" title="BGP路由信息处理"></a>BGP路由信息处理</h5><p>图</p>
 <h4 id="BGP产生路由的方法"><a href="#BGP产生路由的方法" class="headerlink" title="BGP产生路由的方法"></a>BGP产生路由的方法</h4><p>在路由表中都要有对应的路由条目，不能凭空产生。</p>
 <ol>
-<li><p>network命令宣告</p>
-</li>
-<li><p>从其他协议中import</p>
-</li>
-<li><p>aggregate 手动汇总</p>
-</li>
-<li><p>自动汇总</p>
-</li>
+<li>network命令宣告</li>
+<li>从其他协议中import</li>
+<li>aggregate 手动汇总</li>
+<li>自动汇总</li>
 </ol>
 <h4 id="BGP对等体交互路由原则"><a href="#BGP对等体交互路由原则" class="headerlink" title="BGP对等体交互路由原则"></a>BGP对等体交互路由原则</h4><p>只将最优路由发布给对等体 最优：&gt;</p>
 <ol>
@@ -557,6 +553,9 @@
 <li>AS边缘路由器在IBGP邻居之间建立GRE隧道</li>
 </ol>
 <p>优点：利用隧道来解决BGP路由黑洞，AS内部路由器无需维护大量的BGP路由信息，对设备资源要求不高。配置相对简单。<br>缺点：1.隧道建好后，报文只能在隧道路径中进行转发，路径管理和控制能力较弱。2.如果是GRE隧道，由于它是一种点到点的静态隧道，所以扩展性比较差，通常可以由LSP隧道来代替。3.LSP隧道是动态的隧道，建立和维护都可以自动完成，只需要全网运行LDP协议进行隧道的建立 。</p>
+<h3 id="BGP的防环"><a href="#BGP的防环" class="headerlink" title="BGP的防环"></a>BGP的防环</h3><p>IBGP用水平分割机制</p>
+<p>EBGP用AS_Path</p>
+<p> 联盟防环机制</p>
 <h3 id="BGP与IBGP交互——BGP同步"><a href="#BGP与IBGP交互——BGP同步" class="headerlink" title="BGP与IBGP交互——BGP同步"></a>BGP与IBGP交互——BGP同步</h3><p>默认关闭</p>
 <p>解决路由黑洞问题</p>
 <p>从EBGP邻居接收到的路由，传给所以有的EBGP和IBGP邻居。</p>
@@ -592,17 +591,12 @@
 <li>aggregate 引用attribute-policy修改手动汇总的BGP路由属性</li>
 </ol>
 <p>export import 方向上引用route-policy 时，要注意不匹配node的路由，默认被拒绝发送或则接收。</p>
-<h4 id="BGP路径选择"><a href="#BGP路径选择" class="headerlink" title="BGP路径选择"></a>BGP路径选择</h4><ol>
-<li>preferred-value（协议首选值)</li>
-</ol>
-<p>默认情况下华为设备通过network，import，aggregate命令引入BGP表中的路由，协议首选值为0，通过其他BGP邻居传来的BGP路由本地默认设置为0.只能是import方向设置协议首选值，适用于IBGP，EBGP，不能在export方向应用。</p>
+<h4 id="BGP选择路由的策略"><a href="#BGP选择路由的策略" class="headerlink" title="BGP选择路由的策略"></a>BGP选择路由的策略</h4><p><strong>当到达同一目的存在多条路时，BGP依次对比下列属性来选择路由</strong></p>
+<h5 id="一、preferred-value（协议首选值"><a href="#一、preferred-value（协议首选值" class="headerlink" title="一、preferred-value（协议首选值)"></a>一、preferred-value（协议首选值)</h5><p>默认情况下华为设备通过network，import，aggregate命令引入BGP表中的路由，协议首选值为0，通过其他BGP邻居传来的BGP路由本地默认设置为0.只能是import方向设置协议首选值，适用于IBGP，EBGP，不能在export方向应用。</p>
 <p>只在本地有效，不传出去</p>
 <p>使用场景：控制出口链路</p>
-<ol start="2">
-<li>Local_Pref（本地优先级）</li>
-</ol>
-<ul>
-<li><p>属于公认任意属性</p>
+<h5 id="二、Local-Pref（本地优先级）"><a href="#二、Local-Pref（本地优先级）" class="headerlink" title="二、Local_Pref（本地优先级）"></a>二、Local_Pref（本地优先级）</h5><ul>
+<li><p>公认任意属性</p>
 </li>
 <li><p>如果协议首选值相同则比较Local_Pref</p>
 </li>
@@ -633,7 +627,61 @@
 </ol>
 <p>注：RR在IBGP邻居路由器之间，只是用来简单的打破水平分割，当做一个转接点，将IBGP的路由没有任何变化的传递给自己的其他IBGP邻居；只是用来简单的转发，仅此而已。</p>
 <p>总结：RR在入方向可以修改BGP路由属性，出方向对于反射的路由不能修改该BGP属性，非反射路由可以修改。</p>
+<h5 id="三、路由种类"><a href="#三、路由种类" class="headerlink" title="三、路由种类"></a>三、路由种类</h5><p>依次优选手动聚合路由、自动聚合路由、network命令引入的路由、import-route命令引入的路由、从对等体学习的路由。</p>
+<p><strong>自动汇总仅对import-route的路由生效</strong></p>
+<h5 id="四、AS-Path"><a href="#四、AS-Path" class="headerlink" title="四、AS_Path"></a>四、AS_Path</h5><p>优选AS路径（AS_Path）最短的路由</p>
+<ul>
+<li>公认必遵属性</li>
+<li>不仅用于选路还用于防环</li>
+<li>IBGP之间不检查AS_Path、EBGP之间才检查</li>
+</ul>
+<p>AS_Path：指的时一个BGP在传输过程中所经过的AS的个数，个数越小越好。</p>
+<p>注意：只有当一条BGP路由离开一个AS 的时候，才会将自身的AS号添加在这条路由的AS_Path属性中。</p>
+<p>作用：用于AS之间的防环！在接收一个EBGP路由（包括成员EBGP）时，检查其AS_Path属性，如果过在其中发现自己的AS号，说明之前曾经穿越过自己的AS，此时就不会接收该路由，达到防环的目的，IBGP邻居之间不做AS_Path属性的防环检测。</p>
+<ol>
+<li>BGP路由每经过一个AS，就会将这个AS号加入自己的AS_Path中</li>
+<li>当一个路由器收到两条相同目的地的路由，它将选择AS路径最短的路由。</li>
+<li>这个属性只能在EBGP邻居之间传路由时进行改动，对IBGP邻居传来的路由该不了。Cisco中）</li>
+</ol>
+<p>华为设备在联盟EBGP，成员EBGP邻居，IBGP之间in和out都可以修改as_Path。</p>
+<p>华为设备：</p>
+<p>BGP路由器如果从联盟EBGP邻居接收到BGP路由时，会检测此路由的AS_Path中是否存在自身联盟AS号，如果存在拒绝此路由，不检测此AS_PATH是否存在自身的成员AS号，如果存在依然接收此路由。</p>
+<p><font color="skyblue">成员EBGP邻居之间会对接收的路由AS_Path做检查，如果成员内AS_Path（小括号中的AS_Path）存在自身成员AS号，不接收此路由，如果小括号中存在自身联盟AS号，可以接收。</font></p>
+<p>成员EBGP邻居之间如果AS_Path中（除开小括号中AS_Path）存在自身成员AS号，则不接收此路由，可以自身联盟AS号。（防盗用公AS号）</p>
+<p>可以有联盟AS不能由成员AS</p>
 
+
+<p>成员ebgp和成员ibgp之间只能对小括的AS_Path属性做修改.<br>apply as-path none overwirte 替换原有AS_Path<br>apply as-path add 在小括号中添加AS_Path<br>apply as-path  overwirte 替换原有AS_Path，在小括号中覆盖AS-path</p>
+<p>IBGP邻居之间（包括成员IBGP邻居）不做AS_Path属性的防环检测</p>
+<p>对于EBGP邻居出方向上不可以清空，对于IBGP邻居出方向可清空</p>
+<p>local-rib x.x.x.x as_path 100</p>
+<p>route-policy    none overwirte</p>
+<p>adj-rib-out x.x.x.x as_path 200 <s>100</s></p>
+<p>additive：原有AS_Path基础之上添加AS_Path属性</p>
+<p>overwrite：替代掉原有AS_Path属性</p>
+<p>对收到的路由就开始做AS_Path的检测了</p>
+<p>peer allow-as-loop用于接收EBGP（包括成员EBGP）邻居传递来的路由允许AS_Path中出现自身联盟AS号（或自身成员AS号）的次数，默认1次。只要整个AS_Path（小括号内和小括号外的总和）中出现的次数小于或者等于配置的允许出现的值，就会接收次路由。</p>
+<p>联盟内小括号里面的AS号，在选路时，不计算到as-path长度里面。算0个</p>
+<p>as-path-limit不接收AS_Path长度大于此命令定义的值的BGP路由，同时不能发送（adj-out-rib表）AS_Path长度大于此值的BGP路由，小括号中的AS_Path长度计算在内，在import方向如果用策略增加了AS_Path长度超过limit设定的值，还是可以接收。</p>
+<h6 id="通过AS-Path列表过滤路由"><a href="#通过AS-Path列表过滤路由" class="headerlink" title="通过AS_Path列表过滤路由"></a>通过AS_Path列表过滤路由</h6><p>ip as-path-filter</p>
+<p>正则表达中的元字符：</p>
+<p>正则表达式由直接量和元字符组成，直接量就是文本字符，元字符式充当运算符的正则表达式字符。</p>
+<p><strong>^$</strong><br>表示匹配的字符串为空，即AS_Path为空的路由，表示只匹配本AS内部起源路由</p>
+<p><strong>.*</strong><br>表示匹配任意字符串，即AS_Path为任意，表示匹配所有路由</p>
+<p><strong>^100</strong><br>表示匹配字符串开始为100，即AS_Path最左边AS前3位（最后一个AS）为100、1001、1002等，表示匹配AS100、1001、1002等邻居发送的路由。</p>
+<p><strong>^100_</strong><br>表示匹配字符串开始为100后面为符号，即AS_Path最左边AS为100，表示匹配AS100邻居发送的路由，比较前一个表示，“_”的好处就体现出来了，它可以和用来帮助我们限制匹配单独的一个AS。</p>
+<p><strong>_100$</strong>    <strong>100$</strong><br>表示匹配字符串最后为100，即AS_Path最右边AS（起始AS）为100，表示匹配AS100始发的路由</p>
+<p><strong>_100_</strong><br>表示字符串中间有100，即AS_Path中有100，表示匹配经过AS100的路由</p>
+<p><strong>中括号：匹配字符集合</strong></p>
+<p>中括号式你能指定单字符的范围。例如：<br>ip as-path access-list 22 permit ^85[012349]$<br>上述过滤器匹配包含单一AS号850、851、852、853、854，859的AS_Path</p>
+<p>如果过字符的范围连续，你可以只指定序列中开始和结束的字符：<br>ip as-path access-list 23 permit ^85[0-5]$<br>上述过滤器匹配包含单一AS号850、851、852、853、854、855的AS_Path</p>
+<p><strong>否定：匹配除字符集和外其他任何字符</strong><br>当在括号中使用加字符时,将否定括弧中指定的范围。结果是正则表达式将匹配范围外的任何内容。例如:<br>ip as-path access-list 24 permit ^85[^0-5]$<br>该过滤器除了多一个加字符以外与上一个过滤器类似,指定了“不是0-5” 。该正则表达式将匹配856-859范围内的单个AS号。</p>
+<p><strong>通配符:匹配任何单一字符</strong><br>点(.)匹配任何单一字符。 单一字符可能是一个空的。 考虑下面的过滤器：<br>ip as-path access-list 24 permit ^85.<br>该过滤器匹配一个有AS号850-859开始的AS_ PATH。由于”.” 可以匹配一个空格 , AS号85也能匹配成功。</p>
+<p><strong>求或:匹配字符串集合中的一一个(851|158)</strong><br>(|)用作表示一个”或”操作。即(|)任何一边的字都可以匹配。例如:<br>ip as-path access-list 25 permit ^(851|852)$<br>该过滤器匹配单个AS号, 851或852的AS_ PATH。你可以扩展“或”功能来做多于两个可能性的选择:<br>ip as-path access-list 26 permit ^(851|852|6341|53)$</p>
+<p><strong>选择字符:匹配一个可能存在也可能不存在的字符</strong><br>问号(?)匹配字的0个或-一个实例。 例如<br>ip as-path access-list 27 permit ^(850)?$<br>该过滤器匹配一个单一-AS号850的AS_ PATH或者匹配一一个空的列表。注意这里的园括号,表示元字符特殊字符”?”应用在这个AS号上。如果表达式使用850? , 元字符特殊字符只应用在最后一个字符上。该表达式匹配85或者850。</p>
+<p><strong>重复：匹配许多字符的重复</strong><br>你可以使用两个元字符特殊字符来匹配重复的词:星号(* )匹配0次或多次重复，加号( + )匹配1次或多次重复。例如:<br>ip as-path access-list 28 permit ^(85)*$<br>该过滤器AS_ PATH匹配空的AS列表或包含1个或多个的AS号850的列表。即AS路径可以是(85)，( 8585)等。<br>ip as-path access-list 29 permit ^(850)+$</p>
+<p><strong>分界线：描述多个字</strong><br>分界线(_ )用定的一串字。例如假设你想匹配指定的AS_ PATH ( 5610, 148 , 284, 13)。过滤器可以如下所示：<br>ip as-path access-list 30 permit ^5610_ 148 <em>284</em> 13$<br>下划线匹配行的开始、行的结束、逗号或空格。注意下面过滤器与上述过滤器的区别：<br>ip as-path access-list 30 permit. 5610 148_ 284. 13_<br>由于第一个过滤器指定了行的开始与结束,只有AS_ PATH (5610,148,284,13)才能匹配。第二个过滤器中，只要求指定的序列包含在AS_ PATH中,并不要求是唯一-的属性。 所以<br>AS_ PATH(5610, 148, 284, 13)，(23, 15, 5610, 148, 284, 13)和(5610, 148 , 284, 13, 3005 )都能匹配。</p>
+<h5 id="五、"><a href="#五、" class="headerlink" title="五、"></a>五、</h5>
             </div>
             <hr/>
 
@@ -1107,7 +1155,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">67.9k</span>&nbsp;字
+                class="white-color">70.8k</span>&nbsp;字
             
             
             
