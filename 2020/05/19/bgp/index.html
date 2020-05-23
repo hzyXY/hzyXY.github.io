@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.1k
+                    9.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    25 分
+                    35 分
                 </div>
                 
 
@@ -443,7 +443,7 @@
             <div id="articleContent">
                 <h2 id="BGP"><a href="#BGP" class="headerlink" title="BGP"></a>BGP</h2><ul>
 <li>BGP协议不产生路由，只用来传输路由</li>
-<li>BGP只会传输自己”正在使用“的路由</li>
+<li>BGP始终只会传输自己”正在使用“（最优）的路由</li>
 <li>BGP是一个路径矢量路由协议，并且是一个无环路径；AS-PATH在一个AS内部以及AS之间都有不同的防环机制。</li>
 <li>BGP是一个应用程协议，使用的是TCP协议，端口号为179，单播。是唯一使用TCP的路由协议</li>
 <li>可以不停的可靠的发送大量的路由报文，利用的就是TCP的可靠以及滑动窗口。说明为什么BGP适合于庞大的网络，或者是internet网络，其他的协议即使可靠的但是他们都是通过一堆的ACK来做到可靠机制的。</li>
@@ -582,7 +582,7 @@
 <li>公认必遵<br>所有BGP路由器可以识别，且必须存在Update消息中<br>如果缺少这种属性，路由信息就会出错</li>
 <li>公认任意<br>所有BGP路由器都可以识别，但不要求必须存在Update消息中<br>即就算缺少这类属性，路由信息也不会出错</li>
 <li>可选过度<br>在AS之间具有可传递性的属性<br>BGP路由器可以不支持此属性，但它仍然会接收这类属性，并传递给其他对等体</li>
-<li>可选非过度<br>如果过BGP路由器不支持此属性，则相应的这类属性会被忽略，且不会传递给其他对等体</li>
+<li>可选非过度<br>如果BGP路由器不支持此属性，则相应的这类属性会被忽略，且不会传递给其他对等体</li>
 </ul>
 <h4 id="常用于修改BGP路由属性的方法"><a href="#常用于修改BGP路由属性的方法" class="headerlink" title="常用于修改BGP路由属性的方法"></a>常用于修改BGP路由属性的方法</h4><ol>
 <li>network 引用route-policy 修改本地起源BGP路由的BGP属性</li>
@@ -681,7 +681,134 @@
 <p><strong>选择字符:匹配一个可能存在也可能不存在的字符</strong><br>问号(?)匹配字的0个或-一个实例。 例如<br>ip as-path access-list 27 permit ^(850)?$<br>该过滤器匹配一个单一-AS号850的AS_ PATH或者匹配一一个空的列表。注意这里的园括号,表示元字符特殊字符”?”应用在这个AS号上。如果表达式使用850? , 元字符特殊字符只应用在最后一个字符上。该表达式匹配85或者850。</p>
 <p><strong>重复：匹配许多字符的重复</strong><br>你可以使用两个元字符特殊字符来匹配重复的词:星号(* )匹配0次或多次重复，加号( + )匹配1次或多次重复。例如:<br>ip as-path access-list 28 permit ^(85)*$<br>该过滤器AS_ PATH匹配空的AS列表或包含1个或多个的AS号850的列表。即AS路径可以是(85)，( 8585)等。<br>ip as-path access-list 29 permit ^(850)+$</p>
 <p><strong>分界线：描述多个字</strong><br>分界线(_ )用定的一串字。例如假设你想匹配指定的AS_ PATH ( 5610, 148 , 284, 13)。过滤器可以如下所示：<br>ip as-path access-list 30 permit ^5610_ 148 <em>284</em> 13$<br>下划线匹配行的开始、行的结束、逗号或空格。注意下面过滤器与上述过滤器的区别：<br>ip as-path access-list 30 permit. 5610 148_ 284. 13_<br>由于第一个过滤器指定了行的开始与结束,只有AS_ PATH (5610,148,284,13)才能匹配。第二个过滤器中，只要求指定的序列包含在AS_ PATH中,并不要求是唯一-的属性。 所以<br>AS_ PATH(5610, 148, 284, 13)，(23, 15, 5610, 148, 284, 13)和(5610, 148 , 284, 13, 3005 )都能匹配。</p>
-<h5 id="五、"><a href="#五、" class="headerlink" title="五、"></a>五、</h5>
+<p>华为route-policy中if-math语句调用ACL，ip-prefix,as-path-filter等用于匹配路由的工具时，acl，ip-prefix，as-path-filter中deny语句用于将这些匹配路由排除在此node之外，继续匹配router-policy下一条node语句。</p>
+<p>当BGP路由策略产生冲突时，拒绝优先</p>
+<h5 id="五、Origin（起源属性）"><a href="#五、Origin（起源属性）" class="headerlink" title="五、Origin（起源属性）"></a>五、Origin（起源属性）</h5><ul>
+<li>公认必遵属性</li>
+<li>任何邻居都可以修改</li>
+</ul>
+<p>origin type | code指的是一条路由在起源路由器上是如何引入BGP进程中的。</p>
+<blockquote>
+<p>有3种类型</p>
+<p>IGP &gt; EGP &gt; ?</p>
+<p>IGP：network | aggregate-address i</p>
+<p>EGP：e</p>
+<p>？：redistribute ？</p>
+</blockquote>
+<h5 id="六、MED（多出口鉴别器）metric"><a href="#六、MED（多出口鉴别器）metric" class="headerlink" title="六、MED（多出口鉴别器）metric"></a>六、MED（多出口鉴别器）metric</h5><ul>
+<li>可选非过度</li>
+<li>med属性在IBGP和EBGP邻居（包括成员EBGP）in和out方向都可以修改</li>
+</ul>
+<p>MED属性用于影响邻居AS种的路由决策，MED称为外部度量值，32bit长度。</p>
+<p>作用：用于告诉其他的AS，如何选择一个进入自己的AS的入口，相当于metric，如果过med值没有，则是0。</p>
+<p>注：可以发给自己的EBGP邻居，但是EBGP邻居路由器收到以后，就不会将该MED传输到其他的任何AS去了。在同一个as域内的IBGP可以传，在边缘router，向EBGP宣告时去掉metric值</p>
+<p>权值，local_pre和AS_Path以及origin都优先于MED，当这些变量均相同时，将选择MED值最小的路由。</p>
+<ol>
+<li>bgp的med值，如果过是直连路由比如直接network和redis conn（不加metric参数）等等，默认是0（华为的也一样）。</li>
+<li>如果是network和重分发 IGP路由到BGP中，med为IGP路由的Metrie（华为的也一样）。</li>
+<li>default med 对所有import路由以及汇总路由生效。</li>
+</ol>
+<p>MED的通告规则：</p>
+<ol>
+<li><p>默认从ebgp邻居学到的路由再通告给ebgp邻居时，med会被清除，可以传给IBGP邻居以及成员EBGP邻居，除非手动指定。</p>
+<p>默认从ibgp邻居学习到路由再通告给ebgp邻居时，med会被清除，除非手动指定。可以传给成员ebgp邻居。</p>
+<p>默认本地引入的直连路由，静态路由，igp路由如果有med值，那么可以直接传递给ebgp邻居和ibgp邻居，成员ebgp邻居。</p>
+<p>如果从ebgp邻居学习得到的路由不带med属性，则传给ibgp邻居时，将med属性设置0（华为设备如果过从ebgp邻居学到的路由不带med属性，在传给ibgp邻居时也不携带med属性）</p>
+<p>如果路由是联盟内部的路由，med属性在整个联盟内部都可以传递。</p>
+<p>如果从成员ibgp传递来的路由由med属性，可以传递给成员ebgp邻居，但不会传给联盟ebgp邻居。</p>
+<p>在ebgp和ibgp邻居之间in和out方向都可以对med属性做修改</p>
+</li>
+<li><p>ebgp邻居在发布从ibgp邻居学来的路由时，会清除med的值。如果想强制通告，可以在宣告的路由上使用“set metric-type internal”<br>华为使用“apple cost-type internal”也可以实现。</p>
+<p>此cost值为igp路由的cost</p>
+<p>这时BGP将会在IGP表中查找去往这条路由下一跳的metric值，并将该值作为med值传递给ebgp邻居，如果igp表中没有此路由下一跳的路由，则设置为0，可以手动指定。</p>
+</li>
+<li><p>如果过使用network或redistribute命令将来自IGP的路由通告到BGP中，那么BGP的MED是从IGP的metric导出的。</p>
+</li>
+<li><p>如果过是aggregate-address命令注入路由，BGP的MED不被设置，当0。</p>
+<p>默认情况下，只有当去往同一目的地的多条路由均源自同一AS时，才比较这些路由的MED值，也就是AS_Path最左边的AS号要一样。对于AS_Path中最左边不一样的路由，不对med做比较。</p>
+</li>
+</ol>
+<ol start="5">
+<li></li>
+</ol>
+<ol start="6">
+<li><p>华为MED高级选路：</p>
+<ul>
+<li>默认情况下，如果过AS_Path最桌左边的AS号相同时，会进行MED值的比较，EBGP和成员EBGP都是默认开启此选路规则</li>
+<li>使用compare-different-as-med命令后，将不做AS号检测，都进行MED值比较，此命令针对EBGP和成员EBGP邻居有效，只要前5条规则相同，始终比较这些路由的MED属性。</li>
+<li>使用bestroute med-confederation命令后，将不做联盟内AS号的检测，都进行MED值比较，注意这些BGP路由的AS_Path中不能包括任何外部AS号，用于在同一个联盟内不同成员AS起源BGP路由进行MED属性的比较。</li>
+<li>bestroute med-none-as-maximum此命令将丢失med值的BGP路由的med值设置为4294967295，但在BGP表中不显示。并且是本地生效，不传MED给IBGP邻居。</li>
+<li>deterministic-med命令先将最左边AS号相同的BGP路由进行分组，再进行med值比较，然后选择出优胜路由和其他组的优胜路由再次进行BGP路径选择。</li>
+</ul>
+</li>
+<li><p>EBGP&gt;IBGP；EBGP&gt;成员EBGP（注：对于联盟内部的路由，并没有成员内部于成员外部路由之分，都看作是internal路由）</p>
+</li>
+<li><p>优先选择到BGP下一跳具有最低IGP度量值的路径。</p>
+</li>
+<li><p>是否开启负载均衡【两个路由必须是来自相同的邻居AS】（EBGP和成员EBGP），不管是IBGP还是EBGP收到的路由要实现负载均衡必须as-path完全相同，包含的as-set的和联邦子AS的也必须完全相同，也就是（）和P{}里面也要完全相同，如果有联邦EBGP对等体和联邦IBGP对等体收到的路由它们两个之间不可以负载均衡。负载均衡show ip bgp x.x.x.x明细才可以看到，有multipath标记的都会装入路由表。<br>maximum load-balancing：开启此命令后满足下面条件路由负载分担：</p>
+<ol>
+<li>原始下一跳不相同</li>
+<li>首选值相同</li>
+<li>本地优先级（Local_Pref）相同</li>
+<li>都是聚合路由，或者都不是聚合路由</li>
+<li>Origin类型（IGP、EGP、Incomplete）相同</li>
+<li>MED值相同</li>
+<li>都是EBGP路由或都是IBGP路由；</li>
+<li>AS内部IGPMetric相同</li>
+<li>AS_Path属性完全相同</li>
+</ol>
+<p>注：无论负载均衡是否开启，在BGP表中，永远只存在一个最优的，但是在装进路由表的时候，会进行负载均衡，即同时装进多条等价路由</p>
+<p>华为设备负载分担：默认强制要求AS_Path属性完全一致，即长度和所经过的AS号要完全相同。与是否启用或者禁用bestroute as-path-ignore命令无关。</p>
+<p>maximum locad-balancing 2<br>load-balancing as-path-ignore<br>此两条命令配合使用时，AS_Path会作为选路的判断条件，可以实现不要求AS_Path路径一致，但要求长度一致。成员EBGP和成员IBGP都当IBGP路由看待，也可以实现负载均衡。</p>
+<p>maximum locad-balancing 2<br>bestroute as-path-ignore<br>此两条命令配置使用时，AS-Path不会作为选路规则，但在做负载分担时，依然会对AS-Path做检查，要求路径一致，长度一致。</p>
+<p>maximum locad-balancing 2 此命令单独使用，AS-Path会作为选路规则，但在做负载分担时，也会对AS-Path做检查，要求路径一致，长度一致。</p>
+<p><strong>初始下一跳相同的情况下，如果是到达下一跳路由本来也是负载分担的话，BGP也会负载分担</strong></p>
+</li>
+<li><p>默认情况下。位于BGP表中的最下面那一条，是视为“最老的”也就是最稳定的！因为在下面的是首先学习到的路由，在BGP表中存在时间最长，故最稳定。只针对EBGP路由而言，（不包括联盟EBGP）可以实不同AS的EBGP邻居，比较EBGP邻居建立时间越长的优先。<br>如果过发生以下情况，则跳过该步骤：</p>
+<ul>
+<li>开启bgp bestpath compare-router id；</li>
+<li>多条路径的router-id都是相同的，即说明它们都是同一个路由器学习过来的，此时再去比较他们的新旧程度就无意义了。因为本来就是来自同一个邻居，他们的稳定程度相同！</li>
+<li>当前没有最优的路由，这种情况发生在“正在通告的最佳路径的邻居失效了”</li>
+</ul>
+</li>
+<li><p>比较router-id，如果过有RR存在的话，比较originator-id<br>优先选择router-id小的路由发送过来的BGP路由，如果此时，网络中存在RR的话，那就不比较router-id，比较originator-id<br>如果一条路由有orginator-id，一条路由没有，就用orginator-id和router-id做比较，越小越优先。</p>
+</li>
+<li><p>如果有RR存在的话，比较cluster-list长度<br>如果过多条路径始发originator-id相同，那么BGP就选择cluster-list长度最短的路径，通常出现在BGP的RR环境下。<br>（默认华为设备先比较cluster-list再比较router-id，如果路由没有cluster-list属性，则认为cluster-list长度为0，进行比较）</p>
+</li>
+<li><p>比较neighbor-address<br>如果上述参数完全相同，则比较neighbor-address，选择小的neighbor-address发送来的路由。</p>
+</li>
+</ol>
+<h6 id="简易版路由选择策略"><a href="#简易版路由选择策略" class="headerlink" title="简易版路由选择策略"></a>简易版路由选择策略</h6><p>当到达同一目的地存在多条路由时，BGP依次对比下列属性来选择路由：</p>
+<ol>
+<li><p>优选协议首选值（PrefVal）最高的路由。</p>
+<p>协议首选值（PrefVal）是华为设备的特有属性，该属性仅在本地有效。</p>
+</li>
+<li><p>优选本地优先级（Local_Pref）最高的路由。</p>
+<p>如果路由没有本地优先级，BGP选路时将该路由按缺省的本地优先级100来处理。</p>
+</li>
+<li><p>依次优选手动聚合路由、自动聚合路由、<strong>network</strong>命令引入的路由、<strong>import-route</strong>命令引入的路由、从对等体学习的路由。</p>
+</li>
+<li><p>优选AS路径（AS_Path）最短的路由。</p>
+</li>
+<li><p>依次优选Origin类型为IGP、EGP、Incomplete的路由。</p>
+</li>
+<li><p>对于来自同一AS的路由，优选MED值最低的路由。</p>
+</li>
+<li><p>依次优选EBGP路由、IBGP路由、LocalCross路由、RemoteCross路由。</p>
+<p>PE上某个VPN实例的VPNv4路由的ERT匹配其他VPN实例的IRT后复制到该VPN实例，称为LocalCross；从远端PE学习到的VPNv4路由的ERT匹配某个VPN实例的IRT后复制到该VPN实例，称为RemoteCross。</p>
+</li>
+<li><p>优选到BGP下一跳IGP度量值（metric）最小的路由。</p>
+<p><strong>说明：在IGP中，对到达同一目的地址的不同路由，IGP根据本身的路由算法计算路由的度量值。</strong></p>
+</li>
+<li><p>优选Cluster_List最短的路由。</p>
+</li>
+<li><p>优选Router ID最小的设备发布的路由。</p>
+<p>如果路由携带Originator_ID属性，选路过程中将比较Originator_ID的大小（不再比较Router ID），并优选Originator_ID最小的路由。</p>
+</li>
+<li><p>优选从具有最小IP Address的对等体学来的路由。</p>
+</li>
+</ol>
+
             </div>
             <hr/>
 
@@ -1155,7 +1282,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">70.9k</span>&nbsp;字
+                class="white-color">73.5k</span>&nbsp;字
             
             
             
