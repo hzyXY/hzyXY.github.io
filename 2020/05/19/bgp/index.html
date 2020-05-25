@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    14.4k
+                    15.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    53 分
+                    56 分
                 </div>
                 
 
@@ -883,7 +883,7 @@
 <li><p>比较neighbor-address<br>如果上述参数完全相同，则比较neighbor-address，选择小的neighbor-address发送来的路由。</p>
 </li>
 </ol>
-<h6 id="简易版路由优选策略"><a href="#简易版路由优选策略" class="headerlink" title="简易版路由优选策略"></a>简易版路由优选策略</h6><p>当到达同一目的地存在多条路由时，BGP依次对比下列属性来选择路由：</p>
+<h5 id="简易版路由优选策略"><a href="#简易版路由优选策略" class="headerlink" title="简易版路由优选策略"></a>简易版路由优选策略</h5><p>当到达同一目的地存在多条路由时，BGP依次对比下列属性来选择路由：</p>
 <ol>
 <li><p>优选协议首选值（PrefVal）最高的路由。</p>
 <p>协议首选值（PrefVal）是华为设备的特有属性，该属性仅在本地有效。</p>
@@ -914,6 +914,9 @@
 </li>
 </ol>
 <h3 id="BGP路由管理特性"><a href="#BGP路由管理特性" class="headerlink" title="BGP路由管理特性"></a>BGP路由管理特性</h3><p>BGP管理路由特性：<br>EBGP最小通告时间30s，IBGP最小通告时间5s</p>
+<ul>
+<li>BGP路由稳定性管理：默认路由，汇总、路由惩罚</li>
+</ul>
 <h4 id="BGP路由自动汇总"><a href="#BGP路由自动汇总" class="headerlink" title="BGP路由自动汇总"></a>BGP路由自动汇总</h4><ol>
 <li>当路由时被重分发注入到BGP中时，BGP会做自动汇总（不分主类网络边界，都会产生自动汇总路由），可以关闭自动汇总。</li>
 <li>当路由是被network引入到BGP中是，BGP不会自动汇总，就算把自动汇总功能开启也不会</li>
@@ -975,6 +978,44 @@
 <p>rule 5 permit source 192.168.1.0 0.0.0.255<br>rule 10 permit source 192.168.3.0 0.0.0.255</p>
 <p>route-policy org permit node 10 满足ACL的路由作为构建汇总路由的条件路由，permit代表作为构建汇总路由的条件路由，acl和rule之间是逻辑或的关系。</p>
 <p>aggregate 192.168.0.0 255.255.0.0 as-set detail-suppressed origin-policy org</p>
+<h4 id="BGP路由惩罚"><a href="#BGP路由惩罚" class="headerlink" title="BGP路由惩罚"></a>BGP路由惩罚</h4><ul>
+<li><p>IBGP无此特性，只用在EBGP之间</p>
+</li>
+<li><p>默认路由每失效一次惩罚值增加1000，当BGP属性改变时惩罚值增加500</p>
+</li>
+<li><p>half-life（半衰时间）：将惩罚值减少一般所需经历的时间。取值范围为1-45分钟，默认15分钟。</p>
+</li>
+<li><p>reuse（重用限制值）：用来与惩罚相比较，若惩罚值小于重用限制值，且被抑制的路由重新up，就不再对其进行抑制。取值范围1-20000，默认值为750</p>
+</li>
+<li><p>suppress（抑制限制值）：用来与惩罚值相比较的数值。若惩罚值大于限制值，路由将被抑制，取值范围为1-20000，默认为2000</p>
+</li>
+<li><p>max-suppress-time（最长抑制时间）：可对路由进行抑制的最长时间，取值范围为1-255，默认值为half-life时间的4倍。</p>
+</li>
+</ul>
+<p>dampening 5 1000 2000 3000</p>
+<p>当路由惩罚值超过2000时，不会通告此路由可达的消息，用d标记路由被惩罚。直到惩罚值小于重用惩罚值。</p>
+<p>当路由惩罚值小于1000时，如果过此时路由可达，则通告此路由可达，d标记会消失</p>
+<p>当路由惩罚值在1000到2000时，且无d标记，还是可以继续通告此路由可达。</p>
+<h3 id="fake-as"><a href="#fake-as" class="headerlink" title="fake-as"></a>fake-as</h3><p>欺骗邻居AS号，被欺骗的要换peer as号。通俗的讲：麻烦别人方便自己。对外是藏起来的。</p>
+<p>解决了AS号迁移的问题。</p>
+<h3 id="BGP安全性"><a href="#BGP安全性" class="headerlink" title="BGP安全性"></a>BGP安全性</h3><p>BGP易受到跨链路，长距离的攻击。</p>
+<p>BGP使用认证和通同TTL安全保护机制GTSM（Generalized Security Mechanism）两个方法保证BGP对等体间的安全。</p>
+<h4 id="BGP认证"><a href="#BGP认证" class="headerlink" title="BGP认证"></a>BGP认证</h4><p>BGP无设置认证字段的，BGP认证字段放在TCP的options（20个字段）中</p>
+<p>BGP的认证分为MD5认证和keychain认证</p>
+<p>MD5认证只能为TCP连接设置认证密码</p>
+<p>keychain认证除了可以为TCP连接设置认证密码外，还可以对BGP报文进行认证</p>
+<h4 id="BGP-GTSM"><a href="#BGP-GTSM" class="headerlink" title="BGP GTSM"></a>BGP GTSM</h4><ul>
+<li>防御TCP欺骗，TCP伪造攻击。</li>
+<li>GTSM检测IP报文的TTL值是否在一个自我设定的允许的范围之内。超过了就不合法，不接收，直接丢弃。从而保护了IP层以上的业务，增加了系统安全性。</li>
+</ul>
+<p>华为GTSM功能</p>
+<p>peer x.x.x.x vaild-ttl-hops [<em>N</em>]    </p>
+<ol>
+<li>在向邻居x.x.x.x发送BGP报文时，自身ttl设置为255</li>
+<li>在接收邻居x.x.x.x发来的BGP报文时，要求报文的TTL大于等于255-<em>N</em>+1</li>
+</ol>
+<h3 id="ORF（出站路由过滤）"><a href="#ORF（出站路由过滤）" class="headerlink" title="ORF（出站路由过滤）"></a>ORF（出站路由过滤）</h3><p>BGP邻居会通告大量路由，也会对路由做过滤。浪费大量链路带宽。需要什么发什么。</p>
+<p>peer x.x.x.x capability-advertise orf ip-prefix send 发送 接收路由的路由器配置<br>peer x.x.x.x capability-advertise orf ip-prefix receive 接收 发送路由的路由器配置</p>
 
             </div>
             <hr/>
@@ -1449,7 +1490,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">76.8k</span>&nbsp;字
+                class="white-color">77.6k</span>&nbsp;字
             
             
             
