@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    5.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    21 分
                 </div>
                 
 
@@ -505,6 +505,7 @@
 <p>客户端不仅能对组播组作出选择还能对组播源做出选择</p>
 <p>同一个组可提供不同的组播业务</p>
 <h4 id="组播地址"><a href="#组播地址" class="headerlink" title="组播地址"></a>组播地址</h4><p>组播地址为D类地址</p>
+<p><strong>IPv4组播地址的范围及含义</strong></p>
 <table>
 <thead>
 <tr>
@@ -518,7 +519,7 @@
 </tr>
 <tr>
 <td>224.0.1.0<del>231.255.255.255<br>233.0.0.0</del>238.255.255.255</td>
-<td>ASM组播地址，全网范围内有效。（可在互联网上使用）</td>
+<td>ASM组播地址，全网范围内有效。（可在互联网上使用）<br>其中，224.0.1.39和224.0.1.40是保留地址，不建议使用。</td>
 </tr>
 <tr>
 <td>232.0.0.0~232.255.255.255</td>
@@ -529,6 +530,95 @@
 <td>本地管理组地址，仅在本地管理域内有效。（私网主播地址）</td>
 </tr>
 </tbody></table>
+<p><strong>常见的永久组播地址</strong></p>
+<table>
+<thead>
+<tr>
+<th>永久组地址</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>224.0.0.0</td>
+<td>不分配</td>
+</tr>
+<tr>
+<td>224.0.0.1</td>
+<td>网段内所有主机和路由器（等效于广播地址）</td>
+</tr>
+<tr>
+<td>224.0.0.2</td>
+<td>所有组播路由器</td>
+</tr>
+<tr>
+<td>224.0.0.3</td>
+<td>不分配</td>
+</tr>
+<tr>
+<td>224.0.0.4</td>
+<td>DVMRP（Distance Vector Multicast Routing Protocol，距离矢量组播路由协议）路由器</td>
+</tr>
+<tr>
+<td>224.0.0.5</td>
+<td>OSPF（Open Shortest Path First，开放最短路径优先）路由器</td>
+</tr>
+<tr>
+<td>224.0.0.6</td>
+<td>OSPF DR（Designated Router，指定路由器）</td>
+</tr>
+<tr>
+<td>224.0.0.7</td>
+<td>ST（Shared Tree，共享树）路由器</td>
+</tr>
+<tr>
+<td>224.0.0.8</td>
+<td>ST主机</td>
+</tr>
+<tr>
+<td>224.0.0.9</td>
+<td>RIP-2（Routing Information Protocol version 2，路由信息协议版本2）路由器</td>
+</tr>
+<tr>
+<td>224.0.0.11</td>
+<td>移动代理（Mobile-Agents）</td>
+</tr>
+<tr>
+<td>224.0.0.12</td>
+<td>DHCP（Dynamic Host Configuration Protocol，动态主机配置协议）服务器/中继代理</td>
+</tr>
+<tr>
+<td>224.0.0.13</td>
+<td>所有PIM（Protocol Independent Multicast，协议无关组播）路由器</td>
+</tr>
+<tr>
+<td>224.0.0.14</td>
+<td>RSVP（Resource Reservation Protocol，资源预留协议）封装</td>
+</tr>
+<tr>
+<td>224.0.0.15</td>
+<td>所有CBT（Core-Based Tree，有核树）路由器</td>
+</tr>
+<tr>
+<td>224.0.0.16</td>
+<td>指定SBM（Subnetwork Bandwidth Management，子网带宽管理）</td>
+</tr>
+<tr>
+<td>224.0.0.17</td>
+<td>所有SBM</td>
+</tr>
+<tr>
+<td>224.0.0.18</td>
+<td>VRRP（Virtual Router Redundancy Protocol，虚拟路由器冗余协议）</td>
+</tr>
+<tr>
+<td>224.0.0.22</td>
+<td>所有使能IGMPv3（Internet Group Management Protocol, Version 3，因特网组管理协议）的路由器</td>
+</tr>
+<tr>
+<td>224.0.0.19 ～ 224.0.0.21224.0.0.23 ～ 224.0.0.255</td>
+<td>未指定</td>
+</tr>
+</tbody></table>
 <h5 id="组播MAC地址"><a href="#组播MAC地址" class="headerlink" title="组播MAC地址"></a>组播MAC地址</h5><p>OUI：组织机构标识符，专门用来申请给组播IPv4地址的组播MAC地址标识符</p>
 <p><strong>01 00 5E是分配给IPv4组播地址的组播MAC地址</strong></p>
 <p>01 00 5E = <font color="red">0000 0001 0000 0000 1101 1110 0</font></p>
@@ -536,7 +626,377 @@
 <p>组播MAC地址为<font color="red">0000 0001 0000 0000 1101 1110 0</font><font color="skyblue">000 0001 0000 0001 0000 0001</font>再转为16进制</p>
 <p>要避免后面23比特相同</p>
 <p><strong>怎么区分一个MAC地址是组播MAC地址？<br>MAC地址的第八个比特等于1就是MAC地址</strong>    0<font color="red">1</font> xx xx</p>
-<h3 id="组播协议"><a href="#组播协议" class="headerlink" title="组播协议"></a>组播协议</h3><h4 id="IGMP"><a href="#IGMP" class="headerlink" title="IGMP"></a>IGMP</h4><h4 id="PIM"><a href="#PIM" class="headerlink" title="PIM"></a>PIM</h4>
+<h3 id="组播协议"><a href="#组播协议" class="headerlink" title="组播协议"></a>组播协议</h3><h4 id="IGMP"><a href="#IGMP" class="headerlink" title="IGMP"></a>IGMP</h4><ul>
+<li>因特网组管理协议</li>
+<li>定义了一个网段内主机与组播路由器之间如何维护成员信息</li>
+<li>包括IGMPv1、IGMPv2、IGMPv3</li>
+</ul>
+<h5 id="IGMPv1"><a href="#IGMPv1" class="headerlink" title="IGMPv1"></a>IGMPv1</h5><p>只支持ASM组播服务模型</p>
+<h6 id="IGMPv1的报文"><a href="#IGMPv1的报文" class="headerlink" title="IGMPv1的报文"></a>IGMPv1的报文</h6><ul>
+<li>普遍组查询报文（General-Query）</li>
+</ul>
+<p><img src="/2020/05/25/zu-bo/IGMPv1q.JPG" alt="IGMPv1普遍组查询报文"></p>
+<ul>
+<li>成员报告报文（Report）</li>
+</ul>
+<p><img src="/2020/05/25/zu-bo/IGMPv1r.JPG" alt="IGMPv1成员报告报文"></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Version</td>
+<td>IGMP版本，值为1.</td>
+</tr>
+<tr>
+<td>Type</td>
+<td>报文类型。<br>1.普遍组查询消息<br>2.成员报告消息</td>
+</tr>
+<tr>
+<td>Group Address</td>
+<td>组地址</td>
+</tr>
+</tbody></table>
+<p><strong>普遍（通用）组查询报文（General-Query）</strong></p>
+<p>普遍组查询消息是查询器定期向共享网段内所有主机以主播方式（224.0.0.1）发送的查询消息，用于查询那些组播组存在的成员。</p>
+<p>封装该消息的IP报文头的目的地址字段为224.0.0.1，本地网段上的所有路由器和主机都能识别并接收。</p>
+<p>组地址字段全0，表示不指定组播组，默认情况下每<strong>60秒周期性发送，180秒为超时时间</strong>。</p>
+<p><strong>成员报告报文（Report）</strong></p>
+<p>成员报告消息是主机向主播路由器发送的报告消息，用于申请加入某个组播组或者应答查询消息。</p>
+<p>封装该消息的IP报文头的目的地址字段为主机要加入的组播组地址，本网段上所有路由器及属于该组的所有主机都能够识别并接收，同一组的其他成员侦听到该报文后，不再发送针对相同组播组的报告，即报告被抑制。</p>
+<p>组地址字段为主机要加入的组播组地址。</p>
+<p>主机随机等待时间为10s</p>
+<h6 id="IGMPv1基本功能"><a href="#IGMPv1基本功能" class="headerlink" title="IGMPv1基本功能"></a>IGMPv1基本功能</h6><p>IGMPv1协议主要基于查询和相应机制完成组播组管理。在连接用户主机的多路由器共享网段上，由三层路由协议选举出唯一的组播信息转发者（Assert Winner或DR），并作为IGMPv1的查询器，负责该网段的组成员关系查询。</p>
+<p>因为IGMPv1不选举IGMP查询器，如果有多台路由器连接同一个多路访问网段时，就必须选举PIM Designated Router（DR）来避免重复查询，这个DR的选举，是由PIM进行的，选择IP地址高的为DR。PIM DR路由器在IGMPv1中充当IGMP查询器的功能，向主机发送IGMP查询。</p>
+<h6 id="IGMPv1查询器"><a href="#IGMPv1查询器" class="headerlink" title="IGMPv1查询器"></a>IGMPv1查询器</h6><p><strong>IGMPv1选举查询器</strong></p>
+<ul>
+<li><p>在pim-DM中通过比较hello消息上携带的优先级和IP地址，各路由器为多路由器网段选举指定路由器DR，充当IGMPv1的查询器</p>
+</li>
+<li><p>当DR出现故障时，接收hello消息将会超时，邻居路由器之间会出发新的DR选举过程</p>
+</li>
+<li><p>IGMPv1的查询器失效时间就是DR的失效时间，其本质就是PIM邻居的失效时间，默认105s</p>
+</li>
+<li><p>IGMPv2和IGMPv3有自己的查询器选举机制和查询器失效时间。默认125秒</p>
+</li>
+</ul>
+<p><strong>hello定时器</strong><br>hello消息默认发送周期是30秒，超时时间默认为105秒</p>
+<h6 id="组成员关系维护（IGMPv1）"><a href="#组成员关系维护（IGMPv1）" class="headerlink" title="组成员关系维护（IGMPv1）"></a>组成员关系维护（IGMPv1）</h6><p>IGMP查询器周期性地发送General-Query消息，并启动定时器Timer-Membership，超时时间为180秒。发送周期可以使用命令配置，缺省值是60s。</p>
+<p>网段内所有主机都接收到该General-Query消息，IGMPv1地主机都会发送report地消息</p>
+<p>网段中的路由器接收到Report消息后，了解到本网段存在组播组G1和G2的成员，则由组播路由协议生成（*，G1）和（*，G2）组播转发项。网络中一旦有组播组G1和G2的数据到达路由器，将向该网段转发。</p>
+<p>（*，G）：<br>*：任意源IP<br>G：主播组地址</p>
+<h6 id="新成员加入"><a href="#新成员加入" class="headerlink" title="新成员加入"></a>新成员加入</h6><p>host加入组播组，且侦听到网段中没有的组播数据，则不等待General-Query消息的到来，立即发送针对G3的Report消息。</p>
+<p>网段中的路由器接收到Report消息后，了解到本网段内出现了组播组G3的成员，则在组播路由表项（*，G3）中添加对应的下游接口。网络中一旦有组播组G3的数据到达路由器，将向该网段中的路由器接收到Report消息后，了解到本网段内出现了组播组G3的成员，则在组播路由表项（*，G3）中添加对应的下游接口。网络中一旦有组播组G3的数据到达路由器，将向该网段转发。</p>
+<h6 id="组成员离开"><a href="#组成员离开" class="headerlink" title="组成员离开"></a>组成员离开</h6><p>退出组播组的主机将不再反馈Report消息。</p>
+<p>由于该网段不存在其他的组成员，则路由器无法收到组的Report消息，定时器Timer-General-Query超时后（130秒），删除（*，G3）表项中对应的下游接口。如果过这时网络中组播组G3的数据到达路由器，则不会向该网段转发。</p>
+<h5 id="IGMPv2"><a href="#IGMPv2" class="headerlink" title="IGMPv2"></a>IGMPv2</h5><p>只支持ASM组播服务模型</p>
+<p>基本工作原理于IGMPv1基本相同。最大的不同在于IGMPv2增加离开组机制。成员主机离开组播时，会主动发送成员离开报文通知IGMP查询器；IGMP查询器收到成员离开报文后，会连续发送特定组查询报文，询问该组播组是否还存在组成员。如果过在一段时间内没有收到成员主机发送的报告报文，怎不在维护该组的组成员关系。</p>
+<p><strong>IGMPv2于IGMPv1区别</strong></p>
+<ul>
+<li><p>增加了离组报文和特定组查询报文</p>
+</li>
+<li><p>可控制（可以配置）主机的离开的最大响应时间，IGMPv1定死了，只能是10s</p>
+</li>
+</ul>
+<h6 id="IGMPv2报文"><a href="#IGMPv2报文" class="headerlink" title="IGMPv2报文"></a>IGMPv2报文</h6><ul>
+<li>普遍组查询报文（General-Query）<br> DIP 224.0.0.1 60s 周期性发送 180s内收不到组报告，认为成员全部离组。删除相应的（*，G）表项。<br>最大响应时间：10s，可调可控.igmp max-reponse-time</li>
+</ul>
+<p><img src="/2020/05/25/zu-bo/IGMPv2q.JPG" alt="IGMPv2普遍组查询报文"></p>
+<ul>
+<li>成员报告报文（Report）<br>主机加组，主机响应通用组查询或是指定组查询发送。DIP：主机所属的组播组地址<br>最大响应时间：0s，无实际意义。</li>
+</ul>
+<p><img src="/2020/05/25/zu-bo/IGMPv2r.JPG" alt="IGMPv2成员报告报文"></p>
+<ul>
+<li>成员离开报文（Leave）<br>目标地址为224.0.0.2（给所有路由器的）<br>RFC2236建议：只有在将要离开的主机是发送了成员关系报告消息的最后一台主机时，才发送离组消息。<br>因为如果过不是“最后一个响应者”的其他组成员静静的离开组播组，那么路由器也会继续转发组播会话，而不会发送查询消息，从而会一定程度上节省网络带宽。如果过这种行为不是必须的，那么也可以在任一一台主机离开组播时就发送离组消息。（思科路由器采用“最后一个响应者”发送leave消息，不是“最后一个响应者”在离开组时，不会发送leave消息）<br>两种实现机制：主机离组就发送和“最后一个响应者”<br>最大响应时间：0s，无实际意义。</li>
+</ul>
+<p><img src="/2020/05/25/zu-bo/IGMPv2l.JPG" alt="IGMPv2成员离开报文"></p>
+<ul>
+<li>特定组查询报文（Group-Specific Query）<br>DIP：离组报文的离组地址<br>用于判断发送了离开报文的这个组是否还有成员<br>发两次，以一秒为间隔。最大响应时间为1秒。如果两次都收不到应答则认为没有成员，随即删除（*，G）表项，不再向这个网段发送组播流<br>可修改最大响应时间 igmp las tmember-quertinterval<br>可修改发送次数 igmp robust-count </li>
+</ul>
+<p><img src="/2020/05/25/zu-bo/IGMPv2gq.JPG" alt="IGMPv2特定组查询报文"></p>
+<ul>
+<li>版本1成员关系报告（Version 1 Membership report）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类型</td>
+<td>0x11表示成员查询、0x12表示IGMPv1成员报告、0x16表示IGMPv2成员报告、0x17表示成员离开</td>
+</tr>
+<tr>
+<td>最大响应时间</td>
+<td>在发出响应报告前的以0.1秒为单位的最长时间，缺省值为10秒</td>
+</tr>
+<tr>
+<td>校验和</td>
+<td>对IGMP报文头部每16bit进行二进制反码求和</td>
+</tr>
+<tr>
+<td>组地址</td>
+<td>通用组成员查询=0.0.0.0、特定组成员查询=指定的组播组IP地址、成员报告=指定的组播组IP地址、离开报文=指定的组播组IP地址</td>
+</tr>
+</tbody></table>
+<h6 id="IGMPv2查询器"><a href="#IGMPv2查询器" class="headerlink" title="IGMPv2查询器"></a>IGMPv2查询器</h6><p>查询器选举规则：</p>
+<p>IGMPv2使用独立的查询器选举机制，当共享网段上存在多个组播路由器时，IP地址最小的路由器成为查询器。</p>
+<ol>
+<li><p>最初，所有运行IGMPv2的组播路由器都认为自己是查询器，向本网段内的所有主机和组播路由器发送普遍组查询报文。在收到对方发送的普遍组查询报文后，将报文的源IP地址与自己的接口地址作比较。通过比较，IP地址最小的组播路由器将成为查询器，其他组播路由器成为非查询器（Non-Querier）。</p>
+</li>
+<li><p>此后，将由IGMP查询器向本网段内的所有主机和其他组播路由器发送普遍组查询报文，而非查询器（RouterB）则不再发送普遍组查询报文。</p>
+<p>非查询器上都会启动一个定时器（即其他查询器存在时间定时器Other Querier Present Timer）。在该定时器超时前，如果收到了来自查询器的查询报文，则重置该定时器；否则，就认为原查询器失效，并发起新的查询器选举过程。</p>
+</li>
+</ol>
+<p>IGMPv1查询器由PIM的DR或断言优胜者充当</p>
+<p>IGMPv2查询器由接口地址小的路由器充当。可抢占。<br>非查询器可修改查询器超时时间。默认125s</p>
+<p>其他IGMP查询器的存活时间 = 健壮系数（robust-count） * IGMP普遍组查询报文发送间隔 + （1/2）* 最大查询响应时间，以自身参数值进行计算。</p>
+<p>也可以想改多少改多少：igmp timer other-querier-present优先于公式</p>
+<h5 id="IGMPv3"><a href="#IGMPv3" class="headerlink" title="IGMPv3"></a>IGMPv3</h5><p>支持ASM、SSM组播服务模型</p>
+<h6 id="IGMPv3报文"><a href="#IGMPv3报文" class="headerlink" title="IGMPv3报文"></a>IGMPv3报文</h6><ul>
+<li>普遍组查询报文（General-Query）</li>
+</ul>
+<p><img src="/2020/05/25/zu-bo/igmpv3q.JPG" alt="IGMPv3普遍组查询报文"></p>
+<ul>
+<li>成员报告报文（Report）<br>报告报文包括主机要加入地组和组播源地过滤模式<br>INCLUDE<br>EXCLUDE</li>
+</ul>
+<p><img src="/2020/05/25/zu-bo/igmpv3r.JPG" alt="IGMPv3成员报告报文"></p>
+<ul>
+<li>特定组查询报文（Group-Specific Query）</li>
+</ul>
+<p><img src="/2020/05/25/zu-bo/igmpv3gq.JPG" alt="IGMPv3特定组查询报文"></p>
+<ul>
+<li><p>特定源组查询报文（Group-and-Source-Specific Query）新增</p>
+</li>
+<li><p>没有离组报文</p>
+</li>
+<li><p>取消了成员关系报告抑制机制</p>
+</li>
+</ul>
+<p>IGMPv3报文分成两大类：查询报文和成员报告报文</p>
+<p>IGMPv3没有定义专门的成员离开报文，成员离开通过特定类型的报告报文来传达。</p>
+<p>IGMPv3中一个成员报告报文可以携带多个组播组信息，而之前的版本一个成员报告只能携带一个组播组。这样在IGMPv3中报文数量大大减少。</p>
+<p><strong>IGMPv3查询报文</strong></p>
+<p>图</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Type</td>
+<td>报文类型，取值为0x11。</td>
+</tr>
+<tr>
+<td>Max Response Code</td>
+<td>最大响应时间。成员主机在收到IGMP查询器发送的普遍组查询报文后，需要在最大响应时间内做出回应。</td>
+</tr>
+<tr>
+<td>Checksum</td>
+<td>IGMP报文的校验和。校验和是IGMP报文长度（即IP报文的整个有效负载）的16位检测，表示IGMP信息补码之和的补码。Checksum字段在进行校验计算时设为0。当发送报文时，必须计算校验和并插入到Checksum字段中去。当接收报文时，校验和必须在处理该报文之前进行检验。</td>
+</tr>
+<tr>
+<td>Group Address</td>
+<td>组播组地址。在普遍组查询报文中，该字段设为0；在特定组查询报文和特定源组查询报文中，该字段为要查询的组播组地址。</td>
+</tr>
+<tr>
+<td>Resv</td>
+<td>保留字段。发送报文时该字段设为0；接收报文时，对该字段不做处理。</td>
+</tr>
+<tr>
+<td>S</td>
+<td>该比特位为1时，所有收到此查询报文的其他路由器不启动定时器刷新过程，但是此查询报文并不抑制查询器选举过程和路由器的主机侧处理过程。</td>
+</tr>
+<tr>
+<td>QRV</td>
+<td>如果该字段非0，则表示查询器的健壮系数（Robustness Variable）。如果该字段为0，则表示查询器的健壮系数大于7。路由器接收到查询报文时，如果发现该字段非0，则将自己的健壮系数调整为该字段的值；如果发现该字段为0，则不做处理。</td>
+</tr>
+<tr>
+<td>QQIC</td>
+<td>IGMP查询器的查询间隔，单位为秒。非查询器收到查询报文时，如果发现该字段非0，则将自己的查询间隔参数调整为该字段的值；如果发现该字段为0，则不做处理。</td>
+</tr>
+<tr>
+<td>Number of Sources</td>
+<td>报文中包含的组播源的数量。对于普遍组查询报文和特定组查询报文，该字段为0；对于特定源组查询报文，该字段非0。此参数的大小受到所在网络MTU大小的限制。</td>
+</tr>
+<tr>
+<td>Source Address</td>
+<td>组播源地址，其数量受到Number of Sources字段值大小的限制。</td>
+</tr>
+</tbody></table>
+<p><strong>IGMPv3成员报告报文</strong></p>
+<p>图</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Type</td>
+<td>报文类型，取值为0x22。</td>
+</tr>
+<tr>
+<td>Reserved</td>
+<td>保留字段。发送报文时该字段设为0；接收报文时，对该字段不做处理。</td>
+</tr>
+<tr>
+<td>Checksum</td>
+<td>IGMP报文的校验和。校验和是IGMP报文长度（即IP报文的整个有效负载）的16位检测，表示IGMP信息补码之和的补码。Checksum字段在进行校验计算时设为0。当发送报文时，必须计算校验和并插入到Checksum字段中去。当接收报文时，校验和必须在处理该报文之前进行检验。</td>
+</tr>
+<tr>
+<td>Number of Group Records</td>
+<td>报文中包含的组记录的数量。</td>
+</tr>
+<tr>
+<td>Group Record</td>
+<td>组记录。</td>
+</tr>
+</tbody></table>
+<p><strong>Group Record字段</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Record Type</td>
+<td>组记录的类型。共分为三大类。</td>
+</tr>
+<tr>
+<td></td>
+<td>当前状态报告。用于对查询报文进行响应，通告自己目前的状态，共两种：<br><br>MODE_IS_INCLUDE，表示接收源地址列表包含的源发往该组的组播数据。如果指定源地址列表为空，该报文无效。<br><br>MODE_IS_EXCLUDE，表示不接收源地址列表包含的源发往该组的组播数据。</td>
+</tr>
+<tr>
+<td></td>
+<td>过滤模式改变报告。当组和源的关系在INCLUDE和EXCLUDE之间切换时，会通告过滤模式发生变化，共两种：<br><br>CHANGE_TO_INCLUDE_MODE，表示过滤模式由EXCLUDE转换到INCLUDE，接收源地址列表包含的新组播源发往该组播组的数据。如果指定源地址列表为空，主机将离开组播组。<br><br>CHANGE_TO_EXCLUDE_MODE，表示过滤模式由INCLUDE转换到EXCLUDE，拒绝源地址列表包含的新组播源发往该组的组播数据。</td>
+</tr>
+<tr>
+<td></td>
+<td>源列表改变报告。当指定源发生改变时，会通告源列表发生变化，共两种：<br><br>ALLOW_NEW_SOURCES，表示在现有的基础上，需要接收源地址列表包含的组播源发往该组播组的组播数据。如果当前对应关系为INCLUDE，则向现有源列表中添加这些组播源；如果当前对应关系为EXCLUDE，则从现有阻塞源列表中删除这些组播源。<br><br>BLOCK_OLD_SOURCES，表示在现有的基础上，不再接收源地址列表包含的组播源发往该组播组的组播数据。如果当前对应关系为INCLUDE，则从现有源列表中删除这些组播源；如果当前对应关系为EXCLUDE，则向现有源列表中添加这些组播源。</td>
+</tr>
+<tr>
+<td>Aux Data Len</td>
+<td>辅助数据长度。在IGMPv3的报告报文中，不存在辅助数据字段，该字段设为0。</td>
+</tr>
+<tr>
+<td>Number of Sources</td>
+<td>本记录中包含的源地址数量。</td>
+</tr>
+<tr>
+<td>Multicast Address</td>
+<td>组播组地址。</td>
+</tr>
+<tr>
+<td>Sources Address</td>
+<td>组播源地址。</td>
+</tr>
+<tr>
+<td>Auxiliary Data</td>
+<td>辅助数据。预留给IGMP后续扩展或后续版本。在IGMPv3的报告报文中，不存在辅助数据。</td>
+</tr>
+</tbody></table>
+<h6 id="报告报文组记录"><a href="#报告报文组记录" class="headerlink" title="报告报文组记录"></a>报告报文组记录</h6><p>IGMPv3报告报文组记录</p>
+<ul>
+<li>通过报告报文组记录字段记录组播组与组播源列表对应关系发生的变化</li>
+</ul>
+<p><img src="/2020/05/25/zu-bo/%E6%8A%A5%E5%91%8A%E6%8A%A5%E6%96%87%E7%BB%84%E8%AE%B0%E5%BD%95.JPG" alt="报告报文组记录类型"></p>
+<h5 id="IGMP不同版本互操作"><a href="#IGMP不同版本互操作" class="headerlink" title="IGMP不同版本互操作"></a>IGMP不同版本互操作</h5><p>与IGMPv1路由器兼容</p>
+<ul>
+<li>IGMPv2主机必须发送版本1成员报告报文，且不发送成员离开报文</li>
+<li>IGMPv2路由器必须强制发送版本1报文</li>
+</ul>
+<p>与IGMPv1主机兼容</p>
+<ul>
+<li>IGMPv2主机成员报告报文需被版本1主机抑制</li>
+<li>IGMPv2路由器忽略收到的成员离开报文</li>
+</ul>
+<h5 id="IGMP三个版本的比较"><a href="#IGMP三个版本的比较" class="headerlink" title="IGMP三个版本的比较"></a>IGMP三个版本的比较</h5><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>IGMPv1</th>
+<th>IGMPv2</th>
+<th>IGMPv3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查询器选举方式</td>
+<td>依靠组播路由协议PIM选举</td>
+<td>同网段组播路由器之间竞争选举</td>
+<td>同网段组播路由器之间竞争选举</td>
+</tr>
+<tr>
+<td>普遍组查询报文</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>成员报告报文</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>特定组查询报文</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>成员离开报文</td>
+<td>不支持</td>
+<td>支持</td>
+<td>没有定义专门的成员离开报文，成员离开通过特定类型的报告报文来传达</td>
+</tr>
+<tr>
+<td>特定源组查询报文</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>指定组播源</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>可识别报文协议版本</td>
+<td>IGMPv1</td>
+<td>IGMPv1、IGMPv2</td>
+<td>IGMPv1、IGMPv2、IGMPv3</td>
+</tr>
+<tr>
+<td>ASM模型</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>SSM模型</td>
+<td>需要IGMP SSM Mapping技术支持</td>
+<td>需要IGMP SSM Mapping技术支持</td>
+<td>支持</td>
+</tr>
+</tbody></table>
+<h5 id="IGMP-SSM-Mapping"><a href="#IGMP-SSM-Mapping" class="headerlink" title="IGMP SSM Mapping"></a>IGMP SSM Mapping</h5><ul>
+<li>为IGMPv1主机和IGMPv2主机提供SSM服务</li>
+<li>通过再路由器上静态配置SSM地址的映射规则，将IGMPv1和IGMPv2报文报告中的（*，G）信息转化为对应的（S，G）信息</li>
+</ul>
+<p>配置了SSM Mapping规则后，当IGMP查询器收到来自成员主机的IGMPv1或IGMPv2报告报文时，首先检查该报文中所携带的组播组地址G，然后根据检查结果的不同分别进行处理。</p>
+<p>注：IGMP SSM Mapping不处理IGMPv3的报告报文。为了保证同一网段运行任意版本IGMP的主机都能得到SSM服务，需要在与成员主机所在网段相连的组播路由器接口上运行IGMPv3。</p>
+<h4 id="PIM"><a href="#PIM" class="headerlink" title="PIM"></a>PIM</h4>
             </div>
             <hr/>
 
@@ -1016,7 +1476,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.8k</span>&nbsp;字
+                class="white-color">83.7k</span>&nbsp;字
             
             
             
