@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.9k
+                    9.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    21 分
+                    33 分
                 </div>
                 
 
@@ -626,7 +626,7 @@
 <p>组播MAC地址为<font color="red">0000 0001 0000 0000 1101 1110 0</font><font color="skyblue">000 0001 0000 0001 0000 0001</font>再转为16进制</p>
 <p>要避免后面23比特相同</p>
 <p><strong>怎么区分一个MAC地址是组播MAC地址？<br>MAC地址的第八个比特等于1就是MAC地址</strong>    0<font color="red">1</font> xx xx</p>
-<h3 id="组播协议"><a href="#组播协议" class="headerlink" title="组播协议"></a>组播协议</h3><h4 id="IGMP"><a href="#IGMP" class="headerlink" title="IGMP"></a>IGMP</h4><ul>
+<h3 id="组播组管理协议"><a href="#组播组管理协议" class="headerlink" title="组播组管理协议"></a>组播组管理协议</h3><h4 id="IGMP"><a href="#IGMP" class="headerlink" title="IGMP"></a>IGMP</h4><ul>
 <li>因特网组管理协议</li>
 <li>定义了一个网段内主机与组播路由器之间如何维护成员信息</li>
 <li>包括IGMPv1、IGMPv2、IGMPv3</li>
@@ -996,7 +996,250 @@
 </ul>
 <p>配置了SSM Mapping规则后，当IGMP查询器收到来自成员主机的IGMPv1或IGMPv2报告报文时，首先检查该报文中所携带的组播组地址G，然后根据检查结果的不同分别进行处理。</p>
 <p>注：IGMP SSM Mapping不处理IGMPv3的报告报文。为了保证同一网段运行任意版本IGMP的主机都能得到SSM服务，需要在与成员主机所在网段相连的组播路由器接口上运行IGMPv3。</p>
-<h4 id="PIM"><a href="#PIM" class="headerlink" title="PIM"></a>PIM</h4>
+<h5 id="IGMP-Snooping"><a href="#IGMP-Snooping" class="headerlink" title="IGMP Snooping"></a>IGMP Snooping</h5><p>igmp监听</p>
+<ul>
+<li>解决组播报文再二层广播的问题（主播业务控制不利、主播业务的安全性产生威胁、浪费带宽，消耗交换机性能）</li>
+<li>监听IGMP报文，构建MAC组播表项</li>
+</ul>
+<p>1.配置静态组播分发表项 </p>
+<p>2.IGMP监听</p>
+<p>3.CGMP（思科组管理协议，私有）</p>
+<h6 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h6><table>
+<thead>
+<tr>
+<th>组播转发表项</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VLAN</td>
+<td>2</td>
+</tr>
+<tr>
+<td>组播组地址</td>
+<td>组播组IP</td>
+</tr>
+<tr>
+<td>路由器端口</td>
+<td>与交换机相连的端口</td>
+</tr>
+<tr>
+<td>组播组成员端口</td>
+<td>与接收者相连的端口</td>
+</tr>
+</tbody></table>
+<h6 id="IGMP-Snooping中的端口角色"><a href="#IGMP-Snooping中的端口角色" class="headerlink" title="IGMP Snooping中的端口角色"></a>IGMP Snooping中的端口角色</h6><table>
+<thead>
+<tr>
+<th>端口角色</th>
+<th>作用</th>
+<th>如何生成</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>路由器端口（Router Port）<br>路由器端口都是指二层组播设备上朝向组播路由器的接口，而不是指路由器上的接口。</td>
+<td>二层组播设备上朝向三层组播设备（DR或IGMP查询器）一侧的接口，二层组播设备从此接口接收组播数据报文。</td>
+<td>由协议生成的路由器端口叫做动态路由器端口。收到源地址不为0.0.0.0的IGMP普遍组查询报文或PIM Hello报文（三层组播设备的PIM接口向外发送的用于发现并维持邻居关系的报文）的接口都将被视为动态路由器端口。<br>手工配置的路由器端口叫做静态路由器端口</td>
+</tr>
+<tr>
+<td>成员端口（Member Port）</td>
+<td>又称组播组成员端口，表示二层组播设备上朝向组播组成员一侧的端口，二层组播设备往此接口发送组播数据报文。</td>
+<td>由协议生成的成员端口叫做动态成员端口。收到IGMP Report报文的接口，二层组播设备会将其标识为动态成员端口。<br>手工配置的成员端口叫做静态成员端口。</td>
+</tr>
+</tbody></table>
+<h6 id="IGMP-Snooping对不同报文的处理方式"><a href="#IGMP-Snooping对不同报文的处理方式" class="headerlink" title="IGMP Snooping对不同报文的处理方式"></a>IGMP Snooping对不同报文的处理方式</h6><table>
+<thead>
+<tr>
+<th>IGMP工作阶段</th>
+<th>二层组播设备收到的报文类型</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>普遍组查询<br>IGMP查询器定期向本地网段内的所有主机与路由器（目的地址为224.0.0.1）发送IGMP普遍组查询报文，以查询该网段有哪些组播组的成员</td>
+<td>IGMP普遍组查询报文</td>
+<td>向VLAN内除接收接口外的其他所有接口转发，并对接收接口做如下处理：<br>如果路由器端口列表中尚未包含该接口，则将其添加进去，并启动老化定时器。<br>如果路由器端口列表中已包含该动态路由器端口，则重置老化定时器。<br>说明：收到IGMP普遍组查询报文时，动态路由器端口的老化定时器缺省为180秒，可以通过命令行配置。</td>
+</tr>
+<tr>
+<td>成员报告<br>有两种情况：<br>成员收到IGMP普遍组查询报文后，回应IGMP报告报文。<br>成员主动向IGMP查询器发送IGMP报告报文以声明加入该组播组。<br></td>
+<td>IGMP报告报文</td>
+<td>向VLAN内所有路由器端口转发。从报文中解析出主机要加入的组播组地址，并对接收接口做如下处理：<br>如果不存在该组对应的转发表项，则创建转发表项，将该接口作为动态成员端口添加到出接口列表中，并启动老化定时器。<br>如果已存在该组对应的转发表项，但出接口列表中未包含该接口，则将该接口作为动态成员端口添加到出接口列表，并启动老化定时器。<br>如果已存在该组所对应的转发表项，且出接口列表中已包含该动态成员端口，则重置其老化定时器。<br>说明：收到IGMP报告报文后，动态成员端口的老化定时器 = 健壮系数 x 普遍组查询间隔 + 最大响应时间。</td>
+</tr>
+<tr>
+<td>成员离开组播组<br>有两个阶段：<br>1.运行IGMPv2或IGMPv3的成员发送IGMP离开报文，以通知IGMP查询器自己离开了某个组播组。<br>2.IGMP查询器收到IGMP离开报文后，从中解析出组播组地址，并通过接收接口向该组播组发送IGMP特定组查询报文/IGMP特定源组查询报文。</td>
+<td>IGMP离开报文</td>
+<td>判断离开的组是否存在对应的转发表项，以及转发表项出接口列表是否包含报文的接收接口：<br>如果不存在该组对应的转发表项，或者该组对应转发表项的出接口列表中不包含接收接口，二层组播设备不转发该报文，将其直接丢弃。<br>如果存在该组对应的转发表项，且转发表项的出接口列表中包含该接口，二层组播设备会将报文向VLAN内所有路由器端口转发。<br>对于IGMP离开报文的接收接口（假定为动态成员端口），二层组播设备在其老化时间内：<br>如果从该接口收到了主机响应IGMP特定组/源组查询的报告报文，表示接口下还有该组的成员，于是重置其老化定时器。<br>如果没有从该接口收到主机响应IGMP特定组/源组查询的报告报文，则表示接口下已没有该组成员，则在老化时间超时后，将接口从该组的转发表项出接口列表中删除。<br>说明：<br>收到IGMP离开报文后，动态成员端口的老化定时器 = 健壮系数 x 特定组查询间隔。（默认：2*60+10）</td>
+</tr>
+<tr>
+<td></td>
+<td>IGMP特定组查询报文/IGMP特定源组查询报文</td>
+<td>向VLAN内除接收接口外的其他所有接口转发。</td>
+</tr>
+</tbody></table>
+<h3 id="组播路由协议"><a href="#组播路由协议" class="headerlink" title="组播路由协议"></a>组播路由协议</h3><h4 id="PIM"><a href="#PIM" class="headerlink" title="PIM"></a>PIM</h4><p>PIM（与协议无关的组播路由协议）</p>
+<p>历史：DVMRP（底层要RIP）、MOSPF（底层要OSPF）</p>
+<ul>
+<li>域内组播路由协议</li>
+<li>构建、维护组播路由转发表项</li>
+<li>运行在路由器与路由器之间</li>
+<li>PIM分为PIM-DM（密集模式）和PIM-SM（稀疏模式）</li>
+</ul>
+<h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><h6 id="PIM路由器"><a href="#PIM路由器" class="headerlink" title="PIM路由器"></a>PIM路由器</h6><p>PIM路由器：接口使能PIM的路由器</p>
+<p>叶子</p>
+<p>第一跳路由器</p>
+<p>中间路由器</p>
+<p>最后一跳路由器</p>
+<p>上游接口</p>
+<p>下游接口</p>
+<h6 id="源树（SPT）"><a href="#源树（SPT）" class="headerlink" title="源树（SPT）"></a>源树（SPT）</h6><ul>
+<li>组播分发树的一种</li>
+<li>以组播源为根，组播组成员为叶子的组播分发树成为SPT</li>
+<li>有多少个源就有多少个（S，G）表项，比较消耗资源。但转发路径是最优无环的。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组播表项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>(S,G)</td>
+</tr>
+<tr>
+<td>上游接口列表</td>
+</tr>
+<tr>
+<td>下游接口列表</td>
+</tr>
+</tbody></table>
+<h6 id="共享树（RPT）"><a href="#共享树（RPT）" class="headerlink" title="共享树（RPT）"></a>共享树（RPT）</h6><ul>
+<li>组播分发树的一种</li>
+<li>以RP为根，组播组成员为叶子的组播分发树</li>
+<li>不能保证路径是最优的</li>
+<li>接收者到RP构造（*，G），源到RP构造（S，G）。既有（S，G）也有（*，G）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组播表项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>(*,G)</td>
+</tr>
+<tr>
+<td>上游接口列表</td>
+</tr>
+<tr>
+<td>下游接口列表</td>
+</tr>
+</tbody></table>
+<h5 id="RPF"><a href="#RPF" class="headerlink" title="RPF"></a>RPF</h5><p>反向路径转发（查找单播路由表，RPF检查：上游接口来的组播流量的源地址与进入路由器的接口与单播路由表中的表项相匹配则认为RPF校验成功）</p>
+<p>RPF检查过程：</p>
+<blockquote>
+<p>RPF检测所用到的三张表：</p>
+<p>单播路由表：dis ip routing-table 其路由来源于直连路由，静态单播路由，RIP，OSPF，ISIS，BGP缺省优先级60<br>MBGP表：dis bgp multicast routing-table 其路由来源于MBGP，用于在AS之间通告组播源的路由信息。缺省优先级255<br>组播静态路由表：dis multicast rpf-info source address，管理员手动配置得到的。缺省优先级1</p>
+</blockquote>
+<p>在负载分担的链路上如何判断RPF接口？<br>查找路由表，下一跳IP地址大的为RPF接口，地址小的不为RPF接口。</p>
+<p>RPF邻居：就是路由表下一跳的最大的IP地址，有PIM邻居。</p>
+<h5 id="PIM-DM-（密集）"><a href="#PIM-DM-（密集）" class="headerlink" title="PIM-DM （密集）"></a>PIM-DM （密集）</h5><ul>
+<li>使用”推（Push）模式“转发组播报文</li>
+<li>通过周期性的扩散——剪枝构建和维护单向无环的SPT。（只有SPT树）</li>
+<li>使用于小型组播网络</li>
+<li>工作机制包括：<br>邻居发现<br>扩散<br>剪枝/加入<br>嫁接<br>断言<br>状态刷新</li>
+</ul>
+<h6 id="PIM-DM-邻居发现"><a href="#PIM-DM-邻居发现" class="headerlink" title="PIM-DM 邻居发现"></a>PIM-DM 邻居发现</h6><p>Hello消息</p>
+<ul>
+<li>发现建立PIM邻居、协调各项PIM协议参数、维护邻居关系</li>
+<li>在IGMPv1中选举查询者</li>
+<li>封装Hello报文的组播报文的目的地址：224.0.0.13（表示同一网段中所有PIM路由器）、源地址为接口的IP地址、TTL数值为1</li>
+<li>只有邻居关系建立成功后才接收其他PIM协议报文，从而创建组播路由表项</li>
+<li>每30s发送一次</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>协调各项PIM协议报文参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DR Priority</td>
+<td>表示各路由器接口竞选DR的优先级，优先级越高越容易获胜。（该参数只用于PIM-SM中DR的选举，DM也可选DR没什么用）</td>
+</tr>
+<tr>
+<td>Holdtime</td>
+<td>表示保持邻居为可达状态的超时时间。如果在超时时间内没有收到PIM邻居发送的Hello报文，路由器则认为邻居不可达。（邻居失效时间默认为105s，是hello时间的3.5倍）</td>
+</tr>
+<tr>
+<td>LAN_Delay</td>
+<td>表示共享网段内传输Prune报文的延迟时间。默认0.5s</td>
+</tr>
+<tr>
+<td>Override-Interval</td>
+<td>表示Hello报文中携带的否决剪枝的时间间隔。默认2.5s</td>
+</tr>
+<tr>
+<td>Neighbor-Tracking</td>
+<td>表示邻居跟踪功能。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>维持邻居关系<br>PIM路由器之间周期性地发送Hello报文。如果Holdtime超时还没有收到该PIM邻居发出的新的Hello报文，PIM路由器就认为该邻居不可达，将其从邻居列表中清除。<br>PIM邻居的变化将导致网络中组播拓扑的变化。如果组播分发树上的某上游邻居或下游邻居不可达，将导致组播路由重新收敛，组播分发树迁移。</li>
+</ul>
+<h6 id="PIM-DM-扩散"><a href="#PIM-DM-扩散" class="headerlink" title="PIM-DM 扩散"></a>PIM-DM 扩散</h6><ul>
+<li>将组播源发送的组播报文扩散到全网</li>
+<li>沿途每台PIM-DM路由器创建（S，G）表项</li>
+</ul>
+<p>DM模式的上游接口，也称为RPF接口，就是去往组播源的出口。</p>
+<p>路由器接收到第一份组播流量时：</p>
+<ol>
+<li>创建（S，G）表项</li>
+<li>进行RPF检测，确定上游接口（RPF接口），接收组播流量的接口如果过通过RPF检测则添加此接口到上游接口。没通RPF检测则丢弃组播报文</li>
+<li>确定下游接口。对于DM模式来说，所有存在PIM邻居的接口以及存在组成员的接口都被认为是下游接口，RPF接口不可能称为下游接口！</li>
+</ol>
+<p>扩散行为：从上游接口收到的组播流量，从存在PIM邻居的接口和存在组成员的接口扩散下去。</p>
+<table>
+<thead>
+<tr>
+<th>组播表项</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>（S，G）</td>
+<td>（1.1.1.1，228.1.1.1）</td>
+</tr>
+<tr>
+<td>入口列表</td>
+<td>E0</td>
+</tr>
+<tr>
+<td>出口列表</td>
+<td>E1和E2</td>
+</tr>
+</tbody></table>
+<h6 id="PIM-DM-剪枝-加入"><a href="#PIM-DM-剪枝-加入" class="headerlink" title="PIM-DM 剪枝/加入"></a>PIM-DM 剪枝/加入</h6><ul>
+<li>如不需要上游发送组播报文，则发送Prune消息</li>
+<li>共享网络上有路由器连接接收者，则该路由器发送Join消息来覆盖其他路由器发送的Prune消息</li>
+</ul>
+<blockquote>
+<p>密集模式中下游接口为空的条件：</p>
+<ol>
+<li>没有PIM邻居的非RPF接口</li>
+<li>没有组成员的接口</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>剪枝：<br>当PIM路由器收到组播报文后，RPF检查通过，但下游网段没有组播报文的需求，也就是（S，G）表项中出接口为空。此时PIM路由会向上游发送剪枝报文，通知上游路由器禁止向相应的下游接口的转发，将其从（S，G）表项的下游接口列表中删除。剪枝操作由叶子路由器发起，逐跳向上。如果上游路由器有出接口不为空时（已经删除了这个需要剪枝的出接口），则停止向上发送。最终组播转发路径上只存在于组成员相连的分支。</p>
+<p>如果在以太网中，下游路由器向组播地址224.0.0.13发送Prune消息，上游路由器收到Prune消息后等待3.5s，在这个时间内收不到下游路由器的Join消息的话就从（S，G）表项中删除出接口列表，如为空则继续向上扩散。如果收到了，则继续转发，发送Prune消息的下游路由器只能丢弃组播报文。</p>
+<p>剪枝否决：Join报文在在3s内发送给RPF邻居（上游邻居）</p>
+</blockquote>
+<p>路由器为被裁剪的下游接口启动一个剪枝定时器（默认为210s）即不向此出接口发送组播报文210s，定时器超时后就恢复转发。组播报文重新在全网范围内扩散，新加入的组成员可以接收到组播报文。随后，下游不存在成员的叶子路由器将向上发起剪枝操作。通过这种周期性的扩散-剪枝，PIM-DM周期性的刷新SPT。</p>
+<h5 id="PIM-DM-嫁接"><a href="#PIM-DM-嫁接" class="headerlink" title="PIM-DM 嫁接"></a>PIM-DM 嫁接</h5><blockquote>
+<p>为什么嫁接报文是单播？<br>在PIM协议中，在任何场景下。一条链路只能有一个接口发送组播流量，如果有多个接口向这个链路发送组播流量的话一定存在组播发送的冗余或是环路。我希望上游把组播流量发给我，因为这个路由器是有唯一性的，所以就只用发单播就行了。如果过发组播，不是RPF邻居就会增加不必要的负担。</p>
+</blockquote>
+
             </div>
             <hr/>
 
@@ -1470,7 +1713,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">83.8k</span>&nbsp;字
+                class="white-color">87.2k</span>&nbsp;字
             
             
             
