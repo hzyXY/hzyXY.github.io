@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    9.3k
+                    11.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    33 分
+                    40 分
                 </div>
                 
 
@@ -1076,7 +1076,8 @@
 <td>向VLAN内除接收接口外的其他所有接口转发。</td>
 </tr>
 </tbody></table>
-<h3 id="组播路由协议"><a href="#组播路由协议" class="headerlink" title="组播路由协议"></a>组播路由协议</h3><h4 id="PIM"><a href="#PIM" class="headerlink" title="PIM"></a>PIM</h4><p>PIM（与协议无关的组播路由协议）</p>
+<h3 id="组播路由协议"><a href="#组播路由协议" class="headerlink" title="组播路由协议"></a>组播路由协议</h3><p>hello 组播 224.0.0.13<br>Join/prune 组播 224.0.0.13<br>嫁接 单播<br>嫁接确认 单播<br>状态刷新 组播 224.0.0.13<br>断言 组播 224.0.0.13<br>bootstrap 自举报文 组播 224.0.0.13</p>
+<h4 id="PIM"><a href="#PIM" class="headerlink" title="PIM"></a>PIM</h4><p>PIM（与协议无关的组播路由协议）</p>
 <p>历史：DVMRP（底层要RIP）、MOSPF（底层要OSPF）</p>
 <ul>
 <li>域内组播路由协议</li>
@@ -1084,6 +1085,17 @@
 <li>运行在路由器与路由器之间</li>
 <li>PIM分为PIM-DM（密集模式）和PIM-SM（稀疏模式）</li>
 </ul>
+<blockquote>
+<p>通用规则：</p>
+<ol>
+<li><p>在创建新的（S，G）项时，其出口表提供一个来自父（*，G）的出口表的副本。</p>
+</li>
+<li><p>组播转发项的入口（RPF接口）决不能在其出口表项上出现。</p>
+</li>
+<li><p>对（*，G）项的出口表的添加和删除都被复制（在规则2的限制下）到所有与该组相关的（S，G）项。</p>
+</li>
+</ol>
+</blockquote>
 <h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><h6 id="PIM路由器"><a href="#PIM路由器" class="headerlink" title="PIM路由器"></a>PIM路由器</h6><p>PIM路由器：接口使能PIM的路由器</p>
 <p>叶子</p>
 <p>第一跳路由器</p>
@@ -1148,6 +1160,8 @@
 <li>使用于小型组播网络</li>
 <li>工作机制包括：<br>邻居发现<br>扩散<br>剪枝/加入<br>嫁接<br>断言<br>状态刷新</li>
 </ul>
+<p>密集模式中源非常重要，是核心。</p>
+<p>适用于网络规模小，源的数量少，成员分布比较密集的网络中。</p>
 <h6 id="PIM-DM-邻居发现"><a href="#PIM-DM-邻居发现" class="headerlink" title="PIM-DM 邻居发现"></a>PIM-DM 邻居发现</h6><p>Hello消息</p>
 <ul>
 <li>发现建立PIM邻居、协调各项PIM协议参数、维护邻居关系</li>
@@ -1199,6 +1213,7 @@
 <li>确定下游接口。对于DM模式来说，所有存在PIM邻居的接口以及存在组成员的接口都被认为是下游接口，RPF接口不可能称为下游接口！</li>
 </ol>
 <p>扩散行为：从上游接口收到的组播流量，从存在PIM邻居的接口和存在组成员的接口扩散下去。</p>
+<p>为什么扩散要周期性做：为了维护（S，G）表项，让那些没有需要接收组播数据的路由器也有（S，G）表项，在它有需要的时候可以即使嫁接到SPT网络中来。从而更快地获取到组播流量。</p>
 <table>
 <thead>
 <tr>
@@ -1232,13 +1247,109 @@
 </blockquote>
 <blockquote>
 <p>剪枝：<br>当PIM路由器收到组播报文后，RPF检查通过，但下游网段没有组播报文的需求，也就是（S，G）表项中出接口为空。此时PIM路由会向上游发送剪枝报文，通知上游路由器禁止向相应的下游接口的转发，将其从（S，G）表项的下游接口列表中删除。剪枝操作由叶子路由器发起，逐跳向上。如果上游路由器有出接口不为空时（已经删除了这个需要剪枝的出接口），则停止向上发送。最终组播转发路径上只存在于组成员相连的分支。</p>
-<p>如果在以太网中，下游路由器向组播地址224.0.0.13发送Prune消息，上游路由器收到Prune消息后等待3.5s，在这个时间内收不到下游路由器的Join消息的话就从（S，G）表项中删除出接口列表，如为空则继续向上扩散。如果收到了，则继续转发，发送Prune消息的下游路由器只能丢弃组播报文。</p>
-<p>剪枝否决：Join报文在在3s内发送给RPF邻居（上游邻居）</p>
+<p>只要剪枝的出接口不为空则不仅需向上剪</p>
+<p>如果在以太网中，下游路由器向组播地址224.0.0.13发送Prune消息，上游路由器收到Prune消息后等待3（lan-delay（0.5s）+override-interval（2.5s））s，在这个时间内收不到下游路由器的Join消息的话就从（S，G）表项中删除出接口列表，如为空则继续向上扩散。如果收到了，则继续转发，发送Prune消息的下游路由器只能丢弃组播报文。</p>
+<p><strong>Join报文在DM模式的作用</strong>：剪枝否决：Join报文在在3s内发送给RPF邻居（上游邻居）</p>
 </blockquote>
 <p>路由器为被裁剪的下游接口启动一个剪枝定时器（默认为210s）即不向此出接口发送组播报文210s，定时器超时后就恢复转发。组播报文重新在全网范围内扩散，新加入的组成员可以接收到组播报文。随后，下游不存在成员的叶子路由器将向上发起剪枝操作。通过这种周期性的扩散-剪枝，PIM-DM周期性的刷新SPT。</p>
-<h5 id="PIM-DM-嫁接"><a href="#PIM-DM-嫁接" class="headerlink" title="PIM-DM 嫁接"></a>PIM-DM 嫁接</h5><blockquote>
+<h6 id="SPT树形成"><a href="#SPT树形成" class="headerlink" title="SPT树形成"></a>SPT树形成</h6><ul>
+<li>经过扩散-剪枝过程，形成组播源与接收者之间SPT树</li>
+<li>扩散-剪枝周期进行，每210s重复一次</li>
+<li>每台路由器均会保留（S，G）表项（思科的（S，G）表项老化时间为6min）</li>
+</ul>
+<h6 id="PIM-DM-嫁接"><a href="#PIM-DM-嫁接" class="headerlink" title="PIM-DM 嫁接"></a>PIM-DM 嫁接</h6><p>单播报文</p>
+<p>要实现嫁接的前提是路由器有RPF邻居和（S，G）表项。</p>
+<p>嫁接就是剪到哪里嫁到哪里</p>
+<blockquote>
 <p>为什么嫁接报文是单播？<br>在PIM协议中，在任何场景下。一条链路只能有一个接口发送组播流量，如果有多个接口向这个链路发送组播流量的话一定存在组播发送的冗余或是环路。我希望上游把组播流量发给我，因为这个路由器是有唯一性的，所以就只用发单播就行了。如果过发组播，不是RPF邻居就会增加不必要的负担。</p>
 </blockquote>
+<h6 id="PIM-DM-断言（Assert）"><a href="#PIM-DM-断言（Assert）" class="headerlink" title="PIM-DM 断言（Assert）"></a>PIM-DM 断言（Assert）</h6><ul>
+<li><p>通过组播发送，发送给这个链路上的PIM邻居（224.0.0.13）</p>
+</li>
+<li><p>保证只有一个PIM路由器向该网段转发组播报文，以实现无重复组播流量</p>
+</li>
+<li><p>触发断言机制：下游接口接收到了与自身发送的流量是同源同组的组播流量时。</p>
+</li>
+<li><p>针对（S，G）表项中的某个具体的业务流进行断言</p>
+</li>
+<li><p>断言优胜者高于RPF判断出来的邻居</p>
+</li>
+</ul>
+<blockquote>
+<p>断言竞选规则：</p>
+<ol>
+<li>单播路由协议优先级，谁高谁获胜</li>
+<li>如果优先级相同，则比较自身到组播源的开销值，最小者获胜</li>
+<li>如果以上都相同，则下游接口IP地址最大者获胜</li>
+</ol>
+</blockquote>
+<p>根据Assert竞选结果，路由器将执行不同的操作：</p>
+<ol>
+<li>获胜一方的下游接口哦称为Assert Winner，将负责后续对该网段组播报文的转发</li>
+<li>落败的一方的下游接口称为Assert Loser，后续不会对该网段转发组播报文，PIM路由器也会将其从（S，G）表项下游接口列表中删除。Assert Loser如果（S，G）表项出接口为空则会向上游RPF邻居、Assert Winner发送剪枝报文。Assert Winner如果在3s内没收到Join报文则删除（S，G）表项的出接口。</li>
+<li>Assert竞选结束后，该网段上只存在一个下游接口，只传输一份组播报文，所有AssertLoser可以周期性（默认为180s）地恢复组播报文转发，从而引发周期性地Assert竞选。</li>
+</ol>
+<ul>
+<li>断言胜利者肯定是下游RPF地邻居，下游的路由器收到断言报文会判断然后会动态修改。</li>
+</ul>
+<p>在点到点链路上也会产生断言机制，解释了为什么Assert Loser会向Assert Winner发送剪枝报文。</p>
+<h6 id="PIM-DM-状态刷新（State-Refresh）"><a href="#PIM-DM-状态刷新（State-Refresh）" class="headerlink" title="PIM-DM 状态刷新（State Refresh）"></a>PIM-DM 状态刷新（State Refresh）</h6><p>仅有DM模式有，主要是优化功能。</p>
+<ul>
+<li><p>通过第一跳路由器周期性发送State Refresh来避免被裁剪的接口因为“剪枝定时器”超时而恢复转发</p>
+</li>
+<li><p>只有第一跳路由器知道组播源，如果组播源不发组播流量就不发状态刷新报文了。等待（S，G）表项老化。</p>
+</li>
+<li><p>第一跳路由器将（S，G）表项发送给所有PIM邻居（224.0.0.13）每60s发送一次。收到状态刷新报文地邻居会重置（S，G）表项的老化时间。剪枝状态的接口也刷新抑制时间恢复到210s。</p>
+</li>
+<li><p>降低了需要周期性扩散的行为，避免了带宽的浪费。提高网络质量。</p>
+</li>
+</ul>
+<p>华为默认开启状态刷新机制</p>
+<h5 id="PIM-SM（稀疏）"><a href="#PIM-SM（稀疏）" class="headerlink" title="PIM-SM（稀疏）"></a>PIM-SM（稀疏）</h5><ul>
+<li>使用“拉（Pull）模式”转发组播报文</li>
+<li>以RP（汇聚点）为根构建RPT</li>
+<li>适用于大型组播网络</li>
+<li>工作机制包括：<br>邻居发现<br>DR竞选<br>RP发现<br>RPT构建<br>组播源注册<br>SPT切换<br>剪枝/加入<br>断言</li>
+</ul>
+<h6 id="DR竞选"><a href="#DR竞选" class="headerlink" title="DR竞选"></a>DR竞选</h6><blockquote>
+<p>使用Hello报文中携带DR优先级和该网段接口地址进行竞选</p>
+<ul>
+<li>DR优先级较高者获胜（网段中所有PIM路由器都支持DR优先级）。</li>
+<li>如果DR优先级相同或该网段存在至少一台PIM路由器不支持在Hello报文中携带DR优先级，则IP地址较大者获胜。</li>
+</ul>
+</blockquote>
+<p>如果当前DR出现故障，将导致PIM邻居关系超时，其他PIM邻居之间会触发新一轮的DR竞选。</p>
+<p>DR分为源端DR，成员端DR</p>
+<ul>
+<li>在连接组播源的共享网段，由DR负责向RP发送Register注册报文。与组播源相连的DR称为源端DR。</li>
+<li>在连接组成员的共享网段，由DR负责向RP发送Join加入报文，与组成员相连的DR称为组成员端DR。</li>
+</ul>
+<p>如果无连接组播P源或无成员端，DR就无意义，只是可以选出来。</p>
+<h6 id="RP发现"><a href="#RP发现" class="headerlink" title="RP发现"></a>RP发现</h6><p>RP如何做到全网发现？</p>
+<p>静态RP：在网络中的所有PIM路由器上配置相同的RP地址，静态指定RP的位置。</p>
+<p>配置时，无论加不加ACL，IP地址大的为作为RP。</p>
+<p>仅对PIM-SM有效</p>
+<p>默认动态优于静态，静态RP如携带preferred则优于动态</p>
+<p>动态RP：在PIM域内选择几台PIM路由器，配置C-RP（Candidate-RP，候选RP）来动态竞选出RP。同时，还需要通过配置C-BSR（Candidate-BSR，候选BSR）选举出BSR，来收集C-RP的通告信息，向PIM-SM域内的所有PIM路由器发布。</p>
+<ol>
+<li>BSR协议（自举协议，业界标准）</li>
+</ol>
+<blockquote>
+<p><strong>Bootstrap报文</strong></p>
+<p>默认每60s秒发一次，C-BSR等待接收BSR发送的Bootstrap报文的超时时间是130s（2倍的发送周期+10s）。</p>
+<p>C-BSR开始发，TTL为1 全网泛洪，源地址为发送此报文接口的地址。（每经过一台路由器都会改源地址，其他参数不改）</p>
+<p>优先级越大越优</p>
+<p>如果优先级相同则IP地址大的获胜。（通常为环回口）</p>
+<p>针对Bootstrap做RPF检测，通过RPF检测的bootstrap才能向其他pim邻居接口泛洪下去（根据组播源的RPF信息。如果自举报文从RPF接口收到，且自举报文的源地址是RPF邻居的地址，满足这两个条件，才做接收且向其他PIM邻居泛洪）</p>
+<p>BSR作用：收集C-RP的通告信息，向PIM-SM域内的所有PIM路由器发布，通告所有C-RP的信息。</p>
+</blockquote>
+<ol start="2">
+<li>AUTO RP（自动RP，思科私有，华为具有兼容能力 ）</li>
+</ol>
+<p>RP 一个组地址，在一个时刻有且只有一个RP</p>
+<p>RP失效怎么办？<br>需要设计冗余方案，保证RP的冗余</p>
+<p>不同的组地址，可以有不同的RP，也可以共享一个RP</p>
+<p>224.1.1.1 1.1.1.1<br>224.1.1.2 2.2.2.2/1.1.1.1</p>
 
             </div>
             <hr/>
@@ -1713,7 +1824,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">87.2k</span>&nbsp;字
+                class="white-color">89k</span>&nbsp;字
             
             
             
