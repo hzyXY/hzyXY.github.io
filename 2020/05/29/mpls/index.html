@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="TCP协议, XY">
+    <meta name="keywords" content="MPLS, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>TCP协议 | XY</title>
+    <title>MPLS | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -258,12 +258,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/42.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">TCP协议</h1>
+                    <h1 class="description center-align post-title">MPLS</h1>
                 </div>
             </div>
         </div>
@@ -380,6 +380,10 @@
                     
                     <div class="article-tag">
                         
+                            <a href="/tags/VPN/">
+                                <span class="chip bg-color">VPN</span>
+                            </a>
+                        
                             <a href="/tags/%E5%8D%8F%E8%AE%AE/">
                                 <span class="chip bg-color">协议</span>
                             </a>
@@ -405,7 +409,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-11
+                    2020-05-29
                 </div>
                 
 
@@ -414,7 +418,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.5k
+                    1.6k
                 </div>
                 
 
@@ -437,117 +441,57 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h2><h3 id="TCP报文"><a href="#TCP报文" class="headerlink" title="TCP报文"></a>TCP报文</h3><p><img src="/2020/04/11/tcp-xie-yi/1.jpg" alt></p>
-<p><img src="/2020/04/11/tcp-xie-yi/2.JPG" alt></p>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>长度</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Source Port</td>
-<td>16比特</td>
-<td>源端口，标识哪个应用程序发送。</td>
-</tr>
-<tr>
-<td>Destination Port</td>
-<td>16比特</td>
-<td>目的端口，标识哪个应用程序接收。</td>
-</tr>
-<tr>
-<td>Sequence Number</td>
-<td>32比特</td>
-<td>序号字段。TCP链接中传输的数据流中每个字节都编上一个序号。序号字段的值指的是本报文段所发送的数据的第一个字节的序号。</td>
-</tr>
-<tr>
-<td>Acknowledgment Number</td>
-<td>32比特</td>
-<td>确认号，是期望收到对方的下一个报文段的数据的第1个字节的序号，即上次已成功接收到的数据字节序号加1。只有ACK标识为1，此字段有效。</td>
-</tr>
-<tr>
-<td>Data Offset</td>
-<td>4比特</td>
-<td>数据偏移，即首部长度，指出TCP报文段的数据起始处距离TCP报文段的起始处有多远，以32比特（4字节）为计算单位。最多有60字节的首部，若无选项字段，正常为20字节。</td>
-</tr>
-<tr>
-<td>Reserved</td>
-<td>6比特</td>
-<td>保留，必须填0。</td>
-</tr>
-<tr>
-<td>URG</td>
-<td>1比特</td>
-<td>紧急指针有效标识。它告诉系统此报文段中有紧急数据，应尽快传送（相当于高优先级的数据）。</td>
-</tr>
-<tr>
-<td>ACK</td>
-<td>1比特</td>
-<td>确认序号有效标识。只有当ACK=1时确认号字段才有效。当ACK=0时，确认号无效。</td>
-</tr>
-<tr>
-<td>PSH</td>
-<td>1比特</td>
-<td>标识接收方应该尽快将这个报文段交给应用层。接收到PSH =  1的TCP报文段，应尽快的交付接收应用进程，而不再等待整个缓存都填满了后再向上交付。</td>
-</tr>
-<tr>
-<td>RST</td>
-<td>1比特</td>
-<td>重建连接标识。当RST=1时，表明TCP连接中出现严重错误（如由于主机崩溃或其他原因），必须释放连接，然后再重新建立连接。</td>
-</tr>
-<tr>
-<td>SYN</td>
-<td>1比特</td>
-<td>同步序号标识，用来发起一个连接。SYN=1表示这是一个连接请求或连接接受请求。</td>
-</tr>
-<tr>
-<td>FIN</td>
-<td>1比特</td>
-<td>发端完成发送任务标识。用来释放一个连接。FIN=1表明此报文段的发送端的数据已经发送完毕，并要求释放连接。</td>
-</tr>
-<tr>
-<td>Window</td>
-<td>16比特</td>
-<td>窗口：TCP的流量控制，窗口起始于确认序号字段指明的值，这个值是接收端正期望接收的字节数。窗口最大为65535字节。</td>
-</tr>
-<tr>
-<td>Checksum</td>
-<td>16比特</td>
-<td>校验字段，包括TCP首部和TCP数据，是一个强制性的字段，一定是由发端计算和存储，并由收端进行验证。在计算检验和时，要在TCP报文段的前面加上12字节的伪首部。</td>
-</tr>
-<tr>
-<td>Urgent Pointer</td>
-<td>16比特</td>
-<td>紧急指针，只有当URG标志置1时紧急指针才有效。TCP的紧急方式是发送端向另一端发送紧急数据的一种方式。紧急指针指出在本报文段中紧急数据共有多少个字节（紧急数据放在本报文段数据的最前面）。</td>
-</tr>
-<tr>
-<td>Options</td>
-<td>可变</td>
-<td>选项字段。TCP协议最初只规定了一种选项，即最长报文段长度（数据字段加上TCP首部），又称为MSS。MSS告诉对方TCP“我的缓存所能接收的报文段的数据字段的最大长度是MSS个字节”。 新的RFC规定有以下几种选型：选项表结束，无操作，最大报文段长度，窗口扩大因子，时间戳。 窗口扩大因子：3字节，其中一个字节表示偏移值S。新的窗口值等于TCP首部中的窗口位数增大到（16+S），相当于把窗口值向左移动S位后获得实际的窗口大小。 时间戳：10字节，其中最主要的字段是时间戳值（4字节）和时间戳回送应答字段（4字节）。 选项确认选项：</td>
-</tr>
-<tr>
-<td>Padding</td>
-<td>可变</td>
-<td>填充字段，用来补位，使整个首部长度是4字节的整数倍。</td>
-</tr>
-<tr>
-<td>data</td>
-<td>可变</td>
-<td>TCP负载。</td>
-</tr>
-</tbody></table>
-<h3 id="TCP连接建立与释放"><a href="#TCP连接建立与释放" class="headerlink" title="TCP连接建立与释放"></a>TCP连接建立与释放</h3><p><img src="/2020/04/11/tcp-xie-yi/3.png" alt></p>
-<p><strong>建立连接</strong></p>
-<p>第一次握手：客户端发送syn包（sep=x）到服务器，并进入SYN_SENT状态，等待服务器确认；</p>
-<p>第二次握手：服务器收到SYN包，必须确认客户的SYN（ACK=x+1）同时自己也发送一次SYN包（seq=y），即SYN+ACK包，此时服务器进入SYN_RCVD状态，建立半开连接。</p>
-<p>第三次握手：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK（ack=y+1），此包发送完毕，客户端和服务器进入ESTABLISHED状态，完成三次握手，握手过程中传送的包里不包含数据，三次握手完毕后，客户端与服务器才正式开始传送数据。理想状态下，TCP连接一旦建立，在通信双方中的任何一方主动关闭连接之前，TCP连接都将被一直保持下去。</p>
-<p><strong>断开连接：</strong></p>
-<p>第一次握手：主动方关闭发送一个FIN，用来关闭主动方到被关闭方的数据传送，也就是主动关闭方告诉被动关闭方：我已经不会再给你发数据了（当然，在FIN包之前发送出去的数据，如果没有收到对应的ACK确认报文，主动关闭方依然会重发这些数据），但此时主动关闭方还可以接受数据。</p>
-<p>第二次握手：被动关闭方收到FIN包后，发送一个ACK给对方，确认序号为收到试验型号+1（与SYN相同，一个FIN占用一个序号）</p>
-<p>第三次握手：被动关闭方发送一个FIN，用来关闭被动关闭到主动关闭方的数据传送，也就是告诉主动关闭方，我的数据也发送完了，不会再给你发数据了。</p>
-<p>第四次握手：主动关闭方收到FIN后，发送一个ACK给被动关闭方，确认序号为收到序号+1，至此，完成四次握手</p>
+                <h2 id="MPLS"><a href="#MPLS" class="headerlink" title="MPLS"></a>MPLS</h2><ul>
+<li><p>多协议标签交换（Multiprotocol Label Switching）是一种IP骨干网技术</p>
+</li>
+<li><p>软件算法：IP的逐跳转发，在经过的每一跳处，必须进行路由表的最长匹配查找（可能多次），速度缓慢。<br>没有实现转控分离，都需要CPU完成，从而性能成为瓶颈</p>
+</li>
+<li><p>ATM（Asynchronous Transfer Mode）技术应运而生。ATM采用定长标签，并且只需要维护比路由表规模小得多的标签表，能够提供比IP路由方式高得多的转发性能。然而，ATM协议相对复杂，且ATM网络部署成本高，这使得ATM技术很难普及。</p>
+</li>
+<li><p>传统的IP技术简单，且部署成本低。如何结合IP与ATM的优点成为当时热门话题。多协议标签交换技术MPLS就是在这种背景下产生的。</p>
+</li>
+<li><p>MPLS最初是为了提高路由器的转发速度而提出的。与传统IP路由方式相比，它在数据转发时，只在网络边缘分析IP报文头，而不用在每一跳都分析IP报文头，节约了处理时间。</p>
+<p>随着专用集成电路ASIC（Application Specific Integrated Circuit）技术的发展，路由查找速度已经不是阻碍网络发展的瓶颈。这使得MPLS在提高转发速度方面不再具备明显的优势。但是MPLS支持多层标签和转发平面面向连接的特性，使其在VPN（Virtual Private Network）、QoS（Quality of Service）等方面得到广泛应用。</p>
+</li>
+</ul>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><h4 id="MPLS报文"><a href="#MPLS报文" class="headerlink" title="MPLS报文"></a>MPLS报文</h4><h5 id="MPLS包头"><a href="#MPLS包头" class="headerlink" title="MPLS包头"></a>MPLS包头</h5><p>包头图</p>
+<p>MPLS包头有32bit，其中有：<br>20Bit同做标签（Label）<br>3个Bit的EXP，协议中没有明确，通常用作于COS<br>1Bit的S，用于表示是否是栈底，表明MPLS的标签可以嵌套。等于0为后面还有标签，等于1表示后面无标签。理论上可无限嵌套<br>8Bit的TTL</p>
+<h4 id="MPLS术语"><a href="#MPLS术语" class="headerlink" title="MPLS术语"></a>MPLS术语</h4><p><strong>标签（Label）</strong><br>是一个比较端的，定长的，通常只具有局部意义的标识，这些标签通常位于数据链路层的数据链路层封装头和三层数据包之间，标签通过绑定过程同FEC相映射。</p>
+<p><strong>FEC</strong><br>Forwarding Equivalence Class，FEC（转发等价类），是在转发过程中以等价的方式处理的一组数据分组，可根据地址、隧道、COS（优先级）等标识创建FEC。可以认为一条路由时一个FEC，通常在一台路由器上，对一个FEC分配相同的标签。（根据隧道的目标地址定义：以一组等价的方式转发的报文称之为一个转发等价类）。</p>
+<p><strong>LSP</strong><br>Label Switched Path（标签交换通道）。一个FEC的数据流，在不同的节点被赋予确定的标签，数据转发按照这些标签进行。数据流所走的路径就是LSP。<br>MPLS的标签转发，通过事先分配好的标签，为报文建立了一条标签转发通道（LSP），再通道经过的每一台设备处，只需要进行快速的标签交换即可（一次查找）。</p>
+<p>单向路径</p>
+<p><strong>LSR</strong><br>Label Switching Router，LSR是MPLS的网络核心交换机，它提供标签交换和标签分发的功能。</p>
+<p><strong>LER</strong><br>在MPLS的网络边缘，进入到MPLS网络的流量由LER分为不同的FEC，并为这些FEC请求相应的标签。它提供流量分类和标签的映射、标签的移除功能。</p>
+<h4 id="LSP的建立"><a href="#LSP的建立" class="headerlink" title="LSP的建立"></a>LSP的建立</h4><p>MPLS需要为报文事先分配好标签，建立一条LSP，才能进行报文转发。LSP分为静态LSP和动态LSP。</p>
+<h5 id="静态LSP的建立"><a href="#静态LSP的建立" class="headerlink" title="静态LSP的建立"></a>静态LSP的建立</h5><p>静态LSP是用户通过手工为各个转发等价类分配标签而建立的。由于静态LSP各节点上不能相互感知到整个LSP的情况，因此静态LSP是一个本地概念。</p>
+<p>静态LSP不使用标签发布协议，不需要交互控制报文，因此消耗资源比较小，适用于拓扑结构简单并且稳定的小型网络，但通过静态方式分配标签建立的LSP不能根据网络拓扑变化动态调整，需要管理员干预。</p>
+<p>静态LSP与静态CR-LSP适用相同的标签空间（16~1023）.配置静态LSP时需要遵循的原则是，前一节出标签的值等于下一个节点入标签的值</p>
+<h5 id="动态LSP的建立"><a href="#动态LSP的建立" class="headerlink" title="动态LSP的建立"></a>动态LSP的建立</h5><p>动态LSP通过标签发布协议动态建立。标签发布协议是MPLS的控制协议（也可称为信令协议），负责FEC的分类、标签的分发以及LSP的建立和维护等一系列操作。</p>
+<p>MPLS可以使用多种标签发布协议：</p>
+<ul>
+<li><p>LDP</p>
+<p>LDP（Label Distribution Protocol）是专为标签发布而制定的协议。LDP根据IGP、BGP路由信息通过逐跳方式建立LSP。</p>
+</li>
+<li><p>RSVP-TE</p>
+<p>RSVP-TE（Resource Reservation Protocol Traffic Engineering）是对RSVP的扩展，用于建立基于约束的LSP。它拥有普通LDP LSP没有的功能，如发布带宽预留请求、带宽约束、链路颜色和显式路径等。</p>
+<p>用于基于MPLS的流量工程</p>
+</li>
+<li><p>MP-BGP</p>
+<p>MP-BGP（Multiprotocol Border Gateway Protocol）是在BGP协议基础上扩展的协议。MP-BGP支持为MPLS VPN业务中私网路由和跨域VPN的标签路由分配标签。</p>
+</li>
+</ul>
+<h4 id="MPLS转发"><a href="#MPLS转发" class="headerlink" title="MPLS转发"></a>MPLS转发</h4><p>在MPLS基本转发过程中涉及的相关概念如下：</p>
+<p>标签操作类型包括标签压入（Push）、标签交换（Swap）和标签弹出（Pop），它们是标签转发的基本动作。</p>
+<ul>
+<li><p>Push：当IP报文进入MPLS域时，MPLS边界设备在报文二层首部和IP首部之间插入一个新标签；或者MPLS中间设备根据需要，在标签栈顶增加一个新的标签（即标签嵌套封装）。</p>
+</li>
+<li><p>Swap：当报文在MPLS域内转发时，根据标签转发表，用下一跳分配的标签，替换MPLS报文的栈顶标签。</p>
+</li>
+<li><p>Pop：当报文离开MPLS域时，将MPLS报文的标签剥掉。</p>
+<p>在最后一跳节点，标签已经没有使用价值。这种情况下，可以利用倒数第二跳弹出特性PHP（Penultimate Hop Popping），在倒数第二跳节点处将标签弹出，减少最后一跳的负担。最后一跳节点直接进行IP转发或者下一层标签转发。</p>
+<p>默认情况下，设备支持PHP特性，支持PHP的Egress节点分配给倒数第二跳节点的标签值为3。仅移除顶部标签。</p>
+</li>
+</ul>
 
             </div>
             <hr/>
@@ -573,7 +517,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/11/tcp-xie-yi/">https://hzyxy.github.io/2020/04/11/tcp-xie-yi/</a>
+                    <a href="https://hzyxy.github.io/2020/05/29/mpls/">https://hzyxy.github.io/2020/05/29/mpls/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -610,6 +554,10 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
+                            
+                                <a href="/tags/VPN/">
+                                    <span class="chip bg-color">VPN</span>
+                                </a>
                             
                                 <a href="/tags/%E5%8D%8F%E8%AE%AE/">
                                     <span class="chip bg-color">协议</span>
@@ -778,54 +726,52 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/04/11/ddos-gong-ji-de-jie-shao-yu-fang-yu/">
+                <a href="/2020/05/29/mpls/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/27.jpg" class="responsive-img" alt="DDOS攻击的介绍与防御">
+                        <img src="/medias/featureimages/42.jpg" class="responsive-img" alt="MPLS">
                         
-                        <span class="card-title">DDOS攻击的介绍与防御</span>
+                        <span class="card-title">MPLS</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            DDOS攻击的介绍与防御
+                            MPLS的介绍
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-29
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Cyber-security/" class="post-category">
-                                    Cyber security
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
                     </a>
                     
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
-                        <span class="chip bg-color">攻击防范</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
                     </a>
                     
                 </div>
@@ -839,31 +785,31 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/11/urpf/">
+                <a href="/2020/05/26/2020-05-26-sui-bi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="URPF">
+                        <img src="/medias/featureimages/32.jpg" class="responsive-img" alt="2020-05-26随笔">
                         
-                        <span class="card-title">URPF</span>
+                        <span class="card-title">2020-05-26随笔</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            单播逆向路径转发的介绍
+                            随笔
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-26
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Cyber-security/" class="post-category">
-                                    Cyber security
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                    随笔
                                 </a>
                             
                             
@@ -873,20 +819,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83/">
-                        <span class="chip bg-color">攻击防范</span>
+                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                        <span class="chip bg-color">记录</span>
                     </a>
                     
                 </div>
