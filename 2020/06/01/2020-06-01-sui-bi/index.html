@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="GRE Over IPSec, XY">
+    <meta name="keywords" content="2020-06-01随笔, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>GRE Over IPSec | XY</title>
+    <title>2020-06-01随笔 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -258,12 +258,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/36.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/60.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">GRE Over IPSec</h1>
+                    <h1 class="description center-align post-title">2020-06-01随笔</h1>
                 </div>
             </div>
         </div>
@@ -380,20 +380,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                <span class="chip bg-color">华为</span>
-                            </a>
-                        
-                            <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                                <span class="chip bg-color">配置</span>
-                            </a>
-                        
-                            <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                <span class="chip bg-color">防火墙</span>
-                            </a>
-                        
-                            <a href="/tags/VPN/">
-                                <span class="chip bg-color">VPN</span>
+                            <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                                <span class="chip bg-color">记录</span>
                             </a>
                         
                     </div>
@@ -404,8 +392,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Cyber-security/" class="post-category">
-                                Cyber security
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                随笔
                             </a>
                         
                     </div>
@@ -417,7 +405,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-27
+                    2020-06-01
                 </div>
                 
 
@@ -426,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.4k
+                    19
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    12 分
+                    1 分
                 </div>
                 
 
@@ -449,162 +437,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="GRE-Over-IPSec"><a href="#GRE-Over-IPSec" class="headerlink" title="GRE Over IPSec"></a>GRE Over IPSec</h2><ul>
-<li>GRE可以封装组播数据并在GRE隧道中传输。而IPSec目前只能对单播数据进行加密保护，因此对于诸如路由协议、语音、视频等组播数据需要在IPSec隧道中传输的情况，可以通过建立GRE隧道，并对组播数据进行GRE封装，然后对封装后的报文进行IPSec的加密处理，就实现了组播数据在IPSec隧道中的加密传输。</li>
-<li>GRE over IPSec可以结合GRE和IPSec两种技术的优点，使网络既可以支持多种上层协议和组播报文，又可以支持报文加密、身份认证机制和数据完整性校验。</li>
-<li>当网关之间采用GRE over IPSec连接时，先进行GRE封装，再进行IPSec封装。GRE over IPSec使用的封装模式为可以是隧道模式也可以是传输模式。因为隧道模式跟传输模式相比增加了IPSec头，导致报文长度更长，更容易导致分片，所以推荐采用传输模式GRE over IPSec。</li>
-<li>配置Tunnel逻辑接口时，需要指定GRE隧道使用的源地址及目的地址。配置到对端网络内网网段的路由时，下一跳为Tunnel口。<br>配置GRE over IPSec时，与单独配置GRE和IPSec没有太大的区别。唯一需要注意的地方是，通过ACL定义需要保护的数据流时，不能再以总部和分部内部私网地址为匹配条件，而是必须匹配经过GRE封装后的报文，即定义报文的源地址为GRE隧道的源地址，目的地址为GRE隧道的目的地址。</li>
-</ul>
-<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><h4 id="GRE的优缺点"><a href="#GRE的优缺点" class="headerlink" title="GRE的优缺点"></a>GRE的优缺点</h4><p><strong>GRE的优点</strong><br>1.支持多种上层协议<br>2.支持主播</p>
-<p><strong>GRE的缺点</strong><br>1.不支持加密<br>2.软弱的身份认证机制<br>3.软弱的数据完整性校验</p>
-<h4 id="IPSec的优缺点"><a href="#IPSec的优缺点" class="headerlink" title="IPSec的优缺点"></a>IPSec的优缺点</h4><p><strong>IPSec的优点</strong><br>1.支持加密<br>2.支持身份认证机制<br>3.支持数据完整性校验</p>
-<p><strong>IPSec的缺点</strong><br>1.只支持IP协议的封装，不支持多种上层协议<br>2.不支持主播</p>
-<h4 id="GRE-over-IPSec报文封装"><a href="#GRE-over-IPSec报文封装" class="headerlink" title="GRE over IPSec报文封装"></a>GRE over IPSec报文封装</h4><p><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/fz0.png" alt="传输模式报文封装"></p>
-<ul>
-<li><strong>传输模式tunnel接口不可借用私网IP地址</strong></li>
-</ul>
-<p><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/fz1.png" alt="隧道模式报文封装"></p>
-<ul>
-<li>隧道模式使用新的IPSec报文头来封装经过GRE封装后的消息，封装后的消息共有三个报文头：原始报文头、GRE报文头和IPSec报文头，Internet上的设备根据最外层的IPSec报文头来转发该消息。</li>
-<li>封装GRE报文头时，源和目的地址可以与IPSec报文头中的源和目的地址相同，即使用公网地址来封装；也可以使用私网地址封装GRE报文头，例如，创建Loopback接口并配置私网地址，然后在GRE中借用Loopback接口的地址来封装。</li>
-<li>在GRE over IPSec中，无论IPSec采用传输模式还是隧道模式，都可以保护两个网络之间通信的消息。这是因为GRE已经进行了一次封装，原始报文就可以是两个网络之间的报文。</li>
-<li>注意：隧道模式与传输模式相比多增加了新的IPSec报文头，导致报文长度更长，更容易导致分片。如果网络环境要求报文不能分片，推荐使用传输模式。</li>
-</ul>
-<p><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/fz2.png" alt="GRE over IPSec报文封装和隧道协商过程"></p>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="IPSec安全策略方式"><a href="#IPSec安全策略方式" class="headerlink" title="IPSec安全策略方式"></a>IPSec安全策略方式</h4><p><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
-<h5 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h5><h6 id="一、在FW上的配置"><a href="#一、在FW上的配置" class="headerlink" title="一、在FW上的配置"></a>一、在FW上的配置</h6><table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>1.配置LoopBack接口</strong><br>interface LoopBack0<br> ip address 172.16.1.1 255.255.255.0</td>
-<td><strong>1.配置LoopBack接口</strong><br>interface LoopBack0<br> ip address 172.16.2.1 255.255.255.0</td>
-</tr>
-<tr>
-<td><strong>2.配置Tunnel接口的封装参数</strong><br>interface Tunnel1<br> ip address 100.100.100.1 255.255.255.0<br> tunnel-protocol gre<br> source LoopBack0<br> destination 172.16.2.1</td>
-<td><strong>2.配置Tunnel接口的封装参数</strong><br>interface Tunnel1<br> ip address 100.100.100.2 255.255.255.0<br> tunnel-protocol gre<br> source LoopBack0<br> destination 172.16.1.1</td>
-</tr>
-<tr>
-<td><strong>3.配置路由，引导流量</strong><br>ip route-static 192.168.2.0 255.255.255.0 Tunnel1</td>
-<td><strong>3.配置路由，引导流量</strong><br>ip route-static 192.168.1.0 255.255.255.0 Tunnel1</td>
-</tr>
-<tr>
-<td><strong>4.配置感兴趣流</strong><br>acl number 3000<br> rule 5 permit ip source 172.16.1.0 0.0.0.255 destination 172.16.2.0 0.0.0.255</td>
-<td><strong>4.配置感兴趣流</strong><br>acl number 3000<br> rule 5 permit ip source 172.16.2.0 0.0.0.255 destination 172.16.1.0 0.0.0.255</td>
-</tr>
-<tr>
-<td><strong>5.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
-<td><strong>5.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
-</tr>
-<tr>
-<td><strong>6.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
-<td><strong>6.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
-</tr>
-<tr>
-<td><strong>7.配置IKE peer</strong><br>ike peer FW2<br> undo version 2<br>pre-shared-key 123456<br>ike-proposal 1<br>remote-address 2.1.1.2</td>
-<td><strong>7.配置IKE peer</strong><br>ike peer FW1<br> undo version 2<br>pre-shared-key 123456<br>ike-proposal 1<br> remote-address 1.1.1.1</td>
-</tr>
-<tr>
-<td><strong>8.配置IPSec策略</strong><br>ipsec policy FW2 1 isakmp<br> security acl 3000<br> ike-peer FW2<br> proposal ipsec_p1</td>
-<td><strong>8.配置IPSec策略</strong><br>ipsec policy FW1 1 isakmp<br> security acl 3000<br> ike-peer FW1<br> proposal ipsec_p1</td>
-</tr>
-<tr>
-<td><strong>9.在接口应用IPSec策略</strong><br>interface GigabitEthernet1/0/1<br> undo shutdown<br> ip address 1.1.1.1 255.255.255.0<br> ipsec policy FW2</td>
-<td><strong>9.在接口应用IPSec策略</strong><br>interface GigabitEthernet1/0/1<br> undo shutdown<br> ip address 2.1.1.2 255.255.255.0<br> ipsec policy FW1</td>
-</tr>
-<tr>
-<td><strong>10.配置安全区域</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet0/0/0<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br> add interface Tunnel1</td>
-<td><strong>10.配置安全区域</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet0/0/0<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br> add interface Tunnel1</td>
-</tr>
-<tr>
-<td><strong>11.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol udp source-port 500 destination-port 500<br>  action permit<br><br> rule name 3<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  service protocol 50<br>  action permit</td>
-<td><strong>11.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol udp source-port 500 destination-port 500<br>  action permit<br><br> rule name 3<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 50<br>  action permit</td>
-</tr>
-</tbody></table>
-<h5 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h5><table>
-<thead>
-<tr>
-<th><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1ikesa1.JPG" alt="查看FW1所建立的IKE SA"></th>
-<th><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1ikesa2.JPG" alt="查看FW2所建立的IKE SA"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1ipsecsa1.JPG" alt="查看FW1所建立的IPSec SA"></td>
-<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1ipsecsa2.JPG" alt="查看FW2所建立的IPSec SA"></td>
-</tr>
-<tr>
-<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1sessiontable1.JPG" alt="查看FW1的会话表"></td>
-<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/1sessiontable2.JPG" alt="查看FW2的会话表"></td>
-</tr>
-</tbody></table>
-<h4 id="IPSec安全框架方式"><a href="#IPSec安全框架方式" class="headerlink" title="IPSec安全框架方式"></a>IPSec安全框架方式</h4><p><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/%E6%8B%93%E6%89%91.JPG" alt="拓扑"></p>
-<h5 id="配置步骤-1"><a href="#配置步骤-1" class="headerlink" title="配置步骤"></a>配置步骤</h5><h6 id="一、在FW上的配置-1"><a href="#一、在FW上的配置-1" class="headerlink" title="一、在FW上的配置"></a>一、在FW上的配置</h6><table>
-<thead>
-<tr>
-<th>在FW1的配置</th>
-<th>在FW2的配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>1.配置Tunnel接口的封装参数</strong><br>interface Tunnel1<br> ip address 100.100.100.1 255.255.255.0<br> tunnel-protocol gre<br> source GigabitEthernet1/0/1<br> destination 2.1.1.2</td>
-<td><strong>1.配置Tunnel接口的封装参数</strong><br>interface Tunnel1<br> ip address 200.200.200.1 255.255.255.0<br> tunnel-protocol gre<br> source GigabitEthernet1/0/1<br> destination 1.1.1.1</td>
-</tr>
-<tr>
-<td><strong>2.配置ospf</strong><br>ospf 1<br> area 0.0.0.0<br>  network 100.100.100.0 0.0.0.255<br>  network 192.168.1.0 0.0.0.255</td>
-<td><strong>2.配置ospf</strong><br>ospf 1<br> area 0.0.0.0<br>  network 192.168.2.0 0.0.0.255<br>  network 200.200.200.0 0.0.0.255</td>
-</tr>
-<tr>
-<td><strong>3.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> encapsulation-mode transport<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
-<td><strong>3.配置IPSec安全提议</strong><br>ipsec proposal ipsec_p1<br> encapsulation-mode transport<br> esp authentication-algorithm sha2-256<br> esp encryption-algorithm aes-256</td>
-</tr>
-<tr>
-<td><strong>4.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
-<td><strong>4.配置IKE安全提议</strong><br>ike proposal 1<br> encryption-algorithm aes-256<br> dh group14<br> authentication-algorithm sha2-256<br> authentication-method pre-share<br> integrity-algorithm hmac-sha2-256<br> prf hmac-sha2-256</td>
-</tr>
-<tr>
-<td><strong>5.配置IKE peer</strong><br>ike peer FW2<br> undo version 2<br>pre-shared-key 123456<br>ike-proposal 1</td>
-<td><strong>5.配置IKE peer</strong><br>ike peer FW1<br> undo version 2<br>pre-shared-key<br>ike-proposal 1</td>
-</tr>
-<tr>
-<td><strong>6.配置IPSec安全框架</strong><br>ipsec profile profile1<br> ike-peer FW2<br> proposal ipsec_p1</td>
-<td><strong>6.配置IPSec安全框架</strong><br>ipsec profile profile1<br> ike-peer FW1<br> proposal ipsec_p1</td>
-</tr>
-<tr>
-<td><strong>7.在接口应用IPSec安全框架</strong><br>interface Tunnel1<br> ip address 100.100.100.1 255.255.255.0<br> tunnel-protocol gre<br> source GigabitEthernet1/0/1<br> destination 2.1.1.2<br> ipsec profile profile1</td>
-<td><strong>7.在接口应用IPSec安全框架</strong><br>interface Tunnel1<br> ip address 200.200.200.1 255.255.255.0<br> tunnel-protocol gre<br> source GigabitEthernet1/0/1<br> destination 1.1.1.1<br> ipsec profile profile1</td>
-</tr>
-<tr>
-<td><strong>8.配置安全区域</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet0/0/0<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br> add interface Tunnel1</td>
-<td><strong>8.配置安全区域</strong><br>firewall zone trust<br> set priority 85<br> add interface GigabitEthernet0/0/0<br> add interface GigabitEthernet1/0/0<br><br>firewall zone untrust<br> set priority 5<br> add interface GigabitEthernet1/0/1<br> add interface Tunnel1</td>
-</tr>
-<tr>
-<td><strong>9.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol udp source-port 500 destination-port 500<br>  service protocol 47<br>  action permit<br><br> rule name 3<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  service protocol 50<br>  action permit</td>
-<td><strong>9.配置安全策略</strong><br>security-policy<br><br> rule name 1<br>  source-zone trust<br>  source-zone untrust<br>  destination-zone trust<br>  destination-zone untrust<br>  source-address 192.168.1.1 32<br>  source-address 192.168.2.1 32<br>  destination-address 192.168.1.1 32<br>  destination-address 192.168.2.1 32<br>  service icmp<br>  action permit<br><br> rule name 2<br>  source-zone local<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  source-address 2.1.1.2 32<br>  destination-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol udp source-port 500 destination-port 500<br>  service protocol 47<br>  action permit<br><br> rule name 3<br>  source-zone untrust<br>  destination-zone local<br>  destination-zone untrust<br>  source-address 1.1.1.1 32<br>  destination-address 2.1.1.2 32<br>  service protocol 50<br>  action permit</td>
-</tr>
-</tbody></table>
-<h5 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h5><table>
-<thead>
-<tr>
-<th><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/ospf1.JPG" alt="查看FW1ospf的邻居"></th>
-<th><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/ospf2.JPG" alt="查看FW2ospf的邻居"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2ikesa1.JPG" alt="查看FW1所建立的IKE SA"></td>
-<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2ikesa2.JPG" alt="查看FW2所建立的IKE SA"></td>
-</tr>
-<tr>
-<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2ipsecsa1.JPG" alt="查看FW1所建立的IPSec SA"></td>
-<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2ipsecsa2.JPG" alt="查看FW2所建立的IPSec SA"></td>
-</tr>
-<tr>
-<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2sessiontable1.JPG" alt="查看FW1的会话表"></td>
-<td><img src="/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/2sessiontable2.JPG" alt="查看FW2的会话表"></td>
-</tr>
-</tbody></table>
+                <h2 id="2020-06-01随笔"><a href="#2020-06-01随笔" class="headerlink" title="2020-06-01随笔"></a>2020-06-01随笔</h2><p>只有越来越强大，才能越来越童话。</p>
 
             </div>
             <hr/>
@@ -630,7 +463,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/">https://hzyxy.github.io/2020/04/27/greoveripsec-de-jie-shao-yu-pei-zhi/</a>
+                    <a href="https://hzyxy.github.io/2020/06/01/2020-06-01-sui-bi/">https://hzyxy.github.io/2020/06/01/2020-06-01-sui-bi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -668,20 +501,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                    <span class="chip bg-color">华为</span>
-                                </a>
-                            
-                                <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                                    <span class="chip bg-color">配置</span>
-                                </a>
-                            
-                                <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                    <span class="chip bg-color">防火墙</span>
-                                </a>
-                            
-                                <a href="/tags/VPN/">
-                                    <span class="chip bg-color">VPN</span>
+                                <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                                    <span class="chip bg-color">记录</span>
                                 </a>
                             
                         </div>
@@ -847,58 +668,48 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/04/28/dsvpn/">
+                <a href="/2020/06/01/2020-06-01-sui-bi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="DS VPN">
+                        <img src="/medias/featureimages/60.jpg" class="responsive-img" alt="2020-06-01随笔">
                         
-                        <span class="card-title">DS VPN</span>
+                        <span class="card-title">2020-06-01随笔</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            DS VPN的介绍与配置
+                            随笔
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-01
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Cyber-security/" class="post-category">
-                                    Cyber security
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                    随笔
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/VPN/">
-                        <span class="chip bg-color">VPN</span>
+                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                        <span class="chip bg-color">记录</span>
                     </a>
                     
                 </div>
@@ -912,31 +723,31 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/26/ipsec-vpn-gao-ke-kao-xing/">
+                <a href="/2020/05/31/2020-5-31-sui-bi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="IPSec VPN高可靠性">
+                        <img src="/medias/featureimages/58.jpg" class="responsive-img" alt="2020-05-31随笔">
                         
-                        <span class="card-title">IPSec VPN高可靠性</span>
+                        <span class="card-title">2020-05-31随笔</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            IPSec VPN高可靠性技术的介绍与配置
+                            随笔
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-26
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-31
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Cyber-security/" class="post-category">
-                                    Cyber security
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                    随笔
                                 </a>
                             
                             
@@ -946,20 +757,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                        <span class="chip bg-color">高可靠性</span>
-                    </a>
-                    
-                    <a href="/tags/VPN/">
-                        <span class="chip bg-color">VPN</span>
+                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                        <span class="chip bg-color">记录</span>
                     </a>
                     
                 </div>

@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    11.2k
+                    12.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    40 分
+                    46 分
                 </div>
                 
 
@@ -1107,6 +1107,7 @@
 <li>组播分发树的一种</li>
 <li>以组播源为根，组播组成员为叶子的组播分发树成为SPT</li>
 <li>有多少个源就有多少个（S，G）表项，比较消耗资源。但转发路径是最优无环的。</li>
+<li>（S，G）一定要事先知道S的地址，以及存在S的路由</li>
 </ul>
 <table>
 <thead>
@@ -1129,6 +1130,7 @@
 <li>以RP为根，组播组成员为叶子的组播分发树</li>
 <li>不能保证路径是最优的</li>
 <li>接收者到RP构造（*，G），源到RP构造（S，G）。既有（S，G）也有（*，G）</li>
+<li>（*，G）一定要事先知道RP的地址，以及存在RP的的路由</li>
 </ul>
 <table>
 <thead>
@@ -1154,7 +1156,8 @@
 </blockquote>
 <p>在负载分担的链路上如何判断RPF接口？<br>查找路由表，下一跳IP地址大的为RPF接口，地址小的不为RPF接口。</p>
 <p>RPF邻居：就是路由表下一跳的最大的IP地址，有PIM邻居。</p>
-<h5 id="PIM-DM-（密集）"><a href="#PIM-DM-（密集）" class="headerlink" title="PIM-DM （密集）"></a>PIM-DM （密集）</h5><ul>
+<h5 id="PIM-DM-（密集）"><a href="#PIM-DM-（密集）" class="headerlink" title="PIM-DM （密集）"></a>PIM-DM （密集）</h5><p>工作在ASM模型</p>
+<ul>
 <li>使用”推（Push）模式“转发组播报文</li>
 <li>通过周期性的扩散——剪枝构建和维护单向无环的SPT。（只有SPT树）</li>
 <li>使用于小型组播网络</li>
@@ -1305,13 +1308,38 @@
 </li>
 </ul>
 <p>华为默认开启状态刷新机制</p>
-<h5 id="PIM-SM（稀疏）"><a href="#PIM-SM（稀疏）" class="headerlink" title="PIM-SM（稀疏）"></a>PIM-SM（稀疏）</h5><ul>
+<h5 id="PIM-SM（稀疏）"><a href="#PIM-SM（稀疏）" class="headerlink" title="PIM-SM（稀疏）"></a>PIM-SM（稀疏）</h5><p>工作在ASM</p>
+<ul>
 <li>使用“拉（Pull）模式”转发组播报文</li>
 <li>以RP（汇聚点）为根构建RPT</li>
 <li>适用于大型组播网络</li>
 <li>工作机制包括：<br>邻居发现<br>DR竞选<br>RP发现<br>RPT构建<br>组播源注册<br>SPT切换<br>剪枝/加入<br>断言</li>
 </ul>
-<h6 id="DR竞选"><a href="#DR竞选" class="headerlink" title="DR竞选"></a>DR竞选</h6><blockquote>
+<blockquote>
+<p><strong>PIM-SM规则</strong></p>
+<p>（*，G）</p>
+<ol>
+<li>（*，G）表项是由收到成员报告报文或者收到（*，G）join报文而被创建的。</li>
+<li>（*，G）表项的上行接口是根据RP的地址进行RPF检测得到的。</li>
+<li>（<em>，G）表项的下游接口是存在直连组成员或者收到正确的（\</em>，G）join报文而被创建出来的。</li>
+<li>（*，G）表项的下游接口收到（*，G）的剪枝报文或者最后组成员leave报文而被删除。当（*，G）表项下游接口哦为NULL时，朝RP的RPF接口发送（*，G）剪枝报文。</li>
+</ol>
+<p>（S，G）</p>
+<ol>
+<li>（S，G）表项在下列条件下创建<ul>
+<li>接收一条（S，G）Join / prune报文或者收到register报文，不可预料的（S，G）到达时（*，G）表项不存在，或是进行SPT切换时。</li>
+</ul>
+</li>
+<li>（S，G）表项的上行接口时根据组播源的地址进行RPF检测得到的。</li>
+<li>（S，G）表项的下游接口是存在直连组成员或者收到正确的（S，G）join报文而被创建出来的。</li>
+<li>（S，G）表项的下游接口收到（S，G）的剪枝报文或者最后组成员leave报文而被删除。</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>SM模式下join/Prune报文3bit的意义</strong><br>S-bit是稀疏bit，对于pim-sm来说该bit为1，用于与PIMv1保持兼容性。<br>WC-bit=1表示加入地址是RP的地址，而不是组播源地址，向RP发送加入消息时。<br>将W-bit置为0，表示组播源地址。<br>RPT-bit=1表示该消息沿组播树被传播到RP，0表示向组播源发送加入消息。代表共享树。</p>
+</blockquote>
+<h6 id="DR竞选"><a href="#DR竞选" class="headerlink" title="DR竞选"></a>DR竞选</h6><p>广播网络中必须DR竞选，以发送Register和Join报文</p>
+<blockquote>
 <p>使用Hello报文中携带DR优先级和该网段接口地址进行竞选</p>
 <ul>
 <li>DR优先级较高者获胜（网段中所有PIM路由器都支持DR优先级）。</li>
@@ -1321,13 +1349,18 @@
 <p>如果当前DR出现故障，将导致PIM邻居关系超时，其他PIM邻居之间会触发新一轮的DR竞选。</p>
 <p>DR分为源端DR，成员端DR</p>
 <ul>
-<li>在连接组播源的共享网段，由DR负责向RP发送Register注册报文。与组播源相连的DR称为源端DR。</li>
-<li>在连接组成员的共享网段，由DR负责向RP发送Join加入报文，与组成员相连的DR称为组成员端DR。</li>
+<li>在连接组播源的共享网段，由DR负责向RP发送Register注册报文或发送Register-stop报文。构建SPT树。<br>与组播源相连的DR称为源端DR。</li>
+<li>在连接组成员的共享网段，由DR负责向RP发送Join加入报文。构建RPT树。<br>与组成员相连的DR称为组成员端DR。</li>
 </ul>
 <p>如果无连接组播P源或无成员端，DR就无意义，只是可以选出来。</p>
-<h6 id="RP发现"><a href="#RP发现" class="headerlink" title="RP发现"></a>RP发现</h6><p>RP如何做到全网发现？</p>
-<p>静态RP：在网络中的所有PIM路由器上配置相同的RP地址，静态指定RP的位置。</p>
-<p>配置时，无论加不加ACL，IP地址大的为作为RP。</p>
+<h6 id="RP发现"><a href="#RP发现" class="headerlink" title="RP发现"></a>RP发现</h6><p>RP特点：</p>
+<ol>
+<li>同一时刻一个组只能有一个RP</li>
+<li>不同的组可以有不同的RP，也可以共享一个RP</li>
+</ol>
+<p>RP如何做到全网发现？</p>
+<p>静态RP：在网络中的所有PIM路由器上配置相同的RP地址，静态指定RP的位置。配置量大。</p>
+<p>如果某个组地址同时满足多条ACL，则掩码长度大的优先。即越精确越优先。</p>
 <p>仅对PIM-SM有效</p>
 <p>默认动态优于静态，静态RP如携带preferred则优于动态</p>
 <p>动态RP：在PIM域内选择几台PIM路由器，配置C-RP（Candidate-RP，候选RP）来动态竞选出RP。同时，还需要通过配置C-BSR（Candidate-BSR，候选BSR）选举出BSR，来收集C-RP的通告信息，向PIM-SM域内的所有PIM路由器发布。</p>
@@ -1335,21 +1368,77 @@
 <li>BSR协议（自举协议，业界标准）</li>
 </ol>
 <blockquote>
+<p>工作机制：</p>
+<ol>
+<li><p>首先管理员需手动配置C-BSR路由器，可以是一台或者多台</p>
+</li>
+<li><p>在所有C-BSR路由器中选举出BSR路由器</p>
+</li>
+<li><p>如果BSR路由器失效，在其他的C-BSR中重新选举新的BSR路由器</p>
+</li>
+<li><p>如果只有一台C-BSR，则它成为BSR。</p>
+</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>选举过程：</p>
+<ol>
+<li>C-BSR初始认为自身就是BSR，在所有存在PIM邻居的接口上周期性发送Bootstrap报文，源地址为物理接口IP，目的地址为224.0.0.13。ttl=1。</li>
+<li>Bootstrap报文中携带C-BSR的地址、C-BSR的优先级。逐跳在PIM网络中泛洪到整个PIM网络。</li>
+<li>竞选失败的C-BSR将不会周期性发送自举报文，即此刻网络中只有BSR周期性发送Bootstrap报文。</li>
+<li>C-BSR维护一个BSR失效计时器（Holdtime），默认在130s。如果过没有收到Bootstrap报文，则认为BSR失效，重新进行BSR的竞选。</li>
+</ol>
+</blockquote>
+<blockquote>
 <p><strong>Bootstrap报文</strong></p>
-<p>默认每60s秒发一次，C-BSR等待接收BSR发送的Bootstrap报文的超时时间是130s（2倍的发送周期+10s）。</p>
-<p>C-BSR开始发，TTL为1 全网泛洪，源地址为发送此报文接口的地址。（每经过一台路由器都会改源地址，其他参数不改）</p>
-<p>优先级越大越优</p>
-<p>如果优先级相同则IP地址大的获胜。（通常为环回口）</p>
+<p>默认每60s秒发一次，C-BSR等待接收BSR发送的Bootstrap报文的超时时间（Holdtime）是130s（2倍的发送周期+10s）。</p>
+<p>C-BSR开始发，TTL为1 全网泛洪，源地址为发送此报文接口的地址。（每经过一台路由器都会改源地址，其他参数不改）目的地址为224.0.0.13。</p>
+<p><strong>优先级越大越优</strong><br><strong>如果优先级相同则IP地址大的获胜。（通常为环回口）</strong></p>
+<p>为了防止Bootstrap的泛洪环路，引入BSR RPF检测机制：路由器收到Bootstrap报文，根据BSR的地址进行RPF检测。</p>
 <p>针对Bootstrap做RPF检测，通过RPF检测的bootstrap才能向其他pim邻居接口泛洪下去（根据组播源的RPF信息。如果自举报文从RPF接口收到，且自举报文的源地址是RPF邻居的地址，满足这两个条件，才做接收且向其他PIM邻居泛洪）</p>
+<p>只有同时满足以下2各条件时才接收Bootstrap报文，并向其他接口继续泛洪<br>1.收到bootstrap的接口为去往BSR地址的出口<br>2.收到的报文的源地址为RPF邻居的地址</p>
 <p>BSR作用：收集C-RP的通告信息，向PIM-SM域内的所有PIM路由器发布，通告所有C-RP的信息。</p>
+<p>pim bsr-boundary 接口上控制bootstrap报文的发送，避免多个BSR域互相干扰。</p>
+</blockquote>
+<blockquote>
+<p>RP的选举机制：</p>
+<ol>
+<li>首先管理员需要手动配置C-RP路由器，可以是一台或者多台，C-BSR也可以是C-RP。</li>
+<li>C-RP向BSR的地址发送单播Advertisement报文 ，源地址为C-RP的竞选地址，目的地址为BSR的地址。</li>
+<li>Advertisement报文中携带RP的竞选参数，包括：C-RP的地址，服务的组地址范围，C-RP优先级。<br>RP选举机制<br>1、服务组范围掩码长的优先。<br>2、C-RP优先级<strong>小</strong>的优先，默认为0。<br>3、根据bootstrap设置hash mask len计算hash，值大的优先。<br>公式：hash value = (1103515245*90((1103515245*(G&amp;M)+12345)x or C(i)+12345)mod 2 ^31<br>G=group addr M=mask length C=RP addr<br>4、C-RP地址大的优先。</li>
+</ol>
 </blockquote>
 <ol start="2">
 <li>AUTO RP（自动RP，思科私有，华为具有兼容能力 ）</li>
 </ol>
-<p>RP 一个组地址，在一个时刻有且只有一个RP</p>
-<p>RP失效怎么办？<br>需要设计冗余方案，保证RP的冗余</p>
-<p>不同的组地址，可以有不同的RP，也可以共享一个RP</p>
-<p>224.1.1.1 1.1.1.1<br>224.1.1.2 2.2.2.2/1.1.1.1</p>
+<h6 id="RPT构建"><a href="#RPT构建" class="headerlink" title="RPT构建"></a>RPT构建</h6><ul>
+<li>RPT树以RPT为根，以存在组成员关系的PIM路由器为叶子的组播分发树。</li>
+</ul>
+<h6 id="组播源注册"><a href="#组播源注册" class="headerlink" title="组播源注册"></a>组播源注册</h6><ul>
+<li>组播源都必须首先在RP处进行单播“注册”</li>
+<li>建立源到RP的SPT树</li>
+<li>只要源端DR的（S，G）表项没有老化，Register注册报文每隔60s周期性发送，表明组播源是活的。收到Register-stop报文的源端DR不会再一段时间之内继续把组播封装成单播发给RP，此时路由器进入注册抑制状态，超时后恢复向RP发送Register报文。</li>
+<li>Register-stop报文作用：防止源端DR大量地把组播数据封装在Register注册报文中单播给RP。<br>没有组成员：因为没有出接口，没有必要接收组播流量。<br>有组成员：组播流量可直接从SPT树发送，源端没有必要收到组播流量就封装在Register注册报文中单播给DR。</li>
+</ul>
+<blockquote>
+<p>过程：</p>
+<p>源端DR收到组播数据流时，单播发送Register注册报文（组播数据流封装在这个报文中），RP收到Register报文后解封装提取源地址创建（S，G）表项且进行RPF检测，如果检测通过，向上游发送Join消息。源端DR收到后在（S，G）表项中添加出接口，发送组播数据流。RP收到组播数据流后就认为注册成功。发送Register-stop报文单播给源端DR告诉他别发注册消息了我已经知道了但还是每隔60s发送一次，告诉他组播源是活的。。还有一种情况：如果没有对应的（*，G）表项（出接口为空）则发送Register-stop报文单播给源端DR，不发join报文。</p>
+</blockquote>
+<h6 id="SPT树切换"><a href="#SPT树切换" class="headerlink" title="SPT树切换"></a>SPT树切换</h6><ul>
+<li>组成员DR向源方向发送Join报文</li>
+<li>组成员DR或上游设备向RP发送Prune报文，RP向源端DR发送Prune报文</li>
+</ul>
+<p>spt-switch-threshold 设置spt切换阈值，默认为0。</p>
+<p>PIM-SM的SPT切换</p>
+<ol>
+<li>SPT切换由最后一跳路由器发起。</li>
+<li>当最后一跳路由器接收到从RPT树的组播流量后，可以通过组播流量得知组播源的地址。则默认发起SPT切换。希望构建一颗源到最后一跳路由器的SPT树，实现路由优化。</li>
+</ol>
+<p>SPT切换的流程</p>
+<ol>
+<li>最后一跳路由器根据组播源的地址进行RPF检测，并向指向组播源的RPF接口上RPF邻居发送发送（S，G）的join报文，逐跳构建SPT树。</li>
+<li>当去往组播源地址和去往RP的地址的RPF接口不一致时，路由器沿着去往组播源的RPF发送（S，G）（S）join报文，沿着去往RP的RPF接口发送（S，G）（SR）prune报文。沿着RP方向上的路由器将自身（S，G）表项的下游接口剪枝，实现SPT切换，通过SPT树接收组播流量。</li>
+</ol>
 
             </div>
             <hr/>
@@ -1824,7 +1913,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">90.9k</span>&nbsp;字
+                class="white-color">92.6k</span>&nbsp;字
             
             
             
