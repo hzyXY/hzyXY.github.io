@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    186
+                    3.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    11 分
                 </div>
                 
 
@@ -444,9 +444,188 @@
                 <h2 id="跨域组播"><a href="#跨域组播" class="headerlink" title="跨域组播"></a>跨域组播</h2><h3 id="MSDP"><a href="#MSDP" class="headerlink" title="MSDP"></a>MSDP</h3><ul>
 <li>组播源发现协议</li>
 <li>解决的问题：另外一个AS的RP，它不知道其他AS组播源的地址，无法拉组播流量下来。</li>
+</ul>
+<h4 id="MSDP对等体"><a href="#MSDP对等体" class="headerlink" title="MSDP对等体"></a>MSDP对等体</h4><ul>
 <li>通常，在各个PIM-SM域的RP之间配置MSDP对等体关系，MSDP对等体之间交互SA（Source Active）消息，SA消息中携带组播源DR在RP上注册时的（S，G）信息。通过这些MSDP对等体之间的信息传递，任意一个RP发出的SA消息能够被其他所有的RP收到。</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>MSDP对等体分类</th>
+<th>位置</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>源端MSDP对等体</td>
+<td>离组播源（Source）最近的MSDP对等体（通常也就是源端RP</td>
+<td>源端RP创建SA消息并发送给远端MSDP对等体，通告在本RP上注册的组播源信息。源端MSDP对等体必须配置在RP上，否则将无法向外发布组播源信息。</td>
+</tr>
+<tr>
+<td>接收者端MSDP对等体</td>
+<td>离接收者（Receiver）最近的MSDP对等体</td>
+<td>接收者端MSDP对等体在收到SA消息后，根据该消息中所包含的组播源信息，跨域加入以该组播源为根的SPT；当来自该组播源的组播数据到达后，再沿RPT向本地接收者转发。接收者端MSDP对等体必须配置在RP上，否则无法接收到其他域的组播源信息。</td>
+</tr>
+<tr>
+<td>中间MSDP对等体</td>
+<td>拥有多个远端MSDP对等体的MSDP对等体</td>
+<td>中间MSDP对等体把从一个远端MSDP对等体收到的SA消息转发给其他远端MSDP对等体，其作用相当于传输组播源信息的中转站。</td>
+</tr>
+</tbody></table>
+<h4 id="MSDP协议报文"><a href="#MSDP协议报文" class="headerlink" title="MSDP协议报文"></a>MSDP协议报文</h4><ul>
+<li>MSDP的协议报文封装在TCP数据报中</li>
+</ul>
+<p>图</p>
+<ul>
+<li>Type：报文类型。主要报文类型见表。</li>
+<li>Length：报文长度。</li>
+<li>Value：报文内容，根据Type的取值而不同。</li>
+</ul>
+<p>MSDP协议报文类型</p>
+<table>
+<thead>
+<tr>
+<th>Type取值</th>
+<th>报文类型</th>
+<th>功能</th>
+<th>包含主要信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Source-Active（SA）</td>
+<td>携带多组（S，G）信息，在多个RP之间传递。</td>
+<td>源RP的IP地址<br>消息中包含的（S，G）项数量<br>域中活跃的（S，G）列表</td>
+</tr>
+<tr>
+<td>-</td>
+<td>-</td>
+<td>封装PIM-SM组播数据。</td>
+<td>源RP的IP地址<br><br>PIM-SM组播数据</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Source-Active Request（SA-Req）</td>
+<td>主动请求指定组G的（S，G）列表，减少源加入延迟。</td>
+<td>被请求的组地址G</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Source-Active Response（SA-Resp）</td>
+<td>对Source-Active Request消息的响应。</td>
+<td>源RP的IP地址<br>消息中包含的（S，G）项数量<br>域中活动（S，G）列表</td>
+</tr>
+<tr>
+<td>4</td>
+<td>KeepAlive</td>
+<td>保持MSDP对等体的连接关系。只在对等体之间无其他协议报文交互时才发送。</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Reserved</td>
+<td>保留类型，当前是用作Notification消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Traceroute in Progress</td>
+<td>用于MSDP的Traceroute功能，对SA消息的RPF传递路径进行检测。</td>
+<td>源RP的IP地址<br>域中活动（S，G）列表<br>查询ID<br>返回查询信息<br>跳数</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Traceroute Reply</td>
+<td>同6</td>
+<td>同6</td>
+</tr>
+</tbody></table>
+<ul>
+<li>SA消息中可以携带（S，G）信息，也可以封装组播数据报文。MSDP对等体之间通过交互SA消息共享（S，G）信息。为了避免SA消息中的（S，G）表项超时导致远端用户无法收到组播源的数据，可以在SA消息中封装组播数据报文。</li>
+<li>由于SA消息是周期性发送的，当域内出现新的组用户时，要等待一个周期内的SA消息以获取有效的（S，G）信息。为了减少新组用户加入源SPT的时延，MSDP提供了Type2和Type3的SA-Req消息与SA-Resp消息，提高活动源信息更新的效率。</li>
+</ul>
+<h4 id="MSDP对等体建立过程"><a href="#MSDP对等体建立过程" class="headerlink" title="MSDP对等体建立过程"></a>MSDP对等体建立过程</h4><ul>
+<li><p>MSDP对等体通过TCP连接建立，使用端口639。</p>
+</li>
+<li><p>两台设备使能MSDP并互相指定对方为MSDP对等体后，两端先比较IP地址，IP地址较小的一端会启动连接重试定时器（ConnectRetry timer），并主动发起TCP连接。IP地址较大的一端负责确认是否有TCP连接在端口639建立。TCP连接建立后，MSDP对等体关系就建立了，对等体之间通过KeepAlive消息维持连接关系。</p>
+</li>
+</ul>
+<p>图</p>
+<ol>
+<li>起始状态下，两台路由器的MSDP会话状态都是Down。</li>
+<li>在两端使能MSDP并互相指定对方为MSDP对等体后，两端比较建立连接使用的地址：<ul>
+<li>RouterA的地址较小，进入Connect状态，向RouterB发起连接，并启动ConnectRetry定时器。该定时器用于定义连接重试的周期。</li>
+<li>RouterB的地址较大，进入Listen状态，等待对端进行连接。</li>
+</ul>
+</li>
+<li>TCP连接建立成功后，两端的MSDP会话进入Up状态。</li>
+<li>MSDP对等体两端发送KeepAlive消息，通知对方保持MSDP连接状态。</li>
+</ol>
+<h5 id="MSDP认证"><a href="#MSDP认证" class="headerlink" title="MSDP认证"></a>MSDP认证</h5><ul>
+<li>在TCP连接建立时进行加密认证，可以保证安全性。配置了认证功能后，MSDP对等体两端必须都使用相同的加密算法和密码，才能正常建立TCP连接，否则不建立连接。MSDP支持MD5和Keychain两种加密方式，二者在使用时互斥，MSDP对等体之间只能选择一种方式加密。</li>
+</ul>
+<h4 id="控制SA消息的转发"><a href="#控制SA消息的转发" class="headerlink" title="控制SA消息的转发"></a>控制SA消息的转发</h4><p>SA消息在MSDP对等体之间转发，除了RPF检查，还可以配置各种转发策略的过滤，从而只接收和转发来自正确路径并通过过滤的SA消息，以避免SA消息传递环路；另外，可以在MSDP对等体之间配置MSDP全连接组（Mesh Group），以避免SA消息在MSDP对等体之间的泛滥。</p>
+<h5 id="SA消息的RPF检查规则"><a href="#SA消息的RPF检查规则" class="headerlink" title="SA消息的RPF检查规则"></a>SA消息的RPF检查规则</h5><p>为了防止SA消息在MSDP对等体之间被循环转发，MSDP对接收到的SA消息执行RPF检查，在消息传递的入方向上进行严格的控制。不符合RPF规则的SA消息，将被丢弃。</p>
+<p>RPF检查的主要规则为：MSDP设备收到SA消息后，根据MRIB（Multicast RPF Routing Information Base）确定到源RP（即创建该SA消息的RP）最佳路径的下一跳是哪个对等体，这个对等体也称为“RPF对等体”。如果发现SA消息是从RPF对等体发出的，则接收该SA消息并向其他对等体转发。MRIB包括：MBGP、组播静态路由、单播路由（包括BGP、IGP）。</p>
+<p>此外，还有如下的一些RPF检查规则，SA消息在转发时遵守：</p>
+<ul>
+<li>规则1：发出SA消息的对等体就是源RP，则接收该SA消息并向其他对等体转发。</li>
+<li>规则2：接收从静态RPF对等体到来的SA消息。一台路由器可以同时与多个路由器建立MSDP对等体关系。用户可以从这些远端对等体中选取一个或多个，配置为静态RPF对等体。</li>
+<li>规则3：如果一台路由器只拥有一个远端MSDP对等体，则该远端对等体自动成为RPF对等体，路由器接收从该远端对等体发来的SA消息。</li>
+<li>规则4：发出SA消息的对等体与本地路由器属于同一Mesh Group，则接收该SA消息。来自Mesh Group的SA消息不再向属于该Mesh Group的成员转发，但向该Mesh Group之外的所有对等体转发。</li>
+<li>规则5：到达源RP的路由需要跨越多个AS时，接收从下一跳AS（以AS为单位）中的对等体发出的SA消息，如果该AS中存在多个远端MSDP对等体，则接收从IP地址最高的对等体发来的SA消息。</li>
+<li>规则6：发出SA消息的MSDP对等体是到源RP的路由下一跳或路由转发者，路由器接收该SA消息。如果到源RP存在多条等价路由，则路由器接收所有等价路由中MSDP对等体发出的SA消息。</li>
+</ul>
+<p>规则5和规则6的应用依赖于路由的选择，具体如下：</p>
+<ul>
+<li>到源RP的路由是BGP/MBGP路由：<ul>
+<li>如果MSDP对等体是EBGP/MEBGP对等体：应用规则5。</li>
+<li>如果MSDP对等体是IBGP/MIBGP对等体：应用规则6。</li>
+<li>如果MSDP对等体不是BGP/MBGP对等体：如果到源RP的路由跨越多个AS，则应用规则5，否则应用规则6。</li>
+</ul>
+</li>
+<li>到源RP的路由不是BGP/MBGP路由：<ul>
+<li>如果存在IGP路由或组播静态路由，则应用规则6。</li>
+<li>如果无路由，则路由器丢弃MSDP对等体发出的SA消息。</li>
+</ul>
+</li>
+</ul>
+<h5 id="MSDP全连接组（Mesh-Group）"><a href="#MSDP全连接组（Mesh-Group）" class="headerlink" title="MSDP全连接组（Mesh Group）"></a>MSDP全连接组（Mesh Group）</h5><p>当网络中存在多个MSDP对等体时，很容易导致SA消息在对等体之间泛滥。同时，MSDP对等体对每一个到来的SA报文进行RPF检查，给系统造成很大的负担。将多个MSDP对等体加入同一个Mesh Group，就可以大幅度减少在这些MSDP对等体之间传递的SA消息。</p>
+<p>Mesh Group成员可以都属于同一个PIM-SM域，也可以分布在多个PIM-SM域中；可以都位于同一个AS，也可以位于多个AS中。</p>
+<p>属于同一个Mesh Group的所有成员之间必须两两建立MSDP对等体连接，并承认对方为该Mesh Group的成员。</p>
+<p>当Mesh Group内部成员接收到SA消息后，首先检查该SA消息的来源：</p>
+<ul>
+<li>如果该SA消息来自Mesh Group外部的某个MSDP对等体，则对该SA消息进行RPF检查。如果检查通过，向Mesh Group内其他所有成员转发。</li>
+<li>如果该SA消息来自Mesh Group内部成员，则不进行RPF检查，直接接收。同时也不再向Mesh Group内其他成员转发。</li>
+</ul>
+<h5 id="SA消息过滤"><a href="#SA消息过滤" class="headerlink" title="SA消息过滤"></a>SA消息过滤</h5><p>缺省情况下，MSDP不过滤SA消息，从一个域中发出的SA消息可以被传递到全网的MSDP对等体。</p>
+<p>然而，有些PIM-SM域的（S，G）表项只适用于本域内指导转发，如一些本地组播应用使用了全局的组播组地址，或组播源用的是私网地址10.x.x.x。如果不加过滤，这些（S，G）表项就会经过SA消息传递到其他MSDP对等体。针对这种情况，可以配置SA消息的过滤规则（一般使用ACL定义过滤的规则），并在创建、转发或接收SA消息时使用这些规则，就可以实现SA消息过滤。</p>
 <h5 id="基于MSDP实现-Anycast-RP"><a href="#基于MSDP实现-Anycast-RP" class="headerlink" title="基于MSDP实现 Anycast RP"></a>基于MSDP实现 Anycast RP</h5><p>建立MSDP对等体关系的RP之间，通过交互SA消息，能够共享本地注册信息源信息。将这一特性应用在一个PIM-SM域内，就实现了Anycast RP。</p>
+<p>在传统的PIM-SM域中，每个组播组都只能映射到一个RP。当网络负载较大或者流量过于集中时，可能导致RP路由器的压力过大、RP失效后收敛较慢、组播转发路径非最优等问题。使用Anycast RP，即在同一个PIM-SM域内设置多个具有相同地址的RP，并且在这些RP之间建立MSDP对等体关系，从而实现RP路径最优及负载分担。</p>
+<p>图</p>
+<p>在PIM-SM域内应用Anycast RP，配置方法如下：</p>
+<ol>
+<li><p>在PIM-SM域内选取多台路由器，有待成为RP。如<a href="http://localhost:7890/pages/31180BDB/02/31180BDB/02/resources/dc/dc_fd_msdp_0013.html?ft=0&fe=10&hib=5.9.7.3.4&id=ZH-CN_CONCEPT_0141113731#ZH-CN_CONCEPT_0141113731__fig_01" target="_blank" rel="noopener">图1</a>中的RouterA和RouterB。</p>
+</li>
+<li><p>在这些路由器上各准备一个Loopback接口，配置相同的接口地址，如<a href="http://localhost:7890/pages/31180BDB/02/31180BDB/02/resources/dc/dc_fd_msdp_0013.html?ft=0&fe=10&hib=5.9.7.3.4&id=ZH-CN_CONCEPT_0141113731#ZH-CN_CONCEPT_0141113731__fig_01" target="_blank" rel="noopener">图1</a>中的Loopback1接口。</p>
+</li>
+<li><p>配置RP。因PIM-SM域RP方式而异，以</p>
+<p>图1</p>
+<p>为例：</p>
+<ul>
+<li>使用静态RP：在全域的所有PIM-SM路由器上配置静态RP，指定RP地址为RouterA的Loopback1接口地址。</li>
+<li>使用C-RP：在RouterA和RouterB上配置C-RP，使用Loopback1接口。在网络中配置C-BSR，注意C-RP的地址不能与C-BSR的地址相同。</li>
+</ul>
+</li>
+<li><p>在RouterA和RouterB两个路由器之间建立MSDP对等体连接，不能使用RP所在接口地址。</p>
+</li>
+</ol>
+<p>通过Anycast RP，可以实现：</p>
+<ul>
+<li>RP路径最优：组播源向距离最近的RP进行注册，建立路径最优的SPT；接收者向距离最近的RP发起加入，建立路径最优的RPT。</li>
+<li>RP间的负载分担：每个RP上只需维护PIM-SM域内的部分源/组信息、转发部分的组播数据，从而实现了RP间的负载分担。</li>
+<li>RP间的冗余备份：当某RP失效后，原先在该RP上注册或加入的组播源或接收者会自动选择就近的RP进行注册或加入操作，从而实现了RP间的冗余备份。</li>
+</ul>
 
             </div>
             <hr/>
@@ -929,7 +1108,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">94.4k</span>&nbsp;字
+                class="white-color">101.4k</span>&nbsp;字
             
             
             

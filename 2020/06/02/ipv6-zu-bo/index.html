@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    934
+                    5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    18 分
                 </div>
                 
 
@@ -478,13 +478,13 @@
 </li>
 <li>Scope<ul>
 <li>表示组播组的范围<ul>
-<li>0：预留</li>
-<li>1：节点本地范围</li>
-<li>2：链路本地范围，例如FF02::1</li>
-<li>5：站点本地范围</li>
-<li>8：组织本地范围</li>
-<li>E：全球范围</li>
-<li>F：预留</li>
+<li>0、3、F：预留</li>
+<li>1：节点（或接口）本地范围（node/interface-local scope）</li>
+<li>2：链路本地范围 （link-local scope） 例如FF02::1</li>
+<li>4：管理本地范围（admin-local scope）</li>
+<li>5：站点本地范围（site-local scope）</li>
+<li>8：组织本地范围（organization-local scope）</li>
+<li>E：全球范围（global scope）</li>
 </ul>
 </li>
 </ul>
@@ -501,25 +501,145 @@
 </ul>
 <p>组播IPv6地址：FF02 0000 0000 0000 0000 0000 <font color="red">0000 0001</font> 一共128bit，红色为32bit</p>
 <p>组播MAC地址：                    <font color="skyblue">组播MAC前缀：33-33</font> <font color="red">00-00-00-01</font>一共48bit</p>
-<h4 id="IPv6地址分类"><a href="#IPv6地址分类" class="headerlink" title="IPv6地址分类"></a>IPv6地址分类</h4><h5 id="预定义组播地址"><a href="#预定义组播地址" class="headerlink" title="预定义组播地址"></a>预定义组播地址</h5><ul>
-<li><p>Node-local</p>
-<ul>
-<li>FF01:0:0:0:0:0:0:1，所有节点的组播地址</li>
-<li>FF01:0:0:0:0:0:0:2，所有路由器的组播地址</li>
-</ul>
-<p>只能在接口内环回被访问</p>
-</li>
-<li><p>Link-local</p>
-<ul>
-<li>FF02:0:0:0:0:0:0:1，所有节点的组播地址</li>
-<li>FF02:0:0:0:0:0:0:2，所有路由器的组播地址</li>
-<li>FF02:0:0:0:0:0:1:FFXX:XXXX，Solicited-Node组播地址</li>
-<li>FF02:0:0:0:0:0:0:5，所有OSPF路由器组播地址</li>
-<li>FF02:0:0:0:0:0:0:6，所有OSPF的DR路由器组播地址</li>
-<li>FF02:0:0:0:0:0:0:D，所有PIM路由器组播地址</li>
-</ul>
-</li>
-</ul>
+<h4 id="IPv6组播地址分类"><a href="#IPv6组播地址分类" class="headerlink" title="IPv6组播地址分类"></a>IPv6组播地址分类</h4><h5 id="IPv6组播地址的范围及含义"><a href="#IPv6组播地址的范围及含义" class="headerlink" title="IPv6组播地址的范围及含义"></a>IPv6组播地址的范围及含义</h5><table>
+<thead>
+<tr>
+<th>范围</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FF0x::/32</td>
+<td>保留组播地址。</td>
+</tr>
+<tr>
+<td>FF1x::/32（x不能是1或者2）FF2x::/32（x不能是1或者2）</td>
+<td>ASM组播地址，全网范围内有效。</td>
+</tr>
+<tr>
+<td>FF3x::/32（x不能是1或者2）</td>
+<td>缺省的SSM组地址范围，全网范围内有效。</td>
+</tr>
+</tbody></table>
+<h5 id="保留组播地址"><a href="#保留组播地址" class="headerlink" title="保留组播地址"></a>保留组播地址</h5><table>
+<thead>
+<tr>
+<th>范围</th>
+<th>IPv6组播地址</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>节点（或接口）本地范围</td>
+<td>FF01::1</td>
+<td>所有节点（接口）地址</td>
+</tr>
+<tr>
+<td></td>
+<td>FF01::2</td>
+<td>所有路由器地址</td>
+</tr>
+<tr>
+<td>链路本地范围</td>
+<td>FF02::1</td>
+<td>所有节点地址</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::2</td>
+<td>所有路由器地址</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::3</td>
+<td>未定义的地址</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::4</td>
+<td>DVMRP路由器</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::5</td>
+<td>OSPF IGP Routers</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::6</td>
+<td>OSPF IGP DR</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::7</td>
+<td>ST路由器</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::8</td>
+<td>ST主机</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::9</td>
+<td>RIP路由器</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::A</td>
+<td>EIGRP路由器</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::B</td>
+<td>移动代理</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::D</td>
+<td>所有PIM路由器</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::E</td>
+<td>RSVP封装</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::1:1</td>
+<td>Link Name</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::1:2</td>
+<td>所有DHCP代理</td>
+</tr>
+<tr>
+<td></td>
+<td>FF02::1:FFXX:XXXX</td>
+<td>Solicited-Node地址，XX:XXXX表示节点IPv6地址的后24位</td>
+</tr>
+<tr>
+<td>站点本地范围</td>
+<td>FF05::2</td>
+<td>所有路由器地址</td>
+</tr>
+<tr>
+<td></td>
+<td>FF05::1:3</td>
+<td>所有DHCP服务器</td>
+</tr>
+<tr>
+<td></td>
+<td>FF05::1:4</td>
+<td>所有DHCP中继</td>
+</tr>
+<tr>
+<td></td>
+<td>FF05::1:1000 ～FF05::1:13FF</td>
+<td>服务位置</td>
+</tr>
+</tbody></table>
 <h3 id="MLD"><a href="#MLD" class="headerlink" title="MLD"></a>MLD</h3><h4 id="MLDv1"><a href="#MLDv1" class="headerlink" title="MLDv1"></a>MLDv1</h4><ul>
 <li>MLD（Multicast Listener Discovery）组播监听者发现协议</li>
 <li>与IGMP协议类似，有两个版本：MLDv1（RFC2710 对应IGMPv2 ASM模型）、MLDv2（RFC 3810 对应IGMPv3 SSM模型）。</li>
@@ -530,26 +650,256 @@
 </ul>
 </li>
 </ul>
-<h5 id="MLDv1报文格式"><a href="#MLDv1报文格式" class="headerlink" title="MLDv1报文格式"></a>MLDv1报文格式</h5><p>类型（Type）：MLD消息共有三种。</p>
+<h5 id="MLDv1报文"><a href="#MLDv1报文" class="headerlink" title="MLDv1报文"></a>MLDv1报文</h5><p>MLDv1包括四种类型的报文：</p>
 <ul>
-<li>组播侦听查询（类型130），可分为两种子类型：<ul>
-<li>普遍组查询：用于活的在所连网络上具有侦听者的组播地址。</li>
-<li>特定组播地址查询：用于获得在所连网络上对一特定组播地址是否存在侦听者。</li>
+<li>普遍组查询报文（General Query）：查询器向共享网络上所有主机和路由器发送的查询报文，用于了解哪些组播组存在成员。</li>
+<li>特定组查询报文（Multicast Address Specific Query）：查询器向共享网段内指定组播组发送的查询报文，用于查询该组播组是否存在成员。</li>
+<li>成员报告报文（Multicast Listener Report）：主机向查询器发送的报告报文，用于申请加入某个组播组或者应答查询报文。</li>
+<li>成员离开报文（Multicast Listener Done）：主机离开组播组时主动向查询器发送的报文，用于宣告自己离开了某个组播组。</li>
 </ul>
-</li>
-<li>组播侦听报告（类型=131）</li>
-<li>组播侦听离开（Multicast Listener Done）（类型值=132）</li>
-</ul>
-<p>图</p>
+<h6 id="MLDv1报文格式"><a href="#MLDv1报文格式" class="headerlink" title="MLDv1报文格式"></a>MLDv1报文格式</h6><p>图</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Type</td>
+<td>报文类型。该字段有以下三种取值：<br>130：表示查询报文。包括普遍组查询报文和特定组查询报文两类。<br>131：表示成员报告报文。<br>132：表示成员离开报文。</td>
+</tr>
+<tr>
+<td>Code</td>
+<td>该字段在发送时被设为0，并在接收时被忽略。</td>
+</tr>
+<tr>
+<td>Checksum</td>
+<td>标准的ICMPv6校验和。覆盖所有MLD报文以及IPv6首部区域中的伪首部。Checksum字段在进行校验计算时设为0。接收报文时首先验证校验和，然后才处理报文。</td>
+</tr>
+<tr>
+<td>Maximum Response Delay</td>
+<td>最大响应时间。成员主机在收到MLD查询器发送的普遍组查询报文后，需要在最大响应时间内做出回应。该字段仅在MLD查询报文中有效。</td>
+</tr>
+<tr>
+<td>Reserved</td>
+<td>保留字段。该字段在发送时被设为0，并在接收时被忽略。</td>
+</tr>
+<tr>
+<td>Multicast Address</td>
+<td>组播组地址。<br>在普遍组查询报文中，该字段设为0。<br>在特定组查询报文中，该字段为要查询的IPv6组播组地址。<br>在成员报告报文和离开报文中，该字段为成员要加入或离开的IPv6组播组地址。</td>
+</tr>
+</tbody></table>
 <h5 id="查询器选举机制"><a href="#查询器选举机制" class="headerlink" title="查询器选举机制"></a>查询器选举机制</h5><ul>
-<li><p>MLD路由在初始时都认为自己是查询，并向本地网段内所有的主机和路由器发送MLD普遍组查询报文。目的地址为FF02::1。</p>
+<li>MLD路由在初始时都认为自己是查询，并向本地网段内所有的主机和路由器发送MLD普遍组查询报文。目的地址为FF02::1。</li>
+<li>比较普遍组查询（General Query）报文报文源IPv6地址与自己的接口地址作比较。IPv6地址最小的路由器成为查询器。其他路由器成为非查询器（Non-Querier）</li>
+<li>所有非查询器都会启动一个定时器（其他查询器存在的时间定时器 Other Querier Present Timer）。在定时器超时前。如果收到了来自查询的MLD查询报文，则重置该定时器；否则就认为原查询器失效，并发起新的查询器选举过程。</li>
+</ul>
+<p>其他MLD查询器的存活时间的计算公式是：其他MLD查询器的存活时间 = 健壮系数 × MLD普遍组查询报文发送间隔 +（1/2）× MLD查询报文的最大响应时间。</p>
+<p>当健壮系数、MLD普遍组查询报文发送间隔和MLD查询报文最大响应时间都取缺省值时，其他MLD查询器的存活时间的值为255秒。</p>
+<h5 id="普遍组查询和响应机制"><a href="#普遍组查询和响应机制" class="headerlink" title="普遍组查询和响应机制"></a>普遍组查询和响应机制</h5><ul>
+<li><p>MLD查询器发送目的地址为FF02::1（表示同一网段内所有主机和路由器）的普遍组查询报文；收到该查询报文的组成员启动定时器。（定时器的范围为0～10秒之间的随机值。）</p>
 </li>
-<li><p>比较普遍组查询（General Query）报文报文源IPv6地址与自己的接口地址作比较。IPv6地址最小的路由器成为查询器。其他路由器成为非查询器（Non-Querier）</p>
-</li>
-<li><p>所有非查询器都会启动一个定时器（其他查询器存在的时间定时器 Other Querier Present Timer）。在定时器超时前。如果收到了来自查询的MLD查询报文，则重置该定时器；否则就认为原查询器失效，并发起新的查询器选举过程。</p>
+<li><p>普遍组查询报文是周期性发送的，发送周期可以通过命令配置，缺省情况下每隔125秒发送一次。</p>
 </li>
 </ul>
-<h5 id="组成员加入过程"><a href="#组成员加入过程" class="headerlink" title="组成员加入过程"></a>组成员加入过程</h5><h5 id="组成员离开过程"><a href="#组成员离开过程" class="headerlink" title="组成员离开过程"></a>组成员离开过程</h5><h4 id="MLDv2"><a href="#MLDv2" class="headerlink" title="MLDv2"></a>MLDv2</h4><h5 id="MLDv2报文格式"><a href="#MLDv2报文格式" class="headerlink" title="MLDv2报文格式"></a>MLDv2报文格式</h5><h6 id="查询消息报文格式"><a href="#查询消息报文格式" class="headerlink" title="查询消息报文格式"></a>查询消息报文格式</h6><h6 id="报告消息报文格式"><a href="#报告消息报文格式" class="headerlink" title="报告消息报文格式"></a>报告消息报文格式</h6><h5 id="指定组播源-组查询"><a href="#指定组播源-组查询" class="headerlink" title="指定组播源-组查询"></a>指定组播源-组查询</h5><h4 id="MLDv1与MLDv2的区别"><a href="#MLDv1与MLDv2的区别" class="headerlink" title="MLDv1与MLDv2的区别"></a>MLDv1与MLDv2的区别</h4><h4 id="MLD-SSM-Mapping"><a href="#MLD-SSM-Mapping" class="headerlink" title="MLD SSM Mapping"></a>MLD SSM Mapping</h4><h3 id="嵌入式RP的原理"><a href="#嵌入式RP的原理" class="headerlink" title="嵌入式RP的原理"></a>嵌入式RP的原理</h3>
+<h5 id="组成员加入过程"><a href="#组成员加入过程" class="headerlink" title="组成员加入过程"></a>组成员加入过程</h5><ul>
+<li><p>共享网段内有新组成员需要加入组播组时，会主动向MLD查询器发送报告报文，而不必等待普遍组查询报文的到来。</p>
+</li>
+<li><p>MLD查询器接收到成员的报告报文后，了解到本网段内出现了组播组G1的成员，则生成组播转发项（*，G1）。网络中一旦有G1的数据到达路由器，将向该网段转发。</p>
+</li>
+</ul>
+<h5 id="组成员离开过程"><a href="#组成员离开过程" class="headerlink" title="组成员离开过程"></a>组成员离开过程</h5><ul>
+<li><p>通过离开组机制，MLD查询器可以及时了解到网段内哪些组播组已不存在成员，从而及时更新组成员关系，减少网络中冗余的组播流量。</p>
+</li>
+<li><p>成员向本地网段内的所有组播路由器（目的地址为FF02::2）发送针对组G1的离开报文（Done）。</p>
+</li>
+<li><p>查询器收到离开报文，会发送针对组G1的特定组查询报文。发送间隔和发送次数可以通过命令配置，缺省情况下每隔1秒发送一次，共发送两次。同时查询器启动组成员关系定时器（Timer-Membership = 发送间隔 × 发送次数）。</p>
+</li>
+<li><p>该网段内还存在组G1的其他成员，这些成员在收到查询器发送的特定组查询报文后，会立即发送针对组G1的报告报文。查询器收到针对组G1的报告报文后将继续维护该组成员关系。</p>
+<p>如果该网段内不存在组G1的其他成员，查询器将不会收到针对组G1的报告报文。在Timer-Membership超时后，查询器将删除记录的（*，G1）组信息。当有组G1的组播数据到达查询器时，查询器将不会向下游转发。</p>
+</li>
+</ul>
+<h4 id="MLDv2"><a href="#MLDv2" class="headerlink" title="MLDv2"></a>MLDv2</h4><ul>
+<li>MLDv1报文中只能携带组播组的信息，不能携带组播源的信息，这样运行MLDv1的成员主机在加入组时无法选择加入哪个指定源的组。MLDv2解决了这个问题。运行MLDv2的成员主机不仅能够选择组播组，还能够根据需要选择接收哪些组播源的数据。同时，与MLDv1的成员报告只能携带一个组播组信息相比，MLDv2报文可以携带多个组播组信息，这就大大减少了成员主机与查询器之间交互的报文数量。</li>
+</ul>
+<h5 id="MLDv2报文格式"><a href="#MLDv2报文格式" class="headerlink" title="MLDv2报文格式"></a>MLDv2报文格式</h5><h6 id="查询消息报文格式"><a href="#查询消息报文格式" class="headerlink" title="查询消息报文格式"></a>查询消息报文格式</h6><p>图</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Type</td>
+<td>报文类型。取值为130，表示查询报文。MLDv2的查询报文包括普遍组查询报文、特定组查询报文和特定源组查询报文三类。</td>
+</tr>
+<tr>
+<td>Code</td>
+<td>该字段在发送时被设为0，并在接收时被忽略。</td>
+</tr>
+<tr>
+<td>Checksum</td>
+<td>标准的ICMPv6校验和。覆盖所有MLD报文以及IPv6首部区域中的伪首部。Checksum字段在进行校验计算时设为0。接收报文时首先验证校验和，然后才处理报文。</td>
+</tr>
+<tr>
+<td>Maximum Response Code</td>
+<td>最大响应时间。成员主机在收到MLD查询器发送的普遍组查询报文后，需要在最大响应时间内做出回应。该字段仅在MLD查询报文中有效。</td>
+</tr>
+<tr>
+<td>Reserved</td>
+<td>保留字段。该字段在发送时被设为0，并在接收时被忽略。</td>
+</tr>
+<tr>
+<td>Multicast Address</td>
+<td>组播组地址。在普遍组查询报文中，该字段设为0；在特定组查询报文和特定源组查询报文中，该字段为要查询的组播组地址。</td>
+</tr>
+<tr>
+<td>Resv</td>
+<td>保留字段。发送报文时该字段设为0；接收报文时，对该字段不做处理。</td>
+</tr>
+<tr>
+<td>S</td>
+<td>该比特位为1时，所有收到此查询报文的其他路由器不启动定时器刷新过程，但是此查询报文并不抑制查询器选举过程和路由器的主机侧处理过程。</td>
+</tr>
+<tr>
+<td>QRV</td>
+<td>如果该字段非0，则表示查询器的健壮系数（Robustness Variable）。如果该字段为0，则表示查询器的健壮系数大于7。路由器接收到查询报文时，如果发现该字段非0，则将自己的健壮系数调整为该字段的值；如果发现该字段为0，则不做处理。</td>
+</tr>
+<tr>
+<td>QQIC</td>
+<td>MLD查询器的查询间隔，单位为秒。非查询器收到查询报文时，如果发现该字段非0，则将自己的查询间隔参数调整为该字段的值；如果发现该字段为0，则不做处理。</td>
+</tr>
+<tr>
+<td>Number of Sources</td>
+<td>报文中包含的组播源的数量。对于普遍组查询报文和特定组查询报文，该字段为0；对于特定源组查询报文，该字段非0。此参数的大小受到所在网络MTU大小的限制。</td>
+</tr>
+<tr>
+<td>Source Address</td>
+<td>组播源地址，其数量受到Number of Sources字段值大小的限制。</td>
+</tr>
+</tbody></table>
+<h6 id="报告消息报文格式"><a href="#报告消息报文格式" class="headerlink" title="报告消息报文格式"></a>报告消息报文格式</h6><p>图</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Type</td>
+<td>报文类型。取值为143，表示成员报告报文。</td>
+</tr>
+<tr>
+<td>Reserved</td>
+<td>保留字段。发送报文时该字段设为0；接收报文时，对该字段不做处理。</td>
+</tr>
+<tr>
+<td>Checksum</td>
+<td>标准的ICMPv6校验和。覆盖所有MLD报文以及IPv6首部区域中的伪首部。Checksum字段在进行校验计算时设为0。接收报文时首先验证校验和，然后才处理报文。</td>
+</tr>
+<tr>
+<td>Nr of Mcast Address Records</td>
+<td>报文中包含的组播地址记录的数量。</td>
+</tr>
+<tr>
+<td>Multicast Address Record</td>
+<td>组播地址记录，</td>
+</tr>
+</tbody></table>
+<p>Multicast Address Record字段格式</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Record Type</td>
+<td>组记录的类型。共分为三大类。<br><br>当前状态报告。用于对查询报文进行响应，通告自己目前的状态，共两种：<br>MODE_IS_INCLUDE，表示接收源地址列表包含的源发往该组的组播数据。如果指定源地址列表为空，该报文无效。<br>MODE_IS_EXCLUDE，表示不接收源地址列表包含的源发往该组的组播数据。<br><br>过滤模式改变报告。当组和源的关系在INCLUDE和EXCLUDE之间切换时，会通告过滤模式发生变化，共两种：<br>CHANGE_TO_INCLUDE_MODE，表示过滤模式由EXCLUDE转换到INCLUDE，接收源地址列表包含的新组播源发往该组播组的数据。如果指定源地址列表为空，主机将离开组播组。<br>CHANGE_TO_EXCLUDE_MODE，表示过滤模式由INCLUDE转换到EXCLUDE，拒绝源地址列表包含的新组播源发往该组的组播数据。<br><br>源列表改变报告。当指定源发生改变时，会通告源列表发生变化，共两种：<br>ALLOW_NEW_SOURCES，表示在现有的基础上，需要接收源地址列表包含的组播源发往该组播组的组播数据。如果当前对应关系为INCLUDE，则向现有源列表中添加这些组播源；如果当前对应关系为EXCLUDE，则从现有阻塞源列表中删除这些组播源。<br>BLOCK_OLD_SOURCES，表示在现有的基础上，不再接收源地址列表包含的组播源发往该组播组的组播数据。如果当前对应关系为INCLUDE，则从现有源列表中删除这些组播源；如果当前对应关系为EXCLUDE，则向现有源列表中添加这些组播源。</td>
+</tr>
+<tr>
+<td>Aux Data Len</td>
+<td>辅助数据长度。在MLDv2的报告报文中，不存在辅助数据字段，该字段设为0。</td>
+</tr>
+<tr>
+<td>Number of Sources</td>
+<td>本记录中包含的源地址数量。</td>
+</tr>
+<tr>
+<td>Multicast Address</td>
+<td>组播组地址。</td>
+</tr>
+<tr>
+<td>Sources Address</td>
+<td>组播源地址。</td>
+</tr>
+<tr>
+<td>Auxiliary Data</td>
+<td>辅助数据。在MLDv2的报告报文中，不存在辅助数据。</td>
+</tr>
+</tbody></table>
+<h5 id="特定源加入"><a href="#特定源加入" class="headerlink" title="特定源加入"></a>特定源加入</h5><ul>
+<li>MLDv2的成员报告报文的目的地址为FF02::16（表示本地网段内所有使能MLDv2的路由器）。通过在报告报文中携带组播地址记录，主机在加入组播组的同时，能够明确要求接收或不接收特定组播源发出的组播数据。</li>
+</ul>
+<p>如果Host运行的是MLDv1，Host加入组播组G时无法对组播源进行选择，无论其是否需要，都会同时接收到来自组播源S1和S2的数据。如果采用MLDv2，成员主机可以选择仅接收S1组播数据。</p>
+<ul>
+<li>Host发送MLDv2报告（G，INCLUDE，(S1)），仅接收源S1向组播组G发送的数据。</li>
+<li>Host发送MLDv2报告（G，EXCLUDE，(S2)），不接收指定源S2向组播组G发送的数据，从而仅有来自S1的组播数据才能传递到Host。</li>
+</ul>
+<h5 id="特定源查询"><a href="#特定源查询" class="headerlink" title="特定源查询"></a>特定源查询</h5><p>当接收到组成员发送的改变组播组与源列表的对应关系的报告时（比如CHANGE_TO_INCLUDE_MODE、CHANGE_TO_EXCLUDE_MODE），MLD查询器会发送特定源组查询报文。如果组成员希望接收其中任意一个源的组播数据，将反馈报告报文。MLD查询器根据反馈的组成员报告更新该组对应的源列表。</p>
+<h4 id="MLDv1与MLDv2的区别"><a href="#MLDv1与MLDv2的区别" class="headerlink" title="MLDv1与MLDv2的区别"></a>MLDv1与MLDv2的区别</h4><p>与MLDv1相比，MLDv2报文的变化如下：</p>
+<ul>
+<li>MLDv2报文包含两大类：查询报文和成员报告报文。MLDv2没有定义专门的成员离开报文，成员离开通过特定类型的报告报文来传达。</li>
+<li>查询报文中不仅包含普遍组查询报文和特定组查询报文，还新增了特定源组查询报文（Multicast Address and Source Specific Query）。该报文由查询器向共享网段内特定组播组成员发送，用于查询该组成员是否愿意接收特定源发送的数据。特定源组查询通过在报文中携带一个或多个组播源地址来达到这一目的。</li>
+<li>成员报告报文不仅包含主机想要加入的组播组，而且包含主机想要接收来自哪些组播源的数据。MLDv2增加了针对组播源的过滤模式（INCLUDE/EXCLUDE），将组播组与源列表之间的对应关系简单的表示为（G，INCLUDE，(S1、S2…)），表示只接收来自指定组播源S1、S2…发往组G的数据；或（G，EXCLUDE，(S1、S2…)），表示接收除了组播源S1、S2…之外的组播源发给组G的数据。当组播组与组播源列表的对应关系发生了变化，MLDv2报告报文会将该关系变化存放于组播地址记录（Multicast Address Record）字段，发送给MLD查询器。</li>
+</ul>
+<h4 id="MLD-SSM-Mapping"><a href="#MLD-SSM-Mapping" class="headerlink" title="MLD SSM Mapping"></a>MLD SSM Mapping</h4><ul>
+<li>SSM（Source-Specific Multicast）称为指定源组播，要求路由器能了解成员主机加入组播组时所指定的组播源。如果成员主机上运行MLDv2，可以在MLDv2报告报文中直接指定组播源地址。但是某些情况下，成员主机只能运行MLDv1，为了使其也能够使用SSM服务，组播路由器上需要提供MLD SSM Mapping功能。</li>
+<li>MLD SSM Mapping的机制是：通过在组播路由器上静态配置SSM地址的映射规则，将MLDv1报告报文中的（*，G）信息转化为对应的（G，INCLUDE，（S1，S2…））信息，以提供SSM组播服务。</li>
+</ul>
+<p>MLD查询器收到MLDv1的报文查询到将要加入的组播组处理过程：</p>
+<ul>
+<li>不在IPv6 SSM地址范围内，则提供ASM组播服务。</li>
+<li>在IPv6 SSM组地址范围内：<ul>
+<li>如果查询器没有对应的MLD Mapping规则，则无法提供SSM组播服务，丢弃该报文</li>
+<li>如果查询器有对应的MLD SSM Mapping规则，则依据规则将报告报文中所包含的（*，G）信息映射为（G，INCLUDE，（S1，S2…））信息，可以提供SSM组播服务。</li>
+</ul>
+</li>
+</ul>
+<h3 id="IPv6-PIM"><a href="#IPv6-PIM" class="headerlink" title="IPv6 PIM"></a>IPv6 PIM</h3><p>hello包用链路本地地址，rpf下一跳用链路本地地址。非全局单播。</p>
+<h4 id="IPv6-PIM-DM"><a href="#IPv6-PIM-DM" class="headerlink" title="IPv6 PIM DM"></a>IPv6 PIM DM</h4><p>同IPv4</p>
+<h4 id="IPv6-PIM-SSM"><a href="#IPv6-PIM-SSM" class="headerlink" title="IPv6 PIM SSM"></a>IPv6 PIM SSM</h4><p>同IPv4</p>
+<h4 id="嵌入式RP"><a href="#嵌入式RP" class="headerlink" title="嵌入式RP"></a>嵌入式RP</h4><ul>
+<li>使能嵌入RP功能允许路由器从IPv6组播组地址中分析出RP的地址，从而取代静态配置RP或由BSR动态计算的RP。</li>
+<li>使用嵌入式RP的组播组地址范围是FF7x::/16和FFFx::/16，x表示0～F的任意一个十六进制数。</li>
+</ul>
+<p>在接收侧：<br>接收者主机发布MLD报告消息，加入组播组；<br>接收侧的DR提取内嵌在组播组地址中的RP地址，向其发送IPv6 PIM-SM加入消息。</p>
+<p>在组播源侧：<br>组播源知道组播地址后，向此组播组发送报文；<br>组播源侧的DR提取内嵌在组播地址中的RP地址，向其以单播方式发送IPv6 PIM-SM注册消息。</p>
+<h5 id="嵌入RP地址的组播组地址"><a href="#嵌入RP地址的组播组地址" class="headerlink" title="嵌入RP地址的组播组地址"></a>嵌入RP地址的组播组地址</h5><ul>
+<li>头8bits为FF说明是IPv6组播地址。</li>
+<li>Flags字段的范围是7-F，说明是一个嵌入了RP地址的IPv6组播组地址。</li>
+<li>RIID字段：RP Interface ID，抽取出来填充在RP地址的最后4bits。</li>
+<li>Plen字段：RP地址的前缀长度，换算成十进制数后不能为0，也不能大于64。</li>
+<li>Network Prefix字段：RP的地址前缀。</li>
+<li>Group ID：组ID。</li>
+</ul>
+<p>一个128bits的RP地址如何嵌入到一个128bits的IPv6组播组地址中去？<br>定义特殊的组播地址：</p>
+<p>图</p>
+<h5 id="RP地址转换"><a href="#RP地址转换" class="headerlink" title="RP地址转换"></a>RP地址转换</h5><ul>
+<li><p>如何由组播组地址得到RP地址？<br>提取“plen”字段，转换为十进制数<br>将“Network Prefix”字段的前“plen” bits提取出来作为RP地址的地址前缀<br>将“RIID”字段提取出来作为RP地址的Interface ID的最后4bits，Interface ID其余部分用0补齐</p>
+</li>
+<li><p>嵌入RP实例<br>组播地址FF70:0140:2001:DB8:BEEF:FEED::/96，则从组播地址中获取的RP地址为2001:DB8:BEEF:FEED::1/64</p>
+</li>
+</ul>
+<p>计算过程：</p>
+<p>组播地址：FF70:0<font color="orangered">1</font><font color="aqua">40</font>:<font color="greenyellow">2001:0DB8:BEEF:FEED</font>::/96</p>
+<p><font color="aqua">0x40</font>转为二进制为<font color="aqua">64</font>所以向Network Prefix拿64bit</p>
+<p>RP地址：<font color="greenyellow">2001:0DB8:BEEF:FEED</font>::<font color="orangered">1</font>/<font color="aqua">64</font></p>
+
             </div>
             <hr/>
 
@@ -1041,7 +1391,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">94.4k</span>&nbsp;字
+                class="white-color">101.4k</span>&nbsp;字
             
             
             

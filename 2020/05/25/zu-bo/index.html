@@ -1349,7 +1349,7 @@
 </ol>
 </blockquote>
 <blockquote>
-<p><strong>SM模式下join/Prune报文3bit的意义</strong><br>S-bit是稀疏bit，对于pim-sm来说该bit为1，用于与PIMv1保持兼容性。<br>WC-bit=1表示加入地址是RP的地址，而不是组播源地址，向RP发送加入消息时。<br>将W-bit置为0，表示组播源地址。<br>RPT-bit=1表示该消息沿组播树被传播到RP，0表示向组播源发送加入消息。代表共享树。</p>
+<p><strong>SM模式下join/Prune报文3bit的意义</strong><br>S-bit是稀疏bit，对于pim-sm来说该bit为1，用于与PIMv1保持兼容性。<br>WC-bit=1表示加入地址是RP的地址，而不是组播源地址，向RP发送加入消息时。<br>将W-bit置为0，表示组播源地址。<br>RPT-bit=1表示该消息沿组播树被传播到RP，代表共享树。0表示向组播源发送加入消息，代表源树。</p>
 </blockquote>
 <h6 id="DR竞选"><a href="#DR竞选" class="headerlink" title="DR竞选"></a>DR竞选</h6><p>广播网络中必须DR竞选，以发送Register和Join报文</p>
 <blockquote>
@@ -1931,7 +1931,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">94.4k</span>&nbsp;字
+                class="white-color">101.4k</span>&nbsp;字
             
             
             
