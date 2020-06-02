@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="BFD, XY">
+    <meta name="keywords" content="IPv6组播, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>BFD | XY</title>
+    <title>IPv6组播 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -258,12 +258,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/48.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">BFD</h1>
+                    <h1 class="description center-align post-title">IPv6组播</h1>
                 </div>
             </div>
         </div>
@@ -380,20 +380,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                <span class="chip bg-color">华为</span>
+                            <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                <span class="chip bg-color">协议</span>
                             </a>
                         
-                            <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                                <span class="chip bg-color">配置</span>
+                            <a href="/tags/%E7%BB%84%E6%92%AD/">
+                                <span class="chip bg-color">组播</span>
                             </a>
                         
-                            <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                <span class="chip bg-color">防火墙</span>
-                            </a>
-                        
-                            <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                                <span class="chip bg-color">高可靠性</span>
+                            <a href="/tags/IPv6/">
+                                <span class="chip bg-color">IPv6</span>
                             </a>
                         
                     </div>
@@ -417,7 +413,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-04
+                    2020-06-02
                 </div>
                 
 
@@ -426,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    934
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    3 分
                 </div>
                 
 
@@ -449,56 +445,111 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="BFD"><a href="#BFD" class="headerlink" title="BFD"></a>BFD</h2><ul>
-<li>双向转发检测（Bidirectional Forwarding Detection）BFD对系统间的、同一路径上的一种数据协议的连通性进行检测，这条路径可以是物理链路或是逻辑链路，包括隧道。</li>
-</ul>
-<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>BFD的报文有：<br>BFD控制报文和BFD回声报文，目的端口号均为UDP3784</p>
-<h4 id="BFD检测机制"><a href="#BFD检测机制" class="headerlink" title="BFD检测机制"></a><strong>BFD检测机制</strong></h4><p>BFD的检测机制包括：检测模式、检测时间以及检测参数协商过程。</p>
-<p><strong>检测模式</strong><br>1.异步模式：BFD会话建立后，系统之间会按照协商好的周期相互发送BFD控制报文，如果某个系统在检测时间内没有收到对端发来的BFD控制报文，就宣告BFD会话的状态为Down。异步模式是最常用的。<br><strong>回声功能</strong>是异步检测模式的辅助功能，回声功能激活时：本地发送一个BFD控制报文，远端系统通过它的转发通道将它们环回回来。如果连续几个回声包都没有接收到，会话状态就被宣布为Down。<br>目前系统只支持异步模式下的单跳会话的被动回声功能。</p>
-<p>2.BFD检测模式。<br>查询模式：一旦BFD会话建立，系统就不再周期性发送BFD控制报文，二十通过其他与BFD无关的机制检测连通性（如路由协议的Hello机制、硬件检测机制等），从而减少BFD会话带来的开销。</p>
-<p><strong>检测时间</strong></p>
-<ul>
-<li>DMTI（Desired Min Tx Interval）：本端想要采用的最短BFD控制报文发送周期</li>
-<li>RMRI（Required Min Rx Interval）：本端能够支持的最短BFD控制报文接收周期</li>
-<li>Detect Mult（Detect time multiplier）：检测时间倍数</li>
-</ul>
-<p>一个系统接收到对端发来的BFD控制报文后，将该报文携带的RMRI与自己本地的DMTI进行比较，取二者中的较大值作为自己发送BFD控制报文的周期。<br>Detect Mult不需要协商，两端系统各自配置。</p>
-<p>异步模式的检测时间=接收到的远端Detect Mult × max（本地的RMRI，接收到的DMTI）</p>
-<ul>
-<li>建议两端配置的参数相同</li>
-</ul>
-<p><strong>检测参数协商过程</strong></p>
-<p>BFD会话建立后，可以动态改变相关检测参数，而不影响会话的当前状态</p>
-<h4 id="BFD会话管理"><a href="#BFD会话管理" class="headerlink" title="BFD会话管理"></a>BFD会话管理</h4><h5 id="会话建立方式"><a href="#会话建立方式" class="headerlink" title="会话建立方式"></a>会话建立方式</h5><p><strong>1.手工指定标识符的静态BFD会话</strong><br>手工指定标识符的静态BFD会话是指手工配置BFD会话参数，包括配置本地标识符和远端标识符，然后手工下发BFD会话建立请求。</p>
-<p><strong>2.标识符自协商的静态BFD会话</strong><br>标识符自协商的静态BFD会话是指手工创建BFD会话，但不需要配置本地标识符和远端标识符，本地标识符和远端标识符通过会话协商获得。</p>
-<p><strong>3.协议触发的动态BFD会话</strong><br>协议触发的动态BFD会话是指由路由协议动态触发而建立BFD会话。<br>动态建立BFD会话时，系统对本地标识符和远端标识符的处理方式如下：</p>
-<ul>
-<li><p>动态分配本地标识符<br>当应用程序触发动态创建BFD会话时，系统分配属于动态会话标识符区域的值作为BFD会话的本地标识符。然后向对端发送Your Discriminator的值为0（My Discriminator的值为分配到的本地标识符，State的值为Down）的BFD控制报文，进行会话协商。</p>
+                <h2 id="IPv6组播"><a href="#IPv6组播" class="headerlink" title="IPv6组播"></a>IPv6组播</h2><h3 id="IPv6组播地址"><a href="#IPv6组播地址" class="headerlink" title="IPv6组播地址"></a>IPv6组播地址</h3><ul>
+<li><p>用来标识一组接口，发往组播地址的数据将被转发给侦听该地址的多个设备</p>
 </li>
-<li><p>自学习远端标识符<br>当BFD会话的一端收到Your Discriminator的值为0的BFD控制报文时，根据四元组（源地址、目的地址、出接口、VPN索引）判断该报文是否与本地BFD会话匹配，如果匹配，则学习接收到的BFD控制报文中My Discriminator的值，获取远端标识符。</p>
+<li><p><strong>地址范围：FF00::/8</strong></p>
 </li>
 </ul>
-<h5 id="会话建立过程"><a href="#会话建立过程" class="headerlink" title="会话建立过程"></a>会话建立过程</h5><p>BFD使用三路握手的机制来建立会话，发送方在发送BFD控制报文时会在Sta字段填入本地当前的会话状态，接收方根据收到的BFD控制报文的Sta字段以及本端当前会话状态来进行状态机的迁移，建立会话。</p>
-<p>发送状态为Down的BFD控制报文——&gt;收到状态为Down的BFD控制报文后，本地状态切换至Init，并发送状态为Init的BFD控制报文——&gt;收到状态为Init的BFD控制报文后，本地状态切换至Up，并发送状态为Up的BFD控制报文——&gt;双方状态都为Up，会话成功建立并开始检测链路状态</p>
-<h3 id="配置BFD与PBR联动"><a href="#配置BFD与PBR联动" class="headerlink" title="配置BFD与PBR联动"></a>配置BFD与PBR联动</h3><p><img src="/2020/04/04/bfd/topo.JPG" alt="拓扑"></p>
-<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置"><a href="#一、在FW1上的配置" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.配置BFD</strong></p>
-<p>bfd 1 bind peer-ip 3.1.1.2<br> discriminator local 5<br> discriminator remote 10<br> commit</p>
-<p>bfd 2 bind peer-ip 4.1.1.2<br> discriminator local 15<br> discriminator remote 20<br> commit</p>
-<p><strong>2.配置PBR</strong></p>
-<p>policy-based-route<br> rule name a<br>  ingress-interface GigabitEthernet0/0/0<br>  destination-address 2.1.1.0 24<br>  action no-pbr</p>
-<p> rule name b<br>  ingress-interface GigabitEthernet1/0/0<br>  destination-address 1.1.1.0 24<br>  action no-pbr</p>
-<p> rule name 1<br>  ingress-interface GigabitEthernet0/0/0<br>  source-address 1.1.1.0 24<br>  track bfd-session 5<br>  action pbr next-hop 3.1.1.2</p>
-<p> rule name 2<br>  ingress-interface GigabitEthernet1/0/0<br>  source-address 2.1.1.0 24<br>  track bfd-session 15<br>  action pbr next-hop 4.1.1.2</p>
-<p><strong>3.配置默认路由</strong></p>
-<p>ip route-static 0.0.0.0 0.0.0.0 3.1.1.2 track bfd-session 1<br>ip route-static 0.0.0.0 0.0.0.0 4.1.1.2 track bfd-session 2</p>
-<h5 id="二、在AR1上的配置"><a href="#二、在AR1上的配置" class="headerlink" title="二、在AR1上的配置"></a>二、在AR1上的配置</h5><p><strong>1.配置BFD</strong></p>
-<p>bfd 1 bind peer-ip 3.1.1.1<br> discriminator local 10<br> discriminator remote 5<br> commit</p>
-<h5 id="三、在AR2上的配置"><a href="#三、在AR2上的配置" class="headerlink" title="三、在AR2上的配置"></a>三、在AR2上的配置</h5><p><strong>1.配置BFD</strong></p>
-<p>bfd 1 bind peer-ip 4.1.1.1<br> discriminator local 20<br> discriminator remote 15<br> commit</p>
-<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/04/04/bfd/bfdsession.JPG" alt="查看BFD会话"></p>
-<p><img src="/2020/04/04/bfd/last.JPG" alt="AR1G0/0/0中断前的防火墙会话表"></p>
-<p><img src="/2020/04/04/bfd/next.JPG" alt="AR1G0/0/0中断后的防火墙会话表"></p>
-
+<table>
+<thead>
+<tr>
+<th>8bit</th>
+<th>4bit</th>
+<th>4bit</th>
+<th>80bit</th>
+<th>32bit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>11111111</td>
+<td>flags</td>
+<td>scope</td>
+<td>Reserved（must be 0）</td>
+<td>Group ID</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Flags<ul>
+<li>用来表示永久或临时组播组</li>
+<li>0000表示永久分配或众所周知</li>
+<li>0001表示临时的</li>
+</ul>
+</li>
+<li>Scope<ul>
+<li>表示组播组的范围<ul>
+<li>0：预留</li>
+<li>1：节点本地范围</li>
+<li>2：链路本地范围，例如FF02::1</li>
+<li>5：站点本地范围</li>
+<li>8：组织本地范围</li>
+<li>E：全球范围</li>
+<li>F：预留</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Group ID<ul>
+<li>组播组ID</li>
+</ul>
+</li>
+</ul>
+<h5 id="IPv6组播地址的MAC地址映射"><a href="#IPv6组播地址的MAC地址映射" class="headerlink" title="IPv6组播地址的MAC地址映射"></a>IPv6组播地址的MAC地址映射</h5><ul>
+<li>在以太网环境中，一个组播IPv6报文必须执行以太网封装。</li>
+<li>组播IPv6报文的目的IP地址是组播IPv6地址，而目的MAC地址则必须是组播MAC地址，并且该地址必须与组播IPv6地址对应。</li>
+<li>33-33是专门为IPv6组播预留的MAC地址前缀，MAC地址的后32bit从对应的组播IPv6地址的后32bit拷贝而来。</li>
+</ul>
+<p>组播IPv6地址：FF02 0000 0000 0000 0000 0000 <font color="red">0000 0001</font> 一共128bit，红色为32bit</p>
+<p>组播MAC地址：                    <font color="skyblue">组播MAC前缀：33-33</font> <font color="red">00-00-00-01</font>一共48bit</p>
+<h4 id="IPv6地址分类"><a href="#IPv6地址分类" class="headerlink" title="IPv6地址分类"></a>IPv6地址分类</h4><h5 id="预定义组播地址"><a href="#预定义组播地址" class="headerlink" title="预定义组播地址"></a>预定义组播地址</h5><ul>
+<li><p>Node-local</p>
+<ul>
+<li>FF01:0:0:0:0:0:0:1，所有节点的组播地址</li>
+<li>FF01:0:0:0:0:0:0:2，所有路由器的组播地址</li>
+</ul>
+<p>只能在接口内环回被访问</p>
+</li>
+<li><p>Link-local</p>
+<ul>
+<li>FF02:0:0:0:0:0:0:1，所有节点的组播地址</li>
+<li>FF02:0:0:0:0:0:0:2，所有路由器的组播地址</li>
+<li>FF02:0:0:0:0:0:1:FFXX:XXXX，Solicited-Node组播地址</li>
+<li>FF02:0:0:0:0:0:0:5，所有OSPF路由器组播地址</li>
+<li>FF02:0:0:0:0:0:0:6，所有OSPF的DR路由器组播地址</li>
+<li>FF02:0:0:0:0:0:0:D，所有PIM路由器组播地址</li>
+</ul>
+</li>
+</ul>
+<h3 id="MLD"><a href="#MLD" class="headerlink" title="MLD"></a>MLD</h3><h4 id="MLDv1"><a href="#MLDv1" class="headerlink" title="MLDv1"></a>MLDv1</h4><ul>
+<li>MLD（Multicast Listener Discovery）组播监听者发现协议</li>
+<li>与IGMP协议类似，有两个版本：MLDv1（RFC2710 对应IGMPv2 ASM模型）、MLDv2（RFC 3810 对应IGMPv3 SSM模型）。</li>
+<li>MLDv1主要基于查询和相应机制完成对IPv6组播组成员的管理。MLDv2的原理与MLDv1基本相同，并新增了以下特性：<ul>
+<li>对IPv6组播源的过滤</li>
+<li>IPv6组播组状态跟踪</li>
+<li>接收主机的状态侦听</li>
+</ul>
+</li>
+</ul>
+<h5 id="MLDv1报文格式"><a href="#MLDv1报文格式" class="headerlink" title="MLDv1报文格式"></a>MLDv1报文格式</h5><p>类型（Type）：MLD消息共有三种。</p>
+<ul>
+<li>组播侦听查询（类型130），可分为两种子类型：<ul>
+<li>普遍组查询：用于活的在所连网络上具有侦听者的组播地址。</li>
+<li>特定组播地址查询：用于获得在所连网络上对一特定组播地址是否存在侦听者。</li>
+</ul>
+</li>
+<li>组播侦听报告（类型=131）</li>
+<li>组播侦听离开（Multicast Listener Done）（类型值=132）</li>
+</ul>
+<p>图</p>
+<h5 id="查询器选举机制"><a href="#查询器选举机制" class="headerlink" title="查询器选举机制"></a>查询器选举机制</h5><ul>
+<li><p>MLD路由在初始时都认为自己是查询，并向本地网段内所有的主机和路由器发送MLD普遍组查询报文。目的地址为FF02::1。</p>
+</li>
+<li><p>比较普遍组查询（General Query）报文报文源IPv6地址与自己的接口地址作比较。IPv6地址最小的路由器成为查询器。其他路由器成为非查询器（Non-Querier）</p>
+</li>
+<li><p>所有非查询器都会启动一个定时器（其他查询器存在的时间定时器 Other Querier Present Timer）。在定时器超时前。如果收到了来自查询的MLD查询报文，则重置该定时器；否则就认为原查询器失效，并发起新的查询器选举过程。</p>
+</li>
+</ul>
+<h5 id="组成员加入过程"><a href="#组成员加入过程" class="headerlink" title="组成员加入过程"></a>组成员加入过程</h5><h5 id="组成员离开过程"><a href="#组成员离开过程" class="headerlink" title="组成员离开过程"></a>组成员离开过程</h5><h4 id="MLDv2"><a href="#MLDv2" class="headerlink" title="MLDv2"></a>MLDv2</h4><h5 id="MLDv2报文格式"><a href="#MLDv2报文格式" class="headerlink" title="MLDv2报文格式"></a>MLDv2报文格式</h5><h6 id="查询消息报文格式"><a href="#查询消息报文格式" class="headerlink" title="查询消息报文格式"></a>查询消息报文格式</h6><h6 id="报告消息报文格式"><a href="#报告消息报文格式" class="headerlink" title="报告消息报文格式"></a>报告消息报文格式</h6><h5 id="指定组播源-组查询"><a href="#指定组播源-组查询" class="headerlink" title="指定组播源-组查询"></a>指定组播源-组查询</h5><h4 id="MLDv1与MLDv2的区别"><a href="#MLDv1与MLDv2的区别" class="headerlink" title="MLDv1与MLDv2的区别"></a>MLDv1与MLDv2的区别</h4><h4 id="MLD-SSM-Mapping"><a href="#MLD-SSM-Mapping" class="headerlink" title="MLD SSM Mapping"></a>MLD SSM Mapping</h4><h3 id="嵌入式RP的原理"><a href="#嵌入式RP的原理" class="headerlink" title="嵌入式RP的原理"></a>嵌入式RP的原理</h3>
             </div>
             <hr/>
 
@@ -523,7 +574,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/04/bfd/">https://hzyxy.github.io/2020/04/04/bfd/</a>
+                    <a href="https://hzyxy.github.io/2020/06/02/ipv6-zu-bo/">https://hzyxy.github.io/2020/06/02/ipv6-zu-bo/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -561,20 +612,16 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                    <span class="chip bg-color">华为</span>
+                                <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                    <span class="chip bg-color">协议</span>
                                 </a>
                             
-                                <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                                    <span class="chip bg-color">配置</span>
+                                <a href="/tags/%E7%BB%84%E6%92%AD/">
+                                    <span class="chip bg-color">组播</span>
                                 </a>
                             
-                                <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                    <span class="chip bg-color">防火墙</span>
-                                </a>
-                            
-                                <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                                    <span class="chip bg-color">高可靠性</span>
+                                <a href="/tags/IPv6/">
+                                    <span class="chip bg-color">IPv6</span>
                                 </a>
                             
                         </div>
@@ -740,29 +787,30 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/04/05/link-group/">
+                <a href="/2020/06/02/ipv6-zu-bo/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/44.jpg" class="responsive-img" alt="Link-Group">
+                        <img src="/medias/featureimages/48.jpg" class="responsive-img" alt="IPv6组播">
                         
-                        <span class="card-title">Link-Group</span>
+                        <span class="card-title">IPv6组播</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Link-Group的介绍
+                            IPv6组播协议的介绍
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-05
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-02
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -775,15 +823,20 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
                     </a>
                     
-                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                        <span class="chip bg-color">高可靠性</span>
+                    <a href="/tags/%E7%BB%84%E6%92%AD/">
+                        <span class="chip bg-color">组播</span>
+                    </a>
+                    
+                    <a href="/tags/IPv6/">
+                        <span class="chip bg-color">IPv6</span>
                     </a>
                     
                 </div>
@@ -797,24 +850,24 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/03/ip-link/">
+                <a href="/2020/06/02/kua-yu-zu-bo/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="IP-Link">
+                        <img src="/medias/featureimages/32.jpg" class="responsive-img" alt="跨域组播">
                         
-                        <span class="card-title">IP-Link</span>
+                        <span class="card-title">跨域组播</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            IP-Link的介绍与配置
+                            跨域组播协议的介绍
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-03
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-02
                             </span>
                         <span class="publish-author">
                             
@@ -831,20 +884,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
                     </a>
                     
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                        <span class="chip bg-color">高可靠性</span>
+                    <a href="/tags/%E7%BB%84%E6%92%AD/">
+                        <span class="chip bg-color">组播</span>
                     </a>
                     
                 </div>

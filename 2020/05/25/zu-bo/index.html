@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    12.9k
+                    13.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    46 分
+                    49 分
                 </div>
                 
 
@@ -1152,8 +1152,21 @@
 <p>RPF检查过程：</p>
 <blockquote>
 <p>RPF检测所用到的三张表：</p>
-<p>单播路由表：dis ip routing-table 其路由来源于直连路由，静态单播路由，RIP，OSPF，ISIS，BGP缺省优先级60<br>MBGP表：dis bgp multicast routing-table 其路由来源于MBGP，用于在AS之间通告组播源的路由信息。缺省优先级255<br>组播静态路由表：dis multicast rpf-info source address，管理员手动配置得到的。缺省优先级1</p>
+<p>单播路由表：dis ip routing-table 其路由来源于直连路由，静态单播路由，RIP，OSPF，ISIS，BGP等。 缺省优先级继承单播路由表<br>MBGP表：dis bgp multicast routing-table 其路由来源于MBGP，用于在AS之间通告组播源的路由信息。缺省优先级255<br>组播静态路由表：dis multicast rpf-info source address，管理员手动配置得到的。缺省优先级1。<br>ip rpf-route-static 人为控制去往RP或者组播源的RPF接口以及RPF邻居。</p>
 </blockquote>
+<blockquote>
+<p>除单播路由外，MBGP路由、组播静态路由也是RPF检查的依据。当路由器收到一份组播报文后，如果这三种路由表都存在，具体检查过程如下：</p>
+<ol>
+<li>首先，通过报文源地址，分别从单播路由表、MBGP路由表和组播静态路由表中各选出一条最优路由。单播路由、MBGP路由的出接口为RPF接口，下一跳为RPF邻居。需要注意的是，组播静态路由实际上属于手工配置的组播路由，已经明确指定了RPF接口与RPF邻居。</li>
+<li>然后，根据以下原则从这三条最优路由中选择一条作为RPF路由。<ul>
+<li>如果配置了按照最长匹配选择路由，则从这三条路由中选出最长匹配的那条路由；如果这三条路由的掩码一样，则选择优先级最高的那条路由；如果它们的优先级也相同，则按照组播静态路由、MBGP路由、单播路由的顺序进行选择。</li>
+<li>如果没有配置按照最长匹配选择路由，则从这三条路由中选出优先级最高的那条路由；如果它们的优先级相同，则按照组播静态路由、MBGP路由、单播路由的顺序进行选择。</li>
+</ul>
+</li>
+<li>最后，路由器会将报文的入接口与RPF路由的RPF接口进行比较。如果一致则RPF检查通过，表明该报文来源路径正确，会将其向下游转发；如果不一致即RPF检查失败，表明该报文来源路径错误，就将其丢弃。</li>
+</ol>
+</blockquote>
+<p><strong>缺省情况下，在进行RPF检查时，设备会根据路由优先级来选取路由。</strong>可通过配置组播路由最长匹配，改变默认RPF检查规则，在选取RPF路由时首先按照路由的掩码长度来比较，然后再比较路由优先级。系统试图下：<strong>multicast longest-match</strong></p>
 <p>在负载分担的链路上如何判断RPF接口？<br>查找路由表，下一跳IP地址大的为RPF接口，地址小的不为RPF接口。</p>
 <p>RPF邻居：就是路由表下一跳的最大的IP地址，有PIM邻居。</p>
 <h5 id="PIM-DM-（密集）"><a href="#PIM-DM-（密集）" class="headerlink" title="PIM-DM （密集）"></a>PIM-DM （密集）</h5><p>工作在ASM模型</p>
@@ -1308,7 +1321,7 @@
 </li>
 </ul>
 <p>华为默认开启状态刷新机制</p>
-<h5 id="PIM-SM（稀疏）"><a href="#PIM-SM（稀疏）" class="headerlink" title="PIM-SM（稀疏）"></a>PIM-SM（稀疏）</h5><p>工作在ASM</p>
+<h5 id="PIM-SM（稀疏）（ASM模型）"><a href="#PIM-SM（稀疏）（ASM模型）" class="headerlink" title="PIM-SM（稀疏）（ASM模型）"></a>PIM-SM（稀疏）（ASM模型）</h5><p>工作在ASM</p>
 <ul>
 <li>使用“拉（Pull）模式”转发组播报文</li>
 <li>以RP（汇聚点）为根构建RPT</li>
@@ -1321,7 +1334,7 @@
 <ol>
 <li>（*，G）表项是由收到成员报告报文或者收到（*，G）join报文而被创建的。</li>
 <li>（*，G）表项的上行接口是根据RP的地址进行RPF检测得到的。</li>
-<li>（*，G）表项的下游接口是存在直连组成员或者收到正确的（*，G）join报文而被创建出来的。</li>
+<li>（<em>，G）表项的下游接口是存在直连组成员或者收到正确的（\</em>，G）join报文而被创建出来的。</li>
 <li>（*，G）表项的下游接口收到（*，G）的剪枝报文或者最后组成员leave报文而被删除。当（*，G）表项下游接口哦为NULL时，朝RP的RPF接口发送（*，G）剪枝报文。</li>
 </ol>
 <p>（S，G）</p>
@@ -1439,6 +1452,11 @@
 <li>最后一跳路由器根据组播源的地址进行RPF检测，并向指向组播源的RPF接口上RPF邻居发送发送（S，G）的join报文，逐跳构建SPT树。</li>
 <li>当去往组播源地址和去往RP的地址的RPF接口不一致时，路由器沿着去往组播源的RPF发送（S，G）（S）join报文，沿着去往RP的RPF接口发送（S，G）（SR）prune报文。沿着RP方向上的路由器将自身（S，G）表项的下游接口剪枝，实现SPT切换，通过SPT树接收组播流量。</li>
 </ol>
+<h5 id="PIM-SM（SSM模型）"><a href="#PIM-SM（SSM模型）" class="headerlink" title="PIM-SM（SSM模型）"></a>PIM-SM（SSM模型）</h5><ul>
+<li>SSM模型是借助PIM-SM的部分技术和IGMPv3，MLDv2来实现的，无需维护RP、无需构建RPT、无需注册组播源，可以直接在源与组成员之间建立SPT。</li>
+<li>SSM的特点是网络用户能够预先知道组播源的具体位置。</li>
+<li>SSM模型中，PIM-SM的关键机制包括邻居发现、DR竞选、构建SPT。</li>
+</ul>
 
             </div>
             <hr/>
@@ -1913,7 +1931,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">92.6k</span>&nbsp;字
+                class="white-color">94.4k</span>&nbsp;字
             
             
             
