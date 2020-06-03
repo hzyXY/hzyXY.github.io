@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.6k
+                    3.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    11 分
                 </div>
                 
 
@@ -446,27 +446,68 @@
 </li>
 <li><p>软件算法：IP的逐跳转发，在经过的每一跳处，必须进行路由表的最长匹配查找（可能多次），速度缓慢。<br>没有实现转控分离，都需要CPU完成，从而性能成为瓶颈</p>
 </li>
-<li><p>ATM（Asynchronous Transfer Mode）技术应运而生。ATM采用定长标签，并且只需要维护比路由表规模小得多的标签表，能够提供比IP路由方式高得多的转发性能。然而，ATM协议相对复杂，且ATM网络部署成本高，这使得ATM技术很难普及。</p>
+<li><p>ATM（Asynchronous Transfer Mode）技术应运而生。ATM采用定长标签，并且只需要维护比路由表规模小得多的标签表，能够提供比IP路由方式高得多的转发性能。然而，ATM协议相对复杂，且ATM网络部署成本高，这使得ATM技术很难普及。<br>基于定长数据（信元模式）</p>
 </li>
-<li><p>传统的IP技术简单，且部署成本低。如何结合IP与ATM的优点成为当时热门话题。多协议标签交换技术MPLS就是在这种背景下产生的。</p>
+<li><p>传统的IP技术简单，且部署成本低。如何结合IP与ATM的优点成为当时热门话题。多协议标签交换技术MPLS就是在这种背景下产生的。<br>基于帧模式的转发（数据长度不固定）</p>
 </li>
 <li><p>MPLS最初是为了提高路由器的转发速度而提出的。与传统IP路由方式相比，它在数据转发时，只在网络边缘分析IP报文头，而不用在每一跳都分析IP报文头，节约了处理时间。</p>
 <p>随着专用集成电路ASIC（Application Specific Integrated Circuit）技术的发展，路由查找速度已经不是阻碍网络发展的瓶颈。这使得MPLS在提高转发速度方面不再具备明显的优势。但是MPLS支持多层标签和转发平面面向连接的特性，使其在VPN（Virtual Private Network）、QoS（Quality of Service）等方面得到广泛应用。</p>
 </li>
 </ul>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><h4 id="交换机转发"><a href="#交换机转发" class="headerlink" title="交换机转发"></a>交换机转发</h4><p>3层交换机2层转发和3层转发的判断机制<br>1、DMAC是否为对应VLAN的VLANIF接口的MAC地址。<br>如果不是则执行2层转发，查MAC地址表。如果是则执行3层转发，查IP路由表，找到下一跳地址。</p>
+<ol>
+<li><p>dmac vlan10 smac pc1 192.168.10.1 192.168.20.1 </p>
+</li>
+<li><p>dmac pc2 smac vlanif20 192.168.10.1 192.168.20.1 </p>
+</li>
+</ol>
+<p>直连路由，ARP表差MAC地址，进行2层帧头重写。<br>查MAC地址表执行转发，如果MAC地址表没有DMAC地址，则丢包并执行ARP解析。</p>
+<blockquote>
+<p>路由器转发技术的3个阶段</p>
+<ol>
+<li>基于CPU进行查表转发。<br>所有报文通过背板送给CPU执行路由表的查找。转发速度非常低，成为网络瓶颈。</li>
+</ol>
+<p>1.5. 基于标签的转发机制。 MPLS</p>
+<ol start="2">
+<li>基于缓存的查表转发。（快速转发）<br>一个流的第一个包执行CPU查表转发，并生成重写缓存表，后续包根据重写缓存表执行快速转发，业界称为一次路由，多次交换。</li>
+<li>CEF </li>
+</ol>
+</blockquote>
 <h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><h4 id="MPLS报文"><a href="#MPLS报文" class="headerlink" title="MPLS报文"></a>MPLS报文</h4><h5 id="MPLS包头"><a href="#MPLS包头" class="headerlink" title="MPLS包头"></a>MPLS包头</h5><p>包头图</p>
-<p>MPLS包头有32bit，其中有：<br>20Bit同做标签（Label）<br>3个Bit的EXP，协议中没有明确，通常用作于COS<br>1Bit的S，用于表示是否是栈底，表明MPLS的标签可以嵌套。等于0为后面还有标签，等于1表示后面无标签。理论上可无限嵌套<br>8Bit的TTL</p>
-<h4 id="MPLS术语"><a href="#MPLS术语" class="headerlink" title="MPLS术语"></a>MPLS术语</h4><p><strong>标签（Label）</strong><br>是一个比较端的，定长的，通常只具有局部意义的标识，这些标签通常位于数据链路层的数据链路层封装头和三层数据包之间，标签通过绑定过程同FEC相映射。</p>
-<p><strong>FEC</strong><br>Forwarding Equivalence Class，FEC（转发等价类），是在转发过程中以等价的方式处理的一组数据分组，可根据地址、隧道、COS（优先级）等标识创建FEC。可以认为一条路由时一个FEC，通常在一台路由器上，对一个FEC分配相同的标签。（根据隧道的目标地址定义：以一组等价的方式转发的报文称之为一个转发等价类）。</p>
+<p>MPLS包头有32bit，其中有：<br>20Bit同做标签（Label）<br>3个Bit的EXP，协议中没有明确，通常用作于COS（Class of Service），当设备阻塞时，优先发送优先级高的报文。<br>1Bit的S，用于表示是否是栈底，表明MPLS的标签可以嵌套。等于0为后面还有标签，等于1表示后面无标签。理论上可无限嵌套<br>8Bit的TTL</p>
+<h5 id="MPLS标签"><a href="#MPLS标签" class="headerlink" title="MPLS标签"></a>MPLS标签</h5><p>explicit-null：标签值0<br>将explicit-null（显式空标签）分发给上游LSR，意味着希望上游LSR将顶层标签值为0的MPLS数据包转发过来，下游LSR接收到这样的MPLS数据包后，可以处理标签中的EXP，但对于标签值0，下游LSR无需查找标签转发表，直接删除顶层标签即可，因此explicit-null的作用是将EXP传递过来，从而部署连贯的QOS策略。</p>
+<p>implicit-null或者pop：标签值3，将implicit-null分发给上游LSR，意味着希望上游LSR删除顶层标签，将得到的MPLS数据包或IP数据包转发过来。</p>
+<p>共同点：最后一跳路由器都无需进行LFIB表的查找。</p>
+<h4 id="MPLS术语"><a href="#MPLS术语" class="headerlink" title="MPLS术语"></a>MPLS术语</h4><p><strong>标签（Label）</strong><br>是一个比较端的，定长的，通常只具有本地意义的标识，MPLS标签封装在链路层和网络层之间，标签通过绑定过程同FEC相映射。用于唯一标识一个分组所属的FEC。</p>
+<p><strong>FEC</strong><br>Forwarding Equivalence Class，FEC（转发等价类），是在转发过程中以等价的方式处理的一组数据分组，可根据源地址、目的地址、源端口、目的端口、VPN、隧道、COS（优先级）等标识创建FEC。可以认为一条路由时一个FEC，通常在一台路由器上，对一个FEC分配相同的标签。（根据隧道的目标地址定义：以一组等价的方式转发的报文称之为一个转发等价类）。到同一条路由的所有报文就是一个转发等价类。</p>
 <p><strong>LSP</strong><br>Label Switched Path（标签交换通道）。一个FEC的数据流，在不同的节点被赋予确定的标签，数据转发按照这些标签进行。数据流所走的路径就是LSP。<br>MPLS的标签转发，通过事先分配好的标签，为报文建立了一条标签转发通道（LSP），再通道经过的每一台设备处，只需要进行快速的标签交换即可（一次查找）。</p>
 <p>单向路径</p>
 <p><strong>LSR</strong><br>Label Switching Router，LSR是MPLS的网络核心交换机，它提供标签交换和标签分发的功能。</p>
 <p><strong>LER</strong><br>在MPLS的网络边缘，进入到MPLS网络的流量由LER分为不同的FEC，并为这些FEC请求相应的标签。它提供流量分类和标签的映射、标签的移除功能。</p>
+<p>LSP的入口LER称为入节点（Ingress）；位于LSP中间的LSP称为中间节点（Transit）；LSP的出口LER称为出节点（Egress）。一条LSP可以有0个、1个或多个中间节点，但有且只有一个入节点和一个出节点。</p>
+<h4 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h4><p>图</p>
+<ul>
+<li>控制平面：负责产生和维护路由信息以及标签信息。<ul>
+<li>路由信息表RIB（Routing Information Base）：由IP路由协议（IP Routing Protocol）生成，用于选择路由。</li>
+<li>标签分发协议LDP（Label Distribution Protocol）：负责标签的分配、标签转发信息表的建立、标签交换路径的建立、拆除等工作。</li>
+<li>标签信息表LIB（Label Information Base）：由标签分发协议生成，用于管理标签信息。</li>
+</ul>
+</li>
+<li>转发平面：即数据平面（Data Plane），负责普通IP报文的转发以及带MPLS标签报文的转发。<ul>
+<li>转发信息表FIB（Forwarding Information Base）：从RIB提取必要的路由信息生成，负责普通IP报文的转发。</li>
+<li>标签转发信息表LFIB（Label Forwarding Information Base）：简称标签转发表，由标签分发协议在LSR上建立LFIB，负责带MPLS标签报文的转发。</li>
+</ul>
+</li>
+</ul>
 <h4 id="LSP的建立"><a href="#LSP的建立" class="headerlink" title="LSP的建立"></a>LSP的建立</h4><p>MPLS需要为报文事先分配好标签，建立一条LSP，才能进行报文转发。LSP分为静态LSP和动态LSP。</p>
 <h5 id="静态LSP的建立"><a href="#静态LSP的建立" class="headerlink" title="静态LSP的建立"></a>静态LSP的建立</h5><p>静态LSP是用户通过手工为各个转发等价类分配标签而建立的。由于静态LSP各节点上不能相互感知到整个LSP的情况，因此静态LSP是一个本地概念。</p>
 <p>静态LSP不使用标签发布协议，不需要交互控制报文，因此消耗资源比较小，适用于拓扑结构简单并且稳定的小型网络，但通过静态方式分配标签建立的LSP不能根据网络拓扑变化动态调整，需要管理员干预。</p>
-<p>静态LSP与静态CR-LSP适用相同的标签空间（16~1023）.配置静态LSP时需要遵循的原则是，前一节出标签的值等于下一个节点入标签的值</p>
-<h5 id="动态LSP的建立"><a href="#动态LSP的建立" class="headerlink" title="动态LSP的建立"></a>动态LSP的建立</h5><p>动态LSP通过标签发布协议动态建立。标签发布协议是MPLS的控制协议（也可称为信令协议），负责FEC的分类、标签的分发以及LSP的建立和维护等一系列操作。</p>
+<p>静态LSP与静态CR-LSP适用相同的标签空间（16~1023）.配置静态LSP时需要遵循的原则是，前一节出标签的值等于下一个节点入标签的值。</p>
+<p>中间节点不知道FEC。</p>
+<h5 id="动态LSP的建立"><a href="#动态LSP的建立" class="headerlink" title="动态LSP的建立"></a>动态LSP的建立</h5><ul>
+<li>LDP端口号：TCP646</li>
+</ul>
+<p>动态LSP通过<strong>标签发布协议</strong>动态建立。标签发布协议是MPLS的控制协议（也可称为信令协议），负责FEC的分类、标签的分发以及LSP的建立和维护等一系列操作。</p>
 <p>MPLS可以使用多种标签发布协议：</p>
 <ul>
 <li><p>LDP</p>
@@ -480,16 +521,60 @@
 <p>MP-BGP（Multiprotocol Border Gateway Protocol）是在BGP协议基础上扩展的协议。MP-BGP支持为MPLS VPN业务中私网路由和跨域VPN的标签路由分配标签。</p>
 </li>
 </ul>
-<h4 id="MPLS转发"><a href="#MPLS转发" class="headerlink" title="MPLS转发"></a>MPLS转发</h4><p>在MPLS基本转发过程中涉及的相关概念如下：</p>
-<p>标签操作类型包括标签压入（Push）、标签交换（Swap）和标签弹出（Pop），它们是标签转发的基本动作。</p>
+<p>动态LSP通过LDP协议实现对FEC的分类、标签的分配及LSP建立和维护等操作。</p>
+<p>动态LSP的特点：</p>
+<ul>
+<li>组网配置简单，易于管理和维护</li>
+<li>支持基于路由动态建立LSP，网络拓扑发生变化时，能及时反映网络状况。</li>
+</ul>
+<p>标签空间：</p>
+<p>1、基于接口的标签空间 1 </p>
+<p>2、基于设备的标签空间 0 </p>
+<h6 id="邻居建立过程"><a href="#邻居建立过程" class="headerlink" title="邻居建立过程"></a>邻居建立过程</h6><ul>
+<li>LDP邻居失效时间15s</li>
+<li>LDP会话失效时间45s</li>
+</ul>
+<p>图</p>
+<ol>
+<li>邻居发现<br>周期性发送hello报文（周期为5s，目标地址为224.0.0.2），hello报文中携带的Transport Address大的那一方向地址小的发送TCP连接。进行LDP会话的建立，完成3次握手。</li>
+</ol>
+<h6 id="触发建立LSP的策略"><a href="#触发建立LSP的策略" class="headerlink" title="触发建立LSP的策略"></a>触发建立LSP的策略</h6><p>lsp-trigger host 默认只为直连非接口32位的主机路由建立LSP</p>
+<p>路由器根据LSP产生的策略可知道自身是否是Egress节点<br>Egress节点可以理解为32位直连主机路由的始发路由器<br>Ingress节点，Transit节点可以理解为除Egress节点之外的其他路由器</p>
+<p>In lable 自己分配，通告给LDP邻居使用<br>Out lable 从LDP邻居得到的FEC的标签，自己用</p>
+<blockquote>
+<p>如果In lable为null，则说明自己是这个FEC的Ingress节点<br>如果In lable为非null且不为3，则说明自己是这个FEC的Transit节点<br>如果In lable为3，则说明自己是这个FEC的Egress节点</p>
+</blockquote>
+<h6 id="标签发布和管理"><a href="#标签发布和管理" class="headerlink" title="标签发布和管理"></a>标签发布和管理</h6><p>标签发布方式</p>
+<h4 id="MPLS转发"><a href="#MPLS转发" class="headerlink" title="MPLS转发"></a>MPLS转发</h4><p>转发根据顶部标签执行。</p>
+<p>在MPLS基本转发过程中涉及的相关概念如下：</p>
+<p>标签操作类型包括标签压入（Push）、标签交换（Swap）和标签弹出（Pop），NULL，它们是标签转发的基本动作。</p>
 <ul>
 <li><p>Push：当IP报文进入MPLS域时，MPLS边界设备在报文二层首部和IP首部之间插入一个新标签；或者MPLS中间设备根据需要，在标签栈顶增加一个新的标签（即标签嵌套封装）。</p>
 </li>
 <li><p>Swap：当报文在MPLS域内转发时，根据标签转发表，用下一跳分配的标签，替换MPLS报文的栈顶标签。</p>
 </li>
 <li><p>Pop：当报文离开MPLS域时，将MPLS报文的标签剥掉。</p>
-<p>在最后一跳节点，标签已经没有使用价值。这种情况下，可以利用倒数第二跳弹出特性PHP（Penultimate Hop Popping），在倒数第二跳节点处将标签弹出，减少最后一跳的负担。最后一跳节点直接进行IP转发或者下一层标签转发。</p>
+<p>在最后一跳节点，标签已经没有使用价值。这种情况下，可以利用倒数第二跳弹出特性PHP（Penultimate Hop Popping），在倒数第二跳节点处将标签弹出，减少最后一跳的负担。最后一跳节点直接进行IP转发或者下一层标签转发。本质是弹出顶部标签</p>
 <p>默认情况下，设备支持PHP特性，支持PHP的Egress节点分配给倒数第二跳节点的标签值为3。仅移除顶部标签。</p>
+</li>
+<li><p>NULL：本质弹出标签栈，全部弹出。</p>
+</li>
+</ul>
+<h5 id="MPLS对TTL的处理"><a href="#MPLS对TTL的处理" class="headerlink" title="MPLS对TTL的处理"></a>MPLS对TTL的处理</h5><p>MPLS对TTL的处理包括MPLS对TTL的处理模式和ICMP响应报文这两个方面。</p>
+<p><strong>MPLS对TTL的处理模式</strong></p>
+<p>MPLS标签中包含一个8比特的TTL字段，其含义与IP头中的TTL域相同。MPLS对TTL的处理除了用于防止产生路由环路外，也用于实现Traceroute功能。</p>
+<p>MPLS对TTL的处理模式包括：Uniform和Pipe。缺省情况下，MPLS对TTL的处理模式为Uniform。</p>
+<p><strong>Uniform模式</strong></p>
+<p>图</p>
+<ul>
+<li>IP报文经过MPLS网络时，在入节点，IP TTL减1映射到MPLS TTL字段，此后报文在MPLS网络中按照标准的TTL处理方式处理。在出节点将MPLS TTL减1后映射到IP TTL字段。</li>
+</ul>
+<p><strong>Pipe模式</strong></p>
+<p>图</p>
+<ul>
+<li><p>在入节点，IP TTL值减1，MPLS TTL字段为固定值，此后报文在MPLS网络中按照标准的TTL处理方式处理。在出节点会将IP TTL字段的值减1。即IP分组经过MPLS网络时，无论经过多少跳，IP TTL只在入节点和出节点分别减1。（隧道）</p>
+</li>
+<li><p>在MPLS VPN应用中，出于网络安全的考虑，需要隐藏MPLS骨干网络的结构，这种情况下，对于私网报文，Ingress上建议配置成Pipe模式。</p>
 </li>
 </ul>
 
@@ -966,7 +1051,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">101.4k</span>&nbsp;字
+                class="white-color">103.9k</span>&nbsp;字
             
             
             
