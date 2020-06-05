@@ -426,14 +426,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    970
+                    1.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    8 分
                 </div>
                 
 
@@ -518,7 +518,7 @@
 <td></td>
 </tr>
 </tbody></table>
-<h5 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h5><table>
+<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><table>
 <thead>
 <tr>
 <th><img src="/2020/06/03/zu-bo-pei-zhi/r2bsrrp.JPG" alt="查看R2的BSR、RP信息"></th>
@@ -530,12 +530,73 @@
 <td><img src="/2020/06/03/zu-bo-pei-zhi/r5msdp.JPG" alt="查看R5的MSDP对等体"></td>
 </tr>
 <tr>
-<td><img src="/2020/06/03/zu-bo-pei-zhi/r2sg.JPG" alt="r2sg"></td>
-<td><img src="/2020/06/03/zu-bo-pei-zhi/r5sgxg.JPG" alt="r5sgxg"></td>
+<td><img src="/2020/06/03/zu-bo-pei-zhi/r2sg.JPG" alt="查看R2的PIM组播路由表"></td>
+<td><img src="/2020/06/03/zu-bo-pei-zhi/r5sgxg.JPG" alt="查看R5的PIM组播路由表"></td>
 </tr>
 </tbody></table>
 <p><img src="/2020/06/03/zu-bo-pei-zhi/r6bmr.JPG" alt="查看R6的BGP组播路由表"></p>
-<h3 id="IPv6组播配置"><a href="#IPv6组播配置" class="headerlink" title="IPv6组播配置"></a>IPv6组播配置</h3>
+<h3 id="IPv6组播配置"><a href="#IPv6组播配置" class="headerlink" title="IPv6组播配置"></a>IPv6组播配置</h3><p><img src="/2020/06/03/zu-bo-pei-zhi/ipv6.JPG" alt="PIM IPv6 SM配置拓扑图"></p>
+<h4 id="配置步骤-1"><a href="#配置步骤-1" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在Router中的配置"><a href="#一、在Router中的配置" class="headerlink" title="一、在Router中的配置"></a>一、在Router中的配置</h5><table>
+<thead>
+<tr>
+<th>在R2中的配置</th>
+<th>在R3中的配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1.使能IPv6功能、IPv6组播功能</strong><br>ipv6<br>#<br>multicast ipv6 routing-enable</td>
+<td><strong>1.使能IPv6功能、IPv6组播功能</strong><br>ipv6<br>#<br>multicast ipv6 routing-enable</td>
+</tr>
+<tr>
+<td><strong>2.配置isis</strong><br>isis 1<br> is-level level-2<br> network-entity 49.0002.0000.0000.0002.00<br> #<br> ipv6 enable topology ipv6</td>
+<td><strong>2.配置isis</strong><br>isis 1<br> is-level level-2<br> network-entity 49.0003.0000.0000.0003.00<br> #<br> ipv6 enable topology ipv6</td>
+</tr>
+<tr>
+<td><strong>3.在接口上使能PIM SM、isis</strong><br>interface GigabitEthernet0/0/0<br> ipv6 enable<br> ipv6 address 2000:12::2/64<br> isis ipv6 enable 1<br> pim ipv6 sm<br>#<br>interface GigabitEthernet0/0/1<br> ipv6 enable<br> ipv6 address 2000:23::2/64<br> isis ipv6 enable 1<br> pim ipv6 sm</td>
+<td><strong>3.在接口上使能PIM SM、isis</strong><br>interface GigabitEthernet0/0/0<br> ipv6 enable<br> ipv6 address 2000:23::3/64<br> isis ipv6 enable 1<br> pim ipv6 sm<br>#<br>interface GigabitEthernet0/0/1<br> ipv6 enable<br> ipv6 address 2000:34::3/64<br> isis ipv6 enable 1<br> pim ipv6 sm<br>#<br>interface GigabitEthernet0/0/2<br> ipv6 enable<br> ipv6 address 2000:35::3/64<br> isis ipv6 enable 1<br> pim ipv6 sm<br>#<br>interface LoopBack0<br> ipv6 enable<br> ipv6 address 2001:34::3/128<br> isis ipv6 enable 1<br> pim ipv6 sm</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>4.配置C-RP</strong><br>pim-ipv6<br> c-rp 2001:34::3</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>在R4中的配置</th>
+<th>在R5中的配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1.使能IPv6功能、IPv6组播功能</strong><br>ipv6<br>#<br>multicast ipv6 routing-enable</td>
+<td><strong>1.使能IPv6功能、IPv6组播功能</strong><br>ipv6<br>#<br>multicast ipv6 routing-enable</td>
+</tr>
+<tr>
+<td><strong>2.配置isis</strong><br>isis 1<br> is-level level-2<br> network-entity 49.0004.0000.0000.0004.00<br> #<br> ipv6 enable topology ipv6</td>
+<td><strong>2.配置isis</strong><br>isis 1<br> is-level level-2<br> network-entity 49.0005.0000.0000.0005.00<br> #<br> ipv6 enable topology ipv6</td>
+</tr>
+<tr>
+<td><strong>3.在接口上使能PIM SM、isis</strong><br>interface GigabitEthernet0/0/0<br> ipv6 enable<br> ipv6 address 2000:34::4/64<br> isis ipv6 enable 1<br> pim ipv6 sm<br>#<br>interface GigabitEthernet0/0/1<br> ipv6 enable<br> ipv6 address 2000:54::4/64<br> isis ipv6 enable 1<br> pim ipv6 sm<br>#<br>interface GigabitEthernet0/0/2<br> ipv6 enable<br> ipv6 address 2000:44::4/64<br> isis ipv6 enable 1<br> mld enable<br> mld static-group FF0E::1<br><br>interface LoopBack0<br> ipv6 enable<br> ipv6 address 2001:34::4/128<br> isis ipv6 enable 1<br> pim ipv6 sm</td>
+<td><strong>3.在接口上使能PIM SM、isis</strong><br>interface GigabitEthernet0/0/0<br> ipv6 enable<br> ipv6 address 2000:35::5/64<br> isis ipv6 enable 1<br> pim ipv6 sm<br>#<br>interface GigabitEthernet0/0/1<br> ipv6 enable<br> ipv6 address 2000:54::5/64<br> isis ipv6 enable 1<br> pim ipv6 sm<br><br>interface LoopBack0<br> ipv6 enable<br> ipv6 address 2001:35::5/128<br> isis ipv6 enable 1<br> pim ipv6 sm</td>
+</tr>
+<tr>
+<td><strong>4.配置C-RP</strong><br>pim-ipv6<br> c-rp priority 100<br> c-rp 2001:34::4</td>
+<td><strong>4.配置C-BSR</strong><br>pim-ipv6<br> c-bsr 2001:35::5</td>
+</tr>
+</tbody></table>
+<h4 id="验证配置-1"><a href="#验证配置-1" class="headerlink" title="验证配置"></a>验证配置</h4><table>
+<thead>
+<tr>
+<th>![查看RP、BSR信息](组播配置/ipv6查看rp bsr.JPG)</th>
+<th><img src="/2020/06/03/zu-bo-pei-zhi/ipv6%E7%BB%84%E6%92%AD%E6%BA%90%E5%8F%91%E9%80%81%E7%BB%84%E6%92%AD%E6%B5%81%E9%87%8F.JPG" alt="组播源发送组播流量"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="/2020/06/03/zu-bo-pei-zhi/ipv6r4pim%E8%B7%AF%E7%94%B1%E8%A1%A8.JPG" alt="查看R4的PIM组播路由表"></td>
+<td><img src="/2020/06/03/zu-bo-pei-zhi/ipv6r3pim%E7%BB%84%E6%92%AD%E8%B7%AF%E7%94%B1%E8%A1%A8.JPG" alt="查看R3的PIM组播路由表"></td>
+</tr>
+</tbody></table>
+
             </div>
             <hr/>
 
@@ -1039,7 +1100,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">103.9k</span>&nbsp;字
+                class="white-color">105.8k</span>&nbsp;字
             
             
             

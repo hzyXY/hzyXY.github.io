@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.2k
+                    4.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    11 分
+                    16 分
                 </div>
                 
 
@@ -544,7 +544,17 @@
 <blockquote>
 <p>如果In lable为null，则说明自己是这个FEC的Ingress节点<br>如果In lable为非null且不为3，则说明自己是这个FEC的Transit节点<br>如果In lable为3，则说明自己是这个FEC的Egress节点</p>
 </blockquote>
+<p>lsp-trigger host特点：<br>会为非直连非主机路由作为ingress，transit节点创建LSP<br>会为直连非接口主机路由作为egress节点创建LSP<br>会为其他主机路由作为ingress，transit节点创建LSP</p>
+<p>lsp-trigger all特点：<br>会为直连非接口主机路由作为egress节点创建LSP<br>会为其他主机路由作为ingress，transit节点创建LSP<br>会为直连接口路由作为egress节点创建LSP<br>会为非直连非主机路由作为transit，ingress节点创建LSP</p>
 <h6 id="标签发布和管理"><a href="#标签发布和管理" class="headerlink" title="标签发布和管理"></a>标签发布和管理</h6><p>标签发布方式</p>
+<h6 id="LDP-LSP的建立过程"><a href="#LDP-LSP的建立过程" class="headerlink" title="LDP LSP的建立过程"></a>LDP LSP的建立过程</h6><ul>
+<li>LSP的建立过程实际就是将FEC和标签进行绑定，并将这种绑定通告LSP上相邻LSR的过程。</li>
+<li>缺省情况下，网络的路由改变时，如果过有一个边缘节点（Egress）发现自己的路由表中出现了新的主机路由，并且这一路由不属于任何现有的FEC，则该边缘节点需要位这一路由建立一个新的FEC。</li>
+<li>如果MPLS网络的Egress有可供分配的标签，则为FEC分配标签，并主动向上游发出标签映射消息，标签映射消息中包含分配的标签和绑定的FEC等信息。</li>
+<li>Transit收到标签映射消息后，判断标签银蛇的发送者（Egress）是否为该FEC的下一跳。若是，则在其标签转发表中增加相应的条目，然后主动向上游LSR发送对于指定FEC的标签映射消息。</li>
+<li>Ingress收到标签映射消息后，判断标签映射的发送者（Transit）是否为该FEC的下一跳。若是，则在标签转发表中增加相应的条目。这时，就完成了LSP的建立，接下来就可以对该FEC对应的数据报文进行标签转发。</li>
+</ul>
+<p>LSP：天然自动建立隧道技术</p>
 <h4 id="MPLS转发"><a href="#MPLS转发" class="headerlink" title="MPLS转发"></a>MPLS转发</h4><p>转发根据顶部标签执行。</p>
 <p>在MPLS基本转发过程中涉及的相关概念如下：</p>
 <p>标签操作类型包括标签压入（Push）、标签交换（Swap）和标签弹出（Pop），NULL，它们是标签转发的基本动作。</p>
@@ -572,11 +582,48 @@
 <p><strong>Pipe模式</strong></p>
 <p>图</p>
 <ul>
-<li><p>在入节点，IP TTL值减1，MPLS TTL字段为固定值，此后报文在MPLS网络中按照标准的TTL处理方式处理。在出节点会将IP TTL字段的值减1。即IP分组经过MPLS网络时，无论经过多少跳，IP TTL只在入节点和出节点分别减1。（隧道）</p>
-</li>
-<li><p>在MPLS VPN应用中，出于网络安全的考虑，需要隐藏MPLS骨干网络的结构，这种情况下，对于私网报文，Ingress上建议配置成Pipe模式。</p>
-</li>
+<li>在入节点，IP TTL值减1，MPLS TTL字段为固定值，此后报文在MPLS网络中按照标准的TTL处理方式处理。在出节点会将IP TTL字段的值减1。即IP分组经过MPLS网络时，无论经过多少跳，IP TTL只在入节点和出节点分别减1。（隧道）</li>
+<li>在MPLS VPN应用中，出于网络安全的考虑，需要隐藏MPLS骨干网络的结构，这种情况下，对于私网报文，Ingress上建议配置成Pipe模式。</li>
 </ul>
+<h3 id="MPLS-VPN"><a href="#MPLS-VPN" class="headerlink" title="MPLS VPN"></a>MPLS VPN</h3><p>问题：</p>
+<ol>
+<li>PE连接多个CE时，如何解决PE本地路由冲突的问题。</li>
+<li>当从远端PE接收到的私网路由是属于本端那个site的路由，无法方便进行引入控制。</li>
+<li>PE收到远端PE的私网报文时，如何判断该报文属于本端PE的哪个的site。</li>
+</ol>
+<p>支持打tag的路由协议：ripv2，ospfv2的lsa5、7，isis。</p>
+<p>解决：</p>
+<ol>
+<li>本地路由冲突问题，可以通过在同一台路由器上创建不同的路由表解决，而不同的接口可以分属不同的路由表中，这就相当于将一台共享PE模拟成多台专用PE。VRF解决。</li>
+<li>可以在路由传递的过程中为这条路由再添加一个标识，用以区别不同的VPN。RD，RT解决。<br>VPNv4地址族：（用于描述SITE的私网路由）添加的RD参数的IPv4前缀。</li>
+<li>VPN由于IP报文的格式不可更改，估计指望不上他了，但可以在IP头之外加上一些信息，由始发的VPN打上标记，这样PE在接收报文时可以根据这个标记进行转发。</li>
+</ol>
+<h4 id="VRF"><a href="#VRF" class="headerlink" title="VRF"></a>VRF</h4><p>VPN路由转发实例（VPN Routing &amp; Forwarding Instance）</p>
+<p>每一个VRF可以看作虚拟的路由器，好像是一台专用的PE设备。该虚拟路由器包括如下元素：</p>
+<ul>
+<li>一张独立的路由表，当然也包括了独立的地址空间</li>
+<li>一组归属于这个VRF的接口的集合</li>
+<li>一组只用于本VRF的路由协议</li>
+</ul>
+<p>对于每个PE，可以维护一个或多个VRF，同时维护一个公网的路由表（也叫全局路由表），多个VRF实例相互分离独立。</p>
+<p>其实实现VRF并不困难，关键在于如何在PE上使用特定的策略规则来协调VRF和全局路由表之间的关系。</p>
+<h5 id="RT（路由目标）"><a href="#RT（路由目标）" class="headerlink" title="RT（路由目标）"></a>RT（路由目标）</h5><p>Route Target</p>
+<p>ipv4叫团体属性</p>
+<p>vpnv4叫扩展团体属性，也称为RT。<br>VPNv4地址族：添加了RD参数的IPv4前缀。<br>VPNv4的团体属性：RT。</p>
+<p>扩展的community有如下两种格式：其中type字段为0x0002或者0x0102时表示RT。</p>
+<p>[Type（0x0002）| AS#（16bit）| Value（32bit）]</p>
+<p>[Type（0x0102）| IPaddress（32bit）| Value（32bit）]</p>
+<p>RT的本质是每个VRF表达自己的路由取舍以及喜好的方式。可以分为两部分：Export Target于import Target。前者表示了我发出的路由的属性，而后者表示了我对哪些路由感兴趣。</p>
+<h5 id="RD"><a href="#RD" class="headerlink" title="RD"></a>RD</h5><p>Route Disinguisher</p>
+<p>解决路由在网络中传递时的冲突。</p>
+<h3 id="MLSP路由汇总"><a href="#MLSP路由汇总" class="headerlink" title="MLSP路由汇总"></a>MLSP路由汇总</h3><p>思科路由器在执行汇总时，会在执行汇总路由器的路由表中产生一条指向null 0接口的汇总路由。RIP OSPF ISIS EIGRP BGP</p>
+<p>华为设备要想有此功能，则需要在汇总添加参数。</p>
+<p>现象：</p>
+<ol>
+<li>执行汇总的路由器没有给汇总路由产生LSP，因为华为设备默认产生LSP的触发条件不会给非32位的主机路由产生LSP。<br>所以在接收到汇总路由的路由器是执行IP转发的。而拥有明细路由的路由器是执行标签转发。</li>
+<li>执行汇总，并且LSP的触发策略也给汇总路由产生了LSP<br>所以收到汇总路由的路由器到汇总路由器这一段是执行标签转发，到达汇总路由器后，就根据明细路由的LSP执行标签转发。<br>对于MPLS VPN业务，如果MPLS Domain中对PE设备的Loopback接口的路由执行汇总，则会导致VPN业务中断，因为汇总的路由器会提前将公网标签剥离，而汇总路由无法正确处理私网标签。</li>
+</ol>
+<p>总结：通是肯定能通，但运行vpn业务不通</p>
 
             </div>
             <hr/>
@@ -1051,7 +1098,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">103.9k</span>&nbsp;字
+                class="white-color">105.8k</span>&nbsp;字
             
             
             
