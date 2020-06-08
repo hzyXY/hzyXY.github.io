@@ -258,7 +258,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/31.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/31.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.6k
+                    5.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    16 分
+                    20 分
                 </div>
                 
 
@@ -585,7 +585,8 @@
 <li>在入节点，IP TTL值减1，MPLS TTL字段为固定值，此后报文在MPLS网络中按照标准的TTL处理方式处理。在出节点会将IP TTL字段的值减1。即IP分组经过MPLS网络时，无论经过多少跳，IP TTL只在入节点和出节点分别减1。（隧道）</li>
 <li>在MPLS VPN应用中，出于网络安全的考虑，需要隐藏MPLS骨干网络的结构，这种情况下，对于私网报文，Ingress上建议配置成Pipe模式。</li>
 </ul>
-<h3 id="MPLS-VPN"><a href="#MPLS-VPN" class="headerlink" title="MPLS VPN"></a>MPLS VPN</h3><p>问题：</p>
+<h3 id="MPLS-VPN"><a href="#MPLS-VPN" class="headerlink" title="MPLS VPN"></a>MPLS VPN</h3><p>peer to peer VPN</p>
+<p>问题：</p>
 <ol>
 <li>PE连接多个CE时，如何解决PE本地路由冲突的问题。</li>
 <li>当从远端PE接收到的私网路由是属于本端那个site的路由，无法方便进行引入控制。</li>
@@ -598,7 +599,11 @@
 <li>可以在路由传递的过程中为这条路由再添加一个标识，用以区别不同的VPN。RD，RT解决。<br>VPNv4地址族：（用于描述SITE的私网路由）添加的RD参数的IPv4前缀。</li>
 <li>VPN由于IP报文的格式不可更改，估计指望不上他了，但可以在IP头之外加上一些信息，由始发的VPN打上标记，这样PE在接收报文时可以根据这个标记进行转发。</li>
 </ol>
-<h4 id="VRF"><a href="#VRF" class="headerlink" title="VRF"></a>VRF</h4><p>VPN路由转发实例（VPN Routing &amp; Forwarding Instance）</p>
+<p>公网标签作用？谁分配？<br>本质是vpnv4路由在公网的下一跳。由MPLS Domain中的LDP协议负责分配。</p>
+<p>私网标签作用？谁分配？<br>方便PE接收到私网报文，用于判断这个报文属于本段的哪个vpn实例的。由接收端PE通过MP-BGP协议发布该私网路由的时候分配的。</p>
+<h4 id="VRF"><a href="#VRF" class="headerlink" title="VRF"></a>VRF</h4><ul>
+<li>VPN路由转发实例（VPN Routing &amp; Forwarding Instance）</li>
+</ul>
 <p>每一个VRF可以看作虚拟的路由器，好像是一台专用的PE设备。该虚拟路由器包括如下元素：</p>
 <ul>
 <li>一张独立的路由表，当然也包括了独立的地址空间</li>
@@ -607,15 +612,96 @@
 </ul>
 <p>对于每个PE，可以维护一个或多个VRF，同时维护一个公网的路由表（也叫全局路由表），多个VRF实例相互分离独立。</p>
 <p>其实实现VRF并不困难，关键在于如何在PE上使用特定的策略规则来协调VRF和全局路由表之间的关系。</p>
-<h5 id="RT（路由目标）"><a href="#RT（路由目标）" class="headerlink" title="RT（路由目标）"></a>RT（路由目标）</h5><p>Route Target</p>
+<h4 id="RT（路由目标）"><a href="#RT（路由目标）" class="headerlink" title="RT（路由目标）"></a>RT（路由目标）</h4><p>格式图</p>
+<ul>
+<li><p>Route Target</p>
+</li>
+<li><p>解决本地路由冲突</p>
+</li>
+</ul>
 <p>ipv4叫团体属性</p>
 <p>vpnv4叫扩展团体属性，也称为RT。<br>VPNv4地址族：添加了RD参数的IPv4前缀。<br>VPNv4的团体属性：RT。</p>
 <p>扩展的community有如下两种格式：其中type字段为0x0002或者0x0102时表示RT。</p>
 <p>[Type（0x0002）| AS#（16bit）| Value（32bit）]</p>
 <p>[Type（0x0102）| IPaddress（32bit）| Value（32bit）]</p>
 <p>RT的本质是每个VRF表达自己的路由取舍以及喜好的方式。可以分为两部分：Export Target于import Target。前者表示了我发出的路由的属性，而后者表示了我对哪些路由感兴趣。</p>
-<h5 id="RD"><a href="#RD" class="headerlink" title="RD"></a>RD</h5><p>Route Disinguisher</p>
+<h4 id="RD"><a href="#RD" class="headerlink" title="RD"></a>RD</h4><p>格式图</p>
+<p>Route Disinguisher</p>
 <p>解决路由在网络中传递时的冲突。</p>
+<blockquote>
+<p>为什么不用RT用来作为VPNv4的路由区分？</p>
+<ol>
+<li>RT是路由属性，可以有多个，哪个在判断不同vpnv4路由上，存在操作复杂的问题。</li>
+<li>RT是路由属性，和ipv4前缀放在报文不同地方，设备处理起来不方便。</li>
+<li>BGP撤销路由时，不携带属性信息。</li>
+</ol>
+<p>我们还是单独定义一个参数，专门用于vpnv4路由的区分用，这个参数就是RD。</p>
+</blockquote>
+<p>在IPv4地址加上RD之后，就变成VPN-IPv4地址族了。<br>理论上可以为每一个VRF配置一个RD，但要保证这个RD唯一。通常建议为每个VPN都配置相同的RD。<br>如果过两个VRF中存在相同的地址，但是RD不同，则两个VRF一定不能互访，间接互访也不成。</p>
+<blockquote>
+<p>既然路由发布时已经携带了RD，可否就使用RD作为标识呢？</p>
+<p>理论上肯定可以的。但是RD一共有64个bit，太大了。这回导致转发效率的降低。所以只需要一个短小、定长的标记即可。由于公网的隧道已经由MPLS来提供，而且MPLS支持多层标签的嵌套，这个标记定义成MPLS标签的格式。</p>
+</blockquote>
+<h4 id="概念总结"><a href="#概念总结" class="headerlink" title="概念总结"></a>概念总结</h4><ul>
+<li><p>VRF：在一台PE上虚拟出来的一个路由器，包括一些特定的接口，一张路由表，一个路由协议，一个RD和一组RT规则。</p>
+</li>
+<li><p>RT：表明了一个VRF的路由喜好，通过他可以实现不同VRF至今啊的路由胡同。它的本质就是BGP的community属性。</p>
+</li>
+<li><p>RD：为了防止一台PE接收到远端PE发来的不同VRF的相同路由时不知所措，而加在路由前面的特殊信息。在PE发布路由时加上RD，在远端PE接收到路由后放在本地路由表中，用来与后来接收到的路由进行比较。</p>
+</li>
+<li><p>Label：为了防止一台PE接收到远端PE发给本地不同VRF的相同地址的主机时不知所措，而加在报文前面的特殊信息。由本地PE在发布路由时加上，远端PE接收到保存在相应的VRF中。</p>
+</li>
+<li><p>SITE：一个VRF加上与其相连的所有的CE的集合。</p>
+</li>
+<li><p>VPN：是一些SITE的集合，这些SITE由于共享了相同的路由信息可以互通。</p>
+</li>
+</ul>
+<h3 id="MP-BGP"><a href="#MP-BGP" class="headerlink" title="MP-BGP"></a>MP-BGP</h3><ul>
+<li>Multiprotocol Border Gateway Protocol（多协议边界网关协议）</li>
+</ul>
+<p>一个扩展之后的HLRI（Network Layer Reachability Information），增加了地址族的描述，以及私网lable和RD。</p>
+<table>
+<thead>
+<tr>
+<th>MP_REACH_NLRI</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>address-family</td>
+<td>VPN-IPV4地址族。</td>
+</tr>
+<tr>
+<td>next-hop</td>
+<td>就是PE路由器自己，通常是LoopBack地址。</td>
+</tr>
+<tr>
+<td><strong>NLRI</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>lable</td>
+<td>24个bit，与MPLS标签一样，当没有TTL。</td>
+</tr>
+<tr>
+<td>prefix</td>
+<td>RD：64bit+ip前缀。</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>跟随之后的RT的列表</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Extended_Communities（RT1）</td>
+</tr>
+<tr>
+<td>Extended_Communities（RT2）</td>
+</tr>
+</tbody></table>
+<p>对于使用了扩展属性MP_REACH_NLRI的BGP，我们称为MP-BGP。</p>
 <h3 id="MLSP路由汇总"><a href="#MLSP路由汇总" class="headerlink" title="MLSP路由汇总"></a>MLSP路由汇总</h3><p>思科路由器在执行汇总时，会在执行汇总路由器的路由表中产生一条指向null 0接口的汇总路由。RIP OSPF ISIS EIGRP BGP</p>
 <p>华为设备要想有此功能，则需要在汇总添加参数。</p>
 <p>现象：</p>
@@ -624,6 +710,19 @@
 <li>执行汇总，并且LSP的触发策略也给汇总路由产生了LSP<br>所以收到汇总路由的路由器到汇总路由器这一段是执行标签转发，到达汇总路由器后，就根据明细路由的LSP执行标签转发。<br>对于MPLS VPN业务，如果MPLS Domain中对PE设备的Loopback接口的路由执行汇总，则会导致VPN业务中断，因为汇总的路由器会提前将公网标签剥离，而汇总路由无法正确处理私网标签。</li>
 </ol>
 <p>总结：通是肯定能通，但运行vpn业务不通</p>
+<h3 id="MPLS配置注意"><a href="#MPLS配置注意" class="headerlink" title="MPLS配置注意"></a>MPLS配置注意</h3><ol>
+<li>骨干网网络做通，IGP打通。</li>
+<li>配置公网的LSP隧道，PE，P设备的loopback的主机路由建立LSP</li>
+<li>PE之间配置MP-IBGP邻居关系（可以通过RR简化 MP-IBGP全互联邻居关系）</li>
+<li>VPN业务接入配置，在PE上创建VPN实例，接入用户私网路由。</li>
+</ol>
+<p>PE发布vpnv4路由过程<br>vpn-instance A1 路由表 – import-route –&gt; vpn-instance A1 BGP 路由 –自动–&gt; vpn-instance A1 vpnv4 BGP路由</p>
+<p>PE接收vpnv4路由过程<br>–ert与irt匹配–&gt; mp-bgp vpnv4 路由 –自动–&gt; vpn-instance A2 bgp ipv4路由 –import-route–&gt; bgp引入到vpn-instance A2 IGP路由</p>
+<p>policy vpn-target 开启基于RT属性vpnv4路由的过滤 </p>
+<ol>
+<li>如果过本路由器没有VPN实例业务接入，则丢弃所有vpnv4路由</li>
+<li>如果过本路由器存在VPN实例业务接入，则对ert和本端所有vpn实例的irt做匹配，如果过ert没有和任何一个本端vpn实例的irt匹配，则丢弃。</li>
+</ol>
 
             </div>
             <hr/>
@@ -1096,7 +1195,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">106.3k</span>&nbsp;字
+                class="white-color">107.9k</span>&nbsp;字
             
             
             
