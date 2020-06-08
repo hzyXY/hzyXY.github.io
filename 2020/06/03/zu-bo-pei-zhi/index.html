@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.8k
+                    2.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    10 分
+                    12 分
                 </div>
                 
 
@@ -460,23 +460,28 @@
 <td><strong>1.配置RIPv2</strong><br>rip 1<br> version 2<br> network 10.0.0.0<br> network 3.0.0.0</td>
 </tr>
 <tr>
-<td><strong>2.配置BGP</strong><br>bgp 100<br> peer 2.2.2.2 as-number 100 <br> peer 2.2.2.2 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 2.2.2.2 enable<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  peer 2.2.2.2 enable</td>
-<td><strong>2.配置BGP</strong><br>bgp 100<br> peer 1.1.1.1 as-number 100 <br> peer 1.1.1.1 connect-interface LoopBack0<br> peer 3.3.3.3 as-number 100 <br> peer 3.3.3.3 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 1.1.1.1 enable<br>  peer 1.1.1.1 reflect-client<br>  peer 3.3.3.3 enable<br>  peer 3.3.3.3 reflect-client<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  peer 1.1.1.1 enable<br>  peer 1.1.1.1 reflect-client<br>  peer 3.3.3.3 enable<br>  peer 3.3.3.3 reflect-client</td>
-<td><strong>2.配置BGP</strong><br>bgp 100<br> peer 2.2.2.2 as-number 100 <br> peer 2.2.2.2 connect-interface LoopBack0<br> peer 10.1.34.4 as-number 200 <br> #<br> ipv4-family unicast<br>  undo synchronization<br>  network 2.2.2.2 255.255.255.255 <br>  peer 2.2.2.2 enable<br>  peer 2.2.2.2 next-hop-local <br>  peer 10.1.34.4 enable<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  network 10.1.71.0 255.255.255.0 <br>  peer 2.2.2.2 enable<br>  peer 10.1.34.4 enable</td>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
 </tr>
 <tr>
-<td><strong>3.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/0<br> ip address 10.1.12.1 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.71.1 255.255.255.0 <br> pim hello-option dr-priority 10<br> pim sm</td>
-<td><strong>3.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/1<br> ip address 10.1.12.2 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.23.2 255.255.255.0 <br> pim sm<br>interface LoopBack0<br> ip address 2.2.2.2 255.255.255.255 <br> pim sm</td>
-<td><strong>3.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/1<br> ip address 10.1.23.3 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.34.3 255.255.255.0 <br> undo rip output <br> undo rip input <br> pim bsr-boundary<br> pim sm</td>
+<td><strong>3.配置BGP</strong><br>bgp 100<br> peer 2.2.2.2 as-number 100 <br> peer 2.2.2.2 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 2.2.2.2 enable<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  peer 2.2.2.2 enable</td>
+<td><strong>3.配置BGP</strong><br>bgp 100<br> peer 1.1.1.1 as-number 100 <br> peer 1.1.1.1 connect-interface LoopBack0<br> peer 3.3.3.3 as-number 100 <br> peer 3.3.3.3 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 1.1.1.1 enable<br>  peer 1.1.1.1 reflect-client<br>  peer 3.3.3.3 enable<br>  peer 3.3.3.3 reflect-client<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  peer 1.1.1.1 enable<br>  peer 1.1.1.1 reflect-client<br>  peer 3.3.3.3 enable<br>  peer 3.3.3.3 reflect-client</td>
+<td><strong>3.配置BGP</strong><br>bgp 100<br> peer 2.2.2.2 as-number 100 <br> peer 2.2.2.2 connect-interface LoopBack0<br> peer 10.1.34.4 as-number 200 <br> #<br> ipv4-family unicast<br>  undo synchronization<br>  network 2.2.2.2 255.255.255.255 <br>  peer 2.2.2.2 enable<br>  peer 2.2.2.2 next-hop-local <br>  peer 10.1.34.4 enable<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  network 10.1.71.0 255.255.255.0 <br>  peer 2.2.2.2 enable<br>  peer 10.1.34.4 enable</td>
+</tr>
+<tr>
+<td><strong>4.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/0<br> ip address 10.1.12.1 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.71.1 255.255.255.0 <br> pim hello-option dr-priority 10<br> pim sm</td>
+<td><strong>4.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/1<br> ip address 10.1.12.2 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.23.2 255.255.255.0 <br> pim sm<br>interface LoopBack0<br> ip address 2.2.2.2 255.255.255.255 <br> pim sm</td>
+<td><strong>4.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/1<br> ip address 10.1.23.3 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.34.3 255.255.255.0 <br> undo rip output <br> undo rip input <br> pim bsr-boundary<br> pim sm</td>
 </tr>
 <tr>
 <td></td>
-<td><strong>4.配置BSR、RP</strong><br>pim<br> c-bsr LoopBack0<br> c-rp LoopBack0</td>
+<td><strong>5.配置BSR、RP</strong><br>pim<br> c-bsr LoopBack0<br> c-rp LoopBack0</td>
 <td></td>
 </tr>
 <tr>
 <td></td>
-<td><strong>5.配置MSDP</strong><br>msdp<br> peer 5.5.5.5 connect-interface LoopBack0<br> peer 5.5.5.5 password simple 123456</td>
+<td><strong>6.配置MSDP</strong><br>msdp<br> peer 5.5.5.5 connect-interface LoopBack0<br> peer 5.5.5.5 password simple 123456</td>
 <td></td>
 </tr>
 </tbody></table>
@@ -494,23 +499,28 @@
 <td><strong>1.配置RIPv2</strong><br>rip 1<br> version 2<br> network 6.0.0.0<br> network 10.0.0.0</td>
 </tr>
 <tr>
-<td><strong>2.配置BGP</strong><br>bgp 200<br> peer 5.5.5.5 as-number 200 <br> peer 5.5.5.5 connect-interface LoopBack0<br> peer 10.1.34.3 as-number 100 <br> #<br> ipv4-family unicast<br>  undo synchronization<br>  network 5.5.5.5 255.255.255.255 <br>  peer 5.5.5.5 enable<br>  peer 5.5.5.5 next-hop-local <br>  peer 10.1.34.3 enable<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  peer 5.5.5.5 enable<br>  peer 10.1.34.3 enable</td>
-<td><strong>2.配置BGP</strong><br>bgp 200<br> peer 4.4.4.4 as-number 200 <br> peer 4.4.4.4 connect-interface LoopBack0<br> peer 6.6.6.6 as-number 200 <br> peer 6.6.6.6 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 4.4.4.4 enable<br>  peer 4.4.4.4 reflect-client<br>  peer 6.6.6.6 enable<br>  peer 6.6.6.6 reflect-client<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  peer 4.4.4.4 enable<br>  peer 4.4.4.4 reflect-client<br>  peer 6.6.6.6 enable<br>  peer 6.6.6.6 reflect-client</td>
-<td><strong>2.配置BGP</strong><br>bgp 200<br> peer 5.5.5.5 as-number 200 <br> peer 5.5.5.5 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 5.5.5.5 enable<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  peer 5.5.5.5 enable</td>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
 </tr>
 <tr>
-<td><strong>3.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/0<br> ip address 10.1.34.4 255.255.255.0 <br> undo rip output <br> undo rip input <br> pim bsr-boundary<br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.45.4 255.255.255.0 <br> pim sm</td>
-<td><strong>3.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/0<br> ip address 10.1.45.5 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.56.5 255.255.255.0 <br> pim sm<br>interface LoopBack0<br> ip address 5.5.5.5 255.255.255.255 <br> pim sm</td>
-<td><strong>3.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/0<br> ip address 10.1.56.6 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.66.6 255.255.255.0 <br> pim sm<br> igmp enable</td>
+<td><strong>3.配置BGP</strong><br>bgp 200<br> peer 5.5.5.5 as-number 200 <br> peer 5.5.5.5 connect-interface LoopBack0<br> peer 10.1.34.3 as-number 100 <br> #<br> ipv4-family unicast<br>  undo synchronization<br>  network 5.5.5.5 255.255.255.255 <br>  peer 5.5.5.5 enable<br>  peer 5.5.5.5 next-hop-local <br>  peer 10.1.34.3 enable<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  peer 5.5.5.5 enable<br>  peer 10.1.34.3 enable</td>
+<td><strong>3.配置BGP</strong><br>bgp 200<br> peer 4.4.4.4 as-number 200 <br> peer 4.4.4.4 connect-interface LoopBack0<br> peer 6.6.6.6 as-number 200 <br> peer 6.6.6.6 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 4.4.4.4 enable<br>  peer 4.4.4.4 reflect-client<br>  peer 6.6.6.6 enable<br>  peer 6.6.6.6 reflect-client<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  peer 4.4.4.4 enable<br>  peer 4.4.4.4 reflect-client<br>  peer 6.6.6.6 enable<br>  peer 6.6.6.6 reflect-client</td>
+<td><strong>3.配置BGP</strong><br>bgp 200<br> peer 5.5.5.5 as-number 200 <br> peer 5.5.5.5 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 5.5.5.5 enable<br> #<br> ipv4-family multicast<br>  undo synchronization<br>  peer 5.5.5.5 enable</td>
+</tr>
+<tr>
+<td><strong>4.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/0<br> ip address 10.1.34.4 255.255.255.0 <br> undo rip output <br> undo rip input <br> pim bsr-boundary<br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.45.4 255.255.255.0 <br> pim sm</td>
+<td><strong>4.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/0<br> ip address 10.1.45.5 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.56.5 255.255.255.0 <br> pim sm<br>interface LoopBack0<br> ip address 5.5.5.5 255.255.255.255 <br> pim sm</td>
+<td><strong>4.配置PIM SM</strong><br>multicast routing-enable<br>interface GigabitEthernet0/0/0<br> ip address 10.1.56.6 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.66.6 255.255.255.0 <br> pim sm<br> igmp enable</td>
 </tr>
 <tr>
 <td></td>
-<td><strong>4.配置BSR、RP</strong><br>pim<br> c-bsr LoopBack0<br> c-rp LoopBack0</td>
+<td><strong>5.配置BSR、RP</strong><br>pim<br> c-bsr LoopBack0<br> c-rp LoopBack0</td>
 <td></td>
 </tr>
 <tr>
 <td></td>
-<td><strong>5.配置MSDP</strong><br>msdp<br> peer 2.2.2.2 connect-interface LoopBack0<br> peer 2.2.2.2 password simple 123456</td>
+<td><strong>6.配置MSDP</strong><br>msdp<br> peer 2.2.2.2 connect-interface LoopBack0<br> peer 2.2.2.2 password simple 123456</td>
 <td></td>
 </tr>
 </tbody></table>
@@ -605,12 +615,57 @@
 <td><strong>1.配置RIPv2</strong><br>rip 1<br> version 2<br> network 10.0.0.0<br> network 2.0.0.0<br> network 100.0.0.0</td>
 </tr>
 <tr>
-<td><strong>2.配置PIM SM</strong><br>interface GigabitEthernet0/0/0<br> ip address 10.1.41.1 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.16.1 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.21.1 255.255.255.0 <br> pim sm<br>#<br>interface LoopBack0<br> ip address 1.1.1.1 255.255.255.255 <br> pim sm<br>#<br>interface LoopBack1<br> ip address 100.100.100.100 255.255.255.255 <br> pim sm</td>
-<td><strong>2.配置PIM SM</strong><br>interface GigabitEthernet0/0/0<br> ip address 10.1.42.2 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.25.2 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.12.2 255.255.255.0 <br> pim sm<br>#<br>interface LoopBack0<br> ip address 2.2.2.2 255.255.255.255 <br> pim sm<br>#<br>interface LoopBack1<br> ip address 100.100.100.100 255.255.255.255 <br> pim sm</td>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
 </tr>
 <tr>
-<td><strong>3.配置Anycast RP</strong><br>pim<br> c-rp LoopBack1<br> anycast-rp 100.100.100.100<br>  local-address 1.1.1.1<br>  peer 2.2.2.2</td>
-<td><strong>3.配置Anycast RP</strong><br>pim<br> c-rp LoopBack1<br> anycast-rp 100.100.100.100<br>  local-address 2.2.2.2<br>  peer 1.1.1.1</td>
+<td><strong>3.配置PIM SM</strong><br>interface GigabitEthernet0/0/0<br> ip address 10.1.41.1 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.16.1 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.21.1 255.255.255.0 <br> pim sm<br>#<br>interface LoopBack0<br> ip address 1.1.1.1 255.255.255.255 <br> pim sm<br>#<br>interface LoopBack1<br> ip address 100.100.100.100 255.255.255.255 <br> pim sm</td>
+<td><strong>3.配置PIM SM</strong><br>interface GigabitEthernet0/0/0<br> ip address 10.1.42.2 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.25.2 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.12.2 255.255.255.0 <br> pim sm<br>#<br>interface LoopBack0<br> ip address 2.2.2.2 255.255.255.255 <br> pim sm<br>#<br>interface LoopBack1<br> ip address 100.100.100.100 255.255.255.255 <br> pim sm</td>
+</tr>
+<tr>
+<td><strong>4.配置Anycast RP</strong><br>pim<br> c-rp LoopBack1<br> anycast-rp 100.100.100.100<br>  local-address 1.1.1.1<br>  peer 2.2.2.2</td>
+<td><strong>4.配置Anycast RP</strong><br>pim<br> c-rp LoopBack1<br> anycast-rp 100.100.100.100<br>  local-address 2.2.2.2<br>  peer 1.1.1.1</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>在R4中的配置</th>
+<th>在R5中的配置</th>
+<th>在R6中的配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1.配置RIPv2</strong><br>rip 1<br> version 2<br> network 10.0.0.0<br> network 4.0.0.0</td>
+<td><strong>1.配置RIPv2</strong><br>rip 1<br> version 2<br> network 10.0.0.0</td>
+<td><strong>1.配置RIPv2</strong><br>rip 1<br> version 2<br> network 10.0.0.0</td>
+</tr>
+<tr>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
+<td><strong>2.使能组播路由功能</strong><br>multicast routing-enable</td>
+</tr>
+<tr>
+<td><strong>3.配置PIM SM</strong><br>interface GigabitEthernet0/0/0<br> ip address 10.1.34.4 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.42.4 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.41.4 255.255.255.0 <br> pim sm<br>#<br>interface LoopBack0<br> ip address 4.4.4.4 255.255.255.255 <br> pim sm</td>
+<td><strong>3.配置PIM SM、IGMP</strong><br>interface GigabitEthernet0/0/0<br> ip address 10.1.25.5 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.55.5 255.255.255.0 <br> pim sm<br> igmp enable</td>
+<td>**3.配置PIM SM、IGMP<br>interface GigabitEthernet0/0/0<br> ip address 10.1.16.6 255.255.255.0 <br> pim sm<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.66.6 255.255.255.0 <br> pim sm<br> igmp enable</td>
+</tr>
+<tr>
+<td><strong>4.配置BSR</strong><br>pim<br> c-bsr LoopBack0</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h4 id="验证配置-2"><a href="#验证配置-2" class="headerlink" title="验证配置"></a>验证配置</h4><table>
+<thead>
+<tr>
+<th><img src="/2020/06/03/zu-bo-pei-zhi/ynr5bsrrp.JPG" alt="查看R5的BSR、RP信息"></th>
+<th><img src="/2020/06/03/zu-bo-pei-zhi/ynr6bsrrp.JPG" alt="查看R6的BSR、RP信息"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="/2020/06/03/zu-bo-pei-zhi/ynr1pimr.JPG" alt="查看R1的PIM组播路由表"></td>
+<td><img src="/2020/06/03/zu-bo-pei-zhi/ynr2pimr.JPG" alt="查看R2的PIM组播路由表"></td>
 </tr>
 </tbody></table>
 
@@ -1107,7 +1162,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">106k</span>&nbsp;字
+                class="white-color">106.3k</span>&nbsp;字
             
             
             
