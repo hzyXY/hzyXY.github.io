@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.1k
+                    3.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    12 分
+                    18 分
                 </div>
                 
 
@@ -597,9 +597,69 @@
 </tr>
 </tbody></table>
 <h4 id="验证配置-2"><a href="#验证配置-2" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/06/08/mpls-de-pei-zhi-yu-nei/MPLS%E7%9A%84%E9%85%8D%E7%BD%AE(%E5%9F%9F%E5%86%85)%5Cynmplsr4vpnv4r.JPG" alt="查看R4的BGP VPNv4路由表"></p>
-<p><img src="/2020/06/08/mpls-de-pei-zhi-yu-nei/MPLS%E7%9A%84%E9%85%8D%E7%BD%AE(%E5%9F%9F%E5%86%85)%5Cynmplsr3vpnv4r.JPG" alt="查看R3的BGP VPNv4路由表"></p>
-<p><img src="/2020/06/08/mpls-de-pei-zhi-yu-nei/MPLS%E7%9A%84%E9%85%8D%E7%BD%AE(%E5%9F%9F%E5%86%85)%5Cynmplsr5vpnv4r.JPG" alt="查看R5的BGP VPNv4路由表"></p>
+<p><img src="/2020/06/08/mpls-de-pei-zhi-yu-nei/ynmplsr3vpnv4r.JPG" alt="查看R3的BGP VPNv4路由表"></p>
+<p><img src="/2020/06/08/mpls-de-pei-zhi-yu-nei/ynmplsr5vpnv4r.JPG" alt="查看R5的BGP VPNv4路由表"></p>
 <h3 id="MPLS-VPN-Hub-amp-Spoke组网"><a href="#MPLS-VPN-Hub-amp-Spoke组网" class="headerlink" title="MPLS VPN Hub&amp;Spoke组网"></a>MPLS VPN Hub&amp;Spoke组网</h3><p><img src="/2020/06/08/mpls-de-pei-zhi-yu-nei/mplshs.JPG" alt="MPLS VPN Hub&amp;Spoke组网"></p>
+<h4 id="配置步骤-3"><a href="#配置步骤-3" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在AS100中的配置-1"><a href="#一、在AS100中的配置-1" class="headerlink" title="一、在AS100中的配置"></a>一、在AS100中的配置</h5><h6 id="在AR3中的配置"><a href="#在AR3中的配置" class="headerlink" title="在AR3中的配置"></a>在AR3中的配置</h6><table>
+<thead>
+<tr>
+<th>1.配置ISIS</th>
+<th>2.配置BGP</th>
+<th>3.配置MPLS LDP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>isis 1<br> is-level level-2<br> network-entity 49.0001.0000.0000.0003.00<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.36.3 255.255.255.0 <br> isis enable 1<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.37.3 255.255.255.0 <br> isis enable 1<br>#<br>interface LoopBack0<br> ip address 3.3.3.3 255.255.255.255 <br> isis enable 1</td>
+<td>bgp 100<br> peer 2.2.2.2 as-number 100 <br> peer 2.2.2.2 connect-interface LoopBack0<br> peer 6.6.6.6 as-number 100 <br> peer 6.6.6.6 connect-interface LoopBack0<br> peer 7.7.7.7 as-number 100 <br> peer 7.7.7.7 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 2.2.2.2 enable<br>  peer 6.6.6.6 enable<br>  peer 7.7.7.7 enable<br> # <br> ipv4-family vpnv4<br>  undo policy vpn-target<br>  peer 2.2.2.2 enable<br>  peer 2.2.2.2 reflect-client<br>  peer 6.6.6.6 enable<br>  peer 6.6.6.6 reflect-client<br>  peer 7.7.7.7 enable<br>  peer 7.7.7.7 reflect-client</td>
+<td>mpls lsr-id 3.3.3.3<br>mpls<br>#<br>mpls ldp<br>#<br>interface GigabitEthernet0/0/0<br> ip address 10.1.23.3 255.255.255.0 <br> isis enable 1<br> mpls<br> mpls ldp<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.36.3 255.255.255.0 <br> isis enable 1<br> mpls<br> mpls ldp<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.37.3 255.255.255.0 <br> isis enable 1<br> mpls<br> mpls ldp</td>
+</tr>
+</tbody></table>
+<h6 id="在AR2、AR6、AR7中的配置"><a href="#在AR2、AR6、AR7中的配置" class="headerlink" title="在AR2、AR6、AR7中的配置"></a>在AR2、AR6、AR7中的配置</h6><table>
+<thead>
+<tr>
+<th>在AR2中的配置</th>
+<th>在AR6中的配置</th>
+<th>在AR7中的配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1.配置ISIS</strong><br>isis 1<br> is-level level-2<br> network-entity 49.0001.0000.0000.0002.00<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.23.2 255.255.255.0 <br> isis enable 1<br>#<br>interface LoopBack0<br> ip address 2.2.2.2 255.255.255.255 <br> isis enable 1</td>
+<td><strong>1.配置ISIS</strong><br>isis 1<br> is-level level-2<br> network-entity 49.0001.0000.0000.0006.00<br>#<br>interface GigabitEthernet0/0/0<br> ip address 10.1.36.6 255.255.255.0 <br> isis enable 1<br>#<br>interface LoopBack0<br> ip address 6.6.6.6 255.255.255.255 <br> isis enable 1</td>
+<td><strong>1.配置ISIS</strong><br>isis 1<br> is-level level-2<br> network-entity 49.0001.0000.0000.0007.00<br>#<br>interface GigabitEthernet0/0/0<br> ip address 10.1.37.7 255.255.255.0 <br> isis enable 1<br>#<br>interface LoopBack0<br> ip address 7.7.7.7 255.255.255.255 <br> isis enable 1</td>
+</tr>
+<tr>
+<td><strong>2.配置BGP</strong><br>bgp 100<br> peer 3.3.3.3 as-number 100 <br> peer 3.3.3.3 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 3.3.3.3 enable<br> # <br> ipv4-family vpnv4<br>  policy vpn-target<br>  peer 3.3.3.3 enable<br> #<br> ipv4-family vpn-instance hube <br>  peer 20.1.12.1 as-number 10 <br>  peer 20.1.12.1 allow-as-loop<br> #<br> ipv4-family vpn-instance hubi <br>  peer 10.1.12.1 as-number 10</td>
+<td><strong>2.配置BGP</strong><br>bgp 100<br> peer 3.3.3.3 as-number 100 <br> peer 3.3.3.3 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 3.3.3.3 enable<br> # <br> ipv4-family vpnv4<br>  policy vpn-target<br>  peer 3.3.3.3 enable<br>  peer 3.3.3.3 reflect-client<br> #<br> ipv4-family vpn-instance spoke1 <br>  peer 10.1.64.4 as-number 10 <br>  peer 10.1.64.4 substitute-as</td>
+<td><strong>2.配置BGP</strong><br>bgp 100<br> peer 3.3.3.3 as-number 100 <br> peer 3.3.3.3 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 3.3.3.3 enable<br> # <br> ipv4-family vpnv4<br>  policy vpn-target<br>  peer 3.3.3.3 enable<br>  peer 3.3.3.3 reflect-client<br> #<br> ipv4-family vpn-instance spoke2 <br>  peer 10.1.75.5 as-number 10 <br>  peer 10.1.75.5 substitute-as</td>
+</tr>
+<tr>
+<td><strong>3.配置MPLS LDP</strong><br>mpls lsr-id 2.2.2.2<br>mpls<br>#<br>mpls ldp<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.23.2 255.255.255.0 <br> isis enable 1<br> mpls<br> mpls ldp</td>
+<td><strong>3.配置MPLS LDP</strong><br>mpls lsr-id 6.6.6.6<br>mpls<br>#<br>mpls ldp<br>#<br>interface GigabitEthernet0/0/0<br> ip address 10.1.36.6 255.255.255.0 <br> isis enable 1<br> mpls<br> mpls ldp</td>
+<td><strong>3.配置MPLS LDP</strong><br>mpls lsr-id 7.7.7.7<br>mpls<br>#<br>mpls ldp<br>#<br>interface GigabitEthernet0/0/0<br> ip address 10.1.37.7 255.255.255.0 <br> isis enable 1<br> mpls<br> mpls ldp</td>
+</tr>
+<tr>
+<td><strong>4.配置VPN实例</strong><br>ip vpn-instance hube<br> ipv4-family<br>  route-distinguisher 1:1<br>  vpn-target 1:100 export-extcommunity<br>#<br>ip vpn-instance hubi<br> ipv4-family<br>  route-distinguisher 1:4<br>  vpn-target 1:200 import-extcommunity<br>#<br>interface GigabitEthernet0/0/0<br> ip binding vpn-instance hubi<br> ip address 10.1.12.2 255.255.255.0 <br>#<br>interface GigabitEthernet0/0/2<br> ip binding vpn-instance hube<br> ip address 20.1.12.2 255.255.255.0</td>
+<td><strong>4.配置VPN实例</strong><br>ip vpn-instance spoke1<br> ipv4-family<br>  route-distinguisher 1:2<br>  vpn-target 1:200 export-extcommunity<br>  vpn-target 1:100 import-extcommunity<br>#<br>interface GigabitEthernet0/0/1<br> ip binding vpn-instance spoke1<br> ip address 10.1.64.6 255.255.255.0</td>
+<td><strong>4.配置VPN实例</strong><br>ip vpn-instance spoke2<br> ipv4-family<br>  route-distinguisher 1:3<br>  vpn-target 1:200 export-extcommunity<br>  vpn-target 1:100 import-extcommunity<br>#<br>interface GigabitEthernet0/0/1<br> ip binding vpn-instance spoke2<br> ip address 10.1.75.7 255.255.255.0</td>
+</tr>
+</tbody></table>
+<h6 id="在AR1、AR4、AR5中的配置"><a href="#在AR1、AR4、AR5中的配置" class="headerlink" title="在AR1、AR4、AR5中的配置"></a>在AR1、AR4、AR5中的配置</h6><table>
+<thead>
+<tr>
+<th>在AR1中的配置</th>
+<th>在AR4中的配置</th>
+<th>在AR5中的配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1.配置BGP</strong><br>bgp 10<br> peer 10.1.12.2 as-number 100 <br> peer 20.1.12.2 as-number 100 <br> #<br> ipv4-family unicast<br>  undo synchronization<br>  network 1.1.1.1 255.255.255.255 <br>  peer 10.1.12.2 enable<br>  peer 10.1.12.2 allow-as-loop<br>  peer 20.1.12.2 enable<br>  peer 20.1.12.2 allow-as-loop</td>
+<td><strong>1.配置BGP</strong><br>bgp 10<br> peer 10.1.64.6 as-number 100 <br> #<br> ipv4-family unicast<br>  undo synchronization<br>  network 4.4.4.4 255.255.255.255 <br>  peer 10.1.64.6 enable</td>
+<td><strong>1.配置BGP</strong><br>bgp 10<br> peer 10.1.75.7 as-number 100 <br> #<br> ipv4-family unicast<br>  undo synchronization<br>  network 5.5.5.5 255.255.255.255 <br>  peer 10.1.75.7 enable</td>
+</tr>
+</tbody></table>
+<h4 id="验证配置-3"><a href="#验证配置-3" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/06/08/mpls-de-pei-zhi-yu-nei/hsr1.JPG" alt="查看R1的BGP VPNv4路由表（部分）"></p>
+<p><img src="/2020/06/08/mpls-de-pei-zhi-yu-nei/hsr6.JPG" alt="查看R6的BGP VPNv4路由表（部分）"></p>
+<p><img src="/2020/06/08/mpls-de-pei-zhi-yu-nei/hsr7.JPG" alt="查看R7的BGP VPNv4路由表（部分）"></p>
 
             </div>
             <hr/>
@@ -1080,7 +1140,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">109.6k</span>&nbsp;字
+                class="white-color">111.3k</span>&nbsp;字
             
             
             
