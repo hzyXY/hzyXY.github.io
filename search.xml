@@ -4,6 +4,85 @@
   
     
     <entry>
+      <title>2020-06-11随笔</title>
+      <link href="/2020/06/11/2020-06-11-sui-bi/"/>
+      <url>/2020/06/11/2020-06-11-sui-bi/</url>
+      
+        <content type="html"><![CDATA[<h2 id="2020-06-11随笔"><a href="#2020-06-11随笔" class="headerlink" title="2020-06-11随笔"></a>2020-06-11随笔</h2><p><font color="DarkGray">U2FsdGVkX1/c81f0mwCVVBS6yCT8njWBpCAbluZaK5ZbtBFbaOkzMHyzUpMOYROS<br>ujMkqMxdQTFbhVW/HRXsRckBWlGVJvHItJBQStMRQDD4V1k/kb+mUNS344zgiSD7<br>PAmfQj9gFd+8gvi3IQo7QpK+MU22GmAHeY2PaMqyg6A7ECD+o3oJGlgxYm7CJ4LH<br>/T7CLHPofLXTVBmAyJeOrysQ4/lLoDpYHQL9YFIxYBuZ0Pmu2sqydANBIjfjRKAB<br>ZlhHp5vlG8ZCWpA+BCYD/cTwIF+AI2aQanb0cPkN5kA486g7j3JkYpCsyh4Wo2kC<br>5PHlmH6S4Qidr19YccmRGSeVZ110iNGBbhktGQH9pUVlz3og0PCGOi9KH9LEwSui<br>AyB4iU+SYAMxKMkCpcbrBvpTLS9hn2dI6ME6ngH7G5p+/A/tw07fF9rQHTMlGb5p<br>fbHECecZs8p443c9VHSKGo6+s5LU5dvoBTKEjSrI0YUh2aeTq0QYmakTZ7VWrqtR<br>tmNAy96ILN1zi6hcxZyvolhoPfwSzj8NTWMQDSDegubl53ZBBoai0x08p/to3KiN<br>f2vtR20km69mPcTEsTYOvWA5PrTUE+Reuo//uriT2AgDeyc+S2kPWt9XhmnNmwtc<br>L2RUy1ssSGdSqWihbGvZhBM=</font></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 记录 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MPLS VPN的配置（跨域）</title>
+      <link href="/2020/06/11/kua-yu-mplsvpn-de-pei-zhi/"/>
+      <url>/2020/06/11/kua-yu-mplsvpn-de-pei-zhi/</url>
+      
+        <content type="html"><![CDATA[<h2 id="MPLS-VPN的配置（跨域）"><a href="#MPLS-VPN的配置（跨域）" class="headerlink" title="MPLS VPN的配置（跨域）"></a>MPLS VPN的配置（跨域）</h2><h3 id="Option-A方案"><a href="#Option-A方案" class="headerlink" title="Option-A方案"></a>Option-A方案</h3><p><img src="/2020/06/11/kua-yu-mplsvpn-de-pei-zhi/OAtopo.JPG" alt="Option-A方案拓扑"></p><h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在AS100中的配置"><a href="#一、在AS100中的配置" class="headerlink" title="一、在AS100中的配置"></a>一、在AS100中的配置</h5><table><thead><tr><th>在AR1中的配置</th><th>在AR2中的配置</th><th>在AR3中的配置</th></tr></thead><tbody><tr><td><strong>1.配置OSPF</strong><br>ospf 1 router-id 1.1.1.1 <br> area 0.0.0.0 <br>  network 1.1.1.1 0.0.0.0 <br>  network 10.1.13.1 0.0.0.0</td><td><strong>1.配置OSPF</strong><br>ospf 1 router-id 2.2.2.2 <br> area 0.0.0.0 <br>  network 2.2.2.2 0.0.0.0 <br>  network 10.1.23.2 0.0.0.0</td><td><strong>1.配置OSPF</strong><br>ospf 1 router-id 3.3.3.3 <br> area 0.0.0.0 <br>  network 3.3.3.3 0.0.0.0 <br>  network 10.1.13.3 0.0.0.0 <br>  network 10.1.23.3 0.0.0.0</td></tr><tr><td><strong>2.配置BGP</strong><br>bgp 100<br> peer 3.3.3.3 as-number 100 <br> peer 3.3.3.3 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 3.3.3.3 enable<br> # <br> ipv4-family vpnv4<br>  policy vpn-target<br>  peer 3.3.3.3 enable<br></td><td><strong>2.配置BGP</strong><br>bgp 100<br> peer 3.3.3.3 as-number 100 <br> peer 3.3.3.3 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 3.3.3.3 enable<br> # <br> ipv4-family vpnv4<br>  policy vpn-target<br>  peer 3.3.3.3 enable<br> #<br> ipv4-family vpn-instance A1 <br>  peer 10.1.24.4 as-number 200 <br> #<br> ipv4-family vpn-instance B1 <br>  peer 10.1.24.4 as-number 200</td><td><strong>2.配置BGP</strong><br>bgp 100<br> peer 1.1.1.1 as-number 100 <br> peer 1.1.1.1 connect-interface LoopBack0<br> peer 2.2.2.2 as-number 100 <br> peer 2.2.2.2 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 1.1.1.1 enable<br>  peer 2.2.2.2 enable<br> # <br> ipv4-family vpnv4<br>  undo policy vpn-target<br>  peer 1.1.1.1 enable<br>  peer 1.1.1.1 reflect-client<br>  peer 2.2.2.2 enable<br>  peer 2.2.2.2 reflect-client</td></tr><tr><td><strong>3.配置MPLS LDP</strong><br>mpls lsr-id 1.1.1.1<br>mpls<br>#<br>mpls ldp<br>#<br>interface GigabitEthernet0/0/2<br> ip address 10.1.13.1 255.255.255.0 <br> mpls<br> mpls ldp</td><td><strong>3.配置MPLS LDP</strong><br>mpls lsr-id 2.2.2.2<br>mpls<br>#<br>mpls ldp<br>#<br>interface GigabitEthernet0/0/0<br> ip address 10.1.23.2 255.255.255.0 <br> mpls<br> mpls ldp</td><td><strong>3.配置MPLS LDP</strong><br>mpls lsr-id 3.3.3.3<br>mpls<br>#<br>mpls ldp<br>#<br>interface GigabitEthernet0/0/0<br> ip address 10.1.13.3 255.255.255.0 <br> mpls<br> mpls ldp<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.23.3 255.255.255.0 <br> mpls<br> mpls ldp</td></tr><tr><td><strong>4.配置VPN实例</strong><br>ip vpn-instance A1<br> ipv4-family<br>  route-distinguisher 1:1<br>  vpn-target 1:100 export-extcommunity<br>  vpn-target 1:100 import-extcommunity<br>#<br>ip vpn-instance B1<br> ipv4-family<br>  route-distinguisher 1:2<br>  vpn-target 1:200 export-extcommunity<br>  vpn-target 1:200 import-extcommunity<br>#<br>interface GigabitEthernet0/0/0<br> ip binding vpn-instance A1<br> ip address 10.1.17.1 255.255.255.0 <br>#<br>interface GigabitEthernet0/0/1<br> ip binding vpn-instance B1<br> ip address 10.1.18.1 255.255.255.0</td><td><strong>4.配置VPN实例，以及子接口</strong><br>ip vpn-instance A1<br> ipv4-family<br>  route-distinguisher 1:1<br>  vpn-target 1:100 export-extcommunity<br>  vpn-target 1:100 import-extcommunity<br>#<br>ip vpn-instance B1<br> ipv4-family<br>  route-distinguisher 1:2<br>  vpn-target 1:200 export-extcommunity<br>  vpn-target 1:200 import-extcommunity<br>#<br>interface GigabitEthernet0/0/1.100<br> dot1q termination vid 100<br> ip binding vpn-instance A1<br> ip address 10.1.24.2 255.255.255.0 <br> arp broadcast enable<br>#<br>interface GigabitEthernet0/0/1.200<br> dot1q termination vid 200<br> ip binding vpn-instance B1<br> ip address 10.1.24.2 255.255.255.0 <br> arp broadcast enable</td><td>-</td></tr><tr><td><strong>5.配置A1、B1路由</strong><br>ospf 2 router-id 1.1.1.1 vpn-instance A1<br> import-route bgp<br> area 0.0.0.0 <br>  network 10.1.17.1 0.0.0.0<br>#<br>bgp 100<br>#<br>ipv4-family vpn-instance A1 <br>  import-route ospf 2<br> #<br> ipv4-family vpn-instance B1 <br>  peer 10.1.18.8 as-number 1</td><td>-</td><td>-</td></tr></tbody></table><h5 id="二、在AS200中的配置"><a href="#二、在AS200中的配置" class="headerlink" title="二、在AS200中的配置"></a>二、在AS200中的配置</h5><table><thead><tr><th>在AR4中的配置</th><th>在AR5中的配置</th><th>在AR6中的配置</th></tr></thead><tbody><tr><td><strong>1.配置OSPF</strong><br>ospf 1 router-id 4.4.4.4 <br> area 0.0.0.0 <br>  network 4.4.4.4 0.0.0.0 <br>  network 10.1.45.4 0.0.0.0</td><td><strong>1.配置OSPF</strong><br>ospf 1 router-id 5.5.5.5 <br> area 0.0.0.0 <br>  network 5.5.5.5 0.0.0.0 <br>  network 10.1.45.5 0.0.0.0 <br>  network 10.1.56.5 0.0.0.0</td><td><strong>1.配置OSPF</strong><br>ospf 1 router-id 6.6.6.6 <br> area 0.0.0.0 <br>  network 6.6.6.6 0.0.0.0 <br>  network 10.1.56.6 0.0.0.0</td></tr><tr><td><strong>2.配置BGP</strong><br>bgp 200<br> peer 5.5.5.5 as-number 200 <br> peer 5.5.5.5 connect-interface LoopBack0<br> peer 10.1.24.2 as-number 100 <br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 5.5.5.5 enable<br>  peer 10.1.24.2 enable<br> # <br> ipv4-family vpnv4<br>  policy vpn-target<br>  peer 5.5.5.5 enable<br> #<br> ipv4-family vpn-instance A2 <br>  peer 10.1.24.2 as-number 100 <br> #<br> ipv4-family vpn-instance B2 <br>  peer 10.1.24.2 as-number 100</td><td><strong>2.配置BGP</strong><br>bgp 200<br> peer 4.4.4.4 as-number 200 <br> peer 4.4.4.4 connect-interface LoopBack0<br> peer 6.6.6.6 as-number 200 <br> peer 6.6.6.6 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 4.4.4.4 enable<br>  peer 6.6.6.6 enable<br> # <br> ipv4-family vpnv4<br>  undo policy vpn-target<br>  peer 4.4.4.4 enable<br>  peer 4.4.4.4 reflect-client<br>  peer 6.6.6.6 enable<br>  peer 6.6.6.6 reflect-client</td><td><strong>2.配置BGP</strong><br>bgp 200<br> peer 5.5.5.5 as-number 200 <br> peer 5.5.5.5 connect-interface LoopBack0<br> #<br> ipv4-family unicast<br>  undo synchronization<br>  peer 5.5.5.5 enable<br> # <br> ipv4-family vpnv4<br>  policy vpn-target<br>  peer 5.5.5.5 enable<br> #<br> ipv4-family vpn-instance A2 <br>  import-route isis 1<br> #<br> ipv4-family vpn-instance B2 <br>  peer 10.1.106.10 as-number 2</td></tr><tr><td><strong>3.配置MPLS LDP</strong><br>mpls lsr-id 4.4.4.4<br>mpls<br>#<br>mpls ldp<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.45.4 255.255.255.0 <br> mpls<br> mpls ldp</td><td><strong>3.配置MPLS LDP</strong><br>mpls lsr-id 5.5.5.5<br>mpls<br>#<br>mpls ldp<br>#<br>interface GigabitEthernet0/0/0<br> ip address 10.1.45.5 255.255.255.0 <br> mpls<br> mpls ldp<br>#<br>interface GigabitEthernet0/0/1<br> ip address 10.1.56.5 255.255.255.0 <br> mpls<br> mpls ldp</td><td><strong>3.配置MPLS LDP</strong><br>mpls lsr-id 6.6.6.6<br>mpls<br>#<br>mpls ldp<br>#<br>interface GigabitEthernet0/0/0<br> ip address 10.1.56.6 255.255.255.0 <br> mpls<br> mpls ldp</td></tr><tr><td><strong>4.配置VPN实例，以及子接口</strong><br>ip vpn-instance A2<br> ipv4-family<br>  route-distinguisher 1:3<br>  vpn-target 1:300 export-extcommunity<br>  vpn-target 1:300 import-extcommunity<br>#<br>ip vpn-instance B2<br> ipv4-family<br>  route-distinguisher 1:4<br>  vpn-target 1:400 export-extcommunity<br>  vpn-target 1:400 import-extcommunity<br>#<br>interface GigabitEthernet0/0/0.100<br> dot1q termination vid 100<br> ip binding vpn-instance A2<br> ip address 10.1.24.4 255.255.255.0 <br> arp broadcast enable<br>#<br>interface GigabitEthernet0/0/0.200<br> dot1q termination vid 200<br> ip binding vpn-instance B2<br> ip address 10.1.24.4 255.255.255.0 <br> arp broadcast enable</td><td>-</td><td><strong>4.配置VPN实例</strong><br>ip vpn-instance A2<br> ipv4-family<br>  route-distinguisher 1:3<br>  vpn-target 1:300 export-extcommunity<br>  vpn-target 1:300 import-extcommunity<br>#<br>ip vpn-instance B2<br> ipv4-family<br>  route-distinguisher 1:4<br>  vpn-target 1:400 export-extcommunity<br>  vpn-target 1:400 import-extcommunity<br>#<br>interface GigabitEthernet0/0/1<br> ip binding vpn-instance A2<br> ip address 10.1.69.6 255.255.255.0 #<br>interface GigabitEthernet0/0/2<br> ip binding vpn-instance B2<br> ip address 10.1.106.6 255.255.255.0</td></tr><tr><td>-</td><td>-</td><td><strong>5.配置A2、B2路由</strong><br>isis 1 vpn-instance A2<br> is-level level-2<br> network-entity 49.0001.0000.0000.0006.00<br> import-route bgp<br>#<br>bgp 200<br>ipv4-family vpn-instance A2 <br>  import-route isis 1<br> #<br> ipv4-family vpn-instance B2 <br>  peer 10.1.106.10 as-number 2</td></tr></tbody></table><h5 id="三、配置AR7、AR8、AR9、AR10"><a href="#三、配置AR7、AR8、AR9、AR10" class="headerlink" title="三、配置AR7、AR8、AR9、AR10"></a>三、配置AR7、AR8、AR9、AR10</h5><table><thead><tr><th>在AR7中的配置</th><th>在AR8中的配置</th></tr></thead><tbody><tr><td><strong>1.配置OSPF</strong><br>ospf 1 router-id 7.7.7.7 <br> area 0.0.0.0 <br>  network 7.7.7.7 0.0.0.0 <br>  network 10.1.17.7 0.0.0.0</td><td><strong>1.配置BGP</strong><br>bgp 1<br> peer 10.1.18.1 as-number 100 <br> #<br> ipv4-family unicast<br>  undo synchronization<br>  network 8.8.8.8 255.255.255.255 <br>  peer 10.1.18.1 enable</td></tr></tbody></table><table><thead><tr><th>在AR9中的配置</th><th>在AR10中的配置</th></tr></thead><tbody><tr><td><strong>1.配置ISIS</strong><br>isis 1<br> is-level level-2<br> network-entity 49.0001.0000.0000.0009.00<br>#<br>interface GigabitEthernet0/0/0<br> ip address 10.1.69.9 255.255.255.0 <br> isis enable 1<br>#<br>interface LoopBack0<br> ip address 9.9.9.9 255.255.255.255 <br> isis enable 1</td><td><strong>1.配置BGP</strong><br>bgp 2<br> peer 10.1.106.6 as-number 200 <br> #<br> ipv4-family unicast<br>  undo synchronization<br>  network 10.10.10.10 255.255.255.255 <br>  peer 10.1.106.6 enable</td></tr></tbody></table><h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/06/11/kua-yu-mplsvpn-de-pei-zhi/OAr1vpnv4b.JPG" alt="查看R1的BGP VPNv4路由表（部分）"></p><p><img src="/2020/06/11/kua-yu-mplsvpn-de-pei-zhi/OAr6vpnv4b.JPG" alt="查看R6的BGP VPNv4路由表（部分）"></p><h3 id="Option-B方案"><a href="#Option-B方案" class="headerlink" title="Option-B方案"></a>Option-B方案</h3><h3 id="Option-C方案"><a href="#Option-C方案" class="headerlink" title="Option-C方案"></a>Option-C方案</h3>]]></content>
+      
+      
+      <categories>
+          
+          <category> Datacom </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 配置 </tag>
+            
+            <tag> VPN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>跨域MPLS VPN</title>
+      <link href="/2020/06/11/kua-yu-mpls-vpn/"/>
+      <url>/2020/06/11/kua-yu-mpls-vpn/</url>
+      
+        <content type="html"><![CDATA[<h2 id="跨域MPLS-VPN"><a href="#跨域MPLS-VPN" class="headerlink" title="跨域MPLS VPN"></a>跨域MPLS VPN</h2><h3 id="Option-A方案"><a href="#Option-A方案" class="headerlink" title="Option-A方案"></a>Option-A方案</h3><ul><li><p>（Inter-Provider Backbones Option A）方式：需要跨域的VPN在ASBR间通过专用的接口管理自己的VPN路由，也成为VRF-to-VRF。（背对背VPN实例进行隔离）</p></li><li><p>跨域VPN-Option-A是基本BGP/MPLS IP VPN在跨域环境下的应用，ASBR之间不需要运行MPLS，也不需要为跨域进行特殊配置。这种方式下，两个AS的边界路由器ASBR直接相连，ASBR同时也是各自所在自治系统的PE。两个ASBR都把对端ASBR看作自己CE设备，使用EBGP方式向对端发布IPv4路由。<br>（按照单域来配置就行了）</p></li></ul><blockquote><p>跨域VPN-OptionA方式的特点</p><ul><li><p>优点是配置简单：由于ASBR之间不需要运行MPLS，也不需要为跨域进行特殊配置。</p></li><li><p>缺点是可扩展性差：由于ASBR需要管理所有VPN路由，为每个VPN创建VPN实例。这将导致ASBR上的VPN-IPv4路由数量过大。并且，由于ASBR间是普通的IP转发，要求为每个跨域的VPN使用不同的接口，从而提高了对PE设备的要求。如果过跨越多个自治域，中间域必须支持VPN业务，不仅配置量大，而且对中间域影响大。在需要跨域的VPN数量比较少的情况，可以优先考虑使用。</p></li></ul></blockquote><p>跨域Option-A拓扑图先欠着</p><h3 id="Option-B方案"><a href="#Option-B方案" class="headerlink" title="Option-B方案"></a>Option-B方案</h3><ul><li><p>（Inter-Provider Backbones Option B）方式：ASBR间通过MP-EBGP发布标签VPN-IPv4路由，也称为EBGP redistribution of labeled VPN-IPv4 routes。</p></li><li><p>跨域VPN-OptionB中，两个ASBR通过MP-BGP交换它们从各自AS的PE设备接收到的标签VPN-IPv4路由。</p></li><li><p>跨域VPN-OptionB方案中，ASBR接收本域内和域外传递过来的所有跨域VPN-IPv4路由，再把VPN-IPv4路由发布出去。但MPLS VPN的基本实现中，PE上只保存与本地VPN实例的VPN Target相匹配的VPN路由。因此可以在ASBR上配置不做RT过滤传递路由，因此无需在ASBR创建VPN实例，无需绑定任何接口。</p></li><li><p>可以在网络中叠加部署RR设备，专门负责客户侧VPN路由的传递。</p></li></ul><blockquote><p>跨域VPN-OptionB方式的特点</p><ul><li>优点：不同于OptionA，OptionB的方案不受ASBR之间互连链路数目的限制。</li><li>局限性：VPN的路由信息是通过AS之间的ASBR来保存和扩散的，当VPN路由较多时，ASBR负担重，容易成为故障点。因此在MP-EBGP方案中，需要维护VPN路由信息的ASBR一般不再负责公网IP转发。</li></ul></blockquote><p>跨域Option-B拓扑图先欠着</p><h3 id="Option-C方案"><a href="#Option-C方案" class="headerlink" title="Option-C方案"></a>Option-C方案</h3><ul><li>（Inter-Provider Backbones Option C）方式：PE或RR间通过Multi-hop MP-EBGP发布标签VPN-IPv4路由，也称为Multihop EBGP redistribution of labeled VPN-IPv4 routes。</li><li>VPN路由在入口PE和出口PE之间直接交换，不需要中间设备的保存和转发。</li><li>VPN的路由信息只出现在PE设备上，而P和ASBR只负责报文的转发，使得中间域的设备可以不支持MPLS VPN业务，只需支持MPLS转发，ASBR设备不再成为性能瓶颈。因此跨域VPN-OptionC更适合在跨越多个AS时使用。</li><li>更适合支持MPLS VPN的负载分担。</li><li>缺点是维护一条端到端的PE连接管理代价较大。</li></ul><p>跨域Option-C拓扑图先欠着</p><h4 id="跨域VPN-OptionC方式-方案一"><a href="#跨域VPN-OptionC方式-方案一" class="headerlink" title="跨域VPN-OptionC方式 - 方案一"></a>跨域VPN-OptionC方式 - 方案一</h4><p>vpnv4  RD+IPV4  lable  PE        vpn tunnel   vpn label<br>IPv4     IPv4           lable  ASBR  bgp tunnel  bgp label<br>ldp                           lable              lsp tunnel    lsp label</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Datacom </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> VPN </tag>
+            
+            <tag> 协议 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2020-06-09随笔</title>
       <link href="/2020/06/09/2020-06-09-sui-bi/"/>
       <url>/2020/06/09/2020-06-09-sui-bi/</url>
