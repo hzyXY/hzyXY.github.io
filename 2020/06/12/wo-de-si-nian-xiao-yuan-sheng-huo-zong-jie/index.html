@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="服务器负载均衡, XY">
+    <meta name="keywords" content="四年校园生活总结, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>服务器负载均衡 | XY</title>
+    <title>四年校园生活总结 | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -258,12 +258,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/jsxy.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">服务器负载均衡</h1>
+                    <h1 class="description center-align post-title">四年校园生活总结</h1>
                 </div>
             </div>
         </div>
@@ -380,16 +380,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                <span class="chip bg-color">华为</span>
-                            </a>
-                        
-                            <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                <span class="chip bg-color">防火墙</span>
-                            </a>
-                        
-                            <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
-                                <span class="chip bg-color">负载均衡</span>
+                            <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                                <span class="chip bg-color">记录</span>
                             </a>
                         
                     </div>
@@ -400,8 +392,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Datacom/" class="post-category">
-                                Datacom
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                随笔
                             </a>
                         
                     </div>
@@ -413,7 +405,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-31
+                    2020-06-12
                 </div>
                 
 
@@ -422,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    844
+                    1.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    5 分
                 </div>
                 
 
@@ -445,53 +437,20 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="SLB"><a href="#SLB" class="headerlink" title="SLB"></a>SLB</h2><ul>
-<li><p>服务器负载均衡就是将本应由一个服务器处理的业务分发给多个服务器来处理，以此提高处理业务的效率和能力。</p>
-</li>
-<li><p>处理业务的服务器组成服务器集群，对外体现为一台逻辑上的服务器。对于用户来说，访问的是这台逻辑上的服务器，而不知道实际处理业务的是其他服务器，由FW决定如何分配流量给各个服务器。</p>
-</li>
-</ul>
-<h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><ul>
-<li>负载均衡算法决定了FW如何分配业务流量到服务器上</li>
-</ul>
-<p>FW支持的负载均衡算法如下：</p>
-<p><strong>1.简单轮询算法</strong></p>
-<blockquote>
-<p>优点：实现简单，效率较高<br>缺点：不会考虑每个服务器上的实际负载<br>简单轮询算法是一个静态算法<br>适用场景为服务器的性能相近，服务类型比较简单，且每条流对服务器造成的业务负载大致相等</p>
-</blockquote>
-<p><strong>2.加权轮询算法</strong></p>
-<blockquote>
-<p>加权轮询算法是将客户端的业务流量按照一定权重比依次分配到各个服务器上<br>根据服务器的不同处理能力，给每个服务器分配不同的权值，使其接受相应权值数的服务请求</p>
-</blockquote>
-<p><strong>3.最小连接算法</strong></p>
-<blockquote>
-<p>最小连接算法是将客户端的业务流量分配到并发连接数最小的服务器上。(并发连接数即服务器对应的实时连接数，会话新建或老化都会影响并发连接数的大小)<br>最小连接算法是动态算法<br>适用场景为服务器的性能相近，每条流对服务器造成的业务负载大致相等，但是每条流的会话存活时间不同。</p>
-</blockquote>
-<p><strong>4.加权最小连接算法</strong></p>
-<blockquote>
-<p>加权最小连接算法是将客户端的业务流量分配到加权并发连接数最小的服务器上。(加权并发连接数是考虑服务器权重后得到的实时连接数)<br>适用场景为服务器的性能不同，每一条流对服务器造成的业务负载大致相等，但是每一条流的会话存活时间不同。</p>
-</blockquote>
-<p><strong>5.源IP hash算法</strong></p>
-<blockquote>
-<p>源IP Hash算法是将客户端的IP地址进行Hash运算，得到Hash Index值。FW根据Hash Index值与Hash列表中服务器的对应关系，分配流量至服务器。<br>适用场景为各个服务器性能差别不大</p>
-</blockquote>
-<p><strong>6.加权源IP hash算法</strong></p>
-<blockquote>
-<p>加权源IP Hash算法是将客户端的IP地址进行Hash运算，得到Hash Index值，而后通过FW调整各个服务器的权重得到Hash表中服务器新的权重值。<br>适用场景为各个服务器的性能有一定的差异</p>
-</blockquote>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p><img src="/2020/03/31/fu-wu-qi-fu-zai-jun-heng/topo.JPG" alt="拓扑"></p>
-<h4 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h4><h5 id="一、在FW1上的配置"><a href="#一、在FW1上的配置" class="headerlink" title="一、在FW1上的配置"></a>一、在FW1上的配置</h5><p><strong>1.开启SLB</strong></p>
-<blockquote>
-<p>slb enable </p>
-</blockquote>
-<p><strong>2.配置SLB</strong></p>
-<blockquote>
-<p> slb                                                                             <code>//SLB视图下</code></p>
-<p>  group 1 fwq                                                            <code>//实服务器组</code><br>   metric roundrobin                                                  <code>//算法为简单轮询</code><br>   health-check type icmp                                        <code>//健康检查</code><br>   rserver 0 rip 2.1.1.1 port 21<br>   rserver 1 rip 2.1.1.2 port 21<br>   rserver 2 rip 2.1.1.3 port 21</p>
-<p>  vserver 0 vs                                                           <code>//虚拟服务器组</code><br>   vip 0 1.1.1.100                                                     <code>//虚拟IP</code><br>   protocol tcp<br>   vport 21<br>   group fwq                                                             <code>//关联实服务器组</code></p>
-</blockquote>
-<h4 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h4><p><img src="/2020/03/31/fu-wu-qi-fu-zai-jun-heng/servermap.JPG" alt="查看FW1的server-map表"></p>
-
+                <h2 id="四年校园生活总结"><a href="#四年校园生活总结" class="headerlink" title="四年校园生活总结"></a><center>四年校园生活总结</center></h2><p>&emsp;&emsp;时间真的厉害，真的不得不佩服。眨眼的功夫就毕业了。曾幻想着早点毕业，如今真的将要离开却如此不舍。人怎么会是这样，只有失去了才懂得珍惜。我自己作为一个人却无法了解人本身。人啊，总是充满着矛盾，简直就是一个矛盾的结合体。哈哈。（难怪有心理学这种专业）</p>
+<h3 id="四年概述"><a href="#四年概述" class="headerlink" title="四年概述"></a><center>四年概述</center></h3><h4 id="第一年（2016-2017）"><a href="#第一年（2016-2017）" class="headerlink" title="第一年（2016-2017）"></a>第一年（2016-2017）</h4><p>&emsp;&emsp;这一年，我入学啦！</p>
+<p>&emsp;&emsp;当时心里的感受是，我竟然考的那么差呀，进了这所学校，哎呀，太难受了。当时真的怪自己不好好努力，自卑了。但其实仔细想一想，这种结果并不是一两件事情就能导致的。通常都是一种连锁反应。</p>
+<p>&emsp;&emsp;军训：当时感觉真的是又累，又热，真的好难顶啊。现在回想起来脑子突然尝到了一丝甜味，（哇，人脑真神奇，我是真的感受到了。）<br>&emsp;&emsp;那时候第一次去教室的那个晚上还下着大雨了，不过幸好，舍友有伞。好像是邓某的伞，那时我和邓某还有一个人（实在想不出他是谁了）一起挤着一把伞去教室。到了教室后，由于谁也不认识谁（我那时比较孤僻，额。。。貌似现在也差不多），位置也是随便坐的。我就坐在了第四排的倒数第二个座位上。渐渐的开始坐满了人，我也获得了我的第一个同桌——胡某。记得那时我问过他一个问题，问他将来想要做什么？他说他想成为一名黑客。</p>
+<p>&emsp;&emsp;后来那几天中让我印象深刻的事情就是我的舍友——某达。请我吃了芝士味的夹心饼干。我头一次感受到夹心饼干怎么能那么好吃呢！！！后来一发不可收拾。哈哈哈！！！还有就是星期四的那一天晚会。我只记得一个节目了，就是班助他们的节目，貌似是来回切换各种舞蹈。挺有意思的。他当时说想留点纪念给我们，就做了这一个节目。想不到还真让我记住了。真的特别用心（湛强师兄给你点赞！）</p>
+<p>&emsp;&emsp;最后就是军训的最后一天了，我当时特别开心，终于结束这痛苦的日子了。想家了。结束过程是走操场一圈（那时还没有跑道的）然后无人机拍我们抛帽的那个瞬间，最后解散回家。</p>
+<p>&emsp;&emsp;开学啦！！！原谅我第一年真的没什么影响深刻的事（自己原谅自己吧！）都是一些琐事，那时我的同桌开始是邓某。最记得是商务礼仪课，那时要做ppt。邓某说你们做我就讲。我们三个（谢某峰和杨某龙同学）当时我们三个哪会做什么PPT，碰都没碰过的。我就直接百度了一个给他。特别多字的，（现在感觉有点不好意思让你读了那么久。原谅我吧！！！）。后来我的同桌就是谢某航。跟他聊的比较来。哈哈。我那时又没什么朋友。又记得当时班会课讲的寂寞和孤独的区别。个人理解：寂寞是一种内心渴望融入集体的需求，而孤独则是一种享受。那时我真的在享受孤独。。。（或者说直到2020年那一天都是）。还有就是windows server 2012的期末考试，那时候是上半年，是谭老师教的。让我不解的是我都做出来了为什么只有80来分那么低呢？可能是我不会截图。到了下半年，让我印象比较深的就只有两件事，第一件就是家长会，那时我知道了我的成绩在班级的第三名（貌似是的），总成绩排名好像是第8？还是第6？。让我知道了有综合排名这个东西。还有一件事就是加入网络组的集训队。嘿嘿，那时加入了还蛮高兴的，终于能够被人重视了。毕竟自己当时期末明明努力了，最后竟有综合排名。当时自己觉得的：努力得不到回报真的是对努力自身的致命打击。（现在觉得努力得不到回报其实很正常。）。然后就是一些琐碎的事了，我记得我后来的同桌变成了郑某明，我记得他帮我剪过校服外套的线头。。。。那时我最喜欢看的就是贴吧，关于电脑配置那些；AMD zen架构即将要出来了，英伟达要出10系显卡了；我当时最喜欢看的互动小说app是lifeline系列，讲述的跟外星人相关的。让我脑洞大开。后来我又看完了刘慈欣的《三体》；路遥的《平凡的世界》、《人生》；周国平的《妞妞：一个父亲的札记》。还有心理罪系列。还有一些我忘记了。让我感触最深的就是《平凡的世界》、《人生》、《妞妞：一个父亲的札记》。</p>
+<p>&emsp;&emsp;还有就是一个让我需要特别感谢的一个人——杨某文同学，上coredraw、ps、offic课时，我不会的非常主动且耐心的帮我做，教我。（那时我嘴怎么那么笨呢，谢谢都不会说。。。非常不好意思，回想起来我真的讨厌那时的自己，别人帮你你都不说谢谢呀。。哼！）</p>
+<p>&emsp;&emsp;还有就是我那时天天都特别早来教室，通常门都是不开的，我要等个很久很久。</p>
+<p>&emsp;&emsp;第一年结束了，教室将要搬到4楼咯，2402，我来了！！！</p>
+<p>（自我吐槽：就这没了？1年时间只有几件与同学的相关的事，其他都写你自己？？？对不起啊，那时太孤僻了，又特别敏感和自卑。我那时一放学就赶去吃饭，饭后回宿舍玩手机。。。。）</p>
+<h4 id="第二年（2017-2018）"><a href="#第二年（2017-2018）" class="headerlink" title="第二年（2017-2018）"></a>第二年（2017-2018）</h4><p>在开学前夕，暑假的时候，非常欣慰，我可以帮杨某文同学了，我那时积极的告诉他关于笔记本电脑配置的问题。（嘿嘿，在一年级里看的各种贴吧、电脑吧、配置吧、笔记本吧。那里所吸收的知识派上用场啦！）</p>
+<p>困了，明天再肝。</p>
+<h4 id="第三年（2018-2019）"><a href="#第三年（2018-2019）" class="headerlink" title="第三年（2018-2019）"></a>第三年（2018-2019）</h4><h4 id="第四年（2019-2020）"><a href="#第四年（2019-2020）" class="headerlink" title="第四年（2019-2020）"></a>第四年（2019-2020）</h4><h3 id="现在的感受"><a href="#现在的感受" class="headerlink" title="现在的感受"></a>现在的感受</h3><h3 id="未来展望"><a href="#未来展望" class="headerlink" title="未来展望"></a>未来展望</h3><h3 id="对自己说的话"><a href="#对自己说的话" class="headerlink" title="对自己说的话"></a>对自己说的话</h3>
             </div>
             <hr/>
 
@@ -516,7 +475,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/03/31/fu-wu-qi-fu-zai-jun-heng/">https://hzyxy.github.io/2020/03/31/fu-wu-qi-fu-zai-jun-heng/</a>
+                    <a href="https://hzyxy.github.io/2020/06/12/wo-de-si-nian-xiao-yuan-sheng-huo-zong-jie/">https://hzyxy.github.io/2020/06/12/wo-de-si-nian-xiao-yuan-sheng-huo-zong-jie/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -554,16 +513,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                    <span class="chip bg-color">华为</span>
-                                </a>
-                            
-                                <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                                    <span class="chip bg-color">防火墙</span>
-                                </a>
-                            
-                                <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
-                                    <span class="chip bg-color">负载均衡</span>
+                                <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                                    <span class="chip bg-color">记录</span>
                                 </a>
                             
                         </div>
@@ -729,49 +680,47 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/03/31/fang-huo-qiang-yuan-jin-yuan-chu/">
+                <a href="/2020/06/12/wo-de-si-nian-xiao-yuan-sheng-huo-zong-jie/">
                     <div class="card-image">
                         
-                        <img src="/images/4.jpg" class="responsive-img" alt="源进源出">
+                        <img src="/images/jsxy.jpg" class="responsive-img" alt="四年校园生活总结">
                         
-                        <span class="card-title">源进源出</span>
+                        <span class="card-title">四年校园生活总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            使得来回路径一致
+                            时光荏苒，岁月如梭。
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-12
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Cyber-security/" class="post-category">
-                                    Cyber security
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                    随笔
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
+                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                        <span class="chip bg-color">记录</span>
                     </a>
                     
                 </div>
@@ -785,30 +734,30 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/03/31/shuang-xiang-nat/">
+                <a href="/2020/06/11/2020-06-11-sui-bi/">
                     <div class="card-image">
                         
-                        <img src="/images/8.jpg" class="responsive-img" alt="双向NAT">
+                        <img src="/images/xxx.jpg" class="responsive-img" alt="2020-06-11随笔">
                         
-                        <span class="card-title">双向NAT</span>
+                        <span class="card-title">2020-06-11随笔</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            双向NAT的介绍与配置
+                            随笔
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-11
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Datacom/" class="post-category">
-                                    Datacom
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                    随笔
                                 </a>
                             
                             
@@ -818,20 +767,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/NAT/">
-                        <span class="chip bg-color">NAT</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
+                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                        <span class="chip bg-color">记录</span>
                     </a>
                     
                 </div>
