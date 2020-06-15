@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    860
+                    1.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    4 分
                 </div>
                 
 
@@ -484,6 +484,33 @@
 </ul>
 <p>跨域Option-C拓扑图先欠着</p>
 <h4 id="跨域VPN-OptionC方式-方案一"><a href="#跨域VPN-OptionC方式-方案一" class="headerlink" title="跨域VPN-OptionC方式 - 方案一"></a>跨域VPN-OptionC方式 - 方案一</h4><p>vpnv4  RD+IPV4  lable  PE        vpn tunnel   vpn label<br>IPv4     IPv4           lable  ASBR  bgp tunnel  bgp label<br>ldp                           lable              lsp tunnel    lsp label</p>
+<h4 id="跨域VPN-OptionC方式-方案二"><a href="#跨域VPN-OptionC方式-方案二" class="headerlink" title="跨域VPN-OptionC方式 - 方案二"></a>跨域VPN-OptionC方式 - 方案二</h4><ul>
+<li>跨域VPN-OptionC方案二与方案一大体相似。</li>
+<li>不同之处在于，方案一中，需要使用三层标签，即VPN label。BGP LSP，Tunnel LSP来承载流量，二方案二只需要两层。</li>
+<li>方案一，ASBR在收到对端ASBR发来的BGP标签后，需要配置策略产生一个新的标签发布给AS内的PE或者RR设备，以建立一条完整的BGP LSP。方案二中，ASBR需要配置MPLS触发为BGP标签路由分发标签，因此在AS内的PE上可以看到去往对端PE的LDP LSP，而非BGP LSP。</li>
+<li>同理，方案二支持RR设备的部署。</li>
+</ul>
+<blockquote>
+<p>配置步骤：</p>
+<ol>
+<li><p>AS内IGP和LDP部署完毕。</p>
+</li>
+<li><p>ASBR之间建立EBGP邻居，并启动传递标签ipv4路由能力，互联接口启动mpls。</p>
+</li>
+<li><p>在ASBR向对端ASBR发布本端PE/RR的标签ipv4路由，通过产生标签策略完成。</p>
+<p>peer 34.1.1.4 route-policy label-asbr export<br>peer 34.1.1.4 label-route-capability<br>route-policy label-asbr permit node 1-<br>apply mpls-label</p>
+</li>
+<li><p>在ASBR上开启LSP触发策略，为BGP路由产生LDP的LSP。</p>
+</li>
+<li><p>在ASBR上引入PE/RR的BGP路由到IGP协议中。</p>
+<p>目的就是建立一条PE到PE之间的LSP，方便PE之间建立MP-EBGP传递vpnv4路由。</p>
+</li>
+<li><p>在RR场景下PE和RR之间建立mp-ibgp邻居关系，传递vpnv4路由，并保证路由传递到对端PE下一跳不变。</p>
+</li>
+<li><p>PE之间建立MP-EBGP传递vpnv4路由</p>
+</li>
+</ol>
+</blockquote>
 
             </div>
             <hr/>
@@ -960,7 +987,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">121.4k</span>&nbsp;字
+                class="white-color">123.3k</span>&nbsp;字
             
             
             

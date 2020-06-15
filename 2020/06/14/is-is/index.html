@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Link-Group, XY">
+    <meta name="keywords" content="IS-IS, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Link-Group | XY</title>
+    <title>IS-IS | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -258,12 +258,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/30.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/50.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Link-Group</h1>
+                    <h1 class="description center-align post-title">IS-IS</h1>
                 </div>
             </div>
         </div>
@@ -380,12 +380,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                <span class="chip bg-color">华为</span>
+                            <a href="/tags/VPN/">
+                                <span class="chip bg-color">VPN</span>
                             </a>
                         
-                            <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                                <span class="chip bg-color">高可靠性</span>
+                            <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                <span class="chip bg-color">协议</span>
                             </a>
                         
                     </div>
@@ -409,7 +409,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-05
+                    2020-06-14
                 </div>
                 
 
@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    403
+                    1.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    5 分
                 </div>
                 
 
@@ -441,22 +441,115 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Link-Group"><a href="#Link-Group" class="headerlink" title="Link-Group"></a>Link-Group</h2><ul>
-<li><p>Link-Group功能是将多个接口的状态相互绑定，组成一个逻辑组。当组内任一接口出现故障，系统将组内其它接口状态设置为Down。当组内所有接口恢复正常后，整个组内的接口状态才重新被设置为Up。</p>
-</li>
-<li><p>通过Link-Group功能，可以使上下行接口状态一致，这样可以避免主备切换后，上下行链路路径不一致的问题。</p>
-</li>
-<li><p>Link-Group不仅支持同一接口板的接口状态管理、同一虚拟系统的接口状态管理，而且支持跨接口板的接口状态管理、根系统和不同虚拟系统的接口状态管理。</p>
-</li>
+                <h2 id="IS-IS"><a href="#IS-IS" class="headerlink" title="IS-IS"></a>IS-IS</h2><ul>
+<li>IS-IS特点：仅用于CLNS环境下。</li>
+<li>集成IS-IS特点：支持CLNP和IP双重网络。</li>
+<li>ISIS协议和IP协议是解耦的，无关联的独立的网络层协议，通过802.3以太网帧进行封装。</li>
 </ul>
-<p><strong>当Eth-Trunk接口加入Link-Group后，只有Eth-Trunk成员接口的状态全部变为Down，系统才会认为该Eth-Trunk接口出现故障。</strong></p>
-<p>如果期望不同Link-Group下的接口状态相互关联，则需要通过Link-Group-Monitor监控组来实现。</p>
+<h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><p>TCP/IP网络模式    路由器    终端</p>
+<p>OSI7层模型    中间系统（IS）    终端（End System）</p>
+<p>由于CLNP没有被流行，所以ISIS在早期发展比较缓慢，比较沉寂。</p>
+<p>后来由于ISIS比较灵活，它自身是一种工作在链路层之上的网络层协议，扩展性较强。</p>
 <ul>
-<li>同一Link-Group只能添加到一个Link-Group-Monitor监控组的一个子组中，不能重复属于多个子组。</li>
-<li><strong>同一Link-Group-Monitor监控组下同一子组下不同Link-Group之间相互独立</strong>，不会相互影响。</li>
-<li><strong>同一Link-Group-Monitor监控组下不同子组之间只在如下情况才会相互影响</strong>：当子组下所有Link-Group状态均为fault，设备才会强制将其他子组中的Link-Group下的所有接口切换为Down状态。</li>
-<li>不同Link-Group-Monitor监控组之间相互独立，不会相互影响。</li>
+<li><p>CLNP（无连接的网络层协议）是OSI模型中的网络层协议，ISIS最初是为了支持CLNP而被开发。</p>
+</li>
+<li><p>ISIS OSI7层模型 用于支持CLNP的网络环境，OSPF TCP/IP 用于IP的网络环境</p>
+</li>
 </ul>
+<p>ISIS工程小组后续对ISIS协议进行扩展，让它能支持IPv4、IPv6。CLNP 所以现在ISIS协议被称为集成ISIS协议。</p>
+<p>由于扩展性强，收敛快，工作机制简单，被ISP大量的部署。</p>
+<h3 id="IS-IS的基本概念"><a href="#IS-IS的基本概念" class="headerlink" title="IS-IS的基本概念"></a>IS-IS的基本概念</h3><h4 id="IS-IS协议区域"><a href="#IS-IS协议区域" class="headerlink" title="IS-IS协议区域"></a>IS-IS协议区域</h4><ul>
+<li>ISIS协议的骨干区域和非骨干区域路由器的邻居级别来确定</li>
+<li>ISIS定义路由器级别有3种：level-1、level-2、level-1-2。华为思科路由器默认为L1/2的路由器</li>
+<li>ISIS邻居级别有两种：L1的邻居、L2的邻居。骨干区域就是由L2的邻居组成的逻辑区域。ISIS非骨干区域就是由L1的邻居组成的逻辑区域。骨干和非骨干的边界在L1/2的路由器上。</li>
+</ul>
+<h4 id="IS-IS邻居关系"><a href="#IS-IS邻居关系" class="headerlink" title="IS-IS邻居关系"></a>IS-IS邻居关系</h4><p>L1的邻居：建立的前提 区域号一致</p>
+<p>L2的邻居：不要求区域号一致</p>
+<p>L1的路由器只能建立L1的邻居，L2的路由器只能建立L2的邻居，L1/2的路由器和同区域的L1路由器建立L1邻居，和L2的路由器建立L2邻居。和L1/2的同区域路由器既建立L1的邻居又建立L2的邻居。和L1/2的不同区域的路由器只能建立L2的邻居。</p>
+<h5 id="形成邻居关系的条件"><a href="#形成邻居关系的条件" class="headerlink" title="形成邻居关系的条件"></a>形成邻居关系的条件</h5><p>IS-IS形成邻居关系的条件</p>
+<ol>
+<li><p>同一（层次）级别</p>
+</li>
+<li><p>L1的邻居区域号要一致</p>
+</li>
+<li><p>L1、L2邻居互联地址必须在同一个网段</p>
+</li>
+<li><p>L1、L2邻居网络类型必须一致</p>
+</li>
+</ol>
+<h5 id="广播邻接关系的建立"><a href="#广播邻接关系的建立" class="headerlink" title="广播邻接关系的建立"></a>广播邻接关系的建立</h5><h5 id="ISIS邻居状态"><a href="#ISIS邻居状态" class="headerlink" title="ISIS邻居状态"></a>ISIS邻居状态</h5><p>down    没有收到邻居的hello</p>
+<p>initialized    收到邻居的hello包，但从中没发现自身的mac地址。也称为one-way</p>
+<p>up    收到邻居的hello包，并从中发现有自己的接口mac地址。</p>
+<h4 id="ISIS的网络类型"><a href="#ISIS的网络类型" class="headerlink" title="ISIS的网络类型"></a>ISIS的网络类型</h4><ul>
+<li>OSPF协议默认情况下根据接口的链路层封装协议来确定网络类型。</li>
+<li>ISIS类似，如果是以太网接口则默认认为是广播型，如果过是PPP，HDLC则默认是P2P，不支持NBMA，P2MP。</li>
+</ul>
+<p>IS-IS支持的网络类型</p>
+<ul>
+<li>点对点网络，对应PPP、HDLC等链路</li>
+<li>广播网络，对应Ethernet等链路</li>
+</ul>
+<p>广播链路：DIS和伪节点</p>
+<ul>
+<li>DIS：Designated Intermediate System 指定中间系统</li>
+<li>功能：在广播网络实现更高效的数据库同步</li>
+</ul>
+<h4 id="IS-IS地址结构"><a href="#IS-IS地址结构" class="headerlink" title="IS-IS地址结构"></a>IS-IS地址结构</h4><ul>
+<li>IP协议：使用IP地址对接口进行编址。</li>
+<li>CLNP协议使用NSAP（网络服务访问点）地址对设备进行编址。</li>
+</ul>
+<p>NSAP是OSI协议中用于定位资源的地址</p>
+<ul>
+<li>相当于OSI的网络层协议CLNP的地址（类似IP地址的概念）</li>
+</ul>
+<p>NET是一类特殊的NSAP（SEL=00）</p>
+<ul>
+<li>在路由器上配置IS-IS时，只需要考虑NET即可。</li>
+</ul>
+<p>NET（网络实体标识）地址是一种特殊的NSAP地址，即SEL=0的NSAP地址，在ISIS协议由NET地址标识一台路由器<br>SEL：网络服务鉴别器，1个字节长度，类似于IP报文中的协议号，用于区分上层协议类型。</p>
+<p>NSAP的组成图</p>
+<h4 id="IS-IS报文类型"><a href="#IS-IS报文类型" class="headerlink" title="IS- IS报文类型"></a>IS- IS报文类型</h4><h5 id="HELLO-PDU"><a href="#HELLO-PDU" class="headerlink" title="HELLO PDU"></a>HELLO PDU</h5><p>HELLO PDU（IIH）用于建立和维持邻居关系</p>
+<ul>
+<li>Level-1 LAN IIH：用于在广播型链路上建立L1的邻居</li>
+<li>Level-2 LAN IIH：用于在广播型链路上建立L2的邻居</li>
+<li>P2P IIH：用于在P2P链路上建立ISIS的邻居</li>
+</ul>
+<p>作用：建立和维护邻居关系</p>
+<blockquote>
+<p>问题：为什么要在广播型链路上设计两种hello报文，而P2P链路只有一种hello报文？<br>答：因为广播型链路上存在多路访问的链路，这条链路上可存在多台路由器。邻居关系又分为级别一、级别二。某些路由器只需要建立级别一的邻居关系，它们只需要发送级别一的hello包维护。另一些路由器需要建立级别二的邻居关系，它们就只需要发送级别2的hello包维护。不同级别的邻居设计出不同级别的hello包分别去进行维护，这样会更加细致一些，控制起来也更方便一些，可以独立进行维护。而点到点链路只有两台路由器，不存在多种不同级别邻居的可能性。要么是级别1，要么是级别2，要么既是级别1、也是级别2。所以只需要一种就可以搞定。</p>
+</blockquote>
+<h5 id="LSP"><a href="#LSP" class="headerlink" title="LSP"></a>LSP</h5><p>LSP PDU用于交换链路状态信息 </p>
+<ul>
+<li>Level-1 LSP：描述非骨干区域的链路状态，对应于OSPF协议非骨干区域中的1类或2类LSA</li>
+<li>Level-2 LSP：描述骨干区域的链路状态，对应于OSPF协议骨干区域中的1类或2类LSA</li>
+</ul>
+<p>作用：用于描述携带LSA（链路状态）信息</p>
+<h5 id="SNP"><a href="#SNP" class="headerlink" title="SNP"></a>SNP</h5><ul>
+<li>序列号PDU</li>
+</ul>
+<p>SNP PDU用于维护LSDB的完整与同步，且为摘要信息</p>
+<ul>
+<li>CSNP（完全序列号PDU，类似OSPF的DD报文）<ul>
+<li>Level 1 CSNP</li>
+<li>Level 2 CSNP</li>
+</ul>
+</li>
+<li>PSNP（部分序列号PDU，类似于OSPF的LSR或LSACK。）<ul>
+<li>Level 1 PSNP</li>
+<li>Level 2 PSNP</li>
+</ul>
+</li>
+</ul>
+<h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
+<li>路由协议工作在那一层？</li>
+</ol>
+<p>RIP UDP520，BGP TCP179 工作在应用层</p>
+<p>OSPF IP89 工作在网络层之上和传输层在同一层</p>
+<p>ISIS 工作在数据链路层之上独立的网络层协议</p>
+<ol start="2">
+<li>NET地址由什么组成？</li>
+</ol>
+<p>3部分组成，area id，system id，sel。其中area id可变长度至少一个字节，最大13个字节。system id固定6个字节。sel始终为0，一个字节。</p>
 
             </div>
             <hr/>
@@ -482,7 +575,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/04/05/link-group/">https://hzyxy.github.io/2020/04/05/link-group/</a>
+                    <a href="https://hzyxy.github.io/2020/06/14/is-is/">https://hzyxy.github.io/2020/06/14/is-is/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -520,12 +613,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                    <span class="chip bg-color">华为</span>
+                                <a href="/tags/VPN/">
+                                    <span class="chip bg-color">VPN</span>
                                 </a>
                             
-                                <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                                    <span class="chip bg-color">高可靠性</span>
+                                <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                    <span class="chip bg-color">协议</span>
                                 </a>
                             
                         </div>
@@ -691,87 +784,28 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/04/05/eth-trunk-de-pei-zhi/">
+                <a href="/2020/06/14/is-is/">
                     <div class="card-image">
                         
-                        <img src="/images/21.jpg" class="responsive-img" alt="Eth-Trunk的配置">
+                        <img src="/images/50.jpg" class="responsive-img" alt="IS-IS">
                         
-                        <span class="card-title">Eth-Trunk的配置</span>
+                        <span class="card-title">IS-IS</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Eth-Trunk的配置
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-05
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Datacom/" class="post-category">
-                                    Datacom
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                        <span class="chip bg-color">高可靠性</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2020/04/04/bfd/">
-                    <div class="card-image">
-                        
-                        <img src="/images/16.jpg" class="responsive-img" alt="BFD">
-                        
-                        <span class="card-title">BFD</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            双向转发检测的介绍与配置
+                            中间系统到中间系统路由协议的介绍
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-04
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-14
                             </span>
                         <span class="publish-author">
                             
@@ -785,23 +819,64 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
                     </a>
                     
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
                     </a>
                     
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/06/12/wo-de-si-nian-xiao-yuan-sheng-huo/">
+                    <div class="card-image">
+                        
+                        <img src="/images/jsxy.jpg" class="responsive-img" alt="四年校园生活的回忆与总结">
+                        
+                        <span class="card-title">四年校园生活的回忆与总结</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            时光荏苒，岁月如梭。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-12
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                    随笔
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
                     
-                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                        <span class="chip bg-color">高可靠性</span>
+                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                        <span class="chip bg-color">记录</span>
                     </a>
                     
                 </div>
