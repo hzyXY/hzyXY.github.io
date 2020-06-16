@@ -380,12 +380,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/VPN/">
-                                <span class="chip bg-color">VPN</span>
-                            </a>
-                        
                             <a href="/tags/%E5%8D%8F%E8%AE%AE/">
                                 <span class="chip bg-color">协议</span>
+                            </a>
+                        
+                            <a href="/tags/IGP/">
+                                <span class="chip bg-color">IGP</span>
                             </a>
                         
                     </div>
@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.6k
+                    2.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    9 分
                 </div>
                 
 
@@ -477,7 +477,15 @@
 <li><p>L1、L2邻居网络类型必须一致</p>
 </li>
 </ol>
-<h5 id="广播邻接关系的建立"><a href="#广播邻接关系的建立" class="headerlink" title="广播邻接关系的建立"></a>广播邻接关系的建立</h5><h5 id="ISIS邻居状态"><a href="#ISIS邻居状态" class="headerlink" title="ISIS邻居状态"></a>ISIS邻居状态</h5><p>down    没有收到邻居的hello</p>
+<h5 id="邻居关系的建立"><a href="#邻居关系的建立" class="headerlink" title="邻居关系的建立"></a>邻居关系的建立</h5><p>广播型链路通过IS NET TLV实现3次握手建立邻居。</p>
+<p>P2P的链路通过P2P ADJ Stata TLV实现3次握手建立邻居。</p>
+<p>P2P的链路上还可以通过2次握手建立邻居关系。</p>
+<p>总结：广播型链路仅支持3次握手建立邻居，P2P链路支持3次握手，也可以支持2次握手。</p>
+<p>如何判断p2p链路上使用的是3次握手？<br>查看hello包中是否有P2P ADJ Stata TLV，如有则是3次握手。</p>
+<h6 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h6><p>isis ppp-negotiation 3-way p2p链路上启用3次握手机制，但不要求接收的hello包携带p2p adj state tlv。</p>
+<p>isis ppp-negotiation 3-way only p2p链路上启用3次握手机制，不兼容2次握手。</p>
+<p>isis ppp-negotiation 2-way p2p链路上只采用2次握手建立邻居，忽略不处理p2p adj state</p>
+<h5 id="ISIS邻居状态"><a href="#ISIS邻居状态" class="headerlink" title="ISIS邻居状态"></a>ISIS邻居状态</h5><p>down    没有收到邻居的hello</p>
 <p>initialized    收到邻居的hello包，但从中没发现自身的mac地址。也称为one-way</p>
 <p>up    收到邻居的hello包，并从中发现有自己的接口mac地址。</p>
 <h4 id="ISIS的网络类型"><a href="#ISIS的网络类型" class="headerlink" title="ISIS的网络类型"></a>ISIS的网络类型</h4><ul>
@@ -508,7 +516,13 @@
 </ul>
 <p>NET（网络实体标识）地址是一种特殊的NSAP地址，即SEL=0的NSAP地址，在ISIS协议由NET地址标识一台路由器<br>SEL：网络服务鉴别器，1个字节长度，类似于IP报文中的协议号，用于区分上层协议类型。</p>
 <p>NSAP的组成图</p>
-<h4 id="IS-IS报文类型"><a href="#IS-IS报文类型" class="headerlink" title="IS- IS报文类型"></a>IS- IS报文类型</h4><h5 id="HELLO-PDU"><a href="#HELLO-PDU" class="headerlink" title="HELLO PDU"></a>HELLO PDU</h5><p>HELLO PDU（IIH）用于建立和维持邻居关系</p>
+<h4 id="IS-IS报文类型"><a href="#IS-IS报文类型" class="headerlink" title="IS-IS报文类型"></a>IS-IS报文类型</h4><p>广播型链路上所有L1的ISIS报文使用的DMAC地址为<br>DMAC地址 01:80:C2:00:00:14</p>
+<p>广播型链路上所有L2的ISIS报文使用的DMAC地址为<br>DMAC地址 01:80:C2:00:00:15</p>
+<p>P2P型链路上所有级别的ISIS报文使用的DMAC地址为<br>DMAC地址：09:00:2b:00:00:05</p>
+<p>ISIS协议是基于TLV机制来协商各项属性的。<br>T：属性类型<br>L：长度<br>V：取值</p>
+<p>TLV机制运行路由协议只携带需要的属性，不需要属性可以不携带，扩展性强，如果过协议需要支持新的特性，则只需要开发新TLV属性即可支持。</p>
+<p>OSPFv2不是基于TLV机制路由协议，报文字段都是固定的，所以扩展性比较差。</p>
+<h5 id="HELLO-PDU"><a href="#HELLO-PDU" class="headerlink" title="HELLO PDU"></a>HELLO PDU</h5><p>HELLO PDU（IIH）用于建立和维持邻居关系</p>
 <ul>
 <li>Level-1 LAN IIH：用于在广播型链路上建立L1的邻居</li>
 <li>Level-2 LAN IIH：用于在广播型链路上建立L2的邻居</li>
@@ -518,13 +532,31 @@
 <blockquote>
 <p>问题：为什么要在广播型链路上设计两种hello报文，而P2P链路只有一种hello报文？<br>答：因为广播型链路上存在多路访问的链路，这条链路上可存在多台路由器。邻居关系又分为级别一、级别二。某些路由器只需要建立级别一的邻居关系，它们只需要发送级别一的hello包维护。另一些路由器需要建立级别二的邻居关系，它们就只需要发送级别2的hello包维护。不同级别的邻居设计出不同级别的hello包分别去进行维护，这样会更加细致一些，控制起来也更方便一些，可以独立进行维护。而点到点链路只有两台路由器，不存在多种不同级别邻居的可能性。要么是级别1，要么是级别2，要么既是级别1、也是级别2。所以只需要一种就可以搞定。</p>
 </blockquote>
-<h5 id="LSP"><a href="#LSP" class="headerlink" title="LSP"></a>LSP</h5><p>LSP PDU用于交换链路状态信息 </p>
+<p> 默认情况下 L1/2的路由器在广播型链路上既发L1的hello，也发L2的hello报文。</p>
+<p>L1/2的路由器在广播型链路上发送hello报文的级别与接口的级别相关，和接口级别取交集。</p>
+<p>L1的路由器在广播型链路上只发L1的hello，同理L2的路由器在广播型链路上只发L2的hello报文。跟链路级别无关。</p>
+<p>hello报文circuit type字段取值特点：</p>
+<ul>
+<li>路由器类型level-1，则取值为0x01，路由器类型为level-2，则取值为0x02，与链路级别无关。</li>
+<li>如果路由器类型为level1-2，则与链路级别取交集，链路为L1时，则取值0x01，链路为L2时，则取值0x02</li>
+<li>如果取值为0x03则路由器为level-12的路由器。并且链路为L1-2。</li>
+</ul>
+<p>邻居失效时间（Holding timer：告知邻居本端失效时间。）：hello报文发送间隔的3倍。</p>
+<p>isis.hello.priority 用于DIS的选举，取值范围0-127，越大越优先，0也可以参与DIS的选举。如果过优先级相同，则比较接口的MAC地址，越大越优先。默认为64。</p>
+<p>Area address t=1，l=4 //区域地址<br>IS Neighbor t=6，l=6 //邻居接口的MAC地址<br>IP Interface address t=132，l=4 //自身接口的IP地址<br>Protocols Supported t=129，l=1 //所支持的协议</p>
+<h6 id="命令修改"><a href="#命令修改" class="headerlink" title="命令修改"></a>命令修改</h6><p>isis timer hello 4 level-1 修改hello间隔</p>
+<p>isis timer holding-multiplier 4 level-1 告知邻居本端失效时间</p>
+<h5 id="LSP-PDU"><a href="#LSP-PDU" class="headerlink" title="LSP PDU"></a>LSP PDU</h5><p>LSP PDU用于交换链路状态信息 </p>
 <ul>
 <li>Level-1 LSP：描述非骨干区域的链路状态，对应于OSPF协议非骨干区域中的1类或2类LSA</li>
 <li>Level-2 LSP：描述骨干区域的链路状态，对应于OSPF协议骨干区域中的1类或2类LSA</li>
 </ul>
-<p>作用：用于描述携带LSA（链路状态）信息</p>
-<h5 id="SNP"><a href="#SNP" class="headerlink" title="SNP"></a>SNP</h5><ul>
+<p>作用：用于描述携带LSA（链路状态）信息 。</p>
+<p>从报文角度去看LSP分为两种L1 LSP、L2 LSP</p>
+<p>从LSP的用途去看LSP分为两种 实节点LSP，伪节点LSP</p>
+<p>实节点LSP相当于OSPF的1类LSA，每台ISIS路由器都会产生用于描述自身直连链路状态。</p>
+<p>伪节点LSP相当于OSPF的2类LSA，广播型链路上由DIS产生，用于描述广播型链路。</p>
+<h5 id="SNP-PDU"><a href="#SNP-PDU" class="headerlink" title="SNP PDU"></a>SNP PDU</h5><ul>
 <li>序列号PDU</li>
 </ul>
 <p>SNP PDU用于维护LSDB的完整与同步，且为摘要信息</p>
@@ -550,6 +582,15 @@
 <li>NET地址由什么组成？</li>
 </ol>
 <p>3部分组成，area id，system id，sel。其中area id可变长度至少一个字节，最大13个字节。system id固定6个字节。sel始终为0，一个字节。</p>
+<ol start="3">
+<li>基于TLV机制的协议</li>
+</ol>
+<p>EIGRP、BGP、LDP</p>
+<ol start="4">
+<li>ospf和isis的区别</li>
+</ol>
+<p>OSPF在LSDB同步过程中定义状态机 exstart，exchange，loading，full</p>
+<p>ISIS在LSDB同步过程中没有定义任何状态机</p>
 
             </div>
             <hr/>
@@ -613,12 +654,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/VPN/">
-                                    <span class="chip bg-color">VPN</span>
-                                </a>
-                            
                                 <a href="/tags/%E5%8D%8F%E8%AE%AE/">
                                     <span class="chip bg-color">协议</span>
+                                </a>
+                            
+                                <a href="/tags/IGP/">
+                                    <span class="chip bg-color">IGP</span>
                                 </a>
                             
                         </div>
@@ -823,12 +864,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/VPN/">
-                        <span class="chip bg-color">VPN</span>
-                    </a>
-                    
                     <a href="/tags/%E5%8D%8F%E8%AE%AE/">
                         <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                    <a href="/tags/IGP/">
+                        <span class="chip bg-color">IGP</span>
                     </a>
                     
                 </div>
@@ -1028,7 +1069,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">123.3k</span>&nbsp;字
+                class="white-color">125.9k</span>&nbsp;字
             
             
             
