@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.5k
+                    5.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    20 分
                 </div>
                 
 
@@ -556,6 +556,28 @@
 <p>从LSP的用途去看LSP分为两种 实节点LSP，伪节点LSP</p>
 <p>实节点LSP相当于OSPF的1类LSA，每台ISIS路由器都会产生用于描述自身直连链路状态。</p>
 <p>伪节点LSP相当于OSPF的2类LSA，广播型链路上由DIS产生，用于描述广播型链路。</p>
+<p>L1路由器只维护L1 LSP<br>L2路由器只维护L2 LSP<br>L1/2路由器维护L1 LSP也维护L2 LSP</p>
+<p>ISIS协议如何区分不同的LSP呢？<br>ISIS协议定义通过LSP ID唯一的区分一条LSP</p>
+<p><font color="skyblue">0000.0000.0004</font><font color="red">.00</font><font color="yellowgreen">-00</font> LSP-ID 8个字节长度</p>
+<p>由3个部分组成<br><font color="skyblue">LSP ID = system id（6字节）</font><font color="red">. 伪节点标识符（1字符）</font><font color="yellowgreen">- 分片标识符（1字节）</font></p>
+<p>system id标识产生LSP的路由器的system id。类似ospf的adv router</p>
+<p>伪节点标识符 取值 0 或者 非0，如果等于0，则代表该LSP是实节点LSP。如果非0，则代表该LSP是伪节点LSP，此时system id为DIS的system id。 类似LSA TYPE。</p>
+<p>分片标识符：用于描述同一台路由器产生的不同的LSP </p>
+<blockquote>
+<p>LSP新旧判断机制</p>
+<ol>
+<li>比较LSP SEQ，越大越新</li>
+<li>seq相同则判断remaining lifetime（hold time）是否等于0，如果等于0，则认为是最新的LSP，用于删除一条LSP（用于发给对端邻居作删除的动作）。默认为1200s，每隔15分钟，即900s周期性泛洪，更新LSP，同时seq+1。（ISIS是倒计时。与OSPF相反。）</li>
+<li>如果remaining lifetime都不等于0，则比较checksum，越大越新。</li>
+<li>如果checksum一样，则认为是相同的LSP。初始值从0x0000001开始,最大值为0xFFFFFFFF。</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>SOURCE        0000.0000.0004.00 system id.00    实节点<br>NLPID            IPV4    网络层标识，描述携带式ipv4网络的状态信息<br>AREA ADDR    49.0045 自身所属的区域号<br>INTF ADDR        10.1.45.4 加入到ISIS协议进程接口的IP地址<br>INTF ADDR        4.4.4.4<br>NBR ID            0000.0000.0005.00 COST：10    描述P2P链路上的邻居，实节点邻居的system id，相当于OSPF的link type p2p的链路。<br>NBR ID            0000.0000.0002.01 COST：10    描述bro链路上的邻居，伪节点的system id，相当于OSPF的link type transnet的链路。<br>IP-Internal        10.1.45.0    255.255.255.0    COST：10    描述直连网络号/掩码/cost 相当于OSPF的stubnet。</p>
+</blockquote>
+<blockquote>
+<p>SOURCE 0000.0000.0002.01    dis的system id，伪节点LSP<br>NLPID IPV4<br>NBR ID 0000.0000.0002.00 COST：0    伪节点在广播型链路的实节点邻居<br>NBR ID 0000.0000.0001.00 COST：0<br>NBR ID 0000.0000.0003.00 COST：0</p>
+</blockquote>
 <h5 id="SNP-PDU"><a href="#SNP-PDU" class="headerlink" title="SNP PDU"></a>SNP PDU</h5><ul>
 <li>序列号PDU</li>
 </ul>
@@ -572,6 +594,85 @@
 </ul>
 </li>
 </ul>
+<blockquote>
+<p>PSNP报文如何判断是请求还是确认？<br>PSNP报文中携带的LSP ID的序列号非0的都是用作确认用的，0的均是请求。</p>
+</blockquote>
+<p>PSNP，CSNP携带的LSP的携带信息包括LSP ID，remaning lifetimer，seq，checksum。</p>
+<h4 id="DIS"><a href="#DIS" class="headerlink" title="DIS"></a>DIS</h4><p>作用：起到维护链路上拓扑数据库一致的作用。</p>
+<p>DIS选举</p>
+<ol>
+<li><p>接口优先级越大越优。</p>
+</li>
+<li><p>优先级相同，则比较mac地址，越大越优先。</p>
+</li>
+<li><p>默认优先级64。</p>
+</li>
+<li><p>DIS可以抢夺。</p>
+</li>
+<li><p>DIS分级别，L1的邻居选举L1 DIS，L2的邻居选举L2 DIS。</p>
+</li>
+<li><p>DIS优先级等于0的路由器也可以进行DIS的选举。</p>
+</li>
+<li><p>没有备份的DIS。</p>
+</li>
+</ol>
+<h4 id="P2P网络LSP交互过程"><a href="#P2P网络LSP交互过程" class="headerlink" title="P2P网络LSP交互过程"></a>P2P网络LSP交互过程</h4><ul>
+<li><p>有确认报文，重传时间为5s。</p>
+</li>
+<li><p>P2P链路无需周期性发送CSNP报文。</p>
+</li>
+</ul>
+<h4 id="广播网络LSP交互过程"><a href="#广播网络LSP交互过程" class="headerlink" title="广播网络LSP交互过程"></a>广播网络LSP交互过程</h4><ul>
+<li><p>无确认报文</p>
+</li>
+<li><p>DIS每10s周期发送CSNP，维护此广播型网络上路由器的LSDB同步。</p>
+</li>
+</ul>
+<h4 id="IS-IS路由过载"><a href="#IS-IS路由过载" class="headerlink" title="IS-IS路由过载"></a>IS-IS路由过载</h4><p>OL：过载比特位，通过set-overload命令设置。</p>
+<p>其他路由器不会在进行SPF算法时不在沿着OL=1的路由器继续往下计算SPF树，OL的路由器做为树上的末端节点。</p>
+<p>L1/2设置OL bit后，将不再执行泄露功能，无论是否配置了路由泄露。</p>
+<p>路由过载的功能：<br>RIP    接口上metric out 将发送的路由改成16跳<br>EIGRP    stub router（末节路由器）<br>OSPF    stub router（末节路由器）将自己直连的链路cost值设置成65535</p>
+<h5 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h5><p>set-overload [allow {interlevel | external} * ]</p>
+<p>external引入到ISIS协议中的外部路由，在引入外部路由的ASBR上配置。</p>
+<p>set-overload allow interlevel    L12，L1，L2继续描述自身引入的外部路由，对非自身产生的外部路由无效。通常在L1/2路由器上实施。</p>
+<p>set-overload allow external    L12路由器过载后继续描述AS内部泄露路由以及其他路由器引入的外部路由。通常在ASBR路由器上实施。</p>
+<p>set-overload</p>
+<p>L12路由器设置OL=1后，默认不把L1路由在L2的LSP进行描述，也不会把L2的泄露的路由在L1的LSP中进行描述，同时ATT=0，也不会描述自身引入的外部路由。</p>
+<p>L1，L2路由器设置OL=1后，不描述自身引入的外部路由。</p>
+<p>set-overload on-startup 设备重启后的一段时间内保持LSP的OL位置1。过了这段时间就恢复。</p>
+<p>set-overload on-startup wait-for-bgp 100 无论BGP邻居是否建立，总是在启动后100s内进行OL置位。</p>
+<h3 id="路由计算与交互"><a href="#路由计算与交互" class="headerlink" title="路由计算与交互"></a>路由计算与交互</h3><p>L1的路由器只通过L1的LSP描述直连链路信息，跟链路级别无关。<br>L2的路由器只通过L2的LSP描述直连链路信息，跟链路级别无关。</p>
+<p>L1/2的路由器通过L1的LSP也通过L2的LSP描述自身L1/2的直连链路。<br>L1/2的路由器只通过L2的LSP的LSP描述自身L2的直连链路。<br>L1/2的路由器通过L1的LSP也通过L2的LSP描述自身L1的直连链路。</p>
+<p>骨干区域如何访问非骨干区域？<br>L1/2的路由器将L1的路由作为自身直连的叶子进行描述，并通过L2的LSP携带再骨干区域泛洪。</p>
+<p>非骨干区域如何访问骨干区域呢？<br>默认情况下L1/2的路由器不会将L2的路由转化成L1的LSP在非骨干区域泛洪，那么ISIS非骨干区域天生类似于OSPF的完全末节区域，通过缺省路由访问访问骨干区域。</p>
+<p>OSPF的完全末节区域如何访问其他区域？<br>通过完全末节区域的ABR产生的3类LSA的缺省路由。</p>
+<p>ISIS非骨干区域的缺省路由是怎么计算出来的呢？<br>由L1/2的路由器产生的L1的LSP中通过ATT bit位，来进行缺省路由的计算。</p>
+<p>ATT（骨干区域连接符），用来表明该L1/2的路由器和骨干区域连接着，ATT此时置1。<br>当L1/2的路由器至少存在一个不在相同区域的L2的邻居时，ATT才会置1。且ATT比特位只会在L1的LSP中置1。</p>
+<blockquote>
+<p>缺省路由的计算</p>
+<ol>
+<li>L1的路由器通过ATT置1的LSP得知本区域的L1/2路由器的存在。</li>
+<li>由于L1的路由器和L1/2路由器在同一个区域，所以L1的路由器将自动在路由表中生成一条指向L1/2路由器的缺省路由。</li>
+<li>该路由的下一跳为到L1/2路由器SPF树的下一跳</li>
+<li>该路由的开销为到L1/2路由器的SPF树的开销。</li>
+</ol>
+</blockquote>
+<p>OSPF ABR在自己产生的1类LSA中，通过一个flags来表明自身是ABR，该flags称为B flags。</p>
+<p>同一个区域如果过存在多个L1/2的路由器，彼此不进行缺省路由的计算。防止路由环路。</p>
+<p>Distribution（DU bit）置1为泄露到非骨干区域的L2路由</p>
+<h4 id="命令-2"><a href="#命令-2" class="headerlink" title="命令"></a>命令</h4><p>ATT bit的控制<br>attaached-bit advertise <em>always/never</em> 设置ATT bit位总是置1/0。</p>
+<p>attached-bit advertise avoid-learning 设置L1的路由器不进行缺省路由的计算。</p>
+<p>import-route isis level-2 into level-1 filter-policy ip-prefix 1<br>L2的路由向L1区域泄露时做路由过滤</p>
+<p>路由过滤：在L1/2路由器中进行从L2/L1渗透进L1/L2时，对直连的路由不生效。</p>
+<h3 id="ISIS防环"><a href="#ISIS防环" class="headerlink" title="ISIS防环"></a>ISIS防环</h3><p>同一个区域存在多台L1/2的路由器时如何实现防环的？即ISSI区域间防环机制</p>
+<ol>
+<li><p>为什么泄露到非骨干区域的路由DU会置1，而从非骨干区域传到骨干区域的路由DU不会置1呢？<br>问题1原因：由于L1的路由默认会转化L2的路由在骨干区域泛洪，为了防止L2的路由泄露到L1的区域后，再次传回骨干区域，将该路由的DU bit置1。L1/2路由器不会将DU=1的路由再次传回骨干区域。（区域间的水平分割）<br>问题2原因：L2的路由默认不会传到L1的区域，所以不存在环路风险。</p>
+</li>
+<li><p>如果管理员将L2的路由泄露到L1的区域，那么这些路由会再次传回L1的区域吗？<br>不会，因为L1的路由优于L2的路由，这样L2的路由就无法再次泄露到非骨干区域。</p>
+</li>
+<li><p>为了防止L1/2的路由器优先选择DU置1的路由访问骨干区域，产生次优路径，所以ISIS在这种情况下L2的路由优先DU置1的L1的路由。即L1 &gt; L2 &gt; L1 DU。</p>
+</li>
+</ol>
 <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
 <li>路由协议工作在那一层？</li>
 </ol>
@@ -589,8 +690,57 @@
 <ol start="4">
 <li>ospf和isis的区别</li>
 </ol>
+<blockquote>
 <p>OSPF在LSDB同步过程中定义状态机 exstart，exchange，loading，full</p>
 <p>ISIS在LSDB同步过程中没有定义任何状态机</p>
+</blockquote>
+<blockquote>
+<p>ISIS协议如何区分不同的LSP呢？<br>ISIS协议定义通过LSP ID唯一的区分一条LSP</p>
+<p>OSPF协议如何在同一个区域区分不同的LSA呢？<br>LSA TYPE<br>LS ID<br>ADV ROUTER</p>
+</blockquote>
+<ol start="5">
+<li><p>OSPF的DR，BDR为什么不抢夺？而ISIS为什么可以抢夺？<br>主要原因式广播型链路的邻居状态不一致。如果DR能够抢夺，将导致邻居状态发生大面积的变化，影响设备很多。ISIS抢夺，因为所有路由器都维持UP状态，不会引起邻居关系发生变化。稳定性高。但是伪节点LSP会发生变化，对SPF算法有一定的影响。稳定网络中可以忽略该问题。</p>
+</li>
+<li><p>OSPF的广播链路的网络号是根据几类LSA计算出来的？2类怎么算？<br>2类  ls id DR 接口的地址/携带DR接口的掩码。</p>
+</li>
+</ol>
+<p>ISIS的 伪节点LSP是纯的拓扑信息，不携带路由信息。ISIS通过实节点LSP描述P2P的直连路由，也描述广播型链路的直连路由。</p>
+<ol start="7">
+<li><p>为什么OSPF要要求广播型链路掩码要一致？<br>因为ospf是DR用2类LSA描述广播型网络的，且掩码信息为自身地址的掩码。在这个广播型网络中如果存在不同掩码，那么路由会按最长匹配原则来转发路由信息。导致不通。（这是在假设它们可以建立邻居和交互路由信息的前提下。）</p>
+</li>
+<li><p>通过缺省路由访问骨干区域存在什么问题？</p>
+<blockquote>
+<p>缺点：</p>
+<ol>
+<li><p>次优路径</p>
+<p>如何防止次优路径？</p>
+<ol>
+<li>手动调整缺省路由的开销，通过修改链路开销的实现。</li>
+<li>通过路由泄露，将骨干区域的路由泄露到非骨干区域，泄露到非骨干区域的L2的路由会进行DU bit置1，表示该路由来自骨干区域，是泄露进非骨干区域。</li>
+</ol>
+</li>
+<li><p>无法感知明细路由的状态，存在或者失效都通过缺省路由转发业务，导致带宽存在浪费。</p>
+</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>优点：</p>
+<ol>
+<li>收敛快，无法维护明细路由。</li>
+<li>节省设备资源</li>
+<li>增强网络的稳定性</li>
+</ol>
+</blockquote>
+</li>
+<li><p>如何删除LSP里面的路由？<br>产生一条新的LSP（新的序列号+1），覆盖掉以前旧（序列号）的LSP。里面不携带不要的路由发送的邻居。</p>
+</li>
+<li><p>如何删除一条LSP？<br>发送这条LSP的holdtime等于0。</p>
+</li>
+<li></li>
+</ol>
+<h3 id="P-bit位"><a href="#P-bit位" class="headerlink" title="P bit位"></a>P bit位</h3><p>代表分区修复功能，即表示该路由器是否支持ISIS的虚链路。</p>
+<p>骨干区域修复标志位。用于做虚链路的。但目前各大厂家还未实现，所以置0。</p>
+<p>解释：ISIS不是TCP/IP环境下的网络层协议，那么在基于IP的网络中无法实现跨链路建立ISIS邻居的功能。故无法为IP网络支持虚链路功能。</p>
 
             </div>
             <hr/>
@@ -1063,7 +1213,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">126k</span>&nbsp;字
+                class="white-color">128.9k</span>&nbsp;字
             
             
             
