@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.4k
+                    6.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    20 分
+                    25 分
                 </div>
                 
 
@@ -468,7 +468,7 @@
 <p>L1的路由器只能建立L1的邻居，L2的路由器只能建立L2的邻居，L1/2的路由器和同区域的L1路由器建立L1邻居，和L2的路由器建立L2邻居。和L1/2的同区域路由器既建立L1的邻居又建立L2的邻居。和L1/2的不同区域的路由器只能建立L2的邻居。</p>
 <h5 id="形成邻居关系的条件"><a href="#形成邻居关系的条件" class="headerlink" title="形成邻居关系的条件"></a>形成邻居关系的条件</h5><p>IS-IS形成邻居关系的条件</p>
 <ol>
-<li><p>同一（层次）级别</p>
+<li><p>同一级别（层次）</p>
 </li>
 <li><p>L1的邻居区域号要一致</p>
 </li>
@@ -664,15 +664,164 @@
 <p>attached-bit advertise avoid-learning 设置L1的路由器不进行缺省路由的计算。</p>
 <p>import-route isis level-2 into level-1 filter-policy ip-prefix 1<br>L2的路由向L1区域泄露时做路由过滤</p>
 <p>路由过滤：在L1/2路由器中进行从L2/L1渗透进L1/L2时，对直连的路由不生效。</p>
-<h3 id="ISIS防环"><a href="#ISIS防环" class="headerlink" title="ISIS防环"></a>ISIS防环</h3><p>同一个区域存在多台L1/2的路由器时如何实现防环的？即ISSI区域间防环机制</p>
+<h3 id="IS-IS防环"><a href="#IS-IS防环" class="headerlink" title="IS-IS防环"></a>IS-IS防环</h3><p>同一个区域存在多台L1/2的路由器时如何实现防环的？即ISSI区域间防环机制</p>
 <ol>
-<li><p>为什么泄露到非骨干区域的路由DU会置1，而从非骨干区域传到骨干区域的路由DU不会置1呢？<br>问题1原因：由于L1的路由默认会转化L2的路由在骨干区域泛洪，为了防止L2的路由泄露到L1的区域后，再次传回骨干区域，将该路由的DU bit置1。L1/2路由器不会将DU=1的路由再次传回骨干区域。（区域间的水平分割）<br>问题2原因：L2的路由默认不会传到L1的区域，所以不存在环路风险。</p>
-</li>
-<li><p>如果管理员将L2的路由泄露到L1的区域，那么这些路由会再次传回L1的区域吗？<br>不会，因为L1的路由优于L2的路由，这样L2的路由就无法再次泄露到非骨干区域。</p>
-</li>
-<li><p>为了防止L1/2的路由器优先选择DU置1的路由访问骨干区域，产生次优路径，所以ISIS在这种情况下L2的路由优先DU置1的L1的路由。即L1 &gt; L2 &gt; L1 DU。</p>
-</li>
+<li>为什么泄露到非骨干区域的路由DU会置1，而从非骨干区域传到骨干区域的路由DU不会置1呢？<br>问题1原因：由于L1的路由默认会转化L2的路由在骨干区域泛洪，为了防止L2的路由泄露到L1的区域后，再次传回骨干区域，将该路由的DU bit置1。L1/2路由器不会将DU=1的路由再次传回骨干区域。（区域间的水平分割）<br>问题2原因：L2的路由默认不会传到L1的区域，所以不存在环路风险。</li>
+<li>如果管理员将L2的路由泄露到L1的区域，那么这些路由会再次传回L1的区域吗？<br>不会，因为L1的路由优于L2的路由，这样L2的路由就无法再次泄露到非骨干区域。</li>
+<li>为了防止L1/2的路由器优先选择DU置1的路由访问骨干区域，产生次优路径，所以ISIS在这种情况下L2的路由优先DU置1的L1的路由。即L1 &gt; L2 &gt; L1 DU。</li>
 </ol>
+<h3 id="IS-IS度量值"><a href="#IS-IS度量值" class="headerlink" title="IS-IS度量值"></a>IS-IS度量值</h3><p>ISIS中的metric的类型</p>
+<p>narrow metric：窄度量值<br>接口metric：6bit      —    0到63<br>路由metric：10bit    —    0到1023</p>
+<p>wide metric：宽度量值<br>接口metric：24bit    —    0到1677214<br>路由metric：32bit    —    0到4261412863 （最大值4261412864）</p>
+<ul>
+<li><p>narrow类型下使用的TLV<br>128号TLV（IP Internal Reachability TLV）：用来携带路由域内的ISIS路由信息。<br>130号TLV（IP External Reachability TLV）：用来携带路由域外的ISIS路由信息。<br>2号TLV（IS Neighbors TLV）：用来携带邻居信息。</p>
+</li>
+<li><p>wide类型下使用的TLV</p>
+<p>135号TLV（Extended IP Reachability TLV）：用来替换原有的IP reachability TLV，携带ISIS路由信息，它扩展了路由开销的范围，并可以携带sub TLV。</p>
+<p>22号TLV（IS Extended Neighbors TLV）：用来携带邻居信息。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>开销类型</th>
+<th>接收（此含义是计算）</th>
+<th>发送</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>narrow</td>
+<td>narrow</td>
+<td>narrow</td>
+</tr>
+<tr>
+<td>narrow-compatible</td>
+<td>narrow&amp;wide</td>
+<td>narrow</td>
+</tr>
+<tr>
+<td>compatible</td>
+<td>narrow&amp;wide</td>
+<td>narrow&amp;wide</td>
+</tr>
+<tr>
+<td>wide-compatible</td>
+<td>narrow&amp;wide</td>
+<td>wide</td>
+</tr>
+<tr>
+<td>wide</td>
+<td>wide</td>
+<td>wide</td>
+</tr>
+</tbody></table>
+<p>在算法上的特点：<br>cost-style wide<br>cost-style narrow</p>
+<p>在SPF树上如果发现自身邻居节点的cost-style和自身的cost-style不一致，就不会沿着该邻居节点继续向下进行SPF的计算。</p>
+<p>路由器如果发现伪节点上的邻居和自身的cost-style不一致，将不再继续向伪节点向下计算路由。</p>
+<p>cost-style wide-compatible<br>在SPF树上能兼容narrow风格的邻居节点</p>
+<p><strong>为什么目前在项目建议使用宽风格呢？<br>因为只有宽风格才支持对路由打TAG。</strong></p>
+<h4 id="命令-3"><a href="#命令-3" class="headerlink" title="命令"></a>命令</h4><p>cost-style wide：只计算wide风格的LSP的路由，发送wide风格的LSP。</p>
+<p>cost-style narrow：只计算narrow风格的LSP的路由。发送narrow风格的LSP。</p>
+<p>cost-style wide-compatible<br>在SPF树上能兼容narrow风格的邻居节点和wide风格的邻居节点，自身发送wide风格LSP</p>
+<p>cost-style narrow-compatible<br>在SPF树上能兼容narrow风格的邻居节点和wide风格的邻居节点，自身发送narrow风格LSP</p>
+<p>配置auto-cost enable命令后当开销类型为wide或wide-compatible时，每个接口的开销值通过下面的公式计算：接口开销值=（Bandwidth-reference/Link-bandwidth）*10，配置auto-cost enable compatible命令后每个接口的开销值通过下面的公式计算：接口的开销值=（Bandwidth-reference/Link-bandwidth）。</p>
+<p> 当开销类型为narrow、narrow-compatible或compatible时，各个接口的开销值根据下表来确定。</p>
+<table>
+<thead>
+<tr>
+<th>开销值</th>
+<th>接口带宽范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>60</td>
+<td>接口带宽≤10Mbit/s</td>
+</tr>
+<tr>
+<td>50</td>
+<td>10Mbit/s&lt;接口带宽≤100Mbit/s</td>
+</tr>
+<tr>
+<td>40</td>
+<td>100Mbit/s&lt;接口带宽≤155Mbit/s</td>
+</tr>
+<tr>
+<td>30</td>
+<td>155Mbit/s&lt;接口带宽≤622Mbit/s</td>
+</tr>
+<tr>
+<td>20</td>
+<td>622Mbit/s&lt;接口带宽≤2.5Gbit/s</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2.5Gbit/s&lt;接口带宽</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>cost-type{ external | internal }华为设备引入外部路由时，internal类型优于external，类似于ospf的type1优于type2。</p>
+<p>但不管路由是internal类型还是external类型，在路由表中总是显示实际的路由cost值。</p>
+<p>当路由器的cost-style为wide、companies或wide-compatible时，引入外部路由的开销类型将不区分external和internal，直接比较路由的cost值大小，小的优先。</p>
+<p>当路由的cost-style为narrow，narrow-compatible时，默认引入路由的cost为0，默认cost-type为external，internal优于external。（类似ospf的cost-type 1 优于 ospf-type cost 2）<br>当cost-type为external时，引入外部路由的cost=引入路由cost值+64<br>当cost-type为internal时，引入外部路由的cost=引入路由的csot值</p>
+</blockquote>
+<h3 id="IS-IS认证"><a href="#IS-IS认证" class="headerlink" title="IS-IS认证"></a>IS-IS认证</h3><ul>
+<li>IS-IS协议认证是通过TLV进行携带的，默认不携带认证TLV。（类型10）</li>
+</ul>
+<p>认证分类</p>
+<ul>
+<li>接口认证<ul>
+<li>只对Level-1和Level-2的Hello报文进行认证（本质是对hello报文做认证）</li>
+</ul>
+</li>
+<li>区域认证<ul>
+<li>对Level-1的SNP和LSP报文进行认证（本质是对L1的SNP/LSP报文做认证）</li>
+</ul>
+</li>
+<li>路由域认证<ul>
+<li>对Level-2的SNP和LSP报文进行认证（本质是对L2的SNP/LSP报文做认证）</li>
+</ul>
+</li>
+</ul>
+<p>认证方式</p>
+<ul>
+<li>NULL</li>
+<li>明文</li>
+<li>MD5</li>
+</ul>
+<p>ISIS如果过没有启用认证，代表发送报文时不携带认证TLV，对接收到的报文不做认证，不管是否携带认证TLV。</p>
+<h3 id="命令-4"><a href="#命令-4" class="headerlink" title="命令"></a>命令</h3><p>isis authentication-mode simple cipher huawei@123</p>
+<p>发送报文时携带认证TLV，接收报文时对报文进行认证，即报文要携带认证TLV。</p>
+<p>isis authentication-mode simple cipher huawei@123 send-only</p>
+<p>发送报文时携带认证TLV，接收报文时不对报文进行认证，不管是否携带认证TLV。</p>
+<p>华为设备在不中断邻居关系的前提下更换认证密钥的步骤：</p>
+<table>
+<thead>
+<tr>
+<th>huawei</th>
+<th>huawei</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>huawei send only</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>cisco send only</td>
+</tr>
+<tr>
+<td>将密码改为cisco</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>将密码改为cisco</td>
+</tr>
+</tbody></table>
+<p>area-authentication-mode md5 plain huawei@123<br>对发送的L1的LSP，CSNP，PSNP添加认证TLV，并对接收到的L1的LSP，CSNP，PSNP做认证</p>
+<p>area-authentication-mode md5 plain huawei@123 all-send-only<br>对发送的L1的LSP，CSNP，PSNP添加认证TLV，不对接收到的L1的LSP，CSNP，PSNP做认证。</p>
+<p>area-authentication-mode md5 plain huawei@123 snp-packet send-only<br>对发送的L1的LSP，CSNP，PSNP添加认证TLV，不对接收到的L1的CSNP，PSNP做认证，对接收的L1的LSP做认证。</p>
+<p>area-authentication-mode md5 plain huawei@123 authentication-avoid<br>对发送的L1的LSP添加认证TLV，并对接收到的L1的LSP做认证。忽略发送和接收的L1的SNP报文认证。</p>
 <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
 <li>路由协议工作在那一层？</li>
 </ol>
@@ -736,7 +885,6 @@
 </li>
 <li><p>如何删除一条LSP？<br>发送这条LSP的holdtime等于0。</p>
 </li>
-<li></li>
 </ol>
 <h3 id="P-bit位"><a href="#P-bit位" class="headerlink" title="P bit位"></a>P bit位</h3><p>代表分区修复功能，即表示该路由器是否支持ISIS的虚链路。</p>
 <p>骨干区域修复标志位。用于做虚链路的。但目前各大厂家还未实现，所以置0。</p>
@@ -1213,7 +1361,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">128.9k</span>&nbsp;字
+                class="white-color">130.1k</span>&nbsp;字
             
             
             
