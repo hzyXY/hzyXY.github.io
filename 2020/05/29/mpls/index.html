@@ -505,7 +505,7 @@
 <p>静态LSP与静态CR-LSP适用相同的标签空间（16~1023）.配置静态LSP时需要遵循的原则是，前一节出标签的值等于下一个节点入标签的值。</p>
 <p>中间节点不知道FEC。</p>
 <h5 id="动态LSP的建立"><a href="#动态LSP的建立" class="headerlink" title="动态LSP的建立"></a>动态LSP的建立</h5><ul>
-<li>LDP端口号：TCP646</li>
+<li>LDP用UDP（协议ID=17）发现邻居，用TCP（协议ID=6）建立邻接（LDP协议的目的端口号：646）</li>
 </ul>
 <p>动态LSP通过<strong>标签发布协议</strong>动态建立。标签发布协议是MPLS的控制协议（也可称为信令协议），负责FEC的分类、标签的分发以及LSP的建立和维护等一系列操作。</p>
 <p>MPLS可以使用多种标签发布协议：</p>
@@ -1221,7 +1221,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">130.2k</span>&nbsp;字
+                class="white-color">130.1k</span>&nbsp;字
             
             
             
