@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6.6k
+                    8.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    25 分
+                    33 分
                 </div>
                 
 
@@ -789,7 +789,7 @@
 <li>MD5</li>
 </ul>
 <p>ISIS如果过没有启用认证，代表发送报文时不携带认证TLV，对接收到的报文不做认证，不管是否携带认证TLV。</p>
-<h3 id="命令-4"><a href="#命令-4" class="headerlink" title="命令"></a>命令</h3><p>isis authentication-mode simple cipher huawei@123</p>
+<h4 id="命令-4"><a href="#命令-4" class="headerlink" title="命令"></a>命令</h4><p>isis authentication-mode simple cipher huawei@123</p>
 <p>发送报文时携带认证TLV，接收报文时对报文进行认证，即报文要携带认证TLV。</p>
 <p>isis authentication-mode simple cipher huawei@123 send-only</p>
 <p>发送报文时携带认证TLV，接收报文时不对报文进行认证，不管是否携带认证TLV。</p>
@@ -822,6 +822,75 @@
 <p>area-authentication-mode md5 plain huawei@123 all-send-only<br>对发送的L1的LSP，CSNP，PSNP添加认证TLV，不对接收到的L1的LSP，CSNP，PSNP做认证。</p>
 <p>area-authentication-mode md5 plain huawei@123 snp-packet send-only<br>对发送的L1的LSP，CSNP，PSNP添加认证TLV，不对接收到的L1的CSNP，PSNP做认证，对接收的L1的LSP做认证。</p>
 <p>area-authentication-mode md5 plain huawei@123 authentication-avoid<br>对发送的L1的LSP添加认证TLV，并对接收到的L1的LSP做认证。忽略发送和接收的L1的SNP报文认证。</p>
+<p>domain-authentication-mode md5 plain huawei<br>发送L2的SNP，LSP报文并携带认证TLV,对接收的L2的SNP，LSP做认证</p>
+<p>domain-authentication-mode md5 cipher huawei all-send-only<br>对发送的L2的LSP，CSNP，PSNP添加认证TLV，不对接收到的L2的LSP，CSNP，PSNP做认证。</p>
+<p>domain-authentication-mode md5 cipher huawei snp-packet send-only<br>对发送的L2的LSP，CSNP，PSNP添加认证TLV，不对接收到的L2的CSNP，PSNP做认证，对接收到的L2的LSP做认证。</p>
+<p>domain-authentication-mode md5 cipher huawei snp-packet authentication-avoid<br>对发送的L2的LSP的添加认证TLV，并对接收的L2的LSP做认证。忽略发送和接收的L2的SNP报文认证。</p>
+<p>默认情况下ISIS协议没有启用认证，则忽略对认证TLV的处理。</p>
+<h3 id="IS-IS-LSP分片扩展"><a href="#IS-IS-LSP分片扩展" class="headerlink" title="IS-IS LSP分片扩展"></a>IS-IS LSP分片扩展</h3><ul>
+<li>使IS-IS路由器生成更多的LSP分片，用来携带更多的IS-IS信息。</li>
+</ul>
+<p>当IS-IS要发布的链路状态协议数据报文PDU（Protocol Data Unit）中的信息量太大时，IS-IS路由器将会生成多个LSP分片，用来携带更多的IS-IS信息。</p>
+<p>IS-IS lSP分片由LSP ID中的LSP Number字段进行标识，这个字段的长度是1字节。因此，一个IS-IS进程最多可产生256个LSP分片，携带的信息量有限。在RFC3786中规定，IS-IS可以配置虚拟的SystemID，并生成虚拟IS-IS的LSP报文来携带路由等信息。</p>
+<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
+<li><p>初始系统（Originating System）：初始系统是实际运行IS-IS协议的路由器。允许一个单独的IS-IS进程像多个虚拟路由器一样发布LSP，而“Originating System”指的是那个“真正”的IS-IS进程。</p>
+</li>
+<li><p>系统ID（Normal System-ID）：初始系统的系统ID。</p>
+</li>
+<li><p>虚拟系统（Virtual System）：由附加系统ID标识的系统，用来生成扩展LSP分片。这些分片在其LSP ID中携带附加系统ID。</p>
+</li>
+<li><p>附加系统ID（Additional System-ID）：虚拟系统的系统ID，由网络管理器统一分配。每个附加系统ID都允许生成256个扩展的LSP分片。</p>
+<p><code>附加系统ID和系统ID一样，在整个路由域中必须唯一。</code></p>
+</li>
+<li><p>24号TLV（IS Alias ID TLV）：用来表示初始系统与虚拟系统的关系。</p>
+</li>
+</ul>
+<h4 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h4><p>在IS-IS中，每个系统ID都标识一个系统，每个系统都最多可生成256个LSP分片。通过增加附加系统ID，可以最多配置50个虚拟系统，从而使得IS-IS进程最多可生成13056个LSP分片。</p>
+<p>使能分片扩展功能之后，如果存在由于报文装满而丢失的信息，系统会提醒重启IS-IS。重启之后，初始系统会尽最大能力装载路由信息，装不下的信息将放入虚拟系统的LSP中发送出去，并通过24号TLV来告知其他路由器此虚拟系统和自己的关系。</p>
+<h4 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h4><h5 id="Mode-1"><a href="#Mode-1" class="headerlink" title="Mode-1"></a>Mode-1</h5><ul>
+<li>用于网络中的部分路由器不支持LSP分片扩展特性的情况。</li>
+</ul>
+<p><strong>工作原理：</strong>虚拟系统参与路由SPF计算，初始系统发布的LSP中携带了到每个虚拟系统的链路信息。类似地，虚拟系统发布的LSP也包含到初始系统的链路信息。这样，在网络中虚拟系统看起来与初始系统相连的真实路由器是一样的。</p>
+<p>这种方式是为了兼容不支持分片扩展的老版本所做的一个过渡模式。在老版本中，IS-IS无法识别IS Alias ID TLV，所以虚拟系统的LSP必须表现的像一个普通IS-IS发出的报文。</p>
+<p><strong>注意事项：</strong>虚拟系统的LSP中包含和原LSP中相同的区域地址和过载标志位。如果还有其它特性的TLV，也必须保持一致。</p>
+<p>虚拟系统所携带的邻居信息指向初始系统，metric为最大值减1；初始系统所携带的邻居信息指向虚拟系统，metric必须为0。这样就保证了其它路由器在进行路由计算的时候，虚拟系统一定会成为初始系统的下游节点。</p>
+<h5 id="Mode-2"><a href="#Mode-2" class="headerlink" title="Mode-2"></a>Mode-2</h5><ul>
+<li>用于网络中所有路由器都支持LSP分片扩展特性的情况。</li>
+</ul>
+<p><strong>工作原理：</strong>虚拟系统不参与路由SPF计算，网络中所有路由器都知道虚拟系统生成的LSP实际属于初始系统。</p>
+<p>在该模式下工作的IS-IS，可以识别IS Alias ID TLV的内容，并作为计算树和路由的依据。</p>
+<h3 id="IS-IS管理标记（Tag）"><a href="#IS-IS管理标记（Tag）" class="headerlink" title="IS-IS管理标记（Tag）"></a>IS-IS管理标记（Tag）</h3><ul>
+<li><p>管理标记特性允许在IS-IS域中通过管理标记对IP地址前缀进行控制，可以达到简化管理。其用途包括控制不同级别和不同区域间的路由引入，以及在同一路由器上运行的IS-IS多实例。</p>
+</li>
+<li><p>管理标记值与某些属性相关联。当cost-sytle为wide、wide-compatible或compatible时，如果发布可达的IP地址前缀具有该属性，IS-IS会将管理标记加入到该前缀的IP可达信息TLV中。这样，管理标记就会随着前缀发布到整个路由域。</p>
+</li>
+</ul>
+<h3 id="主机名映射"><a href="#主机名映射" class="headerlink" title="主机名映射"></a>主机名映射</h3><p>IS-IS主机名映射机制为运行IS-IS协议的设备提供了一种从主机名到System ID映射的服务，它包括动态主机名映射和静态主机名映射。动态主机名映射的优先级高于静态主机名映射。当两者同时存在时，由动态主机名代替静态主机名。</p>
+<p>在没有使能主机名交换特性的运行IS-IS协议的设备上，查看IS-IS邻居和链路状态数据库等信息时，IS-IS域中的各设备都是用由12位十六进制数组成的System ID来表示的，例如：aaaa.eeee.1234。这种表示方法比较繁琐，而且易用性不好。主机名交换机制就是为了方便对IS-IS网络的维护和管理而引入的。</p>
+<p>在下列三种情况下会将System ID替换为主机名显示：</p>
+<ul>
+<li>显示IS-IS邻居时，将IS-IS邻居的System ID替换为主机名。如果该邻居为DIS，则DIS的System ID也替换为该邻居的主机名。</li>
+<li>显示IS-IS链路状态数据库中的LSP时，将LSP ID中的System ID替换为发布该LSP的设备的主机名。</li>
+<li>显示IS-IS链路状态数据库的详细信息时，对于使能了动态主机名交换的设备发送的LSP报文会增加显示Host Name字段，而此字段显示内容中的System ID也将替换为发送此LSP的设备的动态主机名。</li>
+</ul>
+<h4 id="动态主机名映射"><a href="#动态主机名映射" class="headerlink" title="动态主机名映射"></a>动态主机名映射</h4><p>在使能了动态主机名映射的设备上，IS-IS动态主机名的信息在LSP中以137号TLV（Dynamic Hostname TLV）的形式发布给其他IS-IS设备。在其他设备上使用IS-IS相关显示命令查看IS-IS信息时，本地设备的System ID将被设置的主机名所代替，这样更直观，也更容易记忆。</p>
+<p>动态主机名的TLV是可选的，它可以存在于LSP中的任何位置。其中TLV的value值不能为空。设备在发送LSP的时候可以决定是否携带该TLV，接收端的设备也可以决定是否忽略该TLV，或者提取该TLV的内容放在自己的映射表中。</p>
+<p>is name [<em>name</em>]</p>
+<h4 id="静态主机名映射"><a href="#静态主机名映射" class="headerlink" title="静态主机名映射"></a>静态主机名映射</h4><p>静态主机名映射是指在本地设备上对其他运行IS-IS协议的设备设置主机名与System ID的映射。静态主机名映射仅在本地设备生效，并不会通过LSP报文发送出去。</p>
+<p>is-name map 0000.0000.0002 R2</p>
+<p>is-name map 0000.0000.0002.01 R2.01</p>
+<h3 id="IS-IS区域迁移"><a href="#IS-IS区域迁移" class="headerlink" title="IS-IS区域迁移"></a>IS-IS区域迁移</h3><p>直接敲上新的area id且system id不能更改，敲上后undo掉旧的area id。这样就可以不中断业务从而更换区域。</p>
+<h3 id="IS-IS路由汇总"><a href="#IS-IS路由汇总" class="headerlink" title="IS-IS路由汇总"></a>IS-IS路由汇总</h3><p>在哪里执行ISIS的路由汇总？</p>
+<p>OSPF中只能在ABR和ASBR中进行路由汇总。</p>
+<ol>
+<li><p>可在L1、L2的路由器上执行汇总，但是只能对自身的直连路由汇总，无法对非直连的ISIS路由做汇总。（只能对自身直连的加入到isis进程的网段进行汇总）</p>
+</li>
+<li><p>L2的路由器上执行区域间路由的汇总，类似于OSPF的ABR。</p>
+</li>
+<li><p>在ASBR上对引入的外部路由执行汇总。</p>
+</li>
+</ol>
+<p>在L12路由器引入外部路由指定引入时路由的级别，不受泄露机制的影响。</p>
 <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
 <li>路由协议工作在那一层？</li>
 </ol>
@@ -1361,7 +1430,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">130.6k</span>&nbsp;字
+                class="white-color">132.8k</span>&nbsp;字
             
             
             
