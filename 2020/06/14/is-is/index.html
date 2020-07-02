@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    8.8k
+                    10.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    33 分
+                    39 分
                 </div>
                 
 
@@ -445,6 +445,14 @@
 <li>IS-IS特点：仅用于CLNS环境下。</li>
 <li>集成IS-IS特点：支持CLNP和IP双重网络。</li>
 <li>ISIS协议和IP协议是解耦的，无关联的独立的网络层协议，通过802.3以太网帧进行封装。</li>
+<li>ISIS是一种IGP协议。</li>
+<li>ISIS使用SPF算法计算路由。</li>
+<li>ISIS的波阿文采用TLV结构，因此扩展性很好。<ul>
+<li>为支持新的协议和特性，只需要扩展新的TLV或子TLV</li>
+<li>可以轻松扩展IPv6，TE（流量工程），MT（多拓扑）等协议和特性。</li>
+<li>IS-IS对IPv6的支持不需要对协议做大的改动，因此协议的继承性很好；不像OSPF，为支持IPv6需要开发全新的协议OSPFv3。</li>
+</ul>
+</li>
 </ul>
 <h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><p>TCP/IP网络模式    路由器    终端</p>
 <p>OSI7层模型    中间系统（IS）    终端（End System）</p>
@@ -725,7 +733,7 @@
 <p>cost-style wide-compatible<br>在SPF树上能兼容narrow风格的邻居节点和wide风格的邻居节点，自身发送wide风格LSP</p>
 <p>cost-style narrow-compatible<br>在SPF树上能兼容narrow风格的邻居节点和wide风格的邻居节点，自身发送narrow风格LSP</p>
 <p>配置auto-cost enable命令后当开销类型为wide或wide-compatible时，每个接口的开销值通过下面的公式计算：接口开销值=（Bandwidth-reference/Link-bandwidth）*10，配置auto-cost enable compatible命令后每个接口的开销值通过下面的公式计算：接口的开销值=（Bandwidth-reference/Link-bandwidth）。</p>
-<p> 当开销类型为narrow、narrow-compatible或compatible时，各个接口的开销值根据下表来确定。</p>
+<p>当开销类型为narrow、narrow-compatible或compatible时，各个接口的开销值根据下表来确定。</p>
 <table>
 <thead>
 <tr>
@@ -891,6 +899,85 @@
 </li>
 </ol>
 <p>在L12路由器引入外部路由指定引入时路由的级别，不受泄露机制的影响。</p>
+<p>在L12上以L1的路由引入外部路由时，DU bit置0</p>
+<p>ISIS汇总路由的外部路由不用分片LSP进行描述，而是当成自身直连的路由进行描述。</p>
+<ol start="4">
+<li><p>汇总路由继承明细路由中cost值最小的。</p>
+</li>
+<li><p>当所有的明细路由失效汇总路由才会失效。</p>
+</li>
+</ol>
+<h4 id="命令-5"><a href="#命令-5" class="headerlink" title="命令"></a>命令</h4><p>summary 192.168.0.0 255.255.0.0 generate_null0_route 执行路由汇总的路由器上产生指向NULL0接口的汇总路由，防止路由环路。</p>
+<p>summary 192.168.0.0 255.255.0.0 avoid-feedback  </p>
+<h3 id="ISIS缺省路由"><a href="#ISIS缺省路由" class="headerlink" title="ISIS缺省路由"></a>ISIS缺省路由</h3><p>default-rouote-advertise alway（强制下发，不管自身路由表中是否存在其他协议的缺省路由）<br>总是下发缺省路由，但也会学习AS内部其他ISIS路由器下发缺省路由，双出口导致环路。</p>
+<p>default-rouote-advertise match default（非强制下发缺省路由，自身路由表存在缺省路由才下发缺省路由）<br>有其他协议的缺省路由或其他ISIS进程的缺省路由时才下发缺省路由，当AS内部其他路由器下发缺省路由并且优先级比其他协议的缺省路由更好，就学习AS内部其他路由器下发的缺省路由。</p>
+<p>default-rouote-advertise route-policy<br>条件下发缺省路由，并学习AS内部其他路由器下发的缺省路由。</p>
+<p>default-route-advertise route-policy avoid-learning<br>条件下发缺省路由，不学习AS内部其他路由器下发的缺省路由。</p>
+<p>default-route-advertise always avoid-learning<br>不学习其他ISIS路由器下发缺省路由，保证其他协议或者其他ISIS进程的缺省路由在路由表中活跃，双出口防环机制。</p>
+<p>default-route-advertise match default avoid-learning<br>有其他协议的缺省路由或其他ISIS进程的缺省路由时，才下发缺省路由，当其他协议的缺省路由已经处于活跃状态，则无论优先级高低，总是不学习AS内部其他路由器下发缺省路由，当其他协议的缺省路由失效后，才学习AS内部其他路由器下发缺省路由，外部缺省再次有效时，比较优先级的高低。</p>
+<blockquote>
+<p>isis 1</p>
+<p>default-rouote-advertise route-policy default</p>
+<p>route-policy default permit node 10<br>    if-match cost 20<br>    if-match ip-prefix 2</p>
+<p>ip ip-prefix 2 index 10 permit 2.2.2.0 24<br>ip ip-prefix 2 index 20 permit 3.3.3.0 24</p>
+<p>在路由表中如果过存在2.2.2.0/24 并且cost等于20或者存在3.3.3.0/24，并且cost等于20，才下发缺省路由。</p>
+</blockquote>
+<h3 id="IS-IS的高级特性"><a href="#IS-IS的高级特性" class="headerlink" title="IS-IS的高级特性"></a>IS-IS的高级特性</h3><h4 id="扩展的TLV类型"><a href="#扩展的TLV类型" class="headerlink" title="扩展的TLV类型"></a>扩展的TLV类型</h4><ul>
+<li>ISIS为支持IPv6，扩展了以下两个TLV：</li>
+<li>IPv6 Reachability TLV [Type 236] [0xEC]<ul>
+<li>IPv6 Reachability：类型值为236（0xEC），通过前缀、度量、标记等来描述可达的IPv6前缀信息。在IPv4中有IPv4内部可达性TLV和IPv4外部可达性TLV，在IPv6的扩展中使用一个“X”bit来区分“内部”和”外部“。</li>
+</ul>
+</li>
+<li>IPv6 Interface Address TLV [Type 232] [0xE8]<ul>
+<li>IPv6 Interface Address：类型值为232（0xE8），它相当于IPv4中的“IP Interface Address” TLV，只不过把原来的32比特的IPv4地址改为128比特的IPv6地址。</li>
+</ul>
+</li>
+</ul>
+<h5 id="IPv6-Reachability-TLV"><a href="#IPv6-Reachability-TLV" class="headerlink" title="IPv6 Reachability TLV"></a>IPv6 Reachability TLV</h5><p>U：up/down bit，标识这个前缀是否是从高Level通告下来的（用来防环路）（IPv4的DUbit）</p>
+<p>X：external original bit，标识这个前缀是否是从其他路由协议中引入过来的。</p>
+<p>S：subtlv present bit，子TLV标识位。（可选）</p>
+<h5 id="IPv6-Interface-Address-TLV"><a href="#IPv6-Interface-Address-TLV" class="headerlink" title="IPv6 Interface Address TLV"></a>IPv6 Interface Address TLV</h5><ul>
+<li>IPv6 Interface Address TLV [类型232] [0xE8]<ul>
+<li>TLV232 跟TLV 132相似</li>
+<li>每个接口的地址长度变成128bits</li>
+</ul>
+</li>
+</ul>
+<p>注意：在hello PDU中，“接口地址TLV”只包含发送hello包的接口的Link-local地址；对于LSP，“接口地址TLV”只包含IS的non-link-local IPv6地址。</p>
+<blockquote>
+<p>link-local</p>
+<ul>
+<li>自动生成/手动配置</li>
+<li>默认前缀FE80::/16</li>
+<li>只能在链路上实现通信，没有路由能力</li>
+<li>每个接口只能有一个link-local地址</li>
+</ul>
+</blockquote>
+<h4 id="IS-IS-ST单拓扑"><a href="#IS-IS-ST单拓扑" class="headerlink" title="IS-IS ST单拓扑"></a>IS-IS ST单拓扑</h4><ul>
+<li>IS-IS为所有协议维护相同的SPT（Shortest  Path Tree）</li>
+<li>IPv4和IPv6的拓扑必须一致</li>
+</ul>
+<h4 id="IS-IS-MT多拓扑"><a href="#IS-IS-MT多拓扑" class="headerlink" title="IS-IS MT多拓扑"></a>IS-IS MT多拓扑</h4><ul>
+<li>MT可以使IS-IS在一个路由域中维护多个拓扑</li>
+<li>如果过支持MT，IS-IS可以为IPv4和IPv6维护分离的拓扑</li>
+<li>重要的是，使用MT，IPv4和IPv6的拓扑就不需要一样了</li>
+</ul>
+<h4 id="MT（多拓扑）：分离的拓扑"><a href="#MT（多拓扑）：分离的拓扑" class="headerlink" title="MT（多拓扑）：分离的拓扑"></a>MT（多拓扑）：分离的拓扑</h4><ul>
+<li>ISIS路由协议主要可以分为以下几个方面：<ul>
+<li>邻居的建立</li>
+<li>路由可达（Prefix Reachable）与路由器可达（IS Reachable）的发布</li>
+<li>SPF计算以及路由计算。</li>
+</ul>
+</li>
+<li>为了达到多拓扑的相互隔离，以上几个方面均要求携带MT参数以满足这一要求（SPF计算与路由计算在路由器内识别完成）。</li>
+<li>新增的四个TLV<ul>
+<li>TLV229 - Multi-Topology Identifier</li>
+<li>TLV222 - Multi-Topologies Intermediate System</li>
+<li>TLV235 - Multi-Topologies Reachable IPv4 Prefixes</li>
+<li>TLV237 - Multi-Topologies Reachable IPv6 Prefixes</li>
+</ul>
+</li>
+</ul>
 <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
 <li>路由协议工作在那一层？</li>
 </ol>
@@ -954,7 +1041,16 @@
 </li>
 <li><p>如何删除一条LSP？<br>发送这条LSP的holdtime等于0。</p>
 </li>
+<li><p>OSPF有哪些方法产生缺省路由？<br>asd</p>
+</li>
+<li><p>ISIS产生缺省路由的方法有哪些？<br>ATT位置1<br>命令下发缺省路由</p>
+</li>
+<li><p>ACL和前缀列表有什么区别？<br>ACL不仅能匹配报文特征进行报文的过滤，还能匹配路由信息使用过滤工具进行路由的过滤。<br>前缀列表只能匹配路由前缀的特征，对路由进行过滤，无法直接对报文特征进行匹配并过滤报文。</p>
+</li>
 </ol>
+<p>相对于ACL来说，prefix-list不仅能匹配前缀信息，还能匹配前缀长度，对路由的掩码范围做出定义，而ACL只能对前缀信息做出匹配，不能匹配路由的掩码信息。</p>
+<p>ACL可以对奇偶地址/奇偶路由做匹配，但前缀列表无法实现。</p>
+<p>定义奇数网段：1.1.1.0 0.0.254.255<br>定义偶数网段：1.1.0.0 0.0.254.255</p>
 <h3 id="P-bit位"><a href="#P-bit位" class="headerlink" title="P bit位"></a>P bit位</h3><p>代表分区修复功能，即表示该路由器是否支持ISIS的虚链路。</p>
 <p>骨干区域修复标志位。用于做虚链路的。但目前各大厂家还未实现，所以置0。</p>
 <p>解释：ISIS不是TCP/IP环境下的网络层协议，那么在基于IP的网络中无法实现跨链路建立ISIS邻居的功能。故无法为IP网络支持虚链路功能。</p>
@@ -1430,7 +1526,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">132.8k</span>&nbsp;字
+                class="white-color">134.3k</span>&nbsp;字
             
             
             
