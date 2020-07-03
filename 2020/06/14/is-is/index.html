@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    10.3k
+                    11.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    39 分
+                    43 分
                 </div>
                 
 
@@ -447,7 +447,7 @@
 <li>ISIS协议和IP协议是解耦的，无关联的独立的网络层协议，通过802.3以太网帧进行封装。</li>
 <li>ISIS是一种IGP协议。</li>
 <li>ISIS使用SPF算法计算路由。</li>
-<li>ISIS的波阿文采用TLV结构，因此扩展性很好。<ul>
+<li>ISIS的报文采用TLV结构，因此扩展性很好。<ul>
 <li>为支持新的协议和特性，只需要扩展新的TLV或子TLV</li>
 <li>可以轻松扩展IPv6，TE（流量工程），MT（多拓扑）等协议和特性。</li>
 <li>IS-IS对IPv6的支持不需要对协议做大的改动，因此协议的继承性很好；不像OSPF，为支持IPv6需要开发全新的协议OSPFv3。</li>
@@ -978,6 +978,67 @@
 </ul>
 </li>
 </ul>
+<h3 id="ISIS收敛步骤"><a href="#ISIS收敛步骤" class="headerlink" title="ISIS收敛步骤"></a>ISIS收敛步骤</h3><p>IS-IS的收敛可以总体描述为如下状态D+O+F+SPT+RIB+DD</p>
+<ol>
+<li>Detection<br>从链路出现故障后到路由器发现链路故障所用的时间</li>
+<li>Originate<br>生成LSP，用来描述新的网络拓扑结构</li>
+<li>Flooding<br>从发现链路故障一直到向邻居发FIB更新的时间（泛洪LSP）</li>
+<li>SPT<br>计算最短路径树的时间</li>
+<li>RIB<br>主CPU更新RIB表项和FIB表项的时间</li>
+<li>Distrbuit on Dealy<br>从主控板向线卡上发布更新路由信息的延迟</li>
+</ol>
+<p>RIB状态和DD状态一般与路由器的硬件有关，如CPU、线卡CPU、内存、网络处理器有关，这两个状态人为无法对收敛时间做出很大的改变。</p>
+<p>RIB    由主控板运行路由协议进行维护</p>
+<p>FIB     主控板的RIB表项下发到线板指导报文转发的转发表，TCAM芯片</p>
+<h4 id="链路故障检测"><a href="#链路故障检测" class="headerlink" title="链路故障检测"></a>链路故障检测</h4><p>正常情况下IS-IS链路故障检测</p>
+<ul>
+<li>由于正常情况下IS-IS的链路状态检测仅仅依赖于IS-IS协议本身，即IS-IS的IIH报文，IIH报文检测时间为妙级，不适合收敛要求高的网络。<br>将IIH发送间隔改小，可以缩短检测时间。</li>
+</ul>
+<p>用其他协议辅助IS-IS链路故障检测</p>
+<ul>
+<li>用SDH/SONET（POS）、光口以太做链路检测收敛速度比较快、为毫秒级、，但是对接口类型有依赖性。</li>
+<li>BFD技术通常应用于IP网络中做链路状态检测，BFD为毫秒级，对接口类型没有依赖性。</li>
+</ul>
+<h4 id="生成LSP的间隔时间"><a href="#生成LSP的间隔时间" class="headerlink" title="生成LSP的间隔时间"></a>生成LSP的间隔时间</h4><ul>
+<li><p>IS-IS协议中，当本地路由信息发生变化时，路由器需要产生新的LSP来通告这种变化。如果产生LSP的延迟时间过长，则会导致本地路由信息的变化无法及时通告给邻居路由器，使网络的收敛速度变慢。</p>
+</li>
+<li><p>为了加快网络的收敛速度，同时又不影响系统性能，因此在产生LSP时使用了智能定时器，它可以根据路由信息的变化频率自动调整延迟时间。 </p>
+</li>
+</ul>
+<p>time lsp-generation配置LSP生成智能定时器</p>
+<h4 id="加快泛洪LSP的时间"><a href="#加快泛洪LSP的时间" class="headerlink" title="加快泛洪LSP的时间"></a>加快泛洪LSP的时间</h4><ul>
+<li><p>LSP快速泛洪</p>
+</li>
+<li><p>为了加快整个网络的收敛速度，当IS-IS收到其它路由器发来的LSP时，如果此LSP比自己LSDB中的要新，按原来RFC协议的实现，则是用一个定时器，定时将LSDB内的LSP扩散出去，所以LSDB的同步会比较缓慢。 </p>
+</li>
+<li><p>LSP快速扩散特性改进了这种方式，配置此特性的路由器收到一个或多个比较新的LSP时，在路由计算之前，先将小于指定数目的LSP扩散出去，加快LSDB的同步过程。这种方式在很大程度上可以提高整个网络的收敛速度。</p>
+</li>
+</ul>
+<p>flash-flood</p>
+<h4 id="加快SPF的计算时间"><a href="#加快SPF的计算时间" class="headerlink" title="加快SPF的计算时间"></a>加快SPF的计算时间</h4><ul>
+<li><p>SPF算法智能定时器</p>
+</li>
+<li><p>改进了路由算法后，如果触发路由计算的间隔较长，同样会影响网路的收敛速度。使用毫秒级定时器可以缩短这个间隔时间，但如果网络变化比较频繁，又会造成过度占用CPU资源。</p>
+</li>
+<li><p>SPF智能定时器既可以对少量的外界突发事件进行快速响应，又可以避免过度的占用CPU。</p>
+</li>
+<li><p>如果拓扑变化比较频繁，智能定时器会随着计算次数的增加，间隔时间也会逐渐延长，避免占用大量的CPU资源。</p>
+</li>
+</ul>
+<p>timer spf</p>
+<h4 id="改进的SPF的计算方式"><a href="#改进的SPF的计算方式" class="headerlink" title="改进的SPF的计算方式"></a>改进的SPF的计算方式</h4><ul>
+<li><p>增量最短路径优先算法I-SPF（Incremental SPF）<br>I-SPF是指增量路由计算，顾名思义它每次只对变化的一部分拓扑进行计算，而不是对全部拓扑重新计算。</p>
+<p>l-SPF除了第一次计算时需要计算全部节点外，每次只计算影响的节点。</p>
+</li>
+<li><p>部分路由计算PRC（Partial Route Calculation）<br>部分路由计算PRC的原理与I-SPF相似，都是只计算变化的那一部分。但PRC不需要计算节点路径，而是根据I-SPF算出来的SPT来更新叶子(路由)。</p>
+</li>
+<li><p>修改广播网络为点到点可以减少网络中伪节点的数量，从而减少SPF的计算时间。</p>
+</li>
+</ul>
+<h4 id="按优先级收敛"><a href="#按优先级收敛" class="headerlink" title="按优先级收敛"></a>按优先级收敛</h4><ul>
+<li>IS-IS按优先级收敛是指在大量路由情况下，能够让某些特定的路由（例如匹配指定IP前缀的路由）优先收敛的一种技术。因此用户可以把和关键业务相关的路由配置成相对较高的优先级，使这些路由更快的收敛，从而使关键的业务收到的影响减小。通过对不同的路由配置不同的收敛优先级，达到重要的路由先收敛的目的，提高网络的可靠性。</li>
+</ul>
+<p>prefix-priority<br>缺省情况下，IS-IS主机露露有和缺省路由的收敛优先级为medium，其他IS-IS路由的收敛优先级为low。<br>收敛优先级的顺序由高到低为：critical &gt; high &gt; medium &gt; low。</p>
 <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
 <li>路由协议工作在那一层？</li>
 </ol>
@@ -1051,6 +1112,9 @@
 <p>相对于ACL来说，prefix-list不仅能匹配前缀信息，还能匹配前缀长度，对路由的掩码范围做出定义，而ACL只能对前缀信息做出匹配，不能匹配路由的掩码信息。</p>
 <p>ACL可以对奇偶地址/奇偶路由做匹配，但前缀列表无法实现。</p>
 <p>定义奇数网段：1.1.1.0 0.0.254.255<br>定义偶数网段：1.1.0.0 0.0.254.255</p>
+<ol start="14">
+<li>BFD能和什么协议联动？<br>静态路由、RIB、VRRP、OSPF、ISIS、BGP</li>
+</ol>
 <h3 id="P-bit位"><a href="#P-bit位" class="headerlink" title="P bit位"></a>P bit位</h3><p>代表分区修复功能，即表示该路由器是否支持ISIS的虚链路。</p>
 <p>骨干区域修复标志位。用于做虚链路的。但目前各大厂家还未实现，所以置0。</p>
 <p>解释：ISIS不是TCP/IP环境下的网络层协议，那么在基于IP的网络中无法实现跨链路建立ISIS邻居的功能。故无法为IP网络支持虚链路功能。</p>
@@ -1526,7 +1590,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">134.3k</span>&nbsp;字
+                class="white-color">135.6k</span>&nbsp;字
             
             
             
