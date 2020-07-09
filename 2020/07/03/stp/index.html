@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    513
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    8 分
                 </div>
                 
 
@@ -468,13 +468,181 @@
 <p>AP（备用端口）：既不是RP也不是DP的端口，被阻塞的端口 。</p>
 <p>BPDU中4个选举参数</p>
 <ul>
-<li>RID（Root Identifier）     根桥的BID</li>
-<li>RPC（Root Path Cost）  对于根桥来说RPC永远等于0<pre><code>对于非根桥来说RPC是自己根端口到根桥的路径开销之和。</code></pre></li>
-<li>BID（Bridge Identifier）  交换机自身的的BID</li>
-<li>PID（Port Identifer）       由端口优先级+端口id组成，优先级的取值为0-240，默认值128，取16的倍数。</li>
+<li>RID（Root Identifier）<br>   根桥的BID</li>
+<li>RPC（Root Path Cost）<pre><code>对于根桥来说RPC永远等于0</code></pre>   对于非根桥来说RPC是自己根端口到根桥的路径开销之和。</li>
+<li>BID（Bridge Identifier）<br>   交换机自身的的BID</li>
+<li>PID（Port Identifer）<br>   由端口优先级+端口id组成，优先级的取值为0-240，默认值128，取16的倍数。</li>
 </ul>
 <p>什么是最好的BPDU？</p>
-<h3 id="STP拓扑计算"><a href="#STP拓扑计算" class="headerlink" title="STP拓扑计算"></a>STP拓扑计算</h3><h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
+<ol>
+<li>比较RID，RID越小越优。</li>
+<li>如果RID相同，则比较RPC路径和，越小越优</li>
+<li>如果RPC路径和相同，则比较BID，越小越优</li>
+<li>如果BID相同，则比较PID，越小越优</li>
+<li>如果PID相同，则比较自身PID（特殊场景下：有hub的场景）</li>
+</ol>
+<p>{4096_S1，0，4096_S1，128.4}</p>
+<p>{根桥ID，累计根路径开销，发送者BID，发送端口PID}</p>
+<h3 id="STP的BPDU"><a href="#STP的BPDU" class="headerlink" title="STP的BPDU"></a>STP的BPDU</h3><ul>
+<li>配置BPDU<ol>
+<li>TCA配置BPDU</li>
+<li>TC配置BPDU</li>
+</ol>
+</li>
+<li>TCP BPDU</li>
+</ul>
+<h3 id="STP拓扑计算"><a href="#STP拓扑计算" class="headerlink" title="STP拓扑计算"></a>STP拓扑计算</h3><h4 id="STP算法实现的基本过程"><a href="#STP算法实现的基本过程" class="headerlink" title="STP算法实现的基本过程"></a>STP算法实现的基本过程</h4><ol>
+<li><p>初始状态</p>
+<p>由于每个桥都认为自己是根桥，所以在每个端口所发出的BPDU中，根桥字段都是用各自的BID，Root Path Cost字段是累计的到根桥的开销，发送者BID是自己的BID，端口PID是发送该BPDU端口的端口ID。</p>
+</li>
+<li><p>选择根桥</p>
+<p>网络初始化时，网络中所有的STP设备都认为自己是“根桥”，根桥ID为自身的设备ID。通过交换配置消息，设备之间比较根桥ID，网络中根桥ID最小的设备被选为根桥。</p>
+</li>
+<li><p>选择根端口和指定端口</p>
+</li>
+</ol>
+<ul>
+<li>非根桥根据根端口的配置消息计算DP端口的配置消息。</li>
+<li>只要根端口确定了，它就会为其他端口计算配置消息，计算出的配置消息与其他端口进行比较，如果对比后发现计算出来的更加优，则替换掉，这些端口就成为DP端口并往外发BPDU。</li>
+<li>根据RP计算DP的BPDU参数，如果比指定端口的本身的BPDU参数好，则该端口为DP端口，如果没有比指定端口本身的BPDU参数好，则该端口为AP。</li>
+</ul>
+<p>生成树拓扑的定位（工作中）</p>
+<ol>
+<li>STP首要工作定位根桥是哪台交换机。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>display stp</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>STP协议的模式</td>
+</tr>
+<tr>
+<td></td>
+<td>交换机自身的BID</td>
+</tr>
+<tr>
+<td></td>
+<td>管理员配置的时间参数</td>
+</tr>
+<tr>
+<td></td>
+<td>交换机实际实施的时间参数</td>
+</tr>
+<tr>
+<td></td>
+<td>根桥的BID，如果该值和自身的BID相同，则该交换机为根桥/ERPC：这台交换机的根端口到根桥的开销（RPC）</td>
+</tr>
+<tr>
+<td></td>
+<td>对于STP协议来说无意义，用于MSTP中。</td>
+</tr>
+<tr>
+<td></td>
+<td>根端口</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li>RID最小的&gt;RPC之和最小&gt;BID最小的&gt;BPDU中PID最小的&gt;自己的PID最小的（场景：有hub的网络中）</li>
+<li>DP对端要么是RP要么AP，RP端口一定是DP</li>
+<li>控制stp的拓扑：改RID、RPC、BID、PID</li>
+</ol>
+<h3 id="STP的端口开销"><a href="#STP的端口开销" class="headerlink" title="STP的端口开销"></a>STP的端口开销</h3><ul>
+<li><p>标准：IEEE802.1d-1998、IEEE802.1t、华为计算方法。</p>
+</li>
+<li><p>端口开销与端口速率、端口模式相关联。</p>
+</li>
+</ul>
+<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><p>更改端口开销标准：stp pathcost-standard </p>
+<p>更改端口开销：接口视图下stp cost </p>
+<h3 id="STP端口状态"><a href="#STP端口状态" class="headerlink" title="STP端口状态"></a>STP端口状态</h3><table>
+<thead>
+<tr>
+<th>端口状态</th>
+<th>目的</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Forwarding</td>
+<td>端口既转发用户流量也处理BPDU报文。</td>
+<td>只有根端口或指定端口才能进入Forwarding状态。</td>
+</tr>
+<tr>
+<td>Learning</td>
+<td>设备会根据收到的用户流量构建MAC地址表，但不转发用户流量。</td>
+<td>过渡状态，增加Learning状态防止临时环路。</td>
+</tr>
+<tr>
+<td>Listening</td>
+<td>确定端口角色，将选举出根桥、根端口和指定端口。</td>
+<td>过渡状态。</td>
+</tr>
+<tr>
+<td>Blocking</td>
+<td>端口仅仅接收并处理BPDU，不转发用户流量。</td>
+<td>阻塞端口的最终状态。</td>
+</tr>
+<tr>
+<td>Disabled</td>
+<td>端口不仅不处理BPDU报文，也不转发用户流量。</td>
+<td>端口状态为Down。</td>
+</tr>
+</tbody></table>
+<p>Forwarding：转发数据，学习MAC地址，处理BPDU</p>
+<p>Learning：不转发数据，学习MAC地址，处理BPDU</p>
+<p>Listening：不转发数据，不学习MAC地址，处理BPDU</p>
+<p>Blocking（discarding）：不转发数据，不学习MAC地址，处理BPDU</p>
+<p>Disable：接口被禁用</p>
+<p>稳定STP网络只有两种状态：即forwarding和blocking。</p>
+<h3 id="端口状态转换"><a href="#端口状态转换" class="headerlink" title="端口状态转换"></a>端口状态转换</h3><p>图</p>
+<p>一个选择为RP或者DP端口的并处于blocking状态至少需要30s进入到forwarding。</p>
+<ol>
+<li>非根桥的RP失效，并存在AP时，AP成为新的RP，需要经过30s（Listening15s，Learning15s）才进入转发状态。</li>
+<li>非根桥的RP失效，但不存在AP时，此时交换机认为自己失去了到根桥的所有路径。于是该交换机将自身作为根桥，发送以自己为根BPDU。下游交换机需要等待20s（Max age）将之前的BPDU老化，再处理该BPDU，此时需要50s恢复网络。（华为有优化，不等20s。直接处理。）</li>
+<li>ROOT失效，重新选举根桥，网络需要50s的恢复连接。</li>
+</ol>
+<h3 id="拓扑改变导致MAC地址表错误"><a href="#拓扑改变导致MAC地址表错误" class="headerlink" title="拓扑改变导致MAC地址表错误"></a>拓扑改变导致MAC地址表错误</h3><blockquote>
+<p>什么时候生成树协议会认为拓扑发生了变化？<br>STP协议最早认为任何端口进入到forwarding状态或者进入disable状态时，认为STP拓扑发生变化。<br>后来STP对拓扑发生变化的定义做出了优化</p>
+<ol>
+<li><p>当端口进入到forwarding状态认为拓扑发生变化。</p>
+</li>
+<li><p>RP失效或者是RP进入forwarding状态会认为拓扑发生变化。</p>
+</li>
+<li><p>DP端口失效不认为拓扑发生变化</p>
+</li>
+</ol>
+<p>华为：<br>STP协议当接口UP并过度到forwarding状态，会发送TCN BPDU，<br>逐跳传给根桥，上游向下游发送TCA=1，TC=1的配置BPDU，用于确认TCN，并将TCN逐跳传给根桥。<br>根桥在接收到TCN的端口上回送一个TCA=1，TC=1的配置BPDU，用于确认TCN，并通知为网络拓扑发生变化。<br>配置BPDU，在其他端口上则发送TCA=0，TC=1的配置BPDU。</p>
+<p>RP恢复到forwarding状态后，并且由一个指定端口在转发状态，此RP也会发TCN BPDU。</p>
+</blockquote>
+<ul>
+<li>MAC地址表项的默认老化时间是300秒</li>
+</ul>
+<h4 id="TCN-BPDU"><a href="#TCN-BPDU" class="headerlink" title="TCN BPDU"></a>TCN BPDU</h4><p><strong>BPDU通过组播工作</strong></p>
+<ul>
+<li><p>拓扑改变通知（TCN）</p>
+</li>
+<li><p>上游收到TCN BPDU后回送TCA BPDU（拓扑改变确认）并继续向上游发送TCN BPDU直到到达根桥，根桥收到后向下游回送TC置位的BPDU，传遍全网。</p>
+</li>
+<li><p>全网的交换机只要收到TC置位的BPDU，就会把自己边缘端口之外的其他端口的MAC地址老化时间置为15s。</p>
+</li>
+<li><p>发送TCN一般是AP与RP，是去往根桥的端口。发送TCA的一般是DP。首次发送TC置位的BPDU（配置BPDU报文中Flags字段的TC位置1）一般是根桥的DP，接着便是其他交换机的DP发送。</p>
+</li>
+</ul>
+<blockquote>
+<p>STP协议MAC地址表刷新机制：<br>当交换机收到TC BPDU后将自身所有端口（边缘端口除外）的MAC地址表的老化时间强制设置为15s。</p>
+<p>TC BPDU会持续由根桥发送35s的时间，这段时间网络不稳定。所以需要这35s的时间，防止学习到错误的MAC地址。</p>
+<p>边缘端口标准STP是不支持的，但是华为的STP协议支持边缘端口的设置。</p>
+</blockquote>
+<h3 id="STP-边缘端口"><a href="#STP-边缘端口" class="headerlink" title="STP 边缘端口"></a>STP 边缘端口</h3><ul>
+<li>可在连接路由器、防火墙、终端、打印机、扫描仪之类设备的接口配置。</li>
+</ul>
+<h4 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h4><p>接口视图下：stp edged-port enable</p>
+<h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
 <li>根桥只能有一个吗？<br>在一个广播域中有且只有1个根桥。</li>
 </ol>
 
@@ -955,7 +1123,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">136.1k</span>&nbsp;字
+                class="white-color">137.8k</span>&nbsp;字
             
             
             
