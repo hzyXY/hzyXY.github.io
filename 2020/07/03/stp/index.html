@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.2k
+                    2.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    9 分
                 </div>
                 
 
@@ -437,7 +437,13 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="STP"><a href="#STP" class="headerlink" title="STP"></a>STP</h2><h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><p>冗余的网络产生的3个问题（二层环路导致的问题）</p>
+                <h2 id="STP"><a href="#STP" class="headerlink" title="STP"></a>STP</h2><ul>
+<li>STP    单实例</li>
+<li>RSTP 单实例</li>
+<li>MSTP 多实例</li>
+<li>厂家都存在私有的基于vlan的STP协议，但并没有成为标准。<br>思科 PVSTP PVSTP+<br>华为 VBST 实现和友商的PVSTP兼容。</li>
+</ul>
+<h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><p>冗余的网络产生的3个问题（二层环路导致的问题）</p>
 <ol>
 <li>广播风暴，交换机转发BUM报文的机制导致（泛洪方式转发），数据帧没有防环机制导致环路无法消除。<br>B：boradcast<br>U：未知DMAC地址单播帧<br>M：组播</li>
 <li>MAC地址表震荡，生成错误的MAC地址表项，导致转发发生错误。</li>
@@ -468,15 +474,10 @@
 <p>AP（备用端口）：既不是RP也不是DP的端口，被阻塞的端口 。</p>
 <p>BPDU中4个选举参数</p>
 <ul>
-<li><p>RID（Root Identifier）<br>   根桥的BID</p>
-</li>
-<li><p>RPC（Root Path Cost）</p>
-<p>   对于根桥来说RPC永远等于0<br>   对于非根桥来说RPC是自己根端口到根桥的路径开销之和。</p>
-</li>
-<li><p>BID（Bridge Identifier）<br>   交换机自身的的BID</p>
-</li>
-<li><p>PID（Port Identifer）<br>   由端口优先级+端口id组成，优先级的取值为0-240，默认值128，取16的倍数。</p>
-</li>
+<li>RID（Root Identifier）<br>   根桥的BID</li>
+<li>RPC（Root Path Cost）<pre><code>对于根桥来说RPC永远等于0</code></pre>   对于非根桥来说RPC是自己根端口到根桥的路径开销之和。</li>
+<li>BID（Bridge Identifier）<br>   交换机自身的的BID</li>
+<li>PID（Port Identifer）<br>   由端口优先级+端口id组成，优先级的取值为0-240，默认值128，取16的倍数。</li>
 </ul>
 <p>什么是最好的BPDU？</p>
 <ol>
@@ -489,13 +490,37 @@
 <p>{4096_S1，0，4096_S1，128.4}</p>
 <p>{根桥ID，累计根路径开销，发送者BID，发送端口PID}</p>
 <h3 id="STP的BPDU"><a href="#STP的BPDU" class="headerlink" title="STP的BPDU"></a>STP的BPDU</h3><ul>
-<li>配置BPDU<ol>
+<li><p>标准STP由根桥发送配置BPDU，非根桥是不能主动发送BPDU的。（华为优化：非根桥可主动发送BPDU，不用等根桥的BPDU到来）</p>
+</li>
+<li><p>配置BPDU</p>
+<ol>
 <li>TCA配置BPDU</li>
 <li>TC配置BPDU</li>
 </ol>
 </li>
-<li>TCP BPDU</li>
+<li><p>TCN BPDU</p>
+</li>
 </ul>
+<p>BDPU中 BPDU FLAG字段<br>TCA = 0 TC = 0 配置BPDU<br>TCA = 1 TC = 0 TCA配置BPDU<br>TCA = 0 TC = 1 TC配置BPDU<br>TCA = 1 TC = 1 TC/TCA配置BPDU</p>
+<p>Message Age：已经存活的时间，根桥发出来是0，逐跳加1。当Message Age等于Max Age则认为该BPDU失效</p>
+<p>Max Age：最大老化时间，默认20s</p>
+<p>Hello Time：默认为2s，发送配置BPDU的时间间隔。</p>
+<p>Forward Delay：默认为15s，转发时间间隔。</p>
+<ol>
+<li>确定了监听和学习状态所需等待的时间。</li>
+<li>收到TC BPDU后MAC地址表老化时间。</li>
+</ol>
+<blockquote>
+<p>华为STP 根桥发送配置BPDU，非根桥也可以主动发送BPDU（华为从RSTP引入）</p>
+<p>华为STP协议引入了大量RSTP的特点：</p>
+<ol>
+<li>非根桥可以主动发送BDPU</li>
+<li>收到次级BPDU立即老化</li>
+<li>边缘端口</li>
+</ol>
+</blockquote>
+<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><p>只能在根桥上配，不然无效。</p>
+<p>系统视图下：<br>stp timer hello<br>stp max-age<br>stp forward-delay </p>
 <h3 id="STP拓扑计算"><a href="#STP拓扑计算" class="headerlink" title="STP拓扑计算"></a>STP拓扑计算</h3><h4 id="STP算法实现的基本过程"><a href="#STP算法实现的基本过程" class="headerlink" title="STP算法实现的基本过程"></a>STP算法实现的基本过程</h4><ol>
 <li><p>初始状态</p>
 <p>由于每个桥都认为自己是根桥，所以在每个端口所发出的BPDU中，根桥字段都是用各自的BID，Root Path Cost字段是累计的到根桥的开销，发送者BID是自己的BID，端口PID是发送该BPDU端口的端口ID。</p>
@@ -562,7 +587,7 @@
 <li><p>端口开销与端口速率、端口模式相关联。</p>
 </li>
 </ul>
-<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><p>更改端口开销标准：stp pathcost-standard </p>
+<h4 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h4><p>更改端口开销标准：stp pathcost-standard </p>
 <p>更改端口开销：接口视图下stp cost </p>
 <h3 id="STP端口状态"><a href="#STP端口状态" class="headerlink" title="STP端口状态"></a>STP端口状态</h3><table>
 <thead>
@@ -614,12 +639,9 @@
 <h3 id="拓扑改变导致MAC地址表错误"><a href="#拓扑改变导致MAC地址表错误" class="headerlink" title="拓扑改变导致MAC地址表错误"></a>拓扑改变导致MAC地址表错误</h3><blockquote>
 <p>什么时候生成树协议会认为拓扑发生了变化？<br>STP协议最早认为任何端口进入到forwarding状态或者进入disable状态时，认为STP拓扑发生变化。<br>后来STP对拓扑发生变化的定义做出了优化</p>
 <ol>
-<li><p>当端口进入到forwarding状态认为拓扑发生变化。</p>
-</li>
-<li><p>RP失效或者是RP进入forwarding状态会认为拓扑发生变化。</p>
-</li>
-<li><p>DP端口失效不认为拓扑发生变化</p>
-</li>
+<li>当端口进入到forwarding状态认为拓扑发生变化，边缘端口除外。</li>
+<li>RP失效或者是RP进入forwarding状态会认为拓扑发生变化。</li>
+<li>DP端口失效不认为拓扑发生变化。</li>
 </ol>
 <p>华为：<br>STP协议当接口UP并过度到forwarding状态，会发送TCN BPDU，<br>逐跳传给根桥，上游向下游发送TCA=1，TC=1的配置BPDU，用于确认TCN，并将TCN逐跳传给根桥。<br>根桥在接收到TCN的端口上回送一个TCA=1，TC=1的配置BPDU，用于确认TCN，并通知为网络拓扑发生变化。<br>配置BPDU，在其他端口上则发送TCA=0，TC=1的配置BPDU。</p>
 <p>RP恢复到forwarding状态后，并且由一个指定端口在转发状态，此RP也会发TCN BPDU。</p>
@@ -644,9 +666,12 @@
 <p>边缘端口标准STP是不支持的，但是华为的STP协议支持边缘端口的设置。</p>
 </blockquote>
 <h3 id="STP-边缘端口"><a href="#STP-边缘端口" class="headerlink" title="STP 边缘端口"></a>STP 边缘端口</h3><ul>
-<li>可在连接路由器、防火墙、终端、打印机、扫描仪之类设备的接口配置。</li>
+<li><p>由于TCN BPDU会导致大量的MAC地址提前老化（包括正确的MAC地址），导致大量未知单播帧的泛洪。可以利用边缘端口的机制来减少未知单播帧的泛洪。</p>
+</li>
+<li><p>可在连接路由器、防火墙、终端、打印机、扫描仪之类设备的接口配置。</p>
+</li>
 </ul>
-<h4 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h4><p>接口视图下：stp edged-port enable</p>
+<h4 id="命令-2"><a href="#命令-2" class="headerlink" title="命令"></a>命令</h4><p>接口视图下：stp edged-port enable</p>
 <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
 <li>根桥只能有一个吗？<br>在一个广播域中有且只有1个根桥。</li>
 </ol>
@@ -1126,7 +1151,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">145.3k</span>&nbsp;字
+                class="white-color">145.7k</span>&nbsp;字
             
             
             
