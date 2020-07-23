@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="智能选路, XY">
+    <meta name="keywords" content="TAC, XY">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>智能选路 | XY</title>
+    <title>TAC | XY</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -258,12 +258,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/55.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">智能选路</h1>
+                    <h1 class="description center-align post-title">TAC</h1>
                 </div>
             </div>
         </div>
@@ -380,12 +380,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                <span class="chip bg-color">华为</span>
-                            </a>
-                        
-                            <a href="/tags/%E6%99%BA%E8%83%BD%E9%80%89%E8%B7%AF/">
-                                <span class="chip bg-color">智能选路</span>
+                            <a href="/tags/%E6%8E%92%E9%94%99/">
+                                <span class="chip bg-color">排错</span>
                             </a>
                         
                     </div>
@@ -409,7 +405,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-31
+                    2020-07-21
                 </div>
                 
 
@@ -418,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.8k
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    6 分
+                    4 分
                 </div>
                 
 
@@ -441,74 +437,27 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="智能选路"><a href="#智能选路" class="headerlink" title="智能选路"></a>智能选路</h2><p>企业通常会在网络出口部署多条链路，以此提高出口链路的带宽和可靠性。<br>但是由于出口设备在转发流量时一般是随机选择一条链路转发流量并不考虑各条链路的实际带宽或链路的实时状态，因此在实际应用中会存在如下问题：</p>
-<ol>
-<li>如果各条链路的带宽不等，则很可能出现某些带宽大的链路空闲、某些带宽小的链路拥塞的情况，从而造成链路资源的浪费。</li>
-<li>由于不同ISP链路的传输质量和服务费用不同，有时用户希望优先保证业务的传输质量，有时希望优先使用费用较低的链路，而平分流量是无法实现这些需求的。</li>
-<li>当出口设备与目的设备之间的链路出现故障或者目的设备上的服务不可用时，如果流量被转发到相应的链路上，则将造成访问失败。</li>
-</ol>
-<ul>
-<li>智能选路是指到达目的网络有多条链路可选时，FW通过不同的智能选路方式，即根据链路带宽、权重、优先级或者自动探测到的链路质量，动态选择最优链路，并根据各链路实时状态动态调整分配结果，以此提高链路资源的利用率和用户体验。</li>
-</ul>
-<h3 id="智能选路分类"><a href="#智能选路分类" class="headerlink" title="智能选路分类"></a>智能选路分类</h3><ol>
-<li><strong>出站智能选路</strong>：当内网用户访问外网时，如果到达目的网络有多条链路可选，FW进行智能的选路。</li>
-<li><strong>入站智能选路</strong>：当外网用户通过域名访问内网服务器时，向企业内网DNS服务器发起DNS请求，DNS服务器返回解析后地址给外网用户，FW可以将DNS回应报文中的解析地址进行智能的修改，使用户能够获得最合适的解析地址，避免链路拥塞或者跨运营商访问，这种解析方式称为<strong>智能DNS</strong>。</li>
-</ol>
-<h4 id="出站智能选路"><a href="#出站智能选路" class="headerlink" title="出站智能选路"></a>出站智能选路</h4><h5 id="全局选路策略（基于等价路由或缺省路由的出站智能选路）"><a href="#全局选路策略（基于等价路由或缺省路由的出站智能选路）" class="headerlink" title="全局选路策略（基于等价路由或缺省路由的出站智能选路）"></a>全局选路策略（基于等价路由或缺省路由的出站智能选路）</h5><ul>
-<li>按照不同的选路方式转发流量到各条链路上，并根据各条链路的实时状态动态调整分配结果，由此提高链路资源的利用率和用户体验。</li>
-</ul>
-<p>负载分担方式：</p>
-<ol>
-<li><p>根据链路带宽负载分担</p>
-</li>
-<li><p>根据链路质量负载分担</p>
-</li>
-<li><p>根据链路权重负载分担</p>
-</li>
-<li><p>根据链路优先级主备备份</p>
-</li>
-</ol>
-<h5 id="策略路由（基于策略路由的出站智能选路）"><a href="#策略路由（基于策略路由的出站智能选路）" class="headerlink" title="策略路由（基于策略路由的出站智能选路）"></a>策略路由（基于策略路由的出站智能选路）</h5><ul>
-<li>策略路由是在路由表已经产生的情况下，不按照现有的路由表进项转发，而是根据用户指定的策略进行路由选择的机制，从更多的维度（如接口、源安全区域、源/目的IP地址、用户、服务、应用）来决定报文如何转发，增加了在报文转发控制上的灵活度。</li>
-</ul>
-<p>通过策略路由，可以实现下述功能，可根据需要进行选配。</p>
-<ol>
-<li>基于用户的选路：指定用户/用户组只能通过指定的链路访问互联网。</li>
-<li>基于应用、协议类型的选路</li>
-</ol>
-<p>基于应用、协议类型的选路</p>
-<p><strong>策略路由的动作</strong></p>
-<p>如果策略路由配置的所有匹配条件都匹配，则此流量成功匹配该策略路由规则，并执行策略路由的动作。策略路由的动作包括：</p>
-<ul>
-<li>转发：按照策略路由转发。根据出接口的不同类型，又分为：<ul>
-<li>单出口：把报文发送到指定的下一跳设备或者从指定出接口发送报文。</li>
-<li>多出口：利用智能选路功能，从多个出接口中选择一个出接口发送报文。</li>
-</ul>
-</li>
-<li>转发其他虚拟系统：按照策略路由将流量转发至其他虚拟系统。</li>
-<li>不做策略路由，按照现有的路由表进行转发。</li>
-</ul>
-<h5 id="ISP选路（基于ISP路由的选路）"><a href="#ISP选路（基于ISP路由的选路）" class="headerlink" title="ISP选路（基于ISP路由的选路）"></a>ISP选路（基于ISP路由的选路）</h5><p>ISP选路是基于ISP路由的选路方式，通过批量生成到运营商网络的ISP路由实现访问特定ISP网络的报文都从相应的出接口转发。ISP选路可以单独使用，也可以结合其他智能选路功能一起使用。</p>
-<p><strong>ISP选路场景</strong></p>
-<p>1.ISP选路<br>如果用户希望访问特定ISP网络的流量从相应出接口转发，不会绕道其他ISP，可以配置ISP选路功能。</p>
-<p>2.ISP选路+策略路由组合</p>
-<p>如果用户希望根据报文目的地址所属ISP网络选择相应的出接口，并根据多出口策略路由进行智能的选路，实现链路资源的合理利用，可以使用该场景。</p>
-<p>3.ISP选路+全局选路策略+DNS透明代理组合</p>
-<p>当内网用户通过域名访问Web服务器时，可以使用该场景。通过配置DNS透明代理，可以使DNS请求报文根据选择的出接口，修改DNS请求报文的目的地址（DNS服务器地址）。通过配置ISP选路和全局选路策略，FW根据报文目的地址所属ISP网络选择相应的出接口，并根据全局选路策略，实现链路资源的合理利用。</p>
-<ul>
-<li>DNS透明代理：<br>对于命中DNS透明代理策略的DNS请求报文，FW会根据DNS请求报文选择的出接口，修改请求报文的目的地址（DNS服务器地址），即将其修改为其他ISP内的DNS服务器地址。</li>
-</ul>
-<h4 id="入站智能选路"><a href="#入站智能选路" class="headerlink" title="入站智能选路"></a>入站智能选路</h4><h5 id="智能DNS："><a href="#智能DNS：" class="headerlink" title="智能DNS："></a>智能DNS：</h5><p>将DNS回应报文中的解析地址进行修改，使用户能够获得与用户属于同一ISP网络的地址。用户发起实际访问流量时会以此地址为目的地址。</p>
-<p><strong>智能DNS可以分为：</strong></p>
-<ul>
-<li>单服务器智能DNS：当企业内网只部署一台Web服务器，即企业内网的DNS服务器上Web服务器的域名与一个Web服务器的IP地址对应时，选择配置单服务器智能DNS。</li>
-<li>多服务器智能DNS：当企业内网部署多台Web服务器，即企业内网的DNS服务器上Web服务器的域名与多个Web服务器的IP地址对应时，选择配置多服务器智能DNS。</li>
-</ul>
-<p><strong>智能DNS功能需要配合NAT Server功能和源进源出功能一起使用。</strong></p>
-<ul>
-<li>通过NAT Server功能，将访问报文的目的地址由公网地址映射为Web服务器的私网地址。</li>
-<li>通过源进源出功能，可以保证转发DNS响应报文时，直接使用入接口作为DNS响应报文的出接口，而不是通过查找路由表来确定出接口，避免报文来回路径不一致导致访问速度慢或业务中断等问题。</li>
-</ul>
+                <h2 id="TAC"><a href="#TAC" class="headerlink" title="TAC"></a>TAC</h2><h3 id="TAC1、AR29的loopback0无法访问AR28的loopback0"><a href="#TAC1、AR29的loopback0无法访问AR28的loopback0" class="headerlink" title="TAC1、AR29的loopback0无法访问AR28的loopback0"></a>TAC1、AR29的loopback0无法访问AR28的loopback0</h3><p><img src="/2020/07/21/tac/TAC1.jpg" alt="TAC1拓扑"></p>
+<h4 id="一、故障根因判断"><a href="#一、故障根因判断" class="headerlink" title="一、故障根因判断"></a>一、故障根因判断</h4><p>AR29的loopback0地址无法访问AR28的loopback0地址的根本原因是因为AR29与AR28用于建立OSPF邻居关系的接口不在同一个广播域中，LSW6上连接AR29与AR28的接口VLAN划分错误。</p>
+<h4 id="二、故障分析"><a href="#二、故障分析" class="headerlink" title="二、故障分析"></a>二、故障分析</h4><p>2.1 故障现象重现    ping -a 10.5.1.29 10.5.1.28<br>由以上输出结果可知确实存在此故障，由于AR29与AR28之间运行OSPF路由协议，<br>所以在AR29上进一步查看路由表以确定是否存在AR28的loopback0接口地址的路由信息。</p>
+<p>2.2 在AR29上检查路由表    display ip routing-table<br>由以上输出可知AR29并没有到AR28的loopback0接口地址的路由，所以需要检查AR29与AR28的OSPF邻居关系是否正常；</p>
+<p>2.3 在AR29上检查OSPF邻居关系是否正常    display ospf peer<br>如上输出可知AR29在区域0没有与AR28 AR27建立OSPF邻居关系，所以初步判断OSPF配置错误，需进一步检查。</p>
+<p>2.4 由于AR27与AR28 AR29处于同一个OSPF域中，所以可以通过AR27的测试结果来判断AR28配置是否正确。    display ospf peer<br>由以上输出可知AR27与AR28能正常建立OSPF邻居关系，并且AR27能够学习到AR28的loopback0地址，说明AR28 ospf配置正确，此时需要对比AR27与AR29的OSPF配置是否一致来判断AR29的OSPF是否配置正确。</p>
+<p>2.5 在AR27/AR29上分别用display ospf brief命令来检查对比AR29是否配置了OSPF。<br>通过以上输出可以看出AR29的OSPF配置正确并且把loopback0也加入了区域0中，所以需要进一步检查OSPF邻居建立是否出现了其他错误。</p>
+<p>2.6 在AR29上使用display ospf error interface命令检查是否出现OSPF邻居建立的错误报文。<br>由以上输出可知OSPF并没有接收到任何错误报文信息，因为只有两种情况会造成此现象，一是OSPF邻居关系正常建立，二是OSPF完全没有接收到任何报文。由于OSPF邻居没有正常建立，所以可以判断<br>OSPF没有正常接收到任何报文，初步判断为AR29与AR28用户建立OSPF的三层地址不通，需进一步判断。</p>
+<p>2.7 在AR29上用命令ping -a 10.5.128.29 10.5.128.28 来测试三层地址是否可达。<br>由以上输出结果可知AR29与AR28之间用于建立OSPF邻居关系的三层IP地址不可达，进一步判断二层是否互通。</p>
+<p>2.8 在AR29上检查ARP表，看是否有AR28的IP-MAC的映射关系。    display arp<br>由以上输出可知AR29的ARP表中并没有AR28 10.5.128.28地址的IP-MAC映射关系，所以初步判断AR29连接LSW6的接口DOWN，需进一步检查。</p>
+<p>2.9 在AR29上采用两次display interface GigabitEthernet 0/0/0 来检查AR29连接LSW6的接口是否正常。<br>由以上上输出可以看出AR29连接LSW6的接口物理和协议正常，并且能够两次输出结果中的组播报文在增长，所以可以判断端口正常。</p>
+<p>结论：通过以上测试结果可以发现，AR29的ospf配置正常，AR29与LSW6直连的接口正常，AR28 OSPF配置正常，但是AR29与AR28用于建立OSPF邻居关系的三层及二层地址不可达。所以可以判断故障的<br>根本原因为AR29与AR28用于建立OSPF邻居关系的IP地址不在同一个广播域，LSW6上用于连接AR29与AR28的接口VLAN划分错误。</p>
+<h4 id="三、故障处理"><a href="#三、故障处理" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 LSW6 vlan划分错误的故障处理需在LSW6上执行以下命令：<br>3.2 其他高可能性故障–LSW6上配置了MuxVlan则需在LSW6上执行以下命令：<br>3.3 其他高可能性故障–LSW6和AR28上配置了过滤策略则需在AR28 LSW6设备上执行以下命令：<br>3.4 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
+<h4 id="总结记忆"><a href="#总结记忆" class="headerlink" title="总结记忆"></a>总结记忆</h4><blockquote>
+<p><strong>故障根因判断</strong></p>
+<p><strong>故障分析</strong></p>
+<p>故障重现——检查路由表</p>
+<p>检查OSPF邻居关系——对比OSPF的配置——检查OSPF邻居建立是否出现错误报文</p>
+<p>检查三层地址是否可达——检查IP-MAC映射关系——检查接口是否正常</p>
+<p><strong>故障处理</strong></p>
+</blockquote>
 
             </div>
             <hr/>
@@ -534,7 +483,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hzyxy.github.io/2020/03/31/zhi-neng-xuan-lu/">https://hzyxy.github.io/2020/03/31/zhi-neng-xuan-lu/</a>
+                    <a href="https://hzyxy.github.io/2020/07/21/tac/">https://hzyxy.github.io/2020/07/21/tac/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -572,12 +521,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                                    <span class="chip bg-color">华为</span>
-                                </a>
-                            
-                                <a href="/tags/%E6%99%BA%E8%83%BD%E9%80%89%E8%B7%AF/">
-                                    <span class="chip bg-color">智能选路</span>
+                                <a href="/tags/%E6%8E%92%E9%94%99/">
+                                    <span class="chip bg-color">排错</span>
                                 </a>
                             
                         </div>
@@ -743,28 +688,78 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/04/03/ip-link/">
+                <a href="/2020/07/21/tac/">
                     <div class="card-image">
                         
-                        <img src="/images/23.jpg" class="responsive-img" alt="IP-Link">
+                        <img src="/images/55.jpg" class="responsive-img" alt="TAC">
                         
-                        <span class="card-title">IP-Link</span>
+                        <span class="card-title">TAC</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            IP-Link的介绍与配置
+                            TAC
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-03
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-21
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
+                                </a>
+                            
+                            
                         </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%8E%92%E9%94%99/">
+                        <span class="chip bg-color">排错</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/07/10/hcie-r-sv3.0-mian-shi-zheng-li/">
+                    <div class="card-image">
+                        
+                        <img src="/images/55.jpg" class="responsive-img" alt="HCIE R&S v3.0面试题">
+                        
+                        <span class="card-title">HCIE R&S v3.0面试题</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            HCIE R&S v3.0面试题整合
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-10
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -780,72 +775,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">配置</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/">
-                        <span class="chip bg-color">高可靠性</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2020/03/31/fang-huo-qiang-yuan-jin-yuan-chu/">
-                    <div class="card-image">
-                        
-                        <img src="/images/4.jpg" class="responsive-img" alt="源进源出">
-                        
-                        <span class="card-title">源进源出</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            使得来回路径一致
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-31
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Cyber-security/" class="post-category">
-                                    Cyber security
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
-                        <span class="chip bg-color">华为</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">
-                        <span class="chip bg-color">防火墙</span>
+                    <a href="/tags/%E9%9D%A2%E8%AF%95/">
+                        <span class="chip bg-color">面试</span>
                     </a>
                     
                 </div>

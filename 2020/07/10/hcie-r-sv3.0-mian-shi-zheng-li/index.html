@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.5k
+                    8.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    26 分
+                    29 分
                 </div>
                 
 
@@ -649,6 +649,8 @@
 <li>问大型割接。<br>考官直接说让我在答割接时结合个人项目经验答题我说分：         割接前准备                   割接背景，包括原因，目的，可行性                   割接人员组织架构，人员，分工，电话                   割接工作步骤细分         —————————–此处考官打断我说话，直接让谈项目经验，经历过的故障到分析到排查和解决过程。         割接前确认         割接实施         割接后留守观察追问：如果有丢包，你怎么处理？我答：部分丢包，按PC-Router-Router-server思路查错，按实际经验，物理原因的多，包括传输误码大，网线松动，网卡问题。完全丢包，分控制平面和数据转发平面。先看控制平面，查看有没有去往目的网段路由，如果有，则看数据转发层，如果有没有acl、route-policy等策略。主要看接口。追问：什么是窗口时间？</li>
 <li>局域网中有多台组播路由器，哪台向成员发送IGMP消息？<br>IGMPV1：由DR发送，选优先级大的，如果一样大，就选择IP地址大的；IGMPV2/IGMPV3：由查询者发送，选IP地址小的。之后，不停直接讲IGMPv1v2v3的区别。追问：V1里面的是叫什么，我说就叫DR，考官说也算吧。追问：组播路由器转发SSM报文，路由器配置什么版本的IGMP?我说IGMPV3，如果是IGMPV1V2需要配置SSM Mapping使用，使支持特定源组查询。副考官追问：四台路由器一字排开，分别是区域12，区域0，区域34，问有几个一类LSA?AR3和AR4学到几条关于12.0的三类LSA?有几个DR? </li>
 </ol>
+<h4 id="三十九"><a href="#三十九" class="headerlink" title="三十九"></a>三十九</h4><p>一、 ppp的chap认证如何区别于其他类型认证做到安全性保证<br>追问1: ppp建链过程<br>追问2:修改一边的认证密码会怎样<br>追问3: ppp链路上两边接口网段不一致可以建立ospf邻接吗<br>追问4: 除了chap认证还有什么<br>追问5: ppp认证除了在串行链路上，还有什么其他应用场景(这里我答pppoe)<br>追问6: pppoe设计的设备组成是什么样的<br>追问7: pppoe跟hdcp的过程有什么区别<br>追问8:以太网接入还有什么认证方法(这里我答802.1x<br>追问9:802.1x认证涉及的设备组成是什么样的<br>追问10:802.1x认证需要客户端吗<br>还有几个追问，我忘了<br>二、ospf、isis和bgp的路由撤销<br>追问1: ospf的lsa使用什么报文发送<br>追问2: ospf还有那些报文，分别有什么作用<br>追问3: dd报文有什么作用<br>追问4: isis两种网络类型的数据库同步过程<br>追问4: bgp路由撤销时包含路径属性吗<br>追问5: mp-bgp里的rd和rt有什么作用，哪个是bgp的路径属性<br>追问6: BGP公认团体属性有哪些,<br>中间有几个追问我忘了<br>三、大型割接方案介绍:<br>追问1:什么是到货即损<br>追问2:到货即损要走什么样的流程:<br>追问3:如果要割接两台核心路由器(思科换华为)，第一步要干什么(答保存快照)<br>追问4:什么是快照”<br>追问5:有没有什么表象也要保存<br>追问6:什么是回退<br>追问7:应急预案和回退一样吗<br>追问8:什么是部分回退和完全回退<br>追问9:回退失败怎么办<br>追问10:考生你有什么项目经验<br>追问11:那你讲讲无线的漫游<br>追问12:二层漫游和三层漫游的区别<br>这部分的追问记得比较全</p>
+<p>准备了很久也挺充分的，所以面试总体来说并不难，将近30个追问（第一题面了30分钟，第二题20分钟，第三题10分钟，所以第三题还没讲两分钟就被打断开始追问了）只有一个BGP公认团体属性忘记了没答上来，最终面试官的评价也只是让我回去再回顾一下BGP公认团体属性。考完感觉挺稳，第三天成绩就出来了。<br>在准备的时候，做了很多实验，抓了很多报文，看了路由交换两份产品文档、官方课程和《HCIE学习指南》，熬了几天几夜终成正果，各位备考的兄弟们加油！！！</p>
 
             </div>
             <hr/>
@@ -879,29 +881,28 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/07/10/hcie-r-sv3.0-mian-shi-zheng-li/">
+                <a href="/2020/07/21/tac/">
                     <div class="card-image">
                         
-                        <img src="/images/55.jpg" class="responsive-img" alt="HCIE R&S v3.0面试题">
+                        <img src="/images/55.jpg" class="responsive-img" alt="TAC">
                         
-                        <span class="card-title">HCIE R&S v3.0面试题</span>
+                        <span class="card-title">TAC</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            HCIE R&S v3.0面试题整合
+                            TAC
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-10
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-21
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -914,12 +915,11 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E9%9D%A2%E8%AF%95/">
-                        <span class="chip bg-color">面试</span>
+                    <a href="/tags/%E6%8E%92%E9%94%99/">
+                        <span class="chip bg-color">排错</span>
                     </a>
                     
                 </div>
@@ -1119,7 +1119,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">145.7k</span>&nbsp;字
+                class="white-color">147.5k</span>&nbsp;字
             
             
             
