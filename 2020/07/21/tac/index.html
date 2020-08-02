@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.3k
+                    4.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    16 分
                 </div>
                 
 
@@ -476,6 +476,40 @@
 <p><strong>故障分析</strong></p>
 <p>故障现象重现——检查路由表</p>
 <p>检查AR29的OSPF邻居关系——检查AR29的相关接口ospf信息——测试3层连通性——检查OSPF邻居建立是否接收到错误的报文——在AR29上打开调试命令</p>
+<p><strong>故障处理</strong></p>
+<h3 id="3tac3、AR32的loopback0无法访问AR28的loopback0"><a href="#3tac3、AR32的loopback0无法访问AR28的loopback0" class="headerlink" title="3tac3、AR32的loopback0无法访问AR28的loopback0"></a>3tac3、AR32的loopback0无法访问AR28的loopback0</h3><p><img src="/2020/07/21/tac/TAC3.jpg" alt="TAC3拓扑"></p>
+<h4 id="一、故障根因判断-2"><a href="#一、故障根因判断-2" class="headerlink" title="一、故障根因判断"></a>一、故障根因判断</h4><p>1.1 AR28在区域0下做了针对自身loopback0接口的路由汇总后面加关键字not-advertise<br>1.2 AR28上做了针对自身loopback0接口的3类LSA的过滤行为（在AREA0的export方向，或者AREA1的import方向）<br>1.3 AR28上使用filter-policy import命令对loopabck0接口的路由做了过滤。<br>1.4 AR28的G2/0/0接口上使用了ospf filter-lsa-out summary acl命令做了3类LSA泛洪过滤。</p>
+<h4 id="二、故障分析-1"><a href="#二、故障分析-1" class="headerlink" title="二、故障分析"></a>二、故障分析</h4><p>2.1 在AR32上，使用Ping测试AR28的Loopback0接口地址，验证故障现象是否存在，测试及结果如下所示：<br>由以上输出可见，此故障现象确实存在，由于AR32通过OSPF协议计算AR28的Loopback0地址的路由，所以需要在AR32上检查是否存在到AR28的Loopback0接口地址的路由。</p>
+<p>2.2 在AR32上用display ip routing-table命令检查是否存在AR28的Loopback0地址的路由，测试及输出结果如下所示：<br>如上输出可知,AR32不存在AR28的Loopback0地址的路由，由于AR32与AR28运行OSPF协议，所以需要进一步检查OSPF邻居关系是否建立。</p>
+<p>2.3 在AR32上通过display ospf peer brief查看AR32与AR28的OSPF邻居关系是否正常，测试及输出结果如下所示：<br>如上输出可知，AR32与AR28建立了OSPF邻居关系，由于OSPF计算出对方路由的前提是收到对方的LSA,所以在AR32上查看OSPF的LSDB.</p>
+<p>2.4 在AR32上通过命令：display ospf lsdb查看当前数据库中是否有AR28的loopback0口对应的LSA.<br>在AR32上执行命令display ospf lsdb，查看ospf的链路状态数据库，显示结果如下：<br>结果表明LSDB中没有存在AR28 loopback 0所对应的3类LSA，但有AR28通告的1类LSA，需要进一步查看该1类LSA中的详细信息。</p>
+<p>2.5 在AR32进一步使用命令dis ospf lsdb router 10.5.1.28 查看AR28产生的1类LSA。<br>结果显示AR28通告的1类LSA中只有描述G2/0/0对应的transnet类型的链路状态描述信息<br>没有loopback0接口对应得链路状态描述信息，所以可以判断AR28的loopback0没有发布在<br>OSPF区域1中，由于不能判定AR28的loopback0是否发布在区域0中，所以要到AR27上查看<br>OSPF的LSDB.</p>
+<p>2.6 在AR27上通过命令：display ospf lsdb router 10.5.1.28查看AR28通告的1类LSA中<br>是否有loopback0口对应的链路状态信息。结果表明在AR27的OSPF区域0的LSDB中AR28通告的1类LSA中存在loopback0对应的stubnet类型的链路状态描述信息，可以判定AR28的loopback0已经发布在OSPF区域0中。</p>
+<p>综合分析：<br>    由于在AR27上的区域0的OSPF LSDB中能看到AR28的loopback0口是做为Type1-LSA存在，但AR32的区域1的OSPF LSDB中无法看到AR28的loopback0的LSA,所以判定是在AR28上做了相应3类LSA过滤行为，在当前环境中针对自身loopback0接口的3类LSA的过滤方式有如下4种：<br>1、在AR28的区域0中使用汇总命令加上关键字not-advertise。<br>2、在区域下使用filter命令调用ACL或者prefix-list，先deny AR28的loopback0接口路由,在permit any。<br>3、AR28上使用filter-policy import命令对loopabck0接口的路由做了过滤。<br>4、AR28的G2/0/0接口上使用了ospf filter-lsa-out summary acl命令做了3类LSA泛洪过滤，先deny AR28的loopback0接口路由,在permit any。</p>
+<h4 id="三、故障处理-1"><a href="#三、故障处理-1" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 AR28上做了路由过滤策略的故障处理需要在AR28上执行以下命令：<br>3.2 高可能性–能收到路由但是ping测不通则可能是AR28/AR32上做了流量过滤策略。<br>3.3 如果通过以上办法仍然无法解决故障则需要用户提供设备的详细配置，或者到达用户现场进行现场排查并拨打华为400电话请求华为TAC专家协助故障处理。</p>
+<h4 id="总结记忆-2"><a href="#总结记忆-2" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
+<p><strong>故障分析</strong></p>
+<p>故障现象重现——检查路由表</p>
+<p>查看OSPF邻居关系——查看OSPF LSDB——查看一类LSA——在AR27查看一类LSA</p>
+<p><strong>故障处理</strong></p>
+<h3 id="5tac5-1-R28-G002口使用了基于源地址为R32-loopback0出方向的流量过滤"><a href="#5tac5-1-R28-G002口使用了基于源地址为R32-loopback0出方向的流量过滤" class="headerlink" title="5tac5-1-R28 G002口使用了基于源地址为R32 loopback0出方向的流量过滤"></a>5tac5-1-R28 G002口使用了基于源地址为R32 loopback0出方向的流量过滤</h3><p>AR32的LoopBack0不能访问ISIS的部分网络。</p>
+<p><img src="/2020/07/21/tac/TAC5.jpg" alt="TAC5拓扑"></p>
+<h4 id="一、故障根因判断-3"><a href="#一、故障根因判断-3" class="headerlink" title="一、故障根因判断"></a>一、故障根因判断</h4><p> AR28的G0/0/2口使用了基于源地址为AR32的loopback0口出方向的流量过滤策略。</p>
+<h4 id="二、故障分析-2"><a href="#二、故障分析-2" class="headerlink" title="二、故障分析"></a>二、故障分析</h4><p>2.1故障重现（各种ping）<br>通过故障现象进行分析，怀疑是AR32路由表中不存在AR34的G0/0/1，AR31的loopback0，G0/0/2, G0/0/1接口的路由，<br>导致AR32无法正常访问这四个接口的地址,其他接口地址均可以正常ping通，输出结果省略。</p>
+<p>2.2通过上述推断，在R32使用以下命令进行验证。<br>通过R32输出的路由表进行分析，发现R32存在ISIS网络中的所有路由条目。<br>因此可以排除R32控制平面问题，怀疑是R34与R31不存在R32的loopback0接口地址的路由条目，导致AR32无法访问这四个接口。</p>
+<p>2.3 通过上述推断，在R34与R31使用以下命令进行验证。<br>通过R34输出的路由表进行分析，虽然不存在R32的loopback0接口地址路由，但是存在两条缺省路由，因此可以排除R34控制平面问题，继续测试R31是否存在R32的loopback0接口地址路由。<br>通过R31输出的路由表进行分析，R31路由表中存在R32的loopback0接口地址路由，因此可以排除R31路由器控制平面的问题，同时表明R28上单点双向引入正常并且路由信息也正常。<br>综上分析，R28,R32,R30,R31,R34不存在控制平面问题。同时也可以排除物理层与数据链路层故障，因此故障定位在数据平面。<br>由于R32是通过R28进行访问R31的三个直连接口与R34的G0/0/1口，因此怀疑某台路由器使用了基于目标地址为R31的三个接口和R34的G0/0/1的流量过滤策略，</p>
+<p>2.4 通过上述推断，在R32不带源地址使用tracert命令验证达到R31的三个接口与R34 G0/0/1口的连通性。<br>通过验证结果进行分析，R28,R31,R34没有使用基于目的地址为R31的三个接口和R34的G0/0/1接口地址的报文做过滤策略，怀疑是某台路由器使用了基于源地址为R32的loopback0接口地址报文做了过滤策略，通过在R32上使用tracert命令进行验证。</p>
+<p>2.5 通过上述推断，在R32使用Loop0接口地址作为源地址进行验证。<br>通过验证结果进行分析，R32的tracert报文都是在第二跳出现无法正常回显的现象，初步判断在AR28和AR31之间存在丢包现象。</p>
+<p>2.6 在AR32上以loop0作为源地址，10.5.130.31作为目标地址做PING测试。同时在AR31查看G0/0/2接口的相关信息做前后比对。<br>经过重复多次PING测试，并观察AR31的G0/0/2口信息，发现接口是UP状态，但接口上Input方向收到的Unicast单播报文数量始终没有增加，由于AR31的接口没有收到PING测数据包，可以判断AR28没有将数据包发送出去。</p>
+<p>2.7 在下游AR31和AR34上进一步排查流量过滤策略中需要调用的ACL。<br>结果显示在AR31和AR34上无相关的ACL，所以可以排除后续在AR31和AR34上做流量过滤的可能。</p>
+<p>2.8 测试针对反向访问数据包是否有过滤行为。在AR34上针对AR32的loop0做路由跟踪，观察数据包走向。<br>结果显示在AR34针对AR32的loop0地址做路由跟踪是成功的，所以可以排除AR34-AR32反方向的数据包过滤。</p>
+<p>2.9.综上分析，通过2.1-2.3步骤判断各路由器不存在控制层面故障，路由信息完整。通过2.4步骤可以判断不存在对包文目标地址存在过滤行为，通过2.5-2.8步骤可以判断AR28的G0/0/2接口outbound方向做了针对源地址为AR32的loopback0的包文过滤行为.</p>
+<h4 id="三、故障处理-2"><a href="#三、故障处理-2" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 登陆R28路由器，删除流量过滤策略</p>
+<p>3.2 高可能性一：如果在ping测试后，某些地址还是无法访问，则存在使用高级ACL过滤报文的可能，需要删除这些高级ACL。</p>
+<p>3.3 如果执行完上述操作仍然不能恢复故障，则需要客户提供完整的设备配置或者前往现场进行排查，并拨打华为400服务热线请求华为TAC专家协助解决，谢谢！</p>
+<h4 id="总结记忆-3"><a href="#总结记忆-3" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
+<p><strong>故障分析</strong></p>
+<p>故障现象重现——检查AR32路由表——检查AR34、AR31的路由表——AR32不带源tracert——AR32带源tracert——AR32带源pingAR31L0口查看AR31的G0/0/2接口——查看AR34与AR32是否有被流量过滤策略调用的ACL———测试反向访问数据包——总结</p>
 <p><strong>故障处理</strong></p>
 
             </div>
@@ -945,7 +979,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">156.7k</span>&nbsp;字
+                class="white-color">158.9k</span>&nbsp;字
             
             
             
