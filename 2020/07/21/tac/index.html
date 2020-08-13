@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.6k
+                    8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    16 分
+                    29 分
                 </div>
                 
 
@@ -472,6 +472,7 @@
 <p>3.2如果以上处理方式仍然不能解决AR29与AR33的loopback0互通的问题则可能有以下几种高可能性：</p>
 <p>   1、AR33上loopback0接口没有加入到ospf进程.<br>   2、AR29和AR33在OSPF进程下做了路由过滤策略，需执行以下命令解决；<br>   3、AR33接口做了过滤策略，需执行以下命令解决；</p>
 <p>3.3 如果以上命令均不能解决此故障则需要用户提供完整的设备配置或者直接前往用户现场进行现场排查，并且拨打华为400服务热线请求华为TAC专家协助故障处理，谢谢！</p>
+<p>3.4 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
 <h4 id="总结记忆-1"><a href="#总结记忆-1" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
 <p><strong>故障分析</strong></p>
 <p>故障现象重现——检查路由表</p>
@@ -486,7 +487,7 @@
 <p>2.5 在AR32进一步使用命令dis ospf lsdb router 10.5.1.28 查看AR28产生的1类LSA。<br>结果显示AR28通告的1类LSA中只有描述G2/0/0对应的transnet类型的链路状态描述信息<br>没有loopback0接口对应得链路状态描述信息，所以可以判断AR28的loopback0没有发布在<br>OSPF区域1中，由于不能判定AR28的loopback0是否发布在区域0中，所以要到AR27上查看<br>OSPF的LSDB.</p>
 <p>2.6 在AR27上通过命令：display ospf lsdb router 10.5.1.28查看AR28通告的1类LSA中<br>是否有loopback0口对应的链路状态信息。结果表明在AR27的OSPF区域0的LSDB中AR28通告的1类LSA中存在loopback0对应的stubnet类型的链路状态描述信息，可以判定AR28的loopback0已经发布在OSPF区域0中。</p>
 <p>综合分析：<br>    由于在AR27上的区域0的OSPF LSDB中能看到AR28的loopback0口是做为Type1-LSA存在，但AR32的区域1的OSPF LSDB中无法看到AR28的loopback0的LSA,所以判定是在AR28上做了相应3类LSA过滤行为，在当前环境中针对自身loopback0接口的3类LSA的过滤方式有如下4种：<br>1、在AR28的区域0中使用汇总命令加上关键字not-advertise。<br>2、在区域下使用filter命令调用ACL或者prefix-list，先deny AR28的loopback0接口路由,在permit any。<br>3、AR28上使用filter-policy import命令对loopabck0接口的路由做了过滤。<br>4、AR28的G2/0/0接口上使用了ospf filter-lsa-out summary acl命令做了3类LSA泛洪过滤，先deny AR28的loopback0接口路由,在permit any。</p>
-<h4 id="三、故障处理-1"><a href="#三、故障处理-1" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 AR28上做了路由过滤策略的故障处理需要在AR28上执行以下命令：<br>3.2 高可能性–能收到路由但是ping测不通则可能是AR28/AR32上做了流量过滤策略。<br>3.3 如果通过以上办法仍然无法解决故障则需要用户提供设备的详细配置，或者到达用户现场进行现场排查并拨打华为400电话请求华为TAC专家协助故障处理。</p>
+<h4 id="三、故障处理-1"><a href="#三、故障处理-1" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 AR28上做了路由过滤策略的故障处理需要在AR28上执行以下命令：<br>3.2 高可能性–能收到路由但是ping测不通则可能是AR28/AR32上做了流量过滤策略。<br>3.3 如果通过以上办法仍然无法解决故障则需要用户提供设备的详细配置，或者到达用户现场进行现场排查并拨打华为400电话请求华为TAC专家协助故障处理。<br>3.4 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
 <h4 id="总结记忆-2"><a href="#总结记忆-2" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
 <p><strong>故障分析</strong></p>
 <p>故障现象重现——检查路由表</p>
@@ -507,10 +508,63 @@
 <h4 id="三、故障处理-2"><a href="#三、故障处理-2" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 登陆R28路由器，删除流量过滤策略</p>
 <p>3.2 高可能性一：如果在ping测试后，某些地址还是无法访问，则存在使用高级ACL过滤报文的可能，需要删除这些高级ACL。</p>
 <p>3.3 如果执行完上述操作仍然不能恢复故障，则需要客户提供完整的设备配置或者前往现场进行排查，并拨打华为400服务热线请求华为TAC专家协助解决，谢谢！</p>
+<p>3.4 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
 <h4 id="总结记忆-3"><a href="#总结记忆-3" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
 <p><strong>故障分析</strong></p>
 <p>故障现象重现——检查AR32路由表——检查AR34、AR31的路由表——AR32不带源tracert——AR32带源tracert——AR32带源pingAR31L0口查看AR31的G0/0/2接口——查看AR34与AR32是否有被流量过滤策略调用的ACL———测试反向访问数据包——总结</p>
 <p><strong>故障处理</strong></p>
+<h3 id="5tac5-2-R30-G000口做了基于源地址为R32-loopback-0出方向的流量"><a href="#5tac5-2-R30-G000口做了基于源地址为R32-loopback-0出方向的流量" class="headerlink" title="5tac5-2-R30 G000口做了基于源地址为R32 loopback 0出方向的流量"></a>5tac5-2-R30 G000口做了基于源地址为R32 loopback 0出方向的流量</h3><p>AR32的loopback0 无法访问AR34的G0/0/0和loopback0</p>
+<p><img src="/2020/07/21/tac/TAC52.jpg" alt="TAC5拓扑"></p>
+<h4 id="一、故障根因判断-4"><a href="#一、故障根因判断-4" class="headerlink" title="一、故障根因判断"></a>一、故障根因判断</h4><p>AR30 G0/0/0口出方向，做了基于源地址为R32 loopback 0的流量过滤策略</p>
+<h4 id="二、故障分析-3"><a href="#二、故障分析-3" class="headerlink" title="二、故障分析"></a>二、故障分析</h4><p>2.1 故障重现<br>通过故障现象进行分析， AR32的Loopback0接口地址无法访问AR34的loopcbak0和G0/0/0接口的地址 ,怀疑是R32路由表中不存在AR34loopback0与G0/0/0接口的路由条目，导致R32无法正常与R34的两个地址通信</p>
+<p>2.2 根据上述推断，在AR32上使用以下命令进行验证。<br>通过R32输出的路由表进行分析，AR32路由表中存在AR34的loopback0与G0/0/0接口地址的路由条目，怀疑是AR34路由表中不存在AR32 loopback 0接口地址的路由条目，导致AR32无法访问AR34的两个接口地址。</p>
+<p>2.3根据上述推断，在AR34使用以下命令进行验证是否存在AR32 loopback 0口路由条目。<br>通过AR34输出的路由表信息进行分析，虽然AR34路由表中不存在AR32 loopback 0口路由条目，但是存在两条缺省的等价路由，进而可以排除AR34与AR32控制平面问题，怀疑是AR30或者是AR31路由表中不存在AR32的loopback0和R34的loopback0与G0/0/0接口地址的路由条目。</p>
+<p>2.4 根据上述推断，在R31路由器使用以下命令进行验证。<br>通过AR31输出的路由表信息进行分析，AR31路由表中存在AR32的loopback0与AR34的loopback0与G0/0/0接口地址的路由条目，因此可以排除AR31控制平面问题。<br>由于AR32存在R34的loopback0与G0/0/0接口地址路由条目，因此可以判断AR28上单点双向引入正常并且路由表项也正常。继续检测AR30是否存在R32的loopback0与AR34的loopback0和G0/0/0接口地址的路由条目。</p>
+<p>2.5 由于R30路由器无法登录，因此在R32分别不带源地址和带源地址（10.5.1.32），以10.5.1.34作为目标地址做路由跟踪观察数据包走向，侧面分析故障。<br>根据上图显示结果对比发现，在 AR32 上带 loopback0 作为源地址，在第三跳中显示为*的地址为 10.5.34.34（AR34 的 G0/0/0口），说明数据包在 AR30 和 AR34 之间发生了丢包，怀疑在AR30和AR34上存在报文过滤行为。</p>
+<p>2.6 在 AR32 上以 loopback0 作为源地址，10.5.34.34 作为目标地址做ping测试，同时在 AR34 查看 G0/0/0 接口的信息做前后对比：<br>路由跟踪到达 AR30 后就无法回显了，经过多次观察 AR34 的 G0/0/0 口信息，发现接口上的 input 方向收到的 unicast 单播报文数量始终没有增加，可以判断AR30的G0/0/0接口发送报文能力存在问题。</p>
+<p>2.7 在下游AR34上进一步排查流量过滤策略中需要调用的ACL。<br>结果显示在AR34上无相关的ACL，所以可以排除后续在AR34上做流量过滤的可能。</p>
+<p>2.8测试针对反向访问数据包是否有过滤行为。在AR34上针对AR32的loop0做路由跟踪，观察数据包走向。<br>结果显示在AR34上针对AR32的loop0地址做路由跟踪是成功的，所以可以排除AR34-AR32反方向的数据包过滤。</p>
+<p>2.9 综合分析<br>首先通过2.1-2.4步骤排除相关路由器上路由控制层面上的故障，通过2.5-2.6步骤初步判断AR30和AR34之间存在报文过滤行为。通过2.7步骤可以得出AR34上不存在报文过滤行为，通过2.8步骤也排除了反方向数据包过滤行为，最终得出故障根因为AR30的G0/0/0口上的outbound方向做了针对AR32的loop0地址的流量过滤。</p>
+<h4 id="三、故障处理-3"><a href="#三、故障处理-3" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 登陆R30路由器，删除流量过滤策略</p>
+<p>高可能性一：如果在ping测试后，某些地址还是无法访问，则存在使用高级ACL过滤报文的可能，需要删除这些高级ACL。</p>
+<p>3.2 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
+<h4 id="总结记忆-4"><a href="#总结记忆-4" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
+<p><strong>故障分析</strong></p>
+<p>故障现象重现——查看AR32的路由表——查看AR34的路由表——查看AR31的路由表——AR32带源不带源tracertAR34LoopBack0接口地址——AR32带源pingAR34Loopback0查看AR34的g0/0/0——查看AR34的acl——AR34带源反向tracertAR32LoopBack0</p>
+<p><strong>故障处理</strong></p>
+<h3 id="6tac6-2-AR34没有学习到两条等价缺省路由-中间系统到中间系统-类型不一致"><a href="#6tac6-2-AR34没有学习到两条等价缺省路由-中间系统到中间系统-类型不一致" class="headerlink" title="6tac6-2-AR34没有学习到两条等价缺省路由 中间系统到中间系统 类型不一致"></a>6tac6-2-AR34没有学习到两条等价缺省路由 中间系统到中间系统 类型不一致</h3><p>AR34没有学习到两条等价默认路由，只从AR30学习到一条。</p>
+<p><img src="/2020/07/21/tac/TAC6.jpg" alt="TAC6拓扑"></p>
+<h4 id="一、故障根因判断-5"><a href="#一、故障根因判断-5" class="headerlink" title="一、故障根因判断"></a>一、故障根因判断</h4><p>AR31配置了错误的ISIS路由器级别（Level1），应该配置为级别Level1/2。</p>
+<h4 id="二、故障分析-4"><a href="#二、故障分析-4" class="headerlink" title="二、故障分析"></a>二、故障分析</h4><p>2.1 故障现象重现，在AR34上查看路由表，是否存在两条缺省路由，测试及结果如下所示：<br>如上测试结果所示，AR34确实只存在一条缺省路由，下一跳指向AR30，缺少一条指向AR31的默认路由，<br>并且可以得知接口G0/0/0和G0/0/1开销都为10，由拓扑可知AR34需要与AR30和AR31建立了ISIS邻居关系，<br>所以需要进一步检查ISIS邻居关系是否正常。</p>
+<p>2.2 在AR34上使用display isis peer命令检查ISIS邻居关系是否正常，测试及结果如下所示：<br>如上测试及输出结果所示，AR34与AR30,AR31正常建立邻居关系，因为产生默认路由需要level-1-2路由器产生的level-1的LSP中ATT位置1，所以<br>需要查看ISIS的LSDB.</p>
+<p>2.3 在AR34上通过命令display isis lsdb查看ISIS数据库。<br>如上测试及输出结果所示，AR31中ATT位没有置1，所以AR34不会产生指向AR31的默认路由。由于要产生ATT置1的LSP，需要满足前提条件<br>此路由器为level1-2路由器，并且要有存在不再同区域的level-2的邻居路由器。</p>
+<p>2.4 在AR31上通过命令display isis peer查看ISIS邻居。<br>如上测试及输出结果所示，AR31只和AR34形成Level-1的邻居关系，没有和AR28形成Level-2的邻居关系。</p>
+<p>2.5 在AR31上测试与AR28直连链路的连通性。<br>如上测试及输出结果所示，可以排除AR31与AR28物理链路故障的可能。</p>
+<p>2.6 在AR31上通过命令display isis brief 查看ISIS进程相关信息。<br>如上测试及输出结果所示，AR31被配置为路由器级别为Level1的路由器。</p>
+<p>2.7 在AR31上查看G0/0/2接口相关的ISIS信息。<br>如上测试及输出结果所示，AR31的G0/0/2接口类型为level1-2，并没有强制为level-1。</p>
+<p>综上分析：由于AR31没有和AR28形成Level-2的邻居关系，所以自身产生的Level1的LSP不会ATT位置1，并且自身路由器级别为level-1，<br>只能发送level-1的Hello报文，导致无法与AR28建立邻居关系，所以需要把AR31改为level1-2路由器。 </p>
+<h4 id="三、故障处理-4"><a href="#三、故障处理-4" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 AR31ISIS路由器级别配置错误的故障解决需要在AR30上执行以下命令：</p>
+<p>高可能性：<br>3.2 高可能性原因1:AR28连接AR31的接口没有使能ISIS，在AR28上执行以下命令：<br>3.3 高可能性原因2:AR28的G0/0/2接口配置了ISIS的验证，在AR28上执行以下命令：<br>3.4 高可能性原因3:AR31上使用attached-bit advertise never，让AR31不产生ATT位置1的LSP<br>3.5 高可能性原因4:AR34在isis进程下，针对下一跳设置了不同的weigth值,在AR34上执行以下命令<br>3.6 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
+<h4 id="总结记忆-5"><a href="#总结记忆-5" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
+<p><strong>故障分析</strong></p>
+<p>故障现象重现——查看ISIS邻居关系——查看lsdp——在AR31上查看isis peer——在AR31测试与AR28的连通性——在AR31上查看ISIS进程相关信息——在AR31上查看G0/0/2接口的ISIS信息。</p>
+<p><strong>故障处理</strong></p>
+<h3 id="6tac6-3-AR34没有学习到两条等价缺省路由-区域ID不一致"><a href="#6tac6-3-AR34没有学习到两条等价缺省路由-区域ID不一致" class="headerlink" title="6tac6-3-AR34没有学习到两条等价缺省路由 区域ID不一致"></a>6tac6-3-AR34没有学习到两条等价缺省路由 区域ID不一致</h3><p>AR34没有学习到两条等价默认路由，只从AR30学习到一条。</p>
+<p><img src="/2020/07/21/tac/TAC6.jpg" alt="TAC6拓扑"></p>
+<h4 id="一、故障根因判断-6"><a href="#一、故障根因判断-6" class="headerlink" title="一、故障根因判断"></a>一、故障根因判断</h4><p>1、AR31配置了错误的区域ID，导致AR31与AR34无法建立ISIS 邻居关系。</p>
+<h4 id="二、故障分析-5"><a href="#二、故障分析-5" class="headerlink" title="二、故障分析"></a>二、故障分析</h4><p>2.1 在AR34上查看路由表，是否存在两条缺省路由，测试及结果如下所示：<br>如上测试结果所示，AR34确实只存在一条缺省路由，下一跳指向AR30，缺少一条指向AR31的默认路由，由拓扑可知AR34需要与AR30和AR31建立了ISIS邻居关系，所以需要进一步检查ISIS邻居关系是否正常。</p>
+<p>2.2 在AR34上采用display isis peer命令检查ISIS邻居关系是否正常，测试及结果如下所示：<br>如上测试及输出结果所示，AR34只与AR30建立了ISIS邻居关系，与AR31没有建立ISIS邻居关系，需要进一步排查邻居无法建立的原因。</p>
+<p>2.3 在AR34上查看ISIS相关参数<br>通过命令输出所示，AR34是level-1类型的ISIS路由器，并且接口G0/0/0和G0/0/1发布在ISIS中，链路cost相同为10，接口类型为Broadcast进一步检测AR34和AR31直连的联通性。</p>
+<p>2.4 在AR34上Ping AR31的G0/0/1接口IP。<br>通过命令输出所示，直连链路连通性正常.</p>
+<p>2.5 在AR31上查看ISIS邻居状态。<br>通过命令输出所示，AR31只与AR28形成level2的邻居关系，没有和AR34形成邻居关系。</p>
+<p>2.6 查看AR31的ISIS相关参数。<br>通过命令输出所示，AR31各相关接口都以加入到ISIS进程中，并且为level1-2路由器。</p>
+<p>2.7 查看AR31上ISIS 接口的相关信息。<br>通过命令输出所示,AR31的G0/0/1接口为level1-2,接口类型为Broadcast,并发布在ISIS中。AR31和AR34无ISIS邻居关系怀疑是协议配置问题。</p>
+<p>2.8 在AR34使用dispaly isis error interface g0/0/1查看是否存在错误计数。<br>根据命令输出所示，发现存在“Mismatched Area Addr(L1):190”的报错提示，表示AR34和AR31有交互level-1的Hello报文的能力，但无法建立ISIS邻居的故障原因是Hello报文中区域ID不一致所导致,level-1邻居建立要求区域ID一致。</p>
+<p>2.9 在AR34上使用命令display isis lsdb local verbose，查看当前AR34的区域信息。<br>根据命令输出所示，AR34的区域ID为49.0005，System ID为0000.0000.0034。</p>
+<p>2.10 在AR31使用命令dispaly isis lsbd local verbose level-1，查看AR34区域ID.<br>根据命令输出所示，AR31的区域ID为49.0006,System id为0000.0000.0031,AR31与AR34之间的system id不冲突。</p>
+<p>综上分析：发现AR34和AR31无法建立邻居的原因是双方的区域ID不一致，需要改变AR31的区域ID与AR34的区域ID保持一致。</p>
+<h4 id="三、故障处理-5"><a href="#三、故障处理-5" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 AR31区域ID配置错误的故障解决需要在AR31上执行以下命令：<br>3.2 高可能性原因1：AR31上使用attached-bit advertise never，让AR31不产生ATT位置1的LSP，在AR31上执行如下命令：<br>3.3 高可能性原因2:AR34在isis进程下，针对下一跳设置了不同的weigth值,在AR34上执行以下命令<br>3.4 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
+<h4 id="总结记忆-6"><a href="#总结记忆-6" class="headerlink" title="总结记忆"></a>总结记忆</h4><p>故障现象重现——查看AR34的isis邻居关系——查看AR34的ISIS相关参数——测试与AR31的连通性——在AR31上查看ISIS邻居关系——查看AR31的ISIS相关参数——查看AR31的ISIS接口的相关信息——查看AR34的G0/0/1是否存在错误——查看AR34的区域信息——查看AR31的区域信息</p>
 
             </div>
             <hr/>
@@ -979,7 +1033,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">158.9k</span>&nbsp;字
+                class="white-color">162.3k</span>&nbsp;字
             
             
             
