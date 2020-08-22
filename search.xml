@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>OSPF面试笔记</title>
+      <link href="/2020/08/22/ospf-mian-shi-bi-ji/"/>
+      <url>/2020/08/22/ospf-mian-shi-bi-ji/</url>
+      
+        <content type="html"><![CDATA[<h2 id="OSPF面试笔记"><a href="#OSPF面试笔记" class="headerlink" title="OSPF面试笔记"></a>OSPF面试笔记</h2><h3 id="1、影响OSPF邻居建立的过程中影响建立的因素有哪些："><a href="#1、影响OSPF邻居建立的过程中影响建立的因素有哪些：" class="headerlink" title="1、影响OSPF邻居建立的过程中影响建立的因素有哪些："></a>1、影响OSPF邻居建立的过程中影响建立的因素有哪些：</h3><ol><li>Router id不能相同</li><li>区域ID不同</li><li>在MA网络接口的地址掩码不同（P2P网络接口不检查掩码）</li><li>认证类型不同</li><li>option字段E位和N位不同</li><li>hello interval配置不同</li><li>dead interval配置不同</li><li>接口IP MTU不同（华为默认将DD报文的MTU设置为0，并且不做DD报文的MTU值比较，如果过使用ospf mtu-enable，则DD的MTU被设置为接口的IP MTU大小，并且在本接口将对接受的DD报文做MTU的大小的检测）</li><li>帧中继map映射缺少broadcast关键字</li></ol><h3 id="2、ospf邻居无法建立有哪几种可能性，如何解决？如果有相同的router-id会产生什么样的后果，为什么？"><a href="#2、ospf邻居无法建立有哪几种可能性，如何解决？如果有相同的router-id会产生什么样的后果，为什么？" class="headerlink" title="2、ospf邻居无法建立有哪几种可能性，如何解决？如果有相同的router-id会产生什么样的后果，为什么？"></a>2、ospf邻居无法建立有哪几种可能性，如何解决？如果有相同的router-id会产生什么样的后果，为什么？</h3><ol><li><p>如果直连的两台路由器有相同的router-id会产生什么样的后果？为什么？<br>产生的后果：如果直连路由器的Router-id冲突（ENSP实验现象：完全看不到对面的状态，init都没有）。</p><p>为什么：</p><ol><li>OSPF邻居关系建立时会发送hello报文，hello报文中携带者router-id的信息，路由器接收到hello报文后发现与自身的hello报文相同就不在进行下一步了。</li><li>如果到达了Ex-start状态，那么将会进行主从选举，是通过比较Router-id的大小来决定LSDB同步时DD报文的序列号的，如果Router-id相同则无法进行主从选举，邻接关系则无法建立，如果可以，那么在LSDB中又无法区分这两台路由器所产生的1类LSA。</li></ol></li></ol><ol start="2"><li><p>如果不直连的2台路由器有相同的Router-id会产生什么样的后果（同区域），为什么？<br>产生的后果：路由器无法区分这两条不同的LSA，从而无法正确的计算路由。</p><p>为什么：</p><ol><li>OSPF协议的1类LSA的link id通过router-id来表示，同时adv router也是由router-id来描述，当LSA的类型都是类型1时，导致路由器无法区分这两条不同的LSA，因为在LSDB中式通过link-id，adv router、lsa type来唯一区分一条LSA的，所以要保证同一个区域内每台路由器router-id不相同</li><li>与DR建立了full的邻居状态后，那么他们发送给DR的1类LSA中的三要素（Lsa type、LinkState ID    AdvRouter）将会相同，这将无法区分这些LSA是谁产生的。（ENSP实验：在DR中不断查看此LSA这LSA会不断地在这两个Router-id冲突的路由器中刷新）</li></ol></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> Datacom </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 协议 </tag>
+            
+            <tag> 面试 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>LAB C1</title>
       <link href="/2020/07/27/lab-c1/"/>
       <url>/2020/07/27/lab-c1/</url>
