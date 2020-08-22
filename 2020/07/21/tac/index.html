@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    8k
+                    8.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    29 分
+                    31 分
                 </div>
                 
 
@@ -487,12 +487,21 @@
 <p>2.5 在AR32进一步使用命令dis ospf lsdb router 10.5.1.28 查看AR28产生的1类LSA。<br>结果显示AR28通告的1类LSA中只有描述G2/0/0对应的transnet类型的链路状态描述信息<br>没有loopback0接口对应得链路状态描述信息，所以可以判断AR28的loopback0没有发布在<br>OSPF区域1中，由于不能判定AR28的loopback0是否发布在区域0中，所以要到AR27上查看<br>OSPF的LSDB.</p>
 <p>2.6 在AR27上通过命令：display ospf lsdb router 10.5.1.28查看AR28通告的1类LSA中<br>是否有loopback0口对应的链路状态信息。结果表明在AR27的OSPF区域0的LSDB中AR28通告的1类LSA中存在loopback0对应的stubnet类型的链路状态描述信息，可以判定AR28的loopback0已经发布在OSPF区域0中。</p>
 <p>综合分析：<br>    由于在AR27上的区域0的OSPF LSDB中能看到AR28的loopback0口是做为Type1-LSA存在，但AR32的区域1的OSPF LSDB中无法看到AR28的loopback0的LSA,所以判定是在AR28上做了相应3类LSA过滤行为，在当前环境中针对自身loopback0接口的3类LSA的过滤方式有如下4种：<br>1、在AR28的区域0中使用汇总命令加上关键字not-advertise。<br>2、在区域下使用filter命令调用ACL或者prefix-list，先deny AR28的loopback0接口路由,在permit any。<br>3、AR28上使用filter-policy import命令对loopabck0接口的路由做了过滤。<br>4、AR28的G2/0/0接口上使用了ospf filter-lsa-out summary acl命令做了3类LSA泛洪过滤，先deny AR28的loopback0接口路由,在permit any。</p>
-<h4 id="三、故障处理-1"><a href="#三、故障处理-1" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 AR28上做了路由过滤策略的故障处理需要在AR28上执行以下命令：<br>3.2 高可能性–能收到路由但是ping测不通则可能是AR28/AR32上做了流量过滤策略。<br>3.3 如果通过以上办法仍然无法解决故障则需要用户提供设备的详细配置，或者到达用户现场进行现场排查并拨打华为400电话请求华为TAC专家协助故障处理。<br>3.4 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
+<h4 id="三、故障处理-1"><a href="#三、故障处理-1" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 AR28上做了路由过滤策略的故障处理需要在AR28上执行以下命令：<br>3.2 高可能性–能收到路由但是ping测不通则可能是AR28/AR32上做了流量过滤策略。<br>3.3 如果通过以上办法仍然无法解决故障则需要用户提供设备的详细配置，或者到达用户现场进行现场排查并拨打华为400电话请求华为TAC专家协助故障处理。</p>
 <h4 id="总结记忆-2"><a href="#总结记忆-2" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
 <p><strong>故障分析</strong></p>
 <p>故障现象重现——检查路由表</p>
 <p>查看OSPF邻居关系——查看OSPF LSDB——查看一类LSA——在AR27查看一类LSA</p>
 <p><strong>故障处理</strong></p>
+<h3 id="4tac4、AR32无法访问中间系统到中间系统所有路由"><a href="#4tac4、AR32无法访问中间系统到中间系统所有路由" class="headerlink" title="4tac4、AR32无法访问中间系统到中间系统所有路由"></a>4tac4、AR32无法访问中间系统到中间系统所有路由</h3><h4 id="故障根因判断"><a href="#故障根因判断" class="headerlink" title="故障根因判断"></a>故障根因判断</h4><p>在AR28的GigabitEthernet2/0/0上使用了ospf filter-lsa-out ase,做了5类LSA在出方向上的过滤</p>
+<h4 id="故障分析-1"><a href="#故障分析-1" class="headerlink" title="故障分析"></a>故障分析</h4><p>2.1 在AR32上执行命令ping -c 2 -a 10.5.1.32 10.1.5.30，测试与AR30的loopback0的连通性，显示信息如下：<br>结果表明AR32确实与ISIS区域的AR30互访存在故障；</p>
+<p>2.2 在AR32上执行命令display ip routing-table，显示信息如下：<br>结果表明AR32没有去往ISIS区域的路由，但是存在OSPF区域的内部路由，例如AR28的loopback0地址，说明AR32与AR28之间邻居不存在问题，<br>由于OSPF路由计算依赖LSDB中的LSA，所以需要进一步判断LSDB是否存在ISIS网络中的5类LSA.</p>
+<p>2.3 通过命令display ospf lsdb，检测AR32的LSDB，显示信息如下：<br>结果显示该AR32的LSDB中不存在类型5的LSA，由于类型5的LSA整个AS内泛洪，且AR28没有权限登陆，所以下一步检查AR27的LSDB是否存在类型5的LSA；</p>
+<p>2.4 登陆AR27，执行命令，display ospf lsdb,查看是否存在LSA 5，显示信息如下：<br>结果表明AR27的LSDB中存在LSA 5</p>
+<p>2.5 登陆AR27，执行命令display ip routing-table protocol ospf | include ASE,显示信息如下：<br>结果表明AR27存在于源自于ISIS区域内的ospf外部路由</p>
+<p>综合分析：<br>由于OSPF外部路由是在整个ospf网络内泛洪的，在AR27上存在源自于ISIS的5类LSA，而在AR32上不存在源自于ISIS路由的LSA5，表明在AR28上针对LSA5做了发送的过滤动作，<br>又因为AR32上只存在AR28这一个邻居，所以可以肯定的是在AR28的GigabitEthernet2/0/0下执行了ospf filter-lsa-out ase，导致AR32不存在源自于ISIS区域路由的LSA5；</p>
+<h4 id="故障处理-1"><a href="#故障处理-1" class="headerlink" title="故障处理"></a>故障处理</h4><p>3.1 针对AR28做了5类LSA过滤的故障需在AR28上执行以下命令：<br>3.2<br>高可能1：在AR32上存在路由过滤<br>高可能2：在AR32/AR28/AR30/AR31/AR34存在流量过滤行为，在这些路由器上分别执行如下操作</p>
+<h4 id="总结记忆-3"><a href="#总结记忆-3" class="headerlink" title="总结记忆"></a>总结记忆</h4><p>故障现象重现——查看AR32的路由表——查看AR32的OSPF LSDB——查看AR27的路由表——查看AR27的OSPF LSDB</p>
 <h3 id="5tac5-1-R28-G002口使用了基于源地址为R32-loopback0出方向的流量过滤"><a href="#5tac5-1-R28-G002口使用了基于源地址为R32-loopback0出方向的流量过滤" class="headerlink" title="5tac5-1-R28 G002口使用了基于源地址为R32 loopback0出方向的流量过滤"></a>5tac5-1-R28 G002口使用了基于源地址为R32 loopback0出方向的流量过滤</h3><p>AR32的LoopBack0不能访问ISIS的部分网络。</p>
 <p><img src="/2020/07/21/tac/TAC5.jpg" alt="TAC5拓扑"></p>
 <h4 id="一、故障根因判断-3"><a href="#一、故障根因判断-3" class="headerlink" title="一、故障根因判断"></a>一、故障根因判断</h4><p> AR28的G0/0/2口使用了基于源地址为AR32的loopback0口出方向的流量过滤策略。</p>
@@ -509,7 +518,7 @@
 <p>3.2 高可能性一：如果在ping测试后，某些地址还是无法访问，则存在使用高级ACL过滤报文的可能，需要删除这些高级ACL。</p>
 <p>3.3 如果执行完上述操作仍然不能恢复故障，则需要客户提供完整的设备配置或者前往现场进行排查，并拨打华为400服务热线请求华为TAC专家协助解决，谢谢！</p>
 <p>3.4 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
-<h4 id="总结记忆-3"><a href="#总结记忆-3" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
+<h4 id="总结记忆-4"><a href="#总结记忆-4" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
 <p><strong>故障分析</strong></p>
 <p>故障现象重现——检查AR32路由表——检查AR34、AR31的路由表——AR32不带源tracert——AR32带源tracert——AR32带源pingAR31L0口查看AR31的G0/0/2接口——查看AR34与AR32是否有被流量过滤策略调用的ACL———测试反向访问数据包——总结</p>
 <p><strong>故障处理</strong></p>
@@ -528,7 +537,7 @@
 <h4 id="三、故障处理-3"><a href="#三、故障处理-3" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 登陆R30路由器，删除流量过滤策略</p>
 <p>高可能性一：如果在ping测试后，某些地址还是无法访问，则存在使用高级ACL过滤报文的可能，需要删除这些高级ACL。</p>
 <p>3.2 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
-<h4 id="总结记忆-4"><a href="#总结记忆-4" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
+<h4 id="总结记忆-5"><a href="#总结记忆-5" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
 <p><strong>故障分析</strong></p>
 <p>故障现象重现——查看AR32的路由表——查看AR34的路由表——查看AR31的路由表——AR32带源不带源tracertAR34LoopBack0接口地址——AR32带源pingAR34Loopback0查看AR34的g0/0/0——查看AR34的acl——AR34带源反向tracertAR32LoopBack0</p>
 <p><strong>故障处理</strong></p>
@@ -545,7 +554,7 @@
 <p>综上分析：由于AR31没有和AR28形成Level-2的邻居关系，所以自身产生的Level1的LSP不会ATT位置1，并且自身路由器级别为level-1，<br>只能发送level-1的Hello报文，导致无法与AR28建立邻居关系，所以需要把AR31改为level1-2路由器。 </p>
 <h4 id="三、故障处理-4"><a href="#三、故障处理-4" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 AR31ISIS路由器级别配置错误的故障解决需要在AR30上执行以下命令：</p>
 <p>高可能性：<br>3.2 高可能性原因1:AR28连接AR31的接口没有使能ISIS，在AR28上执行以下命令：<br>3.3 高可能性原因2:AR28的G0/0/2接口配置了ISIS的验证，在AR28上执行以下命令：<br>3.4 高可能性原因3:AR31上使用attached-bit advertise never，让AR31不产生ATT位置1的LSP<br>3.5 高可能性原因4:AR34在isis进程下，针对下一跳设置了不同的weigth值,在AR34上执行以下命令<br>3.6 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
-<h4 id="总结记忆-5"><a href="#总结记忆-5" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
+<h4 id="总结记忆-6"><a href="#总结记忆-6" class="headerlink" title="总结记忆"></a>总结记忆</h4><p><strong>故障根因判断</strong></p>
 <p><strong>故障分析</strong></p>
 <p>故障现象重现——查看ISIS邻居关系——查看lsdp——在AR31上查看isis peer——在AR31测试与AR28的连通性——在AR31上查看ISIS进程相关信息——在AR31上查看G0/0/2接口的ISIS信息。</p>
 <p><strong>故障处理</strong></p>
@@ -564,7 +573,7 @@
 <p>2.10 在AR31使用命令dispaly isis lsbd local verbose level-1，查看AR34区域ID.<br>根据命令输出所示，AR31的区域ID为49.0006,System id为0000.0000.0031,AR31与AR34之间的system id不冲突。</p>
 <p>综上分析：发现AR34和AR31无法建立邻居的原因是双方的区域ID不一致，需要改变AR31的区域ID与AR34的区域ID保持一致。</p>
 <h4 id="三、故障处理-5"><a href="#三、故障处理-5" class="headerlink" title="三、故障处理"></a>三、故障处理</h4><p>3.1 AR31区域ID配置错误的故障解决需要在AR31上执行以下命令：<br>3.2 高可能性原因1：AR31上使用attached-bit advertise never，让AR31不产生ATT位置1的LSP，在AR31上执行如下命令：<br>3.3 高可能性原因2:AR34在isis进程下，针对下一跳设置了不同的weigth值,在AR34上执行以下命令<br>3.4 如果执行以上命令都无法解决问题，则需要用户提供完整的设备配置信息或者派遣一线工程师到达用户现场进行现场排障，同时拨打华为400服务热线请求华为专家的协助，谢谢！</p>
-<h4 id="总结记忆-6"><a href="#总结记忆-6" class="headerlink" title="总结记忆"></a>总结记忆</h4><p>故障现象重现——查看AR34的isis邻居关系——查看AR34的ISIS相关参数——测试与AR31的连通性——在AR31上查看ISIS邻居关系——查看AR31的ISIS相关参数——查看AR31的ISIS接口的相关信息——查看AR34的G0/0/1是否存在错误——查看AR34的区域信息——查看AR31的区域信息</p>
+<h4 id="总结记忆-7"><a href="#总结记忆-7" class="headerlink" title="总结记忆"></a>总结记忆</h4><p>故障现象重现——查看AR34的isis邻居关系——查看AR34的ISIS相关参数——测试与AR31的连通性——在AR31上查看ISIS邻居关系——查看AR31的ISIS相关参数——查看AR31的ISIS接口的相关信息——查看AR34的G0/0/1是否存在错误——查看AR34的区域信息——查看AR31的区域信息</p>
 
             </div>
             <hr/>
@@ -1023,6 +1032,31 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
     <footer class="page-footer bg-color">
     
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="5195691060"
+                   fixed='true'
+                   autoplay='true'
+                   theme:='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
     <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
@@ -1033,7 +1067,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">162.3k</span>&nbsp;字
+                class="white-color">162.8k</span>&nbsp;字
             
             
             
