@@ -418,7 +418,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    15.2k
+                    15.3k
                 </div>
                 
 
@@ -1010,6 +1010,8 @@
 <p>当路由惩罚值在1000到2000时，且无d标记，还是可以继续通告此路由可达。</p>
 <h3 id="fake-as"><a href="#fake-as" class="headerlink" title="fake-as"></a>fake-as</h3><p>欺骗邻居AS号，被欺骗的要换peer as号。通俗的讲：麻烦别人方便自己。对外是藏起来的。</p>
 <p>解决了AS号迁移的问题。</p>
+<p>1、open报文携带fake as号</p>
+<p>2、路由传递给EBGP邻居时，将fake as号添加到as-path。</p>
 <h3 id="BGP安全性"><a href="#BGP安全性" class="headerlink" title="BGP安全性"></a>BGP安全性</h3><p>BGP易受到跨链路，长距离的攻击。</p>
 <p>BGP使用认证和通同TTL安全保护机制GTSM（Generalized Security Mechanism）两个方法保证BGP对等体间的安全。</p>
 <h4 id="BGP认证"><a href="#BGP认证" class="headerlink" title="BGP认证"></a>BGP认证</h4><p>BGP无设置认证字段的，BGP认证字段放在TCP的options（20个字段）中</p>
@@ -1028,6 +1030,8 @@
 </ol>
 <h3 id="ORF（出站路由过滤）"><a href="#ORF（出站路由过滤）" class="headerlink" title="ORF（出站路由过滤）"></a>ORF（出站路由过滤）</h3><p>BGP邻居会通告大量路由，也会对路由做过滤。浪费大量链路带宽。需要什么发什么。</p>
 <p>peer x.x.x.x capability-advertise orf ip-prefix send 发送 接收路由的路由器配置<br>peer x.x.x.x capability-advertise orf ip-prefix receive 接收 发送路由的路由器配置</p>
+<h3 id="BGP4"><a href="#BGP4" class="headerlink" title="BGP4+"></a>BGP4+</h3><p>不同的地址族携带着不同的下一条，所以有不同的地址族时最好携带MP_REACH_NLRI好些</p>
+<p>unicast地址族    指导单播报文的转发<br>multicast地址族    实现组播源地址通告，实现组播RPF防环检测。</p>
 
             </div>
             <hr/>
@@ -1500,7 +1504,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">163.4k</span>&nbsp;字
+                class="white-color">175.9k</span>&nbsp;字
             
             
             

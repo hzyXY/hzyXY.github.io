@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.6k
+                    4.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    15 分
                 </div>
                 
 
@@ -629,6 +629,10 @@
 <p>Blocking（discarding）：不转发数据，不学习MAC地址，处理BPDU</p>
 <p>Disable：接口被禁用</p>
 <p>稳定STP网络只有两种状态：即forwarding和blocking。</p>
+<p>监听状态15s是避免STP协议在收敛过程中产生临时环路，让BPDU有足够的时间在整个网络进行传递。</p>
+<p>监听状态期间，MAC地址表受TC BPDU的影响会提前老化，清除错误的MAC地址信息，导致错误的MAC地址老化也导致空闲的MAC地址老化</p>
+<p>如果此时要转发数据帧就会导致大量未知DMAC的单播帧泛洪的现象，影响网络性能。那么我们继续牺牲15s的收敛时间，设计出学习状态能让交换机再次期间重新构建正确的MAC地址表项，减少单播帧在STP收敛期间产生大量的泛洪行为。</p>
+<p>STP协议的收敛是完全依赖计时器完成的，收敛速度慢，为了解决临时环路和收敛期间单播帧泛洪，需要等待30s。</p>
 <h3 id="端口状态转换"><a href="#端口状态转换" class="headerlink" title="端口状态转换"></a>端口状态转换</h3><p>图</p>
 <p>一个选择为RP或者DP端口的并处于blocking状态至少需要30s进入到forwarding。</p>
 <ol>
@@ -665,13 +669,70 @@
 <p>TC BPDU会持续由根桥发送35s的时间，这段时间网络不稳定。所以需要这35s的时间，防止学习到错误的MAC地址。</p>
 <p>边缘端口标准STP是不支持的，但是华为的STP协议支持边缘端口的设置。</p>
 </blockquote>
-<h3 id="STP-边缘端口"><a href="#STP-边缘端口" class="headerlink" title="STP 边缘端口"></a>STP 边缘端口</h3><ul>
-<li><p>由于TCN BPDU会导致大量的MAC地址提前老化（包括正确的MAC地址），导致大量未知单播帧的泛洪。可以利用边缘端口的机制来减少未知单播帧的泛洪。</p>
-</li>
-<li><p>可在连接路由器、防火墙、终端、打印机、扫描仪之类设备的接口配置。</p>
-</li>
+<h3 id="STP-边缘端口"><a href="#STP-边缘端口" class="headerlink" title="STP 边缘端口"></a>STP 边缘端口</h3><p>边缘端口正常来说STP是没有的，华为的优化。</p>
+<p>trunk在做单臂路由、连接虚拟机时要为虚拟机打标时可以配置成边缘端口</p>
+<p>边缘端口为什么要发BPDU？<br>1、收到自己发出会block（连接hub时，防止hub有环。）<br>2、收到其他交换机发出，参与STP计算，实现破环，但有临时环路的风险。</p>
+<p>某些厂家的交换机如果不支持STP协议，或者关闭了STP协议，这些交换机是不会透传BPDU的，导致环路。</p>
+<blockquote>
+<p>边缘端口发送BPDU能够防环，但不能实现所有场景都能防环<br>1、临时环路<br>2、边缘端口下行网络存在不透传BPDU的交换机，而拓扑是环路拓扑，导致环路。</p>
+</blockquote>
+<ul>
+<li>由于TCN BPDU会导致大量的MAC地址提前老化（包括正确的MAC地址），导致大量未知单播帧的泛洪。可以利用边缘端口的机制来减少未知单播帧的泛洪。</li>
+<li>可在连接路由器、防火墙、终端、打印机、扫描仪之类设备的接口配置。</li>
 </ul>
+<blockquote>
+<p>边缘端口好处：<br>1、快速进入转发状态，无盘工作站或者通过DHCP获取的IP的主机能够更快的接入网络。<br>2、边缘端口的UP和DOWN都不会导致交换机发送TCN或者TC BPDU，增强STP网络的稳定性。<br>3、边缘端口通常用于连接3层终端设备或者路由器，防火墙等路由设备。</p>
+</blockquote>
+<h3 id="STP的缺点"><a href="#STP的缺点" class="headerlink" title="STP的缺点"></a>STP的缺点</h3><p>STP（802.1D）/RSTP（802.1W）是单生成树协议，在存在多个VLAN的网络中，所有VLAN共享一棵树，导致里链路利用率不高，导致路径存在次优。</p>
+<p>为了解决STP收敛慢，开发出了RSTP</p>
+<p>为了解决RSTP单树弊端，开发出了MSTP</p>
 <h4 id="命令-2"><a href="#命令-2" class="headerlink" title="命令"></a>命令</h4><p>接口视图下：stp edged-port enable</p>
+<h3 id="RSTP"><a href="#RSTP" class="headerlink" title="RSTP"></a>RSTP</h3><p>注意：当RSTP的交换机收到STP的BPDU，该端口将回退为STP的端口，失去快速收敛的特性。</p>
+<h4 id="RSTP的BPDU"><a href="#RSTP的BPDU" class="headerlink" title="RSTP的BPDU"></a>RSTP的BPDU</h4><p>1、RST BPDU</p>
+<p>2、TC RST BPDU</p>
+<h4 id="RSTP快速收敛机制"><a href="#RSTP快速收敛机制" class="headerlink" title="RSTP快速收敛机制"></a>RSTP快速收敛机制</h4><p>1.P/A</p>
+<p>2.边缘端口</p>
+<p>3.AP端口快速切换</p>
+<p>P/A 在点到点全双工的链路上让DP和RP端口快速进入转发状态，同时也不会产生临时环路。</p>
+<blockquote>
+<p>P/A协商前提</p>
+<p>1、DP端口处于discarding</p>
+<p>2、点到点全双工链路</p>
+<p>3、DP端口对端是RP端口</p>
+</blockquote>
+<blockquote>
+<p>DP端口处于discarding状态时，发送（P=1 A=1）BPDU</p>
+<p>RP收到DP的P=1 A=1的BPDU后，会进行同步置位</p>
+<p>同步置位：discarding掉所有的非边缘端口（非边缘指定端口，RP端口）。</p>
+<p>所以说RSTP配置边缘端口是有必要的。</p>
+<p>边缘端口，AP端口由于不会引入额外环路，默认认为已经同步置位。</p>
+<p>同步置位完成后，RP发送（P=0 A=1 BPDU）并将端口置为转发状态。</p>
+<p>上游DP收到RP的（P=0，A=1）BPDU后，认为下游的RP已经处于无环拓扑并转发状态，于是自己将端口状态立即过度到转发。</p>
+<p>DP端口处于dscarding状态，对端是AP时，AP端口不会配置DP进行P/A协商，导致DP端口30s后进入到转发状态。</p>
+</blockquote>
+<h4 id="RSTP拓扑改变"><a href="#RSTP拓扑改变" class="headerlink" title="RSTP拓扑改变"></a>RSTP拓扑改变</h4><p>拓扑变化的唯一判断标准：一个非边缘端口迁移到forwarding状态。</p>
+<p>1、当交换机感知拓扑发生变化（非边缘端口过度转发状态）</p>
+<p>2、在状态发生变化的端口上发TC BPDU，时间为hello time的2倍。（TC While Timer计时器，超时则停发）</p>
+<p>3、收到TC BPDU的交换机清空所有端口的MAC地址，除了边缘端口和收到TC BPDU的端口</p>
+<p>4、并继续泛洪TC BPDU，实现全网MAC地址表的更新。</p>
+<h4 id="RSTP保护"><a href="#RSTP保护" class="headerlink" title="RSTP保护"></a>RSTP保护</h4><p>1、BPDU保护</p>
+<p>可配置命令自动恢复：error-down auto-recorver cause bpdu-protection interval 30s</p>
+<p>2、跟保护</p>
+<h3 id="MSTP"><a href="#MSTP" class="headerlink" title="MSTP"></a>MSTP</h3><p>MSTP配置<br>1、定义MSTP域，在一个域中的交换机必须配置相同的域名<br>2、在同一个域中配置相同的修订级别（防止MD5碰撞，用来额外标识）<br>3、在同一个域中要有相同的instance映射表<br>4、激活域配置</p>
+<p>MSTP特点：<br>1、同一个域中基于instance维护生成树<br>2、同一个域中不同的instance可以设置不同的根桥<br>3、同一个域中可以针对不同的instance配置STP的参数<br>4、同一个域中每个instance独立维护自己的STP树木。<br>5、没有加入到instance中的vlan，默认属于instance 0，instance 0是默认存在的。</p>
+<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>MST域（MST Region）<br>都启动了MSTP、有先相同的域名、有相同的VLAN到生成树实例的映射、相同的修订级别</p>
+<p>MSTI<br>lMST域下实例，一个MST域下可以有多个MSTI。</p>
+<p>VLAN映射表<br>VLAN和MSTI之间的映射关系</p>
+<p>CST<br>公共生成树，MST域与MST域之间通过STP或RSTP计算生成的一颗生成树。</p>
+<p>IST<br>内部生成树，MST域内的一棵生成树，IST是一个特殊的MSTI。MSTI的ID为0。就是实例0。</p>
+<p>SST<br>运行着STP、RSTP的交换设备</p>
+<p>CIST<br>CST和IST的组成叫做公共和内部生成树。一个大范围。</p>
+<p>总根：全网优先级最低的交换机</p>
+<p>域根（实例0）（IST）：Master端口所在的交换机</p>
+<p>主桥/Master端口：非根域 域边缘端口中到总根RPC最近的端口</p>
+<p>如果域边缘端口存在到总根RPC相同的端口，则比较这些交换机的BID，<br>BID最小交换机成为域根（实例0），此交换机的域边缘端口成为master端口，<br>其他的域边缘端口依次比较（总根ID、ERPC、域根ID，指定端口ID,接收端口ID来判断是否DP或者是AP端口）</p>
+<h4 id="增强P-A机制"><a href="#增强P-A机制" class="headerlink" title="增强P/A机制"></a>增强P/A机制</h4><p>与普通P/A机制的区别就是上游的指定端口发P=1 A=1的报文后再发P=0 A=1的报文后，下游的根端口才能进入转发状态，然后才能发P=0 A=1的Agreement报文。</p>
+<p>也就是在同步置位时，下游的根端口也要被阻塞。</p>
 <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
 <li>根桥只能有一个吗？<br>在一个广播域中有且只有1个根桥。</li>
 </ol>
@@ -1151,7 +1212,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">163.4k</span>&nbsp;字
+                class="white-color">175.9k</span>&nbsp;字
             
             
             

@@ -1,0 +1,1287 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Qos, XY">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Qos | XY</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+
+    <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+<script type="text/javascript" src="/js/fireworks.js"></script>
+
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">XY</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">XY</div>
+        <div class="logo-desc">
+            
+            那些意料之外的，才会真正改变我们的生活。
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/54.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Qos</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                <span class="chip bg-color">协议</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Datacom/" class="post-category">
+                                Datacom
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-09-06
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    15 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="Qos"><a href="#Qos" class="headerlink" title="Qos"></a>Qos</h2><p>网络的质量服务模式是FIFO，先进先出，所有业务一视同仁，没有区分服务。</p>
+<p>问题：<br>1、带宽永远不够<br>2、带宽可以被滥用，业务保证能力弱。</p>
+<p>所以为了提高网络的服务质量，单纯的提高带宽，收效可能不大。</p>
+<p>1、业务分类<br>2、流量标记<br>3、拥塞管理<br>4、拥塞避免<br>5、整形和监管<br>6、LFI（链路效率机制）<br>7、压缩</p>
+<h3 id="Qos模型"><a href="#Qos模型" class="headerlink" title="Qos模型"></a>Qos模型</h3><h4 id="尽力而为"><a href="#尽力而为" class="headerlink" title="尽力而为"></a>尽力而为</h4><p>即没有服务保证，只是更换设备或者链路单纯的提升网络性能。</p>
+<h4 id="综合服务模型"><a href="#综合服务模型" class="headerlink" title="综合服务模型"></a>综合服务模型</h4><p>使用RSVP协议，实现基于流的质量保证。</p>
+<h4 id="区分服务模型"><a href="#区分服务模型" class="headerlink" title="区分服务模型"></a>区分服务模型</h4><p>Qos标记的意义：简化了业务分类的配置，方便DS模型在全网进行统一的部署。</p>
+<p>为什么要进行分类？<br>为了提供区分服务，那么流量就必须进行分类。</p>
+<p>基于报文本身的标记执行报文的分类<br>1、802.1P<br>2、EXP<br>缺少端到端对报文分类和标记的能力</p>
+<p>3、IPP<br>4、DSCP<br>可以实现端到端对报文实现分类和标记的能力</p>
+<h4 id="IPv4报文的DSCP字段"><a href="#IPv4报文的DSCP字段" class="headerlink" title="IPv4报文的DSCP字段"></a>IPv4报文的DSCP字段</h4><p>BE：尽力而为，无需作为服务保证非关键业务流量</p>
+<p>AF：确保转发，一般用于分配需要带宽保证的业务流量，对延时，抖动要求不高的业务。 FTP，file server，sql</p>
+<p>EF：快速转发，一般用于分配给需要带宽保证，低延时，低抖动，低丢包率的业务。viop，viode。</p>
+<p>CS：类别服务，主要用于实现和IPP的兼容</p>
+<p>注意：报文的标记值本身不能决定路由器对该报文做何种质量服务，而是取决于管理员对于拥有该标记的报文所执行QoS策略。故这些标记也仅仅起到分类和标记的作用。 </p>
+<p>cs0 000 000    0      0<br>cs1 001 000    8      1<br>cs2 010 000    16    2<br>cs3 011 000    24    3<br>cs4 100 000    32    4<br>cs5 101 000    40    5<br>cs6 110 000    48    6<br>cs7 111 000    56    7</p>
+<p>DS模式 建议对报文标记的方式使用统一的标记方式</p>
+<blockquote>
+<p>AFxy</p>
+<p>x 1到4</p>
+<p>y 1到3</p>
+<p>AFxy = 8x+2y =DSCP</p>
+<p>AF11<br>001 = x<br>010 = y<br>001010 = 10</p>
+<p>x<br>000</p>
+<p>y<br><s>000</s><br>010<br>100<br>110</p>
+</blockquote>
+<p>报文的DSCP值 由发包系统决定，但是未必符合网络的标记要求或者分类要求。</p>
+<h4 id="华为QoS分类"><a href="#华为QoS分类" class="headerlink" title="华为QoS分类"></a>华为QoS分类</h4><p>DS服务 也称为基于类的QoS</p>
+<p>DS的信任边界（边界节点）：由DS域的边界设备组成，边界设备不应该信任DS域外进入DS域内的流量的标记，因为流量的标记不一定是满足我们的标记策略的。<br>所以在边界需要对流量根据DS域的业务分类策略进行业务分类，并重新定义这些流量的标记，方便DS域内的设备根据标记实施简单流分类，并实施QoS策略。 </p>
+<h5 id="简单流分类"><a href="#简单流分类" class="headerlink" title="简单流分类"></a>简单流分类</h5><ul>
+<li>根据报文自身携带的标记执行报文的分类。<br>缺点：报文分类依据比较单一，无法精确区分业务流量<br>因为不同的业务可能拥有相同的标记，而我们希望这些具有相同标记的不同业务要提供区分服务时，就无法很好的支持。<br>简单流分类适合在DS域内部实施，方便QoS策略的部署，在DS域内提供统一的QoS策略。</li>
+</ul>
+<h5 id="复杂流分类"><a href="#复杂流分类" class="headerlink" title="复杂流分类"></a>复杂流分类</h5><ul>
+<li>根据报文多项特征对业务进行精细化分类，精细化的区分业务，提供区分服务能力更强，缺点配置比较繁琐。<br>复杂流分类适合在DS域的边缘实施，并结合标记技术，对业务进行统筹管理</li>
+</ul>
+<h4 id="流分类配置"><a href="#流分类配置" class="headerlink" title="流分类配置"></a>流分类配置</h4><blockquote>
+<p>流分类</p>
+<p>定义一组流量匹配规则，以对报文进行分类。</p>
+<p>traffic classifier OA operator and “与”匹配<br>if-match x<br>if-match y</p>
+<p>报文需要同时满足x和y条件才属于定义OA类流量</p>
+<p>traffic classifier OA operator or “或”匹配<br>if-match x<br>if-match y</p>
+<p>报文只要满足x或者y条件就属于定义OA类流量</p>
+<p>默认操作符为“or”</p>
+<p>标记：对分类出的数据进行重标记，让报文的标记符合我们定制的QoS策略</p>
+</blockquote>
+<blockquote>
+<p>流行为</p>
+<p>traffic behavior OA 设定流量操作的行为</p>
+<p>流策略</p>
+<p>traffic policy 将流量和行为进行关联，形成相应的QoS策略</p>
+<p>在接口的inbound或outbound方向上引用流策略</p>
+</blockquote>
+<blockquote>
+<p>基于MQC的命令行模式</p>
+<p>MQC 模块化QoS命令</p>
+<p>优势：可读性强，可移植性强，可编辑能力强。</p>
+</blockquote>
+<h3 id="拥塞管理"><a href="#拥塞管理" class="headerlink" title="拥塞管理"></a>拥塞管理</h3><p>设别如何识别发生了拥塞？<br>即出口报文缓存队列满了，即认为产生拥塞了</p>
+<p>队列技术<br>什么是队列呢？<br>分为软件队列，硬件队列（硬件队列满了，即发生拥塞）</p>
+<p>队列的3个组成要素<br>@分类机制<br>@插入机制<br>@调度机制</p>
+<p>硬件队列<br>分类：没有分类<br>插入：没满就缓存<br>调度FIFO</p>
+<p>软件队列<br>分类：</p>
+<blockquote>
+<p>FIFO</p>
+<p>先进先出</p>
+<p>优点：实现机制简单且处理速度快<br>缺点：不能有差别地对待优先级不同的报文</p>
+</blockquote>
+<blockquote>
+<p>PQ</p>
+<p>PQ调度算法维护一个优先级递减的队列系列并且只有当更高优先级的所有队列为空时才服务低优先级的队列。这样，将关键业务的分组放入较高优先级的队列，将非关键业务（如E-Mail）的分组放入较低优先级的队列，可以保证关键业务的分组被优先传送。</p>
+<p>qos queue  profile name<br>schedule pq 0 to 7</p>
+<p>PQ提供快速转发服务，适合实时型的业务，语音，视频，直播。<br>缺点：如果过高优先级队列业务把出口带宽用完，那么低优先级队列可能没有带宽可以使用。<br>不能做带宽保证，什么是带宽保证？就是量化。</p>
+</blockquote>
+<blockquote>
+<p>RR 轮询队列</p>
+<p>每个队列都能得到带宽，不会“饿死”，带来延时和抖动，在带宽分配上没有体现出区分服务的特点。</p>
+</blockquote>
+<blockquote>
+<p>WRR</p>
+<p>设备根据每个队列的权值进行轮循调度。调度一轮权值减一，权值减到零的队列不参加调度，当所有队列的权限减到0时，开始下一轮的调度。</p>
+<p>优点：<br>1、WRR调度避免了采用PQ调度时低优先级队列中的报文可能长时间得不到服务的缺点。<br>2、虽然多个队列的调度是轮询进行的，但对每个队列不是固定地分配服务时间片——如果某个队列为空，那么马上换到下一个队列调度，这样带宽资源可以得到充分的利用</p>
+<p>缺点：</p>
+<p>1、WRR调度无法使低延时需求业务得到及时调度<br>2、只关心报文，不关心报文大小</p>
+<p>由于WRR调度的以报文为单位，因此每个队列没有固定的带宽，同等调度机会下大尺寸报文获得的实际带宽要大于小尺寸报文获得的带宽。</p>
+</blockquote>
+<blockquote>
+<p>DRR</p>
+<p>解决了WRR只关心报文，同等调度机会下大尺寸报文获得的实际带宽要大于小尺寸报文获得的带宽的问题，在调度过程中考虑包长的因素以达到调度的速率公平性。</p>
+<p>DRR调度中，Deficit表示队列的带宽赤字，初始值为0。每次调度前，系统按权重为各队列分配带宽，计算Deficit值，如果队列的Deficit值大于0，则参与此轮调度，发送一个报文，并根据所发送报文的长度计算调度后Deficit值，作为下一轮调度的依据；如果队列的Deficit值小于0，则不参与此轮调度，当前Deficit值作为下一轮调度的依据。</p>
+<p>但DRR调度仍然没有解决WRR调度中低延时需求业务得不到及时调度的问题。</p>
+</blockquote>
+<p>PQ、WRR、DRR 根据报文的优先级分类，进入相应的队列。</p>
+<p>队列的组成<br>@分类机制    决定报文进入哪个队列<br>@插入机制    尾丢弃/WRED<br>@调度算法    </p>
+<blockquote>
+<p>WFQ 加权的公平队列 </p>
+<p>分类机制<br>1、基于“流”的分类<br>SIP+DIP+SPORT+DPORT+TCP/UDP+TOS 进行哈希计算，hash值就是队列号，并将报文放入到该队列。<br>WFQ按流的优先级（precedence）来分配每个流应占有带宽。优先级的数值越小，所得的带宽越少。优先级的数值越大，所得的带宽越多。这种方式只有CBQ的default-class支持。</p>
+<p>1    3    3+1=4<br>2    4    4+1=5<br>3    1    1+1=2<br>4    0    0+1=1</p>
+<p>4/12    5/12    2/12    1/12</p>
+<p>2、按优先级分类<br>通过优先级映射把流量标记为本地优先级，每个本地优先级对应一个队列号。每个接口预分配4个或8个队列，报文根据队列号进入队列。默认情况，队列的WFQ权重相同，流量平均分配接口带宽。用户可以通过配置修改权重，高优先权和低优先权按权重比例分配带宽。</p>
+</blockquote>
+<p>PQ、WRR、DRR、PQ+WRR、PQ+DRR、PQ+WFQ 根据报文的优先级进入系统队列，分类机制单一，使用不方便，需要事先对业务进行正确的标记。</p>
+<blockquote>
+<p>CBQ<br>基于类的加权公平队列是对WFQ功能的扩展，为用户提供了定义类的支持。CBQ首先根据IP优先级或者DSCP优先级、输入接口、IP报文的五元组等规则来对报文进行分类，然后让不同类别的报文进入不同的队列。对于不匹配任何类别的报文，送入系统定义的缺省类。</p>
+<p>CBQ提供三类队列：</p>
+<ul>
+<li>EF队列：满足低时延业务</li>
+<li>AF队列：满足需要带宽保证的关键数据业务</li>
+<li>BE队列：满足不需要严格QoS保证的尽力发送业务（还支持一种特殊的EF队列—LLQ队列。LLQ队列较EF队列而言，时延更低。）</li>
+</ul>
+<p>AF    适合提供给数据业务，带宽保证的业务，但不提供低延时服务 1M 不监管，保证1M 不拥塞时可以超过1M</p>
+<p>EF    适合提供给实时业务，带宽保证并监管，提供低延时服务 带宽保证并监管 1M 监管，不管是否拥塞最多1M</p>
+<p>LLQ    适合提供给语音业务，一种比EF效果更好的队列机制，带宽保证并监管，提供更低延时业务</p>
+<p>WFQ    基于流的WFQ队列，适合提供给不需要严格QoS保障的业务。</p>
+<p>队列是实现拥塞管理的主要手段，是一种拥塞保证关键业务体验不下降，劣化其他非关键业务体验的一种技术。</p>
+<p>不建议把太多的业务放入到LLQ或者EF队列中</p>
+<p>合理的分配带宽是CBQ的关键</p>
+<p>所以QoS是一种网络带宽优化技术</p>
+<p>LLQ，EF提供低延时，带宽保证业务</p>
+<p>AF 提供带宽保证业务</p>
+<p>default-class 所有没有匹配分类的报文，默认为该类。应用BE队列，即基于流的WFQ队列</p>
+</blockquote>
+<p>队列的配置方式：<br>1、基于接口的队列配置，PQ，WRR，DRR，PQ+WRR，PQ+DRR，PQ+WFQ<br>2、基于MQC的队列配置，CBQ</p>
+<p>报文进入接口后根据信息的标记值映射到本地优先级，并将报文放入LP对应得队列中，然后根据标记值的映射修改相关标记值，在出口队列发出报文。</p>
+<h3 id="拥塞避免"><a href="#拥塞避免" class="headerlink" title="拥塞避免"></a>拥塞避免</h3><p>传统处理方式：<br>尾丢弃（Tail Drop）</p>
+<p>缺点</p>
+<p>1、TCP全局同步（TCP全局同步现象，导致TCP连接始终无法建立。）<br>2、引起TCP饿死现象<br>原因：无法对流量进行区分丢弃<br>3、无差别丢弃（类似）</p>
+<h4 id="RED"><a href="#RED" class="headerlink" title="RED"></a>RED</h4><p>为了避免TCP全局同步，可在队列未装满时随机丢弃一部分报文。通过预先降低一部分TCP连接的传输速率来尽可能延缓TCP全局同步的到来。这种预先随机丢弃报文的行为被称为早期随机检测（RED）</p>
+<h4 id="WRED"><a href="#WRED" class="headerlink" title="WRED"></a>WRED</h4><p>加权的随机早期检测</p>
+<p>可以通过对不同优先级的数据包或队列设置相应的丢弃策略，实现对不同流量进行区分丢弃。</p>
+<h3 id="令牌桶"><a href="#令牌桶" class="headerlink" title="令牌桶"></a>令牌桶</h3><blockquote>
+<p>单速单桶</p>
+<p>C桶</p>
+<ul>
+<li>CIR：承诺信息速率，表示向C桶中投放令牌的速率，即C桶允许传输或转发报文的平均速率；</li>
+<li>CBS：承诺突发尺寸，表示C桶的容量，即C桶瞬间能够通过的承诺突发流量。</li>
+</ul>
+<p>系统按照CIR速率向C桶中投放令牌，当Tc&lt;CBS时，令牌数增加，否则不增加。</p>
+<p>对于到达的报文，用B表示报文的大小：</p>
+<ul>
+<li>若B≤Tc，报文被标记为绿色，且Tc减少B；</li>
+<li>若B&gt;Tc，报文被标记为红色，Tc不减少。</li>
+</ul>
+</blockquote>
+<p>单速单桶模式不允许流量突发，当用户的流量速率小于配置的CIR时，报文被标记为绿色；当用户的流量大于CIR时直接被标记为红色。</p>
+<blockquote>
+<p>单速双桶</p>
+<p>C桶 E桶<br>CIR：承诺信息速率 就是C桶每秒投放令牌的速率<br>CBS：承诺突发尺寸 就是C桶的容量，即C桶瞬间能够通过的承诺突发流量<br>EBS：超额突发尺寸 就是E桶的容量，即E桶瞬间能够通过的超出突发流量</p>
+<p>系统按照CIR速率向桶中投放令牌：</p>
+<ul>
+<li>若Tc&lt;CBS，Tc增加；</li>
+<li>若Tc=CBS，Te&lt;EBS，Te增加；</li>
+<li>若Tc=CBS，Te=EBS，则都不增加。</li>
+</ul>
+<p>对于到达的报文，用B表示报文的大小：</p>
+<ul>
+<li>若B≤Tc，报文被标记为绿色，且Tc减少B；</li>
+<li>若Tc&lt;B≤Te，报文被标记为黄色，且Te减少B；</li>
+<li>若Te&lt;B，报文被标记为红色，且Tc和Te都不减少。</li>
+</ul>
+</blockquote>
+<p>单速双桶模式允许流量突发，当用户的流量速率小于配置的CIR时，报文被标记为绿色；当用户的突发流量大于配置的CBS而小于EBS时，报文被标记为黄色；当用户的突发流量大于配置的EBS时，报文被标记为红色。</p>
+<blockquote>
+<p>双速双桶</p>
+<p>P桶 C桶</p>
+<ul>
+<li>PIR（Peak information rate）：峰值信息速率，表示向P桶中投放令牌的速率，即P桶允许传输或转发报文的峰值速率，PIR大于CIR；</li>
+<li>CIR：承诺信息速率，表示向C桶中投放令牌的速率，即C桶允许传输或转发报文的平均速率；</li>
+<li>PBS（Peak Burst Size）：峰值突发尺寸，表示P桶的容量，即P桶瞬间能够通过的峰值突发流量；</li>
+<li>CBS：承诺突发尺寸，表示C桶的容量，即C桶瞬间能够通过的承诺突发流量。</li>
+</ul>
+<p>系统按照PIR速率向P桶中投放令牌，按照CIR速率向C桶中投放令牌：</p>
+<ul>
+<li>当Tp&lt;PBS时，P桶中令牌数增加，否则不增加。</li>
+<li>当Tc&lt;CBS时，C桶中令牌数增加，否则不增加。</li>
+</ul>
+<p>对于到达的报文，用B表示报文的大小：</p>
+<ul>
+<li>若Tp&lt;B，报文被标记为红色；</li>
+<li>若Tc&lt;B≤Tp，报文被标记为黄色，且Tp减少B；</li>
+<li>若B≤Tc，报文被标记为绿色，且Tp和Tc都减少B。</li>
+</ul>
+</blockquote>
+<p>双速双桶模式允许流量速率突发，当用户的流量速率小于配置的CIR时，报文被标记为绿色；当用户的流量大于CIR而小于PIR时，报文被标记为黄色；当用户的流量大于PIR时，报文被标记为红色。</p>
+<h3 id="流量监管"><a href="#流量监管" class="headerlink" title="流量监管"></a>流量监管</h3><p>流量监管（Traffic-policing）是一种在入接口或出接口应用的对进入路由器的某流量进行限制的流量管理技术。</p>
+<p>优点：可实现对不同类别的报文分别进行限速</p>
+<p>缺点：当链路空闲时，造成带宽浪费；丢弃的流量可能要进行重传。</p>
+<p>就是对流量进行限速，超过的都丢掉或降低优先级转发</p>
+<p>基于类的流量监管<br>1、接口视图下配置<br>2、在MQC视图下（traffic behavior）</p>
+<p>基于接口的流量监管</p>
+<h3 id="流量整形"><a href="#流量整形" class="headerlink" title="流量整形"></a>流量整形</h3><p>流量整形（traffic shaping）的典型作用是限制流出某一网络的某一连接的流量与突发，使这类报文以比较均匀的速度向外发送</p>
+<p>优点：可现实对不同报文分别进行限速；缓冲机制可减少带宽浪费，减少流量重传。</p>
+<p>缺点：可能会增加延迟。</p>
+<p>只能在出方向做，那为什么入方向就不能整形了？<br>无法控制下游设备向自己接口发送流量的峰值</p>
+<p>流量整形的配置方法：<br>1、基于接口的流量整形<br>2、基于接口的自适应流量整形<br>3、基于队列的流量整形<br>4、MQC实现流量整形<br>5、MQC实现自适应流量整形</p>
+<blockquote>
+<p>流量整形与流量监管的主要区别：在进行报文流量控制时，流量监管是对超过流量限制的报文进行丢弃；而流量整形则将超过流量限制的报文缓存在队列中。</p>
+</blockquote>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hzyxy.github.io" rel="external nofollow noreferrer">XY</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hzyxy.github.io/2020/09/06/qos/">https://hzyxy.github.io/2020/09/06/qos/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://hzyxy.github.io" target="_blank">XY</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                                    <span class="chip bg-color">协议</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2020/09/09/ipv6/">
+                    <div class="card-image">
+                        
+                        <img src="/images/54.jpg" class="responsive-img" alt="IPv6">
+                        
+                        <span class="card-title">IPv6</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            IPv6的介绍
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-09-09
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/09/04/lan/">
+                    <div class="card-image">
+                        
+                        <img src="/images/54.jpg" class="responsive-img" alt="LAN">
+                        
+                        <span class="card-title">LAN</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            LAN
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-09-04
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h1,h2, h3, h4,h5,h6'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1,h2, h3, h4,h5,h6').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="https://hzyxy.github.io" target="_blank">XY</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">175.9k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2020";
+                    var startMonth = "2";
+                    var startDate = "29";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/hzyXY" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1422767050@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1422767050" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1422767050" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

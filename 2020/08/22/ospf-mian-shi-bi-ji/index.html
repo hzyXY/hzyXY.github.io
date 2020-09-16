@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    653
+                    1.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    5 分
                 </div>
                 
 
@@ -443,8 +443,8 @@
             <div id="articleContent">
                 <h2 id="OSPF面试笔记"><a href="#OSPF面试笔记" class="headerlink" title="OSPF面试笔记"></a>OSPF面试笔记</h2><h3 id="1、影响OSPF邻居建立的过程中影响建立的因素有哪些："><a href="#1、影响OSPF邻居建立的过程中影响建立的因素有哪些：" class="headerlink" title="1、影响OSPF邻居建立的过程中影响建立的因素有哪些："></a>1、影响OSPF邻居建立的过程中影响建立的因素有哪些：</h3><ol>
 <li>Router id不能相同</li>
-<li>区域ID不同</li>
-<li>在MA网络接口的地址掩码不同（P2P网络接口不检查掩码）</li>
+<li>区域ID不同  /<em>SPF算法基于区域，直连接口区域不同怎么算？</em>/</li>
+<li>在MA网络接口的地址掩码不同（P2P网络接口不检查掩码）  /<em>DR产生的2类LSA如果接口掩码与2类LSA的掩码不同，那么这些路由器的路由则无法不通</em>/</li>
 <li>认证类型不同</li>
 <li>option字段E位和N位不同</li>
 <li>hello interval配置不同</li>
@@ -469,7 +469,31 @@
 <li>与DR建立了full的邻居状态后，那么他们发送给DR的1类LSA中的三要素（Lsa type、LinkState ID    AdvRouter）将会相同，这将无法区分这些LSA是谁产生的。（ENSP实验：在DR中不断查看此LSA这LSA会不断地在这两个Router-id冲突的路由器中刷新）</li>
 </ol>
 </li>
+<li><p>如果两台路由器有相同的router-id会产生什么样的后果？（一个在area 0、一个在area 1）为什么？<br>产生的后果：路由器还是可以正常计算。</p>
+<p>为什么：<br>理论上OSPF协议要求在同一个区域中的所有路由器router-id要唯一，但如果在不同区域中存在router-id的冲突，这并不会影响到区域内的 LSDB同步，因为类型1和类型2的LSA只能在本区域内泛洪，在LSDB中，LSA1和LSA2是基于区域来存放的，所以即使在不同区域中出现Link-id、adv router、lsa type一样的LSA，ABR依然可以正确的进行LSDB同步和进行基于区域的SPF算法计算内部的路由，而区域间的路由由ABR产生类型3的LSA实现，类型3的LSA并不包含起源路由器的router-id信息，而是ABR的router-id。其他区域路由器只需要计算自身到ABR的最短SPF树，即可计算去往区域间的路由，所以并不会影响区域间路由的计算。</p>
+</li>
+<li><p>如果2台路由器有相同router-id会产生什么样的后果？（一个在area2，一个人在are1，area0连接area1和area2）为什么？</p>
+<ol>
+<li><p>类型3的LSA：每经过一台ABR的时候，adv router都会做相应改变，故在这种情况下，也不会影响域间路由的计算。及只许保证在同一个区域内的路由器route-id唯一即可。</p>
+</li>
+<li><p>类型5的LSA：如果OSPF网络中存在ASBR，那么ASBR的router-id一定要唯一，因为LSA5的adv router是由ASBR的router-id来代表的，并且LSA5在整个OSPF网络中泛洪，并且在泛洪过程中，adv router并不会改变，而且LSA5在LSDB中跟区域不存在关联。</p>
+<p>某台路由器自身的router-id和ASBR的router-id冲突，将会把这些LSA5的age时间设置成3600，并且进行泛洪（seq不变，只是将age时间设置为3600秒），希望其他路由器也将能删除这些LSA5包括产生这条LSA5的ASBR（毕竟这不是它自己产生的），这将导致产生这些LSA5的ASBR不断删除这些LSA，并又不断产生LSA5并进行泛洪，导致网络上反复产生LSA5又不断删除LSA5的行为，影响所有路由器的LSDB的稳定性，并可能产生网络震荡。</p>
+</li>
 </ol>
+</li>
+</ol>
+<h3 id="LSA"><a href="#LSA" class="headerlink" title="LSA"></a>LSA</h3><ol>
+<li>删除一条LSA，就是将LSA的age设置为3600s和metric设置为最大泛洪出去，通告这条LSA失效，并从LSDB中删除。</li>
+<li>新旧比较次序：当路由器收到多个相同的LSA的时候，需要进行新旧的比较，放到自己的LSDB中：<ol>
+<li>先比较序列号，如果序列号越高，说明LSA越新</li>
+<li>如果序列号相同则比较校验和，校验和的值越大，说明越新</li>
+<li>如果校验和相同，则比较存活时间，如果只有一条LSA拥有大小为最大生存时间的老化时间，则认为该LSA是最新的。（要最老的或要删掉的那个！！）</li>
+<li>如果这些LSA的老化时间之间的差别多于15min（称作MaxAgeDiff），那么拥有较小老化时间的LSA将是最新的LSA。（要年轻的）</li>
+<li>如果上述条件都一样的话，那么则认为这两条LSA是相同的。</li>
+</ol>
+</li>
+</ol>
+<h3 id="特殊区域的置位"><a href="#特殊区域的置位" class="headerlink" title="特殊区域的置位"></a>特殊区域的置位</h3><p>ospf的特殊区域有stub和nssa，分别对应如下情况：<br>stub区域：E bit = 0 | N bit = 0<br>nssa区域：E bit = 0 | N bit =1<br>normal区域：E bit = 1 | N bit = 0<br>E代表是否支持5类LSA是否进行同步，N代表7类LSA是否要进行同步。</p>
 
             </div>
             <hr/>
@@ -704,29 +728,28 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/08/22/ospf-mian-shi-bi-ji/">
+                <a href="/2020/09/04/lan/">
                     <div class="card-image">
                         
-                        <img src="/images/HCIERS.jpg" class="responsive-img" alt="OSPF面试笔记">
+                        <img src="/images/54.jpg" class="responsive-img" alt="LAN">
                         
-                        <span class="card-title">OSPF面试笔记</span>
+                        <span class="card-title">LAN</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            OSPF面试笔记
+                            LAN
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-08-22
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-09-04
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -739,16 +762,11 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
                     <a href="/tags/%E5%8D%8F%E8%AE%AE/">
                         <span class="chip bg-color">协议</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%9D%A2%E8%AF%95/">
-                        <span class="chip bg-color">面试</span>
                     </a>
                     
                 </div>
@@ -948,7 +966,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">163.4k</span>&nbsp;字
+                class="white-color">175.9k</span>&nbsp;字
             
             
             
