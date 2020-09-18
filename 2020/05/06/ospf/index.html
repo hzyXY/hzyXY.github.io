@@ -418,7 +418,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    9.2k
+                    9.4k
                 </div>
                 
 
@@ -569,7 +569,7 @@
 </tr>
 <tr>
 <td>Router Prionity</td>
-<td>描述此接口的优先级</td>
+<td>描述此接口的优先级，用于在广播、NBMA型链路来选举DR、BDR。</td>
 </tr>
 <tr>
 <td>Router Dead Interval</td>
@@ -597,8 +597,15 @@
 <li>dead interval 一样</li>
 <li>option 中 N bit，E bit取值一致（区域类型决定取值）</li>
 </ol>
+<p>特定场景下对其他参数的要求</p>
+<ol>
+<li>P2P链路不要求地址在同一个网段，不要求掩码一致</li>
+<li>broadcast，NBMA要求地址必须在同一个网段，掩码必须相同</li>
+<li>P2MP默认要求地址必须在同一个网段，默认情况下要求掩码一致，但可以通过命令忽略对掩码的检测。<em>ospf p2mp-mask-ignore</em></li>
+<li>DBD报文中IP MTU值要一致，默认情况下华为设备不对DBD报文的IP MTU值做检测，华为设备DBD报文的IP MTU默认为0。 </li>
+</ol>
 <h5 id="建立邻居关系的进阶要求"><a href="#建立邻居关系的进阶要求" class="headerlink" title="建立邻居关系的进阶要求"></a>建立邻居关系的进阶要求</h5><h6 id="P2P"><a href="#P2P" class="headerlink" title="P2P"></a>P2P</h6><ul>
-<li>在P2P（PPP，HDLC）的网络类型邻居关系建立条件：P2P网络类型不对hello报文的掩码长度是否一致做检测<ul>
+<li>在P2P（PPP，HDLC）的网络类型邻居关系建立条件：P2P网络类型不对h ello报文的掩码长度是否一致做检测<ul>
 <li>地址在一个网段，但掩码不一致能建立邻接关系 比如：10.1.12.1/30 ——10.1.12.2/24</li>
 <li>不在一个网段能建立邻居关系，路由也能计算 1.1.1.1/24 ——2.2.2.2/30</li>
 <li>一个接口包含另一个接口的IP也能建立邻居关系，路由也能计算 10.1.12.1/30——10.1.12.10/24</li>
@@ -685,7 +692,7 @@
 </tr>
 <tr>
 <td>Init</td>
-<td>本状态表示已经收到了邻居的Hello报文，但是对端并没有收到本端发送的Hello报文。</td>
+<td>本状态表示已经收到了邻居的Hello报文，但是对端并没有收到本端发送的Hello报文。1-way</td>
 </tr>
 <tr>
 <td>2-way</td>
@@ -1436,7 +1443,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">175.9k</span>&nbsp;字
+                class="white-color">176.7k</span>&nbsp;字
             
             
             

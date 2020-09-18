@@ -414,7 +414,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    765
+                    764
                 </div>
                 
 
@@ -445,10 +445,12 @@
 <p>为了数据中心支持vxlan，evpn在BGP协议的基础上新增了一种NLRI，称为EVPN NLRI。</p>
 <p>EVPN NLRI定义了3种路由信息</p>
 <p>1、type 2 路由，称为MAC/IP路由，根据不同的作用也称为ARP路由/IRB路由，用于支持数据中心的</p>
-<pre><code>1.  支持ARP广播抑制
-
-      2. 动态虚拟机迁移
-                    3. 虚拟机主机路由的发布，实现跨子网互访。</code></pre><p>2、type 3路由，称为集成组播路由，用于在vtep之间动态建立vxlan隧道，并动态实现头端复制列表的生成，用于支持BUM报文的转发。</p>
+<ol>
+<li><p>支持ARP广播抑制</p>
+<pre><code>2. 动态虚拟机迁移
+3. 虚拟机主机路由的发布，实现跨子网互访。</code></pre></li>
+</ol>
+<p>2、type 3路由，称为集成组播路由，用于在vtep之间动态建立vxlan隧道，并动态实现头端复制列表的生成，用于支持BUM报文的转发。</p>
 <p>3、type 5路由，称为前缀路由，常用于数据中心外部路由引入到各租户的VPN-INSTANCE中，实现数据中心内部访问外部。</p>
 <p>另外标准的EVPN协议，还定义了<br>    type 1路由，ethernet Ad Router    双归场景下，用于防环，快速收敛，别名。<br>    type 4路由 ，eth Segment router    双归场景下，用于实现DF的选举和执行负载分担的维护。</p>
 <p>EVPN协议中，本地的每个BD域，都可以看成一个独立的EVPN实例，一个2层的广播域</p>
@@ -935,7 +937,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">175.9k</span>&nbsp;字
+                class="white-color">176.7k</span>&nbsp;字
             
             
             

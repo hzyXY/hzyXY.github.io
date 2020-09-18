@@ -414,14 +414,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    593
+                    1.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    4 分
                 </div>
                 
 
@@ -437,7 +437,11 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="LAN"><a href="#LAN" class="headerlink" title="LAN"></a>LAN</h2><h3 id="MAC地址表"><a href="#MAC地址表" class="headerlink" title="MAC地址表"></a>MAC地址表</h3><h4 id="MAC地址表的组成"><a href="#MAC地址表的组成" class="headerlink" title="MAC地址表的组成"></a>MAC地址表的组成</h4><p>动态表项</p>
+                <h2 id="LAN"><a href="#LAN" class="headerlink" title="LAN"></a>LAN</h2><p>交换机接收到数据帧时的动作<br>1、泛洪<br>    广播泛洪，如果数据帧的DMAC地址全1，则认为是广播帧<br>    组播泛洪，如果DMAC的第8个bit等于1，则认为是组播帧，泛洪<br>    未知单播：如果DMAC的第8个bit等于0，则认为是单播帧，查MAC地址表，未知泛洪。</p>
+<p>2、转发<br>    如果DMAC的第8比特等于0，则认为的单播帧，查MAC地址表，已知则转发处理。</p>
+<p>3、丢弃<br>    如果接收数据帧的端口也是发送数据帧的接口，则丢弃。（交换机的一个端口收到一个数据帧为目标MAC地址和源MAC地址在同一个端口学习到）<br>    源MAC或目标MAC地址匹配MAC地址黑洞表项时</p>
+<p>​    冲突导致残缺的数据帧，<br>​    接口拥塞，缓存不够<br>​    CPU过载 </p>
+<h3 id="MAC地址表"><a href="#MAC地址表" class="headerlink" title="MAC地址表"></a>MAC地址表</h3><h4 id="MAC地址表的组成"><a href="#MAC地址表的组成" class="headerlink" title="MAC地址表的组成"></a>MAC地址表的组成</h4><p>动态表项</p>
 <p>静态表项</p>
 <p>黑洞表项</p>
 <h4 id="MAC地址表配置"><a href="#MAC地址表配置" class="headerlink" title="MAC地址表配置"></a>MAC地址表配置</h4><p>配置静态MAC表项</p>
@@ -456,7 +460,13 @@
 <h4 id="MAC地址漂移检测"><a href="#MAC地址漂移检测" class="headerlink" title="MAC地址漂移检测"></a>MAC地址漂移检测</h4><p>利用什么现象</p>
 <p>配置</p>
 <h3 id="免费ARP"><a href="#免费ARP" class="headerlink" title="免费ARP"></a>免费ARP</h3><p>原理</p>
-<h3 id="iStack"><a href="#iStack" class="headerlink" title="iStack"></a>iStack</h3><p>原理</p>
+<blockquote>
+<p>什么时候会发送免费ARP？</p>
+<p>1、接口新增IP地址时<br>2、接口IP地址变更后<br>3、VRRP的主备切换时，新的master会发送免费arp<br>其中发送的mac地址为虚拟的mac地址<br>4、电脑开机后<br>5、虚拟机热迁移后</p>
+</blockquote>
+<h3 id="iStack（智能堆叠）"><a href="#iStack（智能堆叠）" class="headerlink" title="iStack（智能堆叠）"></a>iStack（智能堆叠）</h3><p>一般用于盒式交换机，常见s3700、s5700、ce5800、ce6800，最多支持9台，ce某些型号最多支持16台。</p>
+<p>堆叠式一种基于硬件设备的多虚一技术</p>
+<p>原理</p>
 <h4 id="iStack基本概念"><a href="#iStack基本概念" class="headerlink" title="iStack基本概念"></a>iStack基本概念</h4><p>角色</p>
 <p>堆叠ID</p>
 <p>堆叠优先级</p>
@@ -464,7 +474,7 @@
 <p>1</p>
 <p>2</p>
 <p>业务口堆叠</p>
-<h4 id="堆叠成员加入"><a href="#堆叠成员加入" class="headerlink" title="堆叠成员加入"></a>堆叠成员加入</h4><h4 id="堆叠合并"><a href="#堆叠合并" class="headerlink" title="堆叠合并"></a>堆叠合并</h4><h4 id="堆叠成员退出"><a href="#堆叠成员退出" class="headerlink" title="堆叠成员退出"></a>堆叠成员退出</h4><h4 id="堆叠分裂"><a href="#堆叠分裂" class="headerlink" title="堆叠分裂"></a>堆叠分裂</h4><h4 id="多主检测"><a href="#多主检测" class="headerlink" title="多主检测"></a>多主检测</h4><p><em>为什么要搞多主检测？</em></p>
+<h4 id="堆叠成员加入"><a href="#堆叠成员加入" class="headerlink" title="堆叠成员加入"></a>堆叠成员加入</h4><h4 id="堆叠合并"><a href="#堆叠合并" class="headerlink" title="堆叠合并"></a>堆叠合并</h4><h4 id="堆叠成员退出"><a href="#堆叠成员退出" class="headerlink" title="堆叠成员退出"></a>堆叠成员退出</h4><h4 id="堆叠分裂"><a href="#堆叠分裂" class="headerlink" title="堆叠分裂"></a>堆叠分裂</h4><h4 id="多主检测"><a href="#多主检测" class="headerlink" title="多主检测"></a>多主检测</h4><p><em>为什么要搞多主检测？</em><br>为了防止分裂后出现两个配置相同的两组堆叠系统</p>
 <p>MAD</p>
 <p>1.直连检测</p>
 <p>中间设备、全互联</p>
@@ -473,7 +483,15 @@
 <p>这两种检测互斥</p>
 <p><em>堆叠分裂后，MAD冲突处理机制会使分裂后的堆叠系统处于Detect状态或Recovery状态。Detect状态表示堆叠正常工作状态，Recovery状态表示堆叠禁用状态。</em></p>
 <p><em>堆叠合并：p堆叠链路修复后，处于Recovery状态的堆叠系统重新启动，与Detect状态的堆叠系统合并，同时将被关闭的业务端口恢复Up，整个堆叠系统恢复。</em></p>
-<h4 id="iStack配置"><a href="#iStack配置" class="headerlink" title="iStack配置"></a>iStack配置</h4><h3 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h3><p>原理</p>
+<h4 id="iStack配置"><a href="#iStack配置" class="headerlink" title="iStack配置"></a>iStack配置</h4><h3 id="CSS（集群交换系统）"><a href="#CSS（集群交换系统）" class="headerlink" title="CSS（集群交换系统）"></a>CSS（集群交换系统）</h3><p>一般用于框式交换机，s7700、s7800、s9700、s12700、s12800、s16800，最多支持两台</p>
+<p>vs，虚拟系统，一虚多，框式交换机支持，将单台交换机逻辑上划分成多台独立的交换机，简化组网，提高设备利用率。可以和CSS结合使用，先做CSS，再做VS。</p>
+<p>SVF：纵向虚拟化，通过父交换机和子交换机组成，子交换机相当于父交换机的子卡，全网可以当一台交换机来理解。</p>
+<p>M-LAG：跨框链路聚合技术，双活技术，可以和SVF结合组网，简化网络拓扑，同时提高网络的可靠性，充分利用链路带宽。</p>
+<blockquote>
+<p>S系列的CSS<br>1、主控板+集群子卡 ——CSS    缺点：必须双主控板在线，CSS才能正常工作，否则就分裂<br>2、交换板+集群子卡 ——CSS2 单主控集群不分裂<br>3、线卡（业务卡）直接做CSS</p>
+<p>CE系列<br>1、线卡直接做CSS，不需要集群子卡</p>
+</blockquote>
+<p>原理</p>
 <h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>主备交换机</p>
 <p>集群ID</p>
 <p>集群优先级</p>
@@ -492,6 +510,7 @@
 <p>2、LACP模式聚合</p>
 <h4 id="配置命令"><a href="#配置命令" class="headerlink" title="配置命令"></a>配置命令</h4><h4 id="集群下的链路聚合"><a href="#集群下的链路聚合" class="headerlink" title="集群下的链路聚合"></a>集群下的链路聚合</h4><h4 id="Eth-trunk和E-trunk"><a href="#Eth-trunk和E-trunk" class="headerlink" title="Eth-trunk和E-trunk"></a>Eth-trunk和E-trunk</h4><p>E-trunk是啥？用在什么场景？有什么注意事项？</p>
 <p>思考题记得看！！！！</p>
+<p>本地流量优先转发：自身设备收到数据时优先从自己端口转发，不再从堆叠线走。</p>
 
             </div>
             <hr/>
@@ -964,7 +983,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">175.9k</span>&nbsp;字
+                class="white-color">176.7k</span>&nbsp;字
             
             
             
