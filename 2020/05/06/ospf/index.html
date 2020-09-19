@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    9.4k
+                    10.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    34 分
+                    39 分
                 </div>
                 
 
@@ -446,6 +446,7 @@
 <li>OSPF基于IP协议，协议号 89</li>
 <li>目前，OSPFv2仅支持IPv4，OSPFv3仅支持IPv6</li>
 <li>COST值以出接口方向做累加</li>
+<li>OSPFv2是基于网段、OSPFv3基于链路</li>
 </ul>
 <h3 id="OSPF协议具有以下特点："><a href="#OSPF协议具有以下特点：" class="headerlink" title="OSPF协议具有以下特点："></a>OSPF协议具有以下特点：</h3><ul>
 <li>OSPF把自治系统AS（Autonomous System）划分成逻辑意义上的一个或多个区域；</li>
@@ -463,8 +464,11 @@
 <li><p><strong>骨干路由器（Backbone Router）</strong>：该类路由器至少有一个接口属于骨干区域。所有的ABR和位于Area0的内部路由器都是骨干路由器。</p>
 </li>
 <li><p><strong>区域边界路由器ABR（Area Border Router）</strong>：该类路由器可以同时属于两个以上的区域，但其中一个接口必须在骨干区域。ABR用来连接骨干区域和非骨干区域，它与骨干区域之间既可以是物理连接，也可以是逻辑上的连接。</p>
+<p>存在vlink的路由器也是ABR</p>
+<p>ABR将直连区域的区域内路由转化成其他区域的type3<br>ABR会在所连区域产生的type1中表明自身是ABR</p>
 </li>
 <li><p><strong>自治系统边界路由器ASBR（AS Boundary Router）</strong>：与其他AS交换路由信息的路由器称为ASBR。ASBR并没有特定的位置要求，它可能位于普通的区域，也可能是ABR。<strong>只要一台OSPF路由器引入了外部路由的信息，它就成为ASBR</strong>。</p>
+<p>ASBR的定义：<br>1、执行了import-route命令<br>2、NSSA区域7转5的ABR</p>
 </li>
 </ul>
 <h3 id="OSPF的报文类型"><a href="#OSPF的报文类型" class="headerlink" title="OSPF的报文类型"></a>OSPF的报文类型</h3><ul>
@@ -632,6 +636,7 @@
 </ul>
 <h6 id="MTU对邻居关系的影响"><a href="#MTU对邻居关系的影响" class="headerlink" title="MTU对邻居关系的影响"></a>MTU对邻居关系的影响</h6><p>如果过链路是PPP，在PPP上的链路会自动协商链路的MTU，使得链路两边的MTU值一致，取接口最小MTU值作为链路的MTU，默认DD报文的MTU为0，都小于链路的MTU，因此邻居关系正常建立，如果过使用了ospf mtu-enable，那么在DD报文中MTU值为链路协商后的MTU，因此还是保持一致，邻居也可以正常建立。</p>
 <p>如果过链路是HDLC，由于缺乏MTU的协商机制，所以当两边的MTU不一致，并且用ospf mtu-enable时，如果过DD报文中的MTU值大于接收DD报文的接口本地的MTU值时，邻居关系无法正常建立，另据关系将卡在exstar的状态。</p>
+<h4 id="OSPF邻居建立的可靠性"><a href="#OSPF邻居建立的可靠性" class="headerlink" title="OSPF邻居建立的可靠性"></a>OSPF邻居建立的可靠性</h4><p>3次握手、DBD的隐式确认，LSA的显示确认，报文的重传机制</p>
 <h4 id="DD报文"><a href="#DD报文" class="headerlink" title="DD报文"></a>DD报文</h4><p>首个DBD报文不携带任何LSA摘要信息，仅用来协商主从关系</p>
 <p><img src="/2020/05/06/ospf/firstdbd.JPG" alt="首个DBD报文参数"></p>
 <p><img src="/2020/05/06/ospf/secdbd.JPG" alt="第二个DBD报文参数"></p>
@@ -656,13 +661,16 @@
 </tr>
 <tr>
 <td>DD Sequence</td>
-<td>DD报文序列号，用于标识DD报文，只有Master产生序列号，每发送一次加1。从路由器收到主路由的DD报文后会使用回主路由器上一个DD报文的序列号来进行隐式确认。</td>
+<td>DD报文序列号，用于标识DD报文，只有Master产生序列号，每发送一次加1。slave总是用master的序列号向master发送dd报文，master将slave序列号加1，向从发送dd报文，实现dd报文的隐式确认。5秒内从没有收到主路由器dd报文序列号+1的，即认为上一个dd报文主没有收到，重传此dd报文。</td>
 </tr>
 </tbody></table>
 <p>注意：</p>
 <p>DD报文中携带的链路状态信息(LSA)头部要解决的问题</p>
 <p>lsa type    link state id    adv router 解决有LSA没有问题以及在同一个区域如何区分不同的LSA。</p>
 <p>seq num    check sum    age 解决LSA新旧问题</p>
+<p>同DBD中携带的LSA的头部信息，完成LSDB的差异比较，向邻居发送LSR，请求自身需要的LSA</p>
+<p>为什么要设计DD报文呢？实现按需同步，提高收敛速度。</p>
+<p>为什么要采用隐式确认？原因DD报文携带自身LSDB中所有的LSA头部信息，信息比较多，一一确认处理起来比较繁琐，消耗设备资源影响邻居收敛的时间，所以采用相对简单的隐式确认机制。</p>
 <h4 id="LSR报文"><a href="#LSR报文" class="headerlink" title="LSR报文"></a>LSR报文</h4><ul>
 <li>从DBD报文中的LSA摘要信息中可得知自己缺少的LSA从而发送LSA请求报文请求所缺的LSA</li>
 <li>里面包含了所请求报文的三要素（有没有问题）</li>
@@ -696,15 +704,15 @@
 </tr>
 <tr>
 <td>2-way</td>
-<td>互为邻居。本状态表示双方互相收到了对端发送的Hello报文，建立了邻居关系。如果不形成邻接关系则邻居状态机就停留在此状态，否则进入Exstart状态。</td>
+<td>互为邻居。本状态表示双方互相收到了对端发送的Hello报文，建立了邻居关系。如果不形成邻接关系则邻居状态机就停留在此状态，否则进入Exstart状态。drother之间就仅到此状态，不仅进行lsdb的同步</td>
 </tr>
 <tr>
 <td>Exstart</td>
-<td>协商主/从关系。建立主/从关系主要是为了保证在后续的DD报文交换中能够有序的发送。初始DD序列号也是在此状态下决定的。在此状态下发送的DD报文不包含链路状态描述。</td>
+<td>协商主/从关系。建立主/从关系主要是为了保证在后续的DD报文交换中能够有序的发送。初始DD序列号也是在此状态下决定的。在此状态下发送的DD报文不包含链路状态描述。发送的DBD报文只做主从选举，而不会携带任何LSDB中LSA的头部信息。并各自表达自身是初次发送DBD报文，后续还希望继续发送DBD，并自身是master，随机生成DBD报文序列号，进行主从选举。彼此交换该DBD报文后，根据router id大的完成主从选举，大的master、小的slave。</td>
 </tr>
 <tr>
 <td>Exchange</td>
-<td>交换DD报文。本端设备将本地的LSDB用DD报文来描述，并发给邻居设备。</td>
+<td>交换DD报文。本端设备将本地的LSDB用DD报文来描述，并发给邻居设备。主从选举完毕后进入的状态，slave路由器开始发送携带自身LSDB中的LSA的头部信息的DBD报文，并使用exstart状态的master路由器的序列号作为该DBD报文的序列号。</td>
 </tr>
 <tr>
 <td>Loading</td>
@@ -720,9 +728,10 @@
 <li>Drother之间会停留在2-way状态</li>
 <li>Exstar中协商主从关系的作用：，因为DD报文不周期性发送，且ospf协议是直接封装在IP报文之上的，IP协议是不保证可靠传递的。为了保证DD报文的可靠传输，ospf协议就设计主从选举的机制来保证后续DD报文的可靠传输。</li>
 <li>所以router id不能冲突的原因：1.在Exstart状态中需要进行主从选举，选举的依据就是router id。2.产生的1类LSA三要素相同导致不能区分。 </li>
-<li>在Exchange状态中，DD报文的隐式确认：从路由器总是用主路由器的seq num向主路由器发送DD报文。主路由器总是用从路由器的DD的seq num+1向从路由器发送DD报文。隐式确认保证DD报文交互的可靠性。</li>
 </ol>
-<h3 id="OSPF-LSA"><a href="#OSPF-LSA" class="headerlink" title="OSPF LSA"></a>OSPF LSA</h3><h4 id="LSA新旧对比"><a href="#LSA新旧对比" class="headerlink" title="LSA新旧对比"></a>LSA新旧对比</h4><ol>
+<h3 id="OSPF-LSA"><a href="#OSPF-LSA" class="headerlink" title="OSPF LSA"></a>OSPF LSA</h3><h4 id="LSA老化机制"><a href="#LSA老化机制" class="headerlink" title="LSA老化机制"></a>LSA老化机制</h4><p>LSA每隔半小时周期性更新，谁产生谁负责周期性更新，seq+1，checksum重新算，ls age置0，lsa age到达3600s还没刷新，自己删除老化的LSA。</p>
+<p>链路状态变化触发更新，seq+1 checksum重新算，ls age置0。</p>
+<h4 id="LSALSA新旧对比"><a href="#LSALSA新旧对比" class="headerlink" title="LSALSA新旧对比"></a>LSALSA新旧对比</h4><ol>
 <li>首先比较序列号（有32位，从0x80000001到0x7fffffff），如果序列号越高，则越新。</li>
 <li>如果序列号相同，则比较校验和，校验和越高越新。</li>
 <li>如果校验和相同，则比较存活时间（LS Age），如果这些LSA中只有一条存活时间为3600s，则认为该LSA是最新的。</li>
@@ -770,6 +779,7 @@
 <p>Type：LSA类型为Router</p>
 <p>LinkState ID：自己的Router ID</p>
 <p>AdvRouter： 谁产生这条LSA的Router ID</p>
+<p>type 1 的LSA通过4种link type 描述直连链路信息<br>每种link type 由link id，data，metric进行描述。</p>
 <p><strong>类型1的LSA的Link type 分为4种</strong></p>
 <ol>
 <li>stubnet：描述路由器自身直连网段的网络号以及掩码，开销。Link ID就是直连网络的网路号；data就是直连网络的子网掩码；metric就是自身直连网络的开销值。</li>
@@ -794,6 +804,7 @@
 <p>路由器 如何说明自身是ABR、ASBR或是否存在v-link<br>type1-lsa Flages<br>v bit    0代表路由器没有v-link    1代表此路由器上配置了v-link<br>E bit    0代表此路由器不是ASBR    1代表此路由器是ASBR<br>B bit    0代表此路由器不是ABR    1代表此路由器是ABR</p>
 <p>ABR 将直连区域的的区域内路由（1，2LSA计算出来的路由），转化成其他区域的3类LSA（路由信息，描述ABR到这些路由的开销）</p>
 <p>区域间路由计算：<br>ABR将区域0中的3类LSA转化成非骨干区域的3类LSA。<br>ABR将非骨干区域的3类LSA转化成其他非骨干区域的3类LSA<br>ABR不能将非骨干区域的3类LSA再次转化骨干区域的3类LSA，实现区域间的防环<br>区域0的3类LSA优于非骨干区域的3类LSA计算路由<br>ABR如果过能用1类计算出来的路由，就不会用3类来计算这条路由<br>自身到ABR的下一跳就是去往区域间路由的下一跳<br>自身到ABR的开销+ABR到区域间路由的开销等于自身到区域间路由的开销<br>ABR在区域0存在活动邻居时，不会考虑使用非骨干区域的3类LSA计算区域间的路由。原因是1类优于3类，骨干区域的3类优于非骨干区域的3类<br>在区域0中ABR产生某条路由的3类LSA后，不会使用其他ABR产生的这条路由的3类LSA计算路由</p>
+<p><strong>开销=自身到ABE的开销（SPF）+ABR到type3的开销（SPF）</strong><br>下一跳=自身到ABR的下一跳</p>
 <h5 id="ASBR-summary-LSA（Type4）"><a href="#ASBR-summary-LSA（Type4）" class="headerlink" title="ASBR-summary-LSA（Type4）"></a>ASBR-summary-LSA（Type4）</h5><p>如果存在ASBR，ASBR所在区域的ABR就会产生类型4的LSA，不一定需要有类型5的LSA出现<br>LSA类型：ASBR summary LSA AS边界路由器汇总LSA<br>作用：告诉其他区域的路由器如何到达ASBR<br>产生路由器：与ASBR在同一区域里面的ABR产生<br>LSA传输范围：一个区域内部<br>LinkState ID：ASBR的router id<br>AdvRouter：ABR的router id<br>AdvRouter是否变化：每经过一个ABR，都会发生变化一次<br>Link-date：子网掩码为0</p>
 <p>4类LSA的产生：<br>由ASBR所在区域ABR向其他区域产生，如果过有多个ABR，都产生4类的LSA，用于描述自身到ASBR的开销</p>
 <h6 id="4类LSA防环以及选路机制"><a href="#4类LSA防环以及选路机制" class="headerlink" title="4类LSA防环以及选路机制"></a>4类LSA防环以及选路机制</h6><p>ABR通过1类LSA和4类LSA都能计算到ASBR的路径时，选择到ASBR开销小的路径，作为外部路由的路径，没有1类LSA优于4类LSA的规则。<br>ABR通过优先使用区域0的4类LSA计算外部路由，区域0的4类优于非骨干的4类<br>当ABR在区域0有活动邻居时，不会用非骨干区域的4类LSA，计算外部路由</p>
@@ -812,6 +823,16 @@
 </blockquote>
 <p>metric type=2 在路由表中只显示引入时的外部路由开销，不体现AS内部所经过的路径开销计算在内<br>metric type=1 在路由表中显示引入时外部开销与在AS内部所经过的路径开销之和</p>
 <p>4类和5类的能不能单独出现？<strong>可以</strong><br>单区域的OSPF网络引入外部 路由时，不需要4类的LSA，存在5类LSA<br>空引入外部路由时或引入的外部路由在ASBR上被全部过滤时 ，会产生4类，而不存在5类</p>
+<h6 id="外部路由计算"><a href="#外部路由计算" class="headerlink" title="外部路由计算"></a>外部路由计算</h6><blockquote>
+<p>同ASBR在同一个区域内的路由器外部计算机</p>
+<p>以cost-type 1引入外部路由，FA地址为0.0.0.0<br>开销=自身到ASBR的开销+引入时开销<br>下一跳 = 自身到ASBR的下一跳</p>
+<p>以cost-type 2引入外部路由，FA地址为0.0.0.0<br>开销 = 引入时开销<br>下一跳 = 自身到ASBR的下一跳</p>
+</blockquote>
+<blockquote>
+<p>和ASBR不在同一个区域的路由器外部路由计算</p>
+<p>以cost-type 1引入外部路由，FA地址为0.0.0.0<br>开销=通过type 4的lsa计算到ASBR的开销+引入时开销<br>下一跳 = 自身到ASBR的下一跳</p>
+<p>以cost-type 2引入外部路由，FA地址为0.0.0.0<br>开销 = 引入时开销<br>下一跳 = 自身到ASBR的下一跳</p>
+</blockquote>
 <h6 id="5类LSA如何防环？"><a href="#5类LSA如何防环？" class="headerlink" title="5类LSA如何防环？"></a>5类LSA如何防环？</h6><p>5类自身没有防环机制<br>与ASBR同一区域的路由器可以通过SPF算法实现外部路由防环<br>没有与ASBR在同一个区域的路由器通过4类的LSA防环</p>
 <h6 id="区域间路由汇总"><a href="#区域间路由汇总" class="headerlink" title="区域间路由汇总"></a>区域间路由汇总</h6><p>不能在区域内做路由汇总的原因：路由汇总针对的是路由条目，区域内的路由都是都是用1类2类LSA计算出来的，1类和2类LSA是无法做汇总，是要在区域内泛洪的。所以无法在区域内做路由汇总</p>
 <p>ABR的汇总：只能针对直连区域的1类2类LSA产生的路由进行汇总，已经成为3类的LSA是无法进行ABR的汇总。</p>
@@ -851,9 +872,15 @@
 </ol>
 <p>星型的NBMA网络。使用P2MP是最合适组网。</p>
 <h4 id="广播类型"><a href="#广播类型" class="headerlink" title="广播类型"></a>广播类型</h4><p>当链路层协议是Ethernet，FDDI时，缺省情况下，OSPF认为网络类型是Broadcast。在该类型的网络中，通常以组播形式发送Hello报文，LSU报文和LSACK报文。其中，224.0.0.5的组播地址为OSPF路由器的预留IP组播地址；224.0.0.6的组播地址为OSPF DR的预留IP组播地址。以单播形式发送DD报文和LSR报文。邻居可以自动建立，需要选择DR，BDR。</p>
+<p>广播型/NBMA型链路的网络号由2类LSA进行维护，为了避免路由不精确，要求广播型链路接口掩码配置要一致。即该链路各接口属于同一个网段。</p>
+<p>广播型/NBMA型链路 DD，LSR通过单播发送，如果地址不在同一个网段，导致单播报文发送失败。无法建立邻居 </p>
+<p>所以broadcast和nbma必须同一个网段/掩码相同。</p>
 <h3 id="OSPF的防环"><a href="#OSPF的防环" class="headerlink" title="OSPF的防环"></a>OSPF的防环</h3><h4 id="区域内路由防环"><a href="#区域内路由防环" class="headerlink" title="区域内路由防环"></a>区域内路由防环</h4><p>域内主要用SPF算法</p>
 <p>一类LSA和二类LSA通过SPF算法进行防环</p>
-<h4 id="区域间路由防环"><a href="#区域间路由防环" class="headerlink" title="区域间路由防环"></a>区域间路由防环</h4><p>由于OSPF区域间路由计算本质上还是一种DV算法，无法通过SPF算法进行区域间的放环，所以其核心思想是，保证骨干区域连续，非骨干区域和骨干区域直接相连，非骨干区域之间的流量只能通过骨干区域传递，从而避免有过多的路由计算从而导致环路，具体规则有以下几种：</p>
+<h4 id="区域间路由防环"><a href="#区域间路由防环" class="headerlink" title="区域间路由防环"></a>区域间路由防环</h4><p>1、骨干区域有且只有一个，非骨干必须和骨干区域相连，并通过骨干区域通信，形成星形逻辑拓扑，逻辑结构无环。<br>2、非骨干区域的3类不会再传回骨干区域，ABR优先使用骨干区域的1类或者3类计算路由，当ABR在区域0中失去所有邻居后才使用非骨干区域的3类LSA计算区域间路由。</p>
+<p>1类&gt;非骨干区域的3类<br>区域0的3类&gt;非骨干的区域3类<br>这种选路规则防止非骨干区域的3类传回骨干区域。</p>
+<p>3、1类&gt;区域0的3类LSA，防止非骨干区域内的路由从骨干区域再次传回本区域</p>
+<p>由于OSPF区域间路由计算本质上还是一种DV算法，无法通过SPF算法进行区域间的放环，所以其核心思想是，保证骨干区域连续，非骨干区域和骨干区域直接相连，非骨干区域之间的流量只能通过骨干区域传递，从而避免有过多的路由计算从而导致环路，具体规则有以下几种：</p>
 <ul>
 <li>不论cost值大小，LSA1和LSA2计算的路由优于LSA3计算的路由。</li>
 <li>优先使用骨干区域的LSA3计算路由，优于非骨干区域的LSA3。</li>
@@ -865,12 +892,15 @@
 <h4 id="LSA5和LSA7选路机制"><a href="#LSA5和LSA7选路机制" class="headerlink" title="LSA5和LSA7选路机制"></a>LSA5和LSA7选路机制</h4><p>转发度量值分为两种：<br>1.当转发地址为0.0.0.0，则转发度量值为到ASBR的cost<br>2.当转发地址不为0.0.0.0，则转发度量值为到转发地址的cost值</p>
 <p>转发度量值：到ASBR的开销<br>种子度量值：ASBR引入外部路由的开销</p>
 <p>当转发地址不同，但到转发地址的开销相同，则负载分担，5类7类都遵循此特点</p>
-<h5 id="Cost-type2"><a href="#Cost-type2" class="headerlink" title="Cost-type2"></a>Cost-type2</h5><p>默认为类型2</p>
+<h5 id="Cost-type2"><a href="#Cost-type2" class="headerlink" title="Cost-type2"></a>Cost-type2</h5><p>外部路由选路机制：<br>1、引入时开销小优先、不考虑AS内部路径开销。<br>2、引入时开销相同，选择到ASBR的开销小的。<br>3、引入时开销相同，到ASBR的开销也相同，则负载分担。</p>
+<p>type-cost 2就是管理员希望按管理意义上最短的路径访问外部网络。</p>
+<p>默认为类型2</p>
 <p>转发地址为0.0.0.0或不为0.0.0.0都遵循以下规则：</p>
 <p>如果引入种子开销相同，转发度量值相同，则负载分担<br>如果引入种子开销相同，转发度量值不同，则选择转发度量值小的优先<br>如果引入种子开销不同，转发度量值相同，则选择种子度量值小的优先<br>如果引入种子开销不同，转发度量值不同，则选择种子度量值小的优先</p>
 <p>类型5或类型7的LSA，当转发地址非0时，优先使用种子开销小的LSA计算路由，如果过种子开销值相同，则优先选择到转发地址开销值小的LSA计算路由。如果过种子开销相同，转发地址也开销相同，转发地址相同或不同，则负载分担。<br>如果ASBR上去往外部同一条路由开销相同，则使用转发地址大的产生类型5或是类型7的LSA</p>
 <p><strong>总结</strong><br>Cost-type2通过可以在不影响AS内部拓扑结构的情况下，选择“最佳的”出接口来使用。通常用于不关心内部转发路径时，选择一个“最佳的”路径，通常可以实现人为对业务出口的控制。</p>
-<h5 id="Cost-type1"><a href="#Cost-type1" class="headerlink" title="Cost-type1"></a>Cost-type1</h5><p>转发地址为0.0.0.0或不为0.0.0.0都遵循以下规则：</p>
+<h5 id="Cost-type1"><a href="#Cost-type1" class="headerlink" title="Cost-type1"></a>Cost-type1</h5><p>外部路由选路机制：<br>1、选择开销和值小的最优<br>2、如果相同、则负载分担<br>type-cost 1就是管理员希望按路由意义的最短路径访问外部网络</p>
+<p>转发地址为0.0.0.0或不为0.0.0.0都遵循以下规则：</p>
 <p>如果过引入种子开销相同，转发度量值相同，则负载分担<br>其他情况根据种子开销和转发度量值之和，和值小的优先，如果过和值相同则负载分担。</p>
 <p>Cost-type1总是比Cost-type2的优先，不区分是5类还是7类的LSA</p>
 <p>类型5和类型7的LSA，当转发地址非0时，如果过种子开销相同，转发地址开销相同，转发地址相同，则负载分担。<br>类型5和类型7的LSA，当转发地址非0时，如果过种子开销相同，转发地址开销相同，转发地址不同，也负载分担。<br>类型5和类型7的LSA，使用最终计算出来的COST值最低的路由，作为最佳路由，不关心转发地址开销值和种子开销值。</p>
@@ -938,7 +968,12 @@
 <h4 id="LSA泛洪控制"><a href="#LSA泛洪控制" class="headerlink" title="LSA泛洪控制"></a>LSA泛洪控制</h4><p>ospf filter-lsa-out all在进程中仅对p2mp网络类型的邻居生效</p>
 <p>ospf filter-lsa-out all在接口中优先在进程中</p>
 <p>ospf filter-lsa-out all接口中不关心网络类型，都可以用。</p>
-<h3 id="OSPF外部路由汇总"><a href="#OSPF外部路由汇总" class="headerlink" title="OSPF外部路由汇总"></a>OSPF外部路由汇总</h3><p>ASBR汇总：</p>
+<h3 id="OSPF路由汇总"><a href="#OSPF路由汇总" class="headerlink" title="OSPF路由汇总"></a>OSPF路由汇总</h3><h4 id="OSPF区域间汇总"><a href="#OSPF区域间汇总" class="headerlink" title="OSPF区域间汇总"></a>OSPF区域间汇总</h4><p>1、ABR对区域间的路由做汇总，只能对直连区域的区域内路由做汇总。</p>
+<p>2、当明细路由全部失效，汇总路由才会失效。</p>
+<p>3、汇总路由的默认开销继承明细路由开销中最大的，可以通过命令修改汇总路由的默认开销。</p>
+<p>4、ABR不对自身汇总产生的type3 lsa进行路由计算，也不会对其他ABR产生的相同type3 LSA进行计算，防止路由环路。</p>
+<p>5、当一个非骨干区域存在多个ABR时，在对非骨干区域路由做汇总时，建议在这些ABR上都要执行相同的汇总，防止路由回馈和环路。</p>
+<h4 id="OSPF外部路由汇总"><a href="#OSPF外部路由汇总" class="headerlink" title="OSPF外部路由汇总"></a>OSPF外部路由汇总</h4><p>ASBR汇总：</p>
 <p>如果引入的明细路由cost type类型不一致，则默认为type2<br>如果引入的明细路由cost type类型一致，则继承明细路由的cost type</p>
 <h3 id="OSPF认证"><a href="#OSPF认证" class="headerlink" title="OSPF认证"></a>OSPF认证</h3><p>认证模式分为3种：</p>
 <ol>
@@ -967,6 +1002,14 @@
 <li>区域认证</li>
 </ol>
 <p>vlink当作一个接口来做认证，vlink怎样都是属于区域0的。</p>
+<h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><ol>
+<li>OSPF 为什么进行区域的划分？<ol>
+<li>在同一个区域中无法有效的进行路由管理，比如：路由过滤，路由的汇总，划分区域之后在ABR上能对路由展开过滤和汇总</li>
+<li>单区域过大，如果某条链路不稳定，导致整个区域所有路由不稳定的链路进行SPF的计算，影响网络的稳定性。</li>
+<li>减小SPF树的规模，提高网络的整体收敛时间。</li>
+</ol>
+</li>
+</ol>
 
             </div>
             <hr/>
@@ -1443,7 +1486,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">176.7k</span>&nbsp;字
+                class="white-color">178.1k</span>&nbsp;字
             
             
             
