@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    11.6k
+                    11.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    43 分
+                    44 分
                 </div>
                 
 
@@ -558,6 +558,7 @@
 <ul>
 <li>Level-1 LSP：描述非骨干区域的链路状态，对应于OSPF协议非骨干区域中的1类或2类LSA</li>
 <li>Level-2 LSP：描述骨干区域的链路状态，对应于OSPF协议骨干区域中的1类或2类LSA</li>
+<li>在区域内泛洪，要么在骨干，要么在非骨干。</li>
 </ul>
 <p>作用：用于描述携带LSA（链路状态）信息 。</p>
 <p>从报文角度去看LSP分为两种L1 LSP、L2 LSP</p>
@@ -586,6 +587,7 @@
 <blockquote>
 <p>SOURCE 0000.0000.0002.01    dis的system id，伪节点LSP<br>NLPID IPV4<br>NBR ID 0000.0000.0002.00 COST：0    伪节点在广播型链路的实节点邻居<br>NBR ID 0000.0000.0001.00 COST：0<br>NBR ID 0000.0000.0003.00 COST：0</p>
 </blockquote>
+<p>伪节点LSP描述的是拓扑信息，不携带路由信息。<br>通过实节点LSP描述P2P的直连路由，也描述广播型链路的直连路由。</p>
 <h5 id="SNP-PDU"><a href="#SNP-PDU" class="headerlink" title="SNP PDU"></a>SNP PDU</h5><ul>
 <li>序列号PDU</li>
 </ul>
@@ -642,8 +644,8 @@
 <p>路由过载的功能：<br>RIP    接口上metric out 将发送的路由改成16跳<br>EIGRP    stub router（末节路由器）<br>OSPF    stub router（末节路由器）将自己直连的链路cost值设置成65535</p>
 <h5 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h5><p>set-overload [allow {interlevel | external} * ]</p>
 <p>external引入到ISIS协议中的外部路由，在引入外部路由的ASBR上配置。</p>
-<p>set-overload allow interlevel    L12，L1，L2继续描述自身引入的外部路由，对非自身产生的外部路由无效。通常在L1/2路由器上实施。</p>
-<p>set-overload allow external    L12路由器过载后继续描述AS内部泄露路由以及其他路由器引入的外部路由。通常在ASBR路由器上实施。</p>
+<p>set-overload allow interlevel    过载了继续执行路由泄露功能，但只对ISIS AS的内部路由继续泄露。通常在L1/L2路由器上实施。</p>
+<p>set-overload allow external    过载了继续执行路由泄露功能，但只对ISIS AS的外部路由继续泄露。通常在ASBR的路由器上实施。</p>
 <p>set-overload</p>
 <p>L12路由器设置OL=1后，默认不把L1路由在L2的LSP进行描述，也不会把L2的泄露的路由在L1的LSP中进行描述，同时ATT=0，也不会描述自身引入的外部路由。</p>
 <p>L1，L2路由器设置OL=1后，不描述自身引入的外部路由。</p>
@@ -669,10 +671,10 @@
 <p>同一个区域如果过存在多个L1/2的路由器，彼此不进行缺省路由的计算。防止路由环路。</p>
 <p>Distribution（DU bit）置1为泄露到非骨干区域的L2路由</p>
 <h4 id="命令-2"><a href="#命令-2" class="headerlink" title="命令"></a>命令</h4><p>ATT bit的控制<br>attaached-bit advertise <em>always/never</em> 设置ATT bit位总是置1/0。</p>
-<p>attached-bit advertise avoid-learning 设置L1的路由器不进行缺省路由的计算。</p>
+<p>attached-bit advertise avoid-learning 设置L1的路由器不进行缺省路由的计算。（本地有效）</p>
 <p>import-route isis level-2 into level-1 filter-policy ip-prefix 1<br>L2的路由向L1区域泄露时做路由过滤</p>
 <p>路由过滤：在L1/2路由器中进行从L2/L1渗透进L1/L2时，对直连的路由不生效。</p>
-<h3 id="IS-IS防环"><a href="#IS-IS防环" class="headerlink" title="IS-IS防环"></a>IS-IS防环</h3><p>同一个区域存在多台L1/2的路由器时如何实现防环的？即ISSI区域间防环机制</p>
+<h3 id="IS-IS防环"><a href="#IS-IS防环" class="headerlink" title="IS-IS防环"></a>IS-IS防环</h3><p>同一个区域存在多台L1/2的路由器时如何实现防环的？即ISIS区域间防环机制</p>
 <ol>
 <li>为什么泄露到非骨干区域的路由DU会置1，而从非骨干区域传到骨干区域的路由DU不会置1呢？<br>问题1原因：由于L1的路由默认会转化L2的路由在骨干区域泛洪，为了防止L2的路由泄露到L1的区域后，再次传回骨干区域，将该路由的DU bit置1。L1/2路由器不会将DU=1的路由再次传回骨干区域。（区域间的水平分割）<br>问题2原因：L2的路由默认不会传到L1的区域，所以不存在环路风险。</li>
 <li>如果管理员将L2的路由泄露到L1的区域，那么这些路由会再次传回L1的区域吗？<br>不会，因为L1的路由优于L2的路由，这样L2的路由就无法再次泄露到非骨干区域。</li>
@@ -693,8 +695,8 @@
 <thead>
 <tr>
 <th>开销类型</th>
-<th>接收（此含义是计算）</th>
-<th>发送</th>
+<th>接收（此含义是计算）（风格的LSP）</th>
+<th>发送（风格的LSP）</th>
 </tr>
 </thead>
 <tbody><tr>
@@ -829,7 +831,7 @@
 <p>area-authentication-mode md5 plain huawei@123<br>对发送的L1的LSP，CSNP，PSNP添加认证TLV，并对接收到的L1的LSP，CSNP，PSNP做认证</p>
 <p>area-authentication-mode md5 plain huawei@123 all-send-only<br>对发送的L1的LSP，CSNP，PSNP添加认证TLV，不对接收到的L1的LSP，CSNP，PSNP做认证。</p>
 <p>area-authentication-mode md5 plain huawei@123 snp-packet send-only<br>对发送的L1的LSP，CSNP，PSNP添加认证TLV，不对接收到的L1的CSNP，PSNP做认证，对接收的L1的LSP做认证。</p>
-<p>area-authentication-mode md5 plain huawei@123 authentication-avoid<br>对发送的L1的LSP添加认证TLV，并对接收到的L1的LSP做认证。忽略发送和接收的L1的SNP报文认证。</p>
+<p>area-authentication-mode md5 plain huawei@123 snp-packet authentication-avoid<br>对发送的L1的LSP添加认证TLV，并对接收到的L1的LSP做认证。忽略发送和接收的L1的SNP报文认证。</p>
 <p>domain-authentication-mode md5 plain huawei<br>发送L2的SNP，LSP报文并携带认证TLV,对接收的L2的SNP，LSP做认证</p>
 <p>domain-authentication-mode md5 cipher huawei all-send-only<br>对发送的L2的LSP，CSNP，PSNP添加认证TLV，不对接收到的L2的LSP，CSNP，PSNP做认证。</p>
 <p>domain-authentication-mode md5 cipher huawei snp-packet send-only<br>对发送的L2的LSP，CSNP，PSNP添加认证TLV，不对接收到的L2的CSNP，PSNP做认证，对接收到的L2的LSP做认证。</p>
@@ -873,6 +875,7 @@
 <li><p>管理标记值与某些属性相关联。当cost-sytle为wide、wide-compatible或compatible时，如果发布可达的IP地址前缀具有该属性，IS-IS会将管理标记加入到该前缀的IP可达信息TLV中。这样，管理标记就会随着前缀发布到整个路由域。</p>
 </li>
 </ul>
+<p>可在接口直接打tag</p>
 <h3 id="主机名映射"><a href="#主机名映射" class="headerlink" title="主机名映射"></a>主机名映射</h3><p>IS-IS主机名映射机制为运行IS-IS协议的设备提供了一种从主机名到System ID映射的服务，它包括动态主机名映射和静态主机名映射。动态主机名映射的优先级高于静态主机名映射。当两者同时存在时，由动态主机名代替静态主机名。</p>
 <p>在没有使能主机名交换特性的运行IS-IS协议的设备上，查看IS-IS邻居和链路状态数据库等信息时，IS-IS域中的各设备都是用由12位十六进制数组成的System ID来表示的，例如：aaaa.eeee.1234。这种表示方法比较繁琐，而且易用性不好。主机名交换机制就是为了方便对IS-IS网络的维护和管理而引入的。</p>
 <p>在下列三种情况下会将System ID替换为主机名显示：</p>
@@ -884,6 +887,7 @@
 <h4 id="动态主机名映射"><a href="#动态主机名映射" class="headerlink" title="动态主机名映射"></a>动态主机名映射</h4><p>在使能了动态主机名映射的设备上，IS-IS动态主机名的信息在LSP中以137号TLV（Dynamic Hostname TLV）的形式发布给其他IS-IS设备。在其他设备上使用IS-IS相关显示命令查看IS-IS信息时，本地设备的System ID将被设置的主机名所代替，这样更直观，也更容易记忆。</p>
 <p>动态主机名的TLV是可选的，它可以存在于LSP中的任何位置。其中TLV的value值不能为空。设备在发送LSP的时候可以决定是否携带该TLV，接收端的设备也可以决定是否忽略该TLV，或者提取该TLV的内容放在自己的映射表中。</p>
 <p>is name [<em>name</em>]</p>
+<p>双方都要启用</p>
 <h4 id="静态主机名映射"><a href="#静态主机名映射" class="headerlink" title="静态主机名映射"></a>静态主机名映射</h4><p>静态主机名映射是指在本地设备上对其他运行IS-IS协议的设备设置主机名与System ID的映射。静态主机名映射仅在本地设备生效，并不会通过LSP报文发送出去。</p>
 <p>is-name map 0000.0000.0002 R2</p>
 <p>is-name map 0000.0000.0002.01 R2.01</p>
@@ -891,15 +895,15 @@
 <h3 id="IS-IS路由汇总"><a href="#IS-IS路由汇总" class="headerlink" title="IS-IS路由汇总"></a>IS-IS路由汇总</h3><p>在哪里执行ISIS的路由汇总？</p>
 <p>OSPF中只能在ABR和ASBR中进行路由汇总。</p>
 <ol>
-<li><p>可在L1、L2的路由器上执行汇总，但是只能对自身的直连路由汇总，无法对非直连的ISIS路由做汇总。（只能对自身直连的加入到isis进程的网段进行汇总）</p>
+<li><p>可在L1或L2的路由器上执行汇总，但是只能对自身的直连路由汇总，无法对非直连的ISIS路由做汇总。（只能对自身直连的加入到isis进程的网段进行汇总）</p>
 </li>
-<li><p>L2的路由器上执行区域间路由的汇总，类似于OSPF的ABR。</p>
+<li><p>L1/2路由器上执行区域间路由的汇总，类似于OSPF的ABR。</p>
 </li>
 <li><p>在ASBR上对引入的外部路由执行汇总。</p>
 </li>
 </ol>
-<p>在L12路由器引入外部路由指定引入时路由的级别，不受泄露机制的影响。</p>
-<p>在L12上以L1的路由引入外部路由时，DU bit置0</p>
+<p>在L12路由器引入外部路由指定引入时路由的级别，不受泄露机制的影响，引入时是级别几就是级别几。</p>
+<p>在L12上以L1的路由引入外部路由时，DU bit置0，可传到骨干区域。</p>
 <p>ISIS汇总路由的外部路由不用分片LSP进行描述，而是当成自身直连的路由进行描述。</p>
 <ol start="4">
 <li><p>汇总路由继承明细路由中cost值最小的。</p>
@@ -907,8 +911,9 @@
 <li><p>当所有的明细路由失效汇总路由才会失效。</p>
 </li>
 </ol>
+<p>路由引入时，会产生分片lsp来携带这条路由，在对这条路由执行汇总时会自动老化分片lsp，把这条路由当成自己的一个叶子来携带。</p>
 <h4 id="命令-5"><a href="#命令-5" class="headerlink" title="命令"></a>命令</h4><p>summary 192.168.0.0 255.255.0.0 generate_null0_route 执行路由汇总的路由器上产生指向NULL0接口的汇总路由，防止路由环路。</p>
-<p>summary 192.168.0.0 255.255.0.0 avoid-feedback  </p>
+<p>summary 192.168.0.0 255.255.0.0 avoid-feedback  只要是我发出去的，我就不学这条路由了，防止环路。</p>
 <h3 id="ISIS缺省路由"><a href="#ISIS缺省路由" class="headerlink" title="ISIS缺省路由"></a>ISIS缺省路由</h3><p>default-rouote-advertise alway（强制下发，不管自身路由表中是否存在其他协议的缺省路由）<br>总是下发缺省路由，但也会学习AS内部其他ISIS路由器下发缺省路由，双出口导致环路。</p>
 <p>default-rouote-advertise match default（非强制下发缺省路由，自身路由表存在缺省路由才下发缺省路由）<br>有其他协议的缺省路由或其他ISIS进程的缺省路由时才下发缺省路由，当AS内部其他路由器下发缺省路由并且优先级比其他协议的缺省路由更好，就学习AS内部其他路由器下发的缺省路由。</p>
 <p>default-rouote-advertise route-policy<br>条件下发缺省路由，并学习AS内部其他路由器下发的缺省路由。</p>
@@ -933,10 +938,10 @@
 </ul>
 </li>
 </ul>
-<h5 id="IPv6-Reachability-TLV"><a href="#IPv6-Reachability-TLV" class="headerlink" title="IPv6 Reachability TLV"></a>IPv6 Reachability TLV</h5><p>U：up/down bit，标识这个前缀是否是从高Level通告下来的（用来防环路）（IPv4的DUbit）</p>
+<h5 id="IPv6-Reachability-TLV-type-236"><a href="#IPv6-Reachability-TLV-type-236" class="headerlink" title="IPv6 Reachability TLV [type 236]"></a>IPv6 Reachability TLV [type 236]</h5><p>U：up/down bit，标识这个前缀是否是从高Level通告下来的（用来防环路）（IPv4的DUbit）</p>
 <p>X：external original bit，标识这个前缀是否是从其他路由协议中引入过来的。</p>
 <p>S：subtlv present bit，子TLV标识位。（可选）</p>
-<h5 id="IPv6-Interface-Address-TLV"><a href="#IPv6-Interface-Address-TLV" class="headerlink" title="IPv6 Interface Address TLV"></a>IPv6 Interface Address TLV</h5><ul>
+<h5 id="IPv6-Interface-Address-TLV-type-232"><a href="#IPv6-Interface-Address-TLV-type-232" class="headerlink" title="IPv6 Interface Address TLV [type 232]"></a>IPv6 Interface Address TLV [type 232]</h5><ul>
 <li>IPv6 Interface Address TLV [类型232] [0xE8]<ul>
 <li>TLV232 跟TLV 132相似</li>
 <li>每个接口的地址长度变成128bits</li>
@@ -1356,30 +1361,30 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/06/16/2020-06-16-sui-bi/">
+                <a href="/2020/07/03/stp/">
                     <div class="card-image">
                         
-                        <img src="/images/51.jpg" class="responsive-img" alt="2020-06-16随笔">
+                        <img src="/images/54.jpg" class="responsive-img" alt="STP">
                         
-                        <span class="card-title">2020-06-16随笔</span>
+                        <span class="card-title">STP</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            随笔
+                            生成树协议的介绍
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-06-16
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-03
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
@@ -1389,8 +1394,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
                     </a>
                     
                 </div>
@@ -1404,30 +1409,30 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/06/12/wo-de-si-nian-xiao-yuan-sheng-huo/">
+                <a href="/2020/06/11/kua-yu-mplsvpn-de-pei-zhi/">
                     <div class="card-image">
                         
-                        <img src="/images/jsxy.jpg" class="responsive-img" alt="四年校园生活的回忆与总结">
+                        <img src="/images/49.jpg" class="responsive-img" alt="MPLS VPN的配置（跨域）">
                         
-                        <span class="card-title">四年校园生活的回忆与总结</span>
+                        <span class="card-title">MPLS VPN的配置（跨域）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            时光荏苒，岁月如梭。
+                            跨域MPLS VPN的配置
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-12
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-11
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
@@ -1437,8 +1442,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
+                    </a>
+                    
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
                     </a>
                     
                 </div>
@@ -1590,7 +1599,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">178.1k</span>&nbsp;字
+                class="white-color">145.7k</span>&nbsp;字
             
             
             

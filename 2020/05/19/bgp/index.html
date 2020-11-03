@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    15.3k
+                    18.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    56 分
+                    68 分
                 </div>
                 
 
@@ -441,18 +441,24 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="BGP"><a href="#BGP" class="headerlink" title="BGP"></a>BGP</h2><ul>
+                <h2 id="BGP"><a href="#BGP" class="headerlink" title="BGP"></a>BGP</h2><p>AS之间互联互通的常用方法<br>1、BGP<br>2、IGP路由引入</p>
+<ul>
 <li>BGP协议不产生路由，只用来传输路由</li>
 <li>BGP始终只会传输自己”正在使用“（最优）的路由</li>
 <li>BGP是一个路径矢量路由协议，并且是一个无环路径；AS-PATH在一个AS内部以及AS之间都有不同的防环机制。</li>
 <li>BGP是一个应用程协议，使用的是TCP协议，端口号为179，单播。是唯一使用TCP的路由协议</li>
 <li>可以不停的可靠的发送大量的路由报文，利用的就是TCP的可靠以及滑动窗口。说明为什么BGP适合于庞大的网络，或者是internet网络，其他的协议即使可靠的但是他们都是通过一堆的ACK来做到可靠机制的。</li>
+<li>AS号范围：1——65535，私有AS号范围:64512——65535</li>
 </ul>
 <p>为什么BGP要用TCP来工作？<br>1.效率高：TCP有窗口调整机制，能够更高效地传递路由信息。AS之间有大量地路由信息要传递。<br>2.可靠性高：有重传机制<br>3.TCP会话可实现长距离跨链路的信息传递。只要对方IP地址可达。传递路由更加灵活，不受逐跳传递路由的限制。</p>
 <h3 id="BGP工作原理"><a href="#BGP工作原理" class="headerlink" title="BGP工作原理"></a>BGP工作原理</h3><h4 id="BGP报文类型"><a href="#BGP报文类型" class="headerlink" title="BGP报文类型"></a>BGP报文类型</h4><h5 id="OPEN报文"><a href="#OPEN报文" class="headerlink" title="OPEN报文"></a>OPEN报文</h5><ul>
 <li>协商BGP参数</li>
 </ul>
 <p><img src="/2020/05/19/bgp/open.JPG" alt="Open报文"></p>
+<p>影响BGP邻居建立的参数<br>bgp version：如果不一致，高的向下兼容。<br>my as：要和邻居指定的AS号一样。<br>holdtime：如果不一致，则使用小的hold timer<br>bgp router id：不能冲突，否则邻居无法建立，默认使用全局router id充当BGP的router id。<br>optin：至少要匹配一种地址族能力，其他能力不需要匹配。</p>
+<p>全局router id<br>1、华为默认使用设备上第一个IP地址作为全局router id<br>2、可以使用router id命令指定全局router id</p>
+<p>协议router id<br>1、ospf<br>2、BGP<br>3、LDP</p>
+<p>BGP邻居建立不起来的原因：<br>1、TCP会话建立不起来<br>2、错误的BGP邻居配置<br>3、open报文错误的参数<br>4、BGP认证错误</p>
 <h5 id="Update报文"><a href="#Update报文" class="headerlink" title="Update报文"></a>Update报文</h5><p><img src="/2020/05/19/bgp/update.JPG" alt="Update报文"></p>
 <ul>
 <li>交换路由信息</li>
@@ -461,7 +467,8 @@
 <p>携带路径属性，网络层可达消息，撤销路由。NLRI（本质就是路由前缀+掩码）</p>
 <h5 id="Keepalive报文"><a href="#Keepalive报文" class="headerlink" title="Keepalive报文"></a>Keepalive报文</h5><p><img src="/2020/05/19/bgp/keepalive.JPG" alt="Keepalive报文"></p>
 <ul>
-<li>保持邻居关系</li>
+<li>维持邻居关系，保活TCP会话。</li>
+<li>60s周期发送，180s收不到邻居的keepalive报文，则认为邻居失效。断开TCP连接，并删除从该邻居收到的所有BGP路由。</li>
 </ul>
 <p>hole-time<br>如果双方发送的open报文中包含该计时器不同，则会进行协商，选择一个小的hole-time。</p>
 <p>keepalive interval默认是hold-time时间的1/3</p>
@@ -485,15 +492,18 @@
 <li>邻居发起的TCP握手，被本端拒绝，拒绝的原因是邻居发起的TCP报文的源地址，不是本端指定的邻居地址。</li>
 </ol>
 <p><strong>peer x.x.x.x as-nu y   含义</strong></p>
-<p>1.向此邻居发送BGP报文的目标地址为x.x.x.x<br>2.从邻居所属的AS为y<br>3.此邻居向“我”发送BGP报文的源地址为x.x.x.x<br>4.自身去往x.x.x.x的路由的出接口地址，做为我向x.x.x.x发送BGP报文的源地址。</p>
-<p><strong>peer x.x.x.x connect-interface loopBack0</strong><br>向x.x.x.x发送BGP报文的源地址设置为自身loopBack0接口地址 </p>
+<p>1.向此邻居发送BGP报文的目标地址为x.x.x.x<br>2.邻居所在的AS为y<br>3.邻居向本端发送BGP报文的源地址为x.x.x.x</p>
+<p>默认情况下向BGP邻居发送报文的源地址是什么呢?<br>去往邻居地址路由的出接口IP作为BGP报文源地址。</p>
+<p><strong>peer x.x.x.x connect-interface loopBack0</strong><br>向x.x.x.x发送BGP报文的源地址设置为自身loopBack0接口地址 ，需要和邻居制定的地址相同。<br>使用Loopback建立EBGP邻居，需要设置ebgp-max-hop，因为默认情况下EBGP报文ttl=1，不能跨链路传递。</p>
 <p><strong>peer x.x.x.x ebgp-max-hop 10</strong><br>建立EBGP邻居关系时，将BGP报文的ttl值，设置为10，当EBGP邻居跨链路进行建立时使用</p>
 <p>IBGP邻居关系建立时，BGP报文的TTL=255，无需修改</p>
-<h5 id="Connect（连接）"><a href="#Connect（连接）" class="headerlink" title="Connect（连接）"></a>Connect（连接）</h5><p>在Connect状态，BGP发起的第一个TCP连接，如果过连接重试计时器（Connect-Retry）超时，就重新发起TCP连接，并继续保持在Connect状态，如果TCP连接成功，就转入OpenSent状态，如果过TCP连接失败，就转入Active状态。<br>如果过搜索到了，则开始建立TCP连接，如果成功的话，邻居状态则进入“Connect”状态。要分清楚是建立TCP连接的源地址和目标地址是什么，是双方的neighbor如果双方指定的IP地址不相同，那肯定就得不到“期望”的TCP连接。</p>
-<p>当发起TCP连接的路由器，无法收到邻居TCP回应报文时，就会卡在Connect状态，并且5秒后重传一次TCP连接请求，再等待30秒左右，重新再次发起TCP连接请求，通常是由于发起端存在邻居地址的路由，并能主动发送TCP3次握手，但无法从邻居接收第二次握手的报文。通常是由于邻居缺乏到对端的路由，或者是应答报文中途被丢弃。</p>
+<p><strong>peer x.x.x.x listen-only</strong><br>将自己设为被动端，等待x.x.x.x向自己发起连接</p>
+<h5 id="Connect（连接）"><a href="#Connect（连接）" class="headerlink" title="Connect（连接）"></a>Connect（连接）</h5><p>当发起TCP连接的路由器，无法收到邻居TCP回应报文时，就会卡在Connect状态，并且5秒后重传一次TCP连接请求，再等待30秒左右，重新再次发起TCP连接请求，通常是由于发起端存在邻居地址的路由，并能主动发送TCP3次握手，但无法从邻居接收第二次握手的报文。通常是由于邻居缺乏到对端的路由，或者是应答报文中途被丢弃。</p>
 <p>发起TCP连接的路由器，在5s内，如果没有得到邻居的任何回应报文，重传tcp报文，继续等待25s，还没有收到邻居的任何回应，会在重传TCP报文，在建立不起来重连。</p>
+<p>在Connect状态，BGP发起的第一个TCP连接，如果过连接重试计时器（Connect-Retry）超时，就重新发起TCP连接，并继续保持在Connect状态，如果TCP连接成功，就转入OpenSent状态，如果过TCP连接失败，就转入Active状态。<br>如果搜索到了，则开始建立TCP连接，如果成功的话，邻居状态则进入“Connect”状态。要分清楚是建立TCP连接的源地址和目标地址是什么，是双方的neighbor如果双方指定的IP地址不相同，那肯定就得不到“期望”的TCP连接。</p>
 <h5 id="Active（活跃）"><a href="#Active（活跃）" class="headerlink" title="Active（活跃）"></a>Active（活跃）</h5><p>在Active状态，BGP总是在试图建立TCP连接，如果过连接重试计时器（Connect-Retry）超时，就退回到Connect状态，如果过TCP连接成功，就转入OpenSent状态，如果过TCP连接失败，就继续保持在Active状态，并继续发起TCP连接，没有收到对open-send报文的确认报文。</p>
 <p>当发送TCP连接路由器，能收到相应的邻居应答报文，代表2台路由能正常交互报文，但是依然无法建立起TCP的3次握手，将进入到Active。</p>
+<p>邻居之间地址可达，但建立BGP邻居的源目的地址不匹配导致。本端主动发起TCP连接的源地址和对端指定的邻居地址不匹配，导致本段处于active，对端处于idle状态。</p>
 <h5 id="OpenSent（打开消息已发送）"><a href="#OpenSent（打开消息已发送）" class="headerlink" title="OpenSent（打开消息已发送）"></a>OpenSent（打开消息已发送）</h5><p>在OpenSent状态，TCP连接已经建立，BGP也已经发送了第一个Open报文，剩下的工作，BGP就在等在其对等体发送Open报文。并对收到的Open报文进行正确性检查，如果过有错误，系统就会发送一条出错通知消息并退回到idle状态，如果过没有错误，BGP就开始发送Keepalive报文，并复位Keepalive计时器，开始计时。同时转入OpenConfirm状态。</p>
 <p>TCP连接建立之后，开始发送open报文，其中包含很多参数，以对方取根据这个“OPEN”来协商参数。</p>
 <p>只要TCP建立成功，一定就可以发送出open报文，除非在接口做策略控制。</p>
@@ -533,26 +543,31 @@
 <h5 id="BGP路由信息处理"><a href="#BGP路由信息处理" class="headerlink" title="BGP路由信息处理"></a>BGP路由信息处理</h5><p><img src="/2020/05/19/bgp/%E8%B7%AF%E7%94%B1%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86.JPG" alt="BGP路由信息处理"></p>
 <h4 id="BGP产生路由的方法"><a href="#BGP产生路由的方法" class="headerlink" title="BGP产生路由的方法"></a>BGP产生路由的方法</h4><p>在路由表中都要有对应的路由条目，不能凭空产生。</p>
 <ol>
-<li>network命令宣告</li>
-<li>从其他协议中import</li>
-<li>aggregate 手动汇总</li>
-<li>自动汇总</li>
+<li>network命令将路由表的路由发布到BGP协议中</li>
+<li>使用import-route命令将路由表的路由引入到BGP协议中</li>
+<li>aggregate手动路由汇总/路由聚合</li>
+<li>自动路由汇总/路由聚合</li>
 </ol>
 <h4 id="BGP对等体交互路由原则"><a href="#BGP对等体交互路由原则" class="headerlink" title="BGP对等体交互路由原则"></a>BGP对等体交互路由原则</h4><p>只将最优路由发布给对等体 最优：&gt;</p>
 <ol>
 <li>从IBGP得到的路由，只能发布给EBGP对等体</li>
 <li>从EBGP得到的路由，发布给EBGP和IBGP对等体</li>
-<li>自身local起源的BGP路由，只会传给所有的IBGP邻居和EBGP邻居</li>
+<li>自身发布的BGP路由会传递给所有BGP邻居</li>
+<li>只将BGP最优的路由传递给BGP邻居。</li>
 <li>只发送更新的BGP路由</li>
 </ol>
+<p>*-valid：有效的路由，下一跳可达的路由。即路由器自身拥有去往该BGP路由下一跳的路由。<br>从所有去往同一个网段的有效路由中选出最优的BGP路由，传递给邻居。</p>
+<p>有效的BGP路由才有资格参与最优路由的选择。</p>
+<h4 id="BGP更新路由的机制"><a href="#BGP更新路由的机制" class="headerlink" title="BGP更新路由的机制"></a>BGP更新路由的机制</h4><p>1、增量触发更新</p>
+<p>2、管理员手动触发更新，全量的。（手动触发是不断开TCP会话的情况下重新将BGP路由传递给邻居）</p>
 <h4 id="BGP路由下一跳的特点"><a href="#BGP路由下一跳的特点" class="headerlink" title="BGP路由下一跳的特点"></a>BGP路由下一跳的特点</h4><ol>
 <li>自身起源的BGP路由的下一跳为向邻居发送BGP报文的源地址。</li>
-<li>通过EBGP邻居得到的路由在传递给IBGP邻居时，下一跳默认不变。</li>
+<li>从EBGP邻居得到的路由在传递给IBGP邻居时，下一跳默认不变。</li>
 <li>通过IBGP邻居得到的路由在传递给EBGP邻居时，下一跳改为自身向EBGP邻居发送BGP报文的源地址。</li>
 <li>从EBGP邻居得到的路由，传递给成员EBGP邻居时，默认下一跳不变，可以使用next-hop-local进行修改。<br>从IBGP邻居得到的BGP路由，传递给联盟内的EBGP邻居时，默认下一跳不变，也无法使用next-hop-local修改下一跳属性。<br>从IBGP邻居得到的路由，传递给成员EBGP时，默认下一跳不变，无法使用next-hop-local进行修改。<br>（华为设备默认规则，思科可以在这两种情况下都可以修改）</li>
 <li>从成员EBGP邻居得到的路由，传递给成员IBGP邻居时，默认下一跳不变，无法使用next-hop-local进行修改。</li>
 <li><strong>第三方下一跳优化</strong><br>在同一个广播域中存在IBG邻居和EBGP邻居，通过IBGP邻居得到的路由传递给EBGP邻居下一跳默认不变。（并不常见）<br>如果过加了peer x.x.x.x next-hop-local则会变。（但不适合）</li>
-<li>peer x.x.x.x next-hop-local将EBGP邻居得到的路由，发送给IBGP邻居x.x.x.x时，下一跳修改为向此IBGP邻居发送BGP报文的源地址。此命令在IBGP邻居之间生效。</li>
+<li>peer x.x.x.x next-hop-local将EBGP邻居得到的路由，发送给IBGP邻居x.x.x.x时，下一跳修改为向此IBGP邻居发送BGP报文的源地址。此命令在IBGP邻居之间生效。（仅用于IBGP邻居）</li>
 <li>通过RR反射的BGP路由，下一跳不会改变，使用next-hop-local也不会。</li>
 </ol>
 <p>什么叫BGP反射的路由？</p>
@@ -569,14 +584,19 @@
 <p>AS内全互联架构的防环：IBGP水平分割</p>
 <p>RR场景下AS内的防环：IBGP水平分割，originator_id，cluster_id</p>
 <p> 联盟防环机制</p>
-<h3 id="BGP与IBGP交互——BGP同步"><a href="#BGP与IBGP交互——BGP同步" class="headerlink" title="BGP与IBGP交互——BGP同步"></a>BGP与IBGP交互——BGP同步</h3><p>默认关闭</p>
-<p>解决路由黑洞问题</p>
-<p>从EBGP邻居接收到的路由，传给所以有的EBGP和IBGP邻居。</p>
-<p>从IBGP邻居接收到的路由，不会传给其他IBGP邻居。</p>
-<p>从IBGP邻居接收到的路由，传不传给EBGP邻居？<br>开启同步后：路由的下一跳可达才传，还要有这下一跳路由，才传出去。<br><strong>通过BGP得到的路由也能通过IGP得到的话就认为同步</strong> </p>
+<h3 id="BGP与IBGP交互——BGP同步"><a href="#BGP与IBGP交互——BGP同步" class="headerlink" title="BGP与IBGP交互——BGP同步"></a>BGP与IBGP交互——BGP同步</h3><p>undo synchronization 默认关闭</p>
+<p>BGP同步用于在非全互联的AS内预防BGP路由黑洞<br>但是不能够解决BGP路由黑洞问题。</p>
+<p>解决路由黑洞问题的方法有四种：<br>1、AS内部采用IBGP全互联架构，让每台路由器都运行BGP协议，从而都拥有BGP路由，防止黑洞产生。此时BGP同步规则可以关闭。<br>2、在ASBR上将BGP路由引入到IGP协议中，该方法已经被淘汰，该IGP协议无力管理大量的BGP路由。<br>3、在ASBR之间直接建立GRE隧道。<br>4、通过LSP隧道解决黑洞。</p>
+<p>BGP同步规则：从IBGP邻居接收到的路由，如果IGP表中不存在，则认为不同步，则不传递给EBGP邻居。<br><strong>通过BGP得到的路由也能通过IGP得到的话就认为同步</strong> </p>
 <p>同步功能是在AS内部没有全网运行BGP协议时，用于检测是否可能存在BGP路由黑洞的一种机制。</p>
 <p>路由器主观判断，可能别的路由器没有这条路由还是不通。如只配了个静态。</p>
-<h3 id="BGP反射器"><a href="#BGP反射器" class="headerlink" title="BGP反射器"></a>BGP反射器</h3><p>客户机之间不用建立IBGP邻居关系，非客户机之间要建立IBGP邻居关系</p>
+<p>BGP同步功能关闭时，只要从IBGP邻居得到的路由时最优的路由，就可以传递给EBGP邻居，即不做同步检查。<br>华为设备默认关闭同步功能，并且无法开启同步功能。</p>
+<h3 id="BGP反射器"><a href="#BGP反射器" class="headerlink" title="BGP反射器"></a>BGP反射器</h3><ul>
+<li>用于简化IBGP全互联的网络架构</li>
+</ul>
+<p>客户机之间不用建立IBGP邻居关系，非客户机之间要建立IBGP邻居关系</p>
+<p>IBGP全互联<br>1、防止BGP路由器黑洞<br>2、BGP能够在AS内部传递<br>3、结合IBGP水平分割防止AS内部的路由环路<br>缺点：<br>扩展性差，配置大，运维繁琐<br>TCP会话多，占用设备资源。</p>
+<p>RR在入方向可以修改BGP路由属性，出方向对于反射的路由不能修改BGP属性，非反射路由可以修改。</p>
 <h5 id="路由反射簇"><a href="#路由反射簇" class="headerlink" title="路由反射簇"></a>路由反射簇</h5><p>当一个AS内存在多台RR为client提供冗余时，RR间的路由更新很有可能会造成环路，为了防止该现象，引入了Cluster。</p>
 <p>簇：通过4字节的Cluster_ID来表示Cluster，通常会使用loopack地址为Cluster_ID。（由RR的Router ID作为簇ID ）<br>一个Cluster里可以包括一个或多个RR；一个Client可以同时属于多个Cluster</p>
 <h5 id="不同角色的对等体"><a href="#不同角色的对等体" class="headerlink" title="不同角色的对等体"></a>不同角色的对等体</h5><p>IBGP对等体可以有三种角色</p>
@@ -606,6 +626,13 @@
 <li>分级部署</li>
 </ol>
 <h5 id="路由反射防环"><a href="#路由反射防环" class="headerlink" title="路由反射防环"></a>路由反射防环</h5><p><strong>Originator_ID</strong></p>
+<ul>
+<li>用于集群内的防环（簇内的环路）</li>
+<li>由路由反射器（RR）产生，携带了本地AS内该路由发送者的Router ID（RR在发射路由时添加该属性，常规传递的路由不会添加，RR对从EBGP邻居和自身产生的路由不会添加该属性。该属性只能在AS内或者成员AS内传递，不会传递给EBGP邻居/成员EBGP）</li>
+<li>如果RR接收到的路由已经存在该属性，则保持不变，也不会添加该属性。</li>
+<li>对于反射的路由，next-hop-local无效</li>
+<li>当从IBGP邻居接收到路由时，只要originator id和自身router id相同，则忽略该路由。</li>
+</ul>
 <p>Originator_ID属性用于防止路由在反射器的客户机/非客户机之间的出现环路</p>
 <p>Originator_ID属性长4字节，<strong>可选非过度属性</strong>，属性类型为9，是由路由反射器（RR）产生的，携带了本地AS内部路由发起者的Router ID</p>
 <p>当一条路由第一次被RR反射的时候，RR将Originator_ID属性加入到这条路中，标识这条路由的发起路由器。如果一条路由中已经存在了Originator_ID属性，则RR将不会创建新的Originator_ID</p>
@@ -619,11 +646,21 @@
 <li>RR接收到一条BGP路由如果originator_id属性和cluster_list属性中包含自身的router_id或cluster_id，也会拒绝这些路由。</li>
 </ol>
 <p><strong>Cluster_List</strong></p>
+<ul>
+<li><p>Cluster id来区分不同的簇，默认由RR的router id充当该簇的cluster id。</p>
+</li>
+<li><p>当RR反射路由时，不仅会添加originator id，还会在cluster list中添加自己的cluster id。</p>
+</li>
+<li><p>用于集群间的防环（簇间的环路）</p>
+</li>
+<li><p>由每个路由反射器（RR）产生，记录反射路由经过的集群（类似AS-PATH，这样就可以在簇间防止路由环路）</p>
+</li>
+</ul>
 <p>Cluster_List属性用于防止AS内部的环路</p>
 <p>Cluster_List<strong>可选非过度属性</strong>，属性类型编码为10</p>
 <p>Cluster_List由一系列的Cluster_ID组成，描述了一条路由所经过的反射器路径，这和描述路由经过的AS路径的AS_Path属性由相识之处，Cluster_List由路由反射器产生</p>
-<p>当RR在它的客户机之间或客户机与非客户机之间反射路由时，RR会把本地Cluster_ID添加到Cluster_List的前面。如果过Cluster_List为空，RR就创建一个</p>
-<p>当RR接收到一条更新路由时， RR会检查Cluster_List。如果过Cluster_List中已经有本地Cluster_ID，丢弃该路由；如果过没有本地Cluster_ID，将其加入Cluster_List，然后反射该更新路由</p>
+<p>当RR在它的客户机之间或客户机与非客户机之间反射路由时，RR会把本地Cluster_ID添加到Cluster_List的前面。如果Cluster_List为空，RR就创建一个</p>
+<p>当RR接收到一条更新路由时， RR会检查Cluster_List。如果Cluster_List中已经有本地Cluster_ID，丢弃该路由；如果过没有本地Cluster_ID，将其加入Cluster_List，然后反射该更新路由</p>
 <h5 id="RR环境的路由下一跳的特点"><a href="#RR环境的路由下一跳的特点" class="headerlink" title="RR环境的路由下一跳的特点"></a>RR环境的路由下一跳的特点</h5><ol>
 <li>当RR接收到客户机发来路由，反射给其他客户机或者非客户机时，下一跳保持不变，即使使用了next-hop-self命令，也不便。</li>
 <li>当RR接收到客户机发来路由，发送给EBGP邻居时，下一跳会改变为自身的地址。</li>
@@ -632,8 +669,16 @@
 </ol>
 <h3 id="BGP联盟"><a href="#BGP联盟" class="headerlink" title="BGP联盟"></a>BGP联盟</h3><p>BGP联盟可以将AS分割为多个子自治系统,联盟之外的AS将整个联盟看做一一个AS。看不见成员AS ,成员AS对外界来说是隐藏的。可以使用私有AS号。</p>
 <p>联盟的好处是可以极大的降低IBGP对等会话的数量。IBGP通 常用于每个成员AS之内,联盟EBGP运行于成员AS之间。</p>
-<p>命令：bgp confederation identifier 指定路由器是BGP联盟的成员以及联盟ID</p>
-<p>命令：bgp confederation peers 列出路由器所连接的成员AS，该命令告诉BGP进程，该EBGP连接是联盟BGP。存在有联盟EBGP邻居的路由器上配置。</p>
+<p>命令： <strong>confederation id</strong> 指定路由器是BGP联盟的成员以及联盟ID（外部的大AS号）</p>
+<p>命令：<strong>confederation peer-as</strong> 列出路由器所连接的成员AS，该命令告诉BGP进程，该EBGP连接是联盟BGP。存在有联盟EBGP邻居的路由器上配置。（其他成员的AS号）</p>
+<p>联盟内的AS配置<br>bgp 10 （成员As）<br>confederation id 123（联盟AS，外部的公有AS号）<br>confederation peer-as 20 30（其他成员的AS号，私有AS）<br>peer x.x.x.x as-number 20</p>
+<p><strong>从成员EBGP得到路由还是当从IBGP邻居传来路由等同对待</strong></p>
+<p><strong>从联盟EBGP邻居传来的路由在整个联盟内，next-hop属性不变</strong></p>
+<blockquote>
+<p>联盟内的防环机制：</p>
+<p>从EBGP邻居接收：AS-PAHT不能有联盟AS号，可以有成员AS号<br>从成员EBGP邻居那里接收：AS-PATH可以有联盟AS，不能有成员AS号（括号内和括号外都不行）<br>IBGP邻居之间（包括成员EBGP邻居）不做AS-PATH属性的防环检测。</p>
+</blockquote>
+<p>​    </p>
 <p>联盟中的一些特性:</p>
 <ol>
 <li>在联邦内部保留联邦外部路由的NEXT_ HOP属性</li>
@@ -644,18 +689,26 @@
 <li>在BGP选路时,不考虑联盟内部路由(在AS. PATH中没有任何外部AS号)的MED值。</li>
 <li>成员ebgp邻居之间传递路由不改变下一跳, next-hop-self可以用在成员EBGP邻居之间。</li>
 <li>Originator和cluster-list只会在成员AS内部传递,不会传递给成员EBGP邻居。</li>
+<li>在联盟内小括号里面的AS号，在选路时，不计算到as-path长度里面。</li>
 </ol>
 <p>华为设备联盟场景下BGP路由下一跳规则补充:</p>
 <ol start="9">
-<li>当从EBGP邻居接收到的BGP路由，传递给联盟内的EBGP邻居，下一-跳默认不变 ，可以使用next-hop-local修改下一跳属性</li>
-<li>从IBGP邻居得到的BGP路由，传递给联盟内的EBGP邻居时，默认下一-跳也不变，也无法使用next-hop-local|修改下一跳属性。</li>
+<li>当从EBGP邻居接收到的BGP路由，传递给联盟内的EBGP邻居，下一跳默认不变 ，可以使用next-hop-local修改下一跳属性</li>
+<li>从IBGP邻居得到的BGP路由，传递给联盟内的EBGP邻居时，默认下一跳不变，也无法使用next-hop-local|修改下一跳属性。</li>
 <li>从IBGP邻居得到的路由，传递给成员EBGP时.默认下一跳不变,无法使用next-hop-local进行修改。</li>
+<li>从联盟EBGP邻居得到的路由传递给IBGP邻居时，无法使用next-hop-local修改路由的下一跳属性。</li>
 </ol>
 <p>(华为设备默认规则，思科可以在这2种情况下都可以修改)</p>
 <p>属性意义:人为赋予BGP路由的,用于实现某种目的的功能。用于选路,用于防环，用于便于对BGP路由做出管理。</p>
 <h3 id="community（团体属性）"><a href="#community（团体属性）" class="headerlink" title="community（团体属性）"></a>community（团体属性）</h3><ul>
-<li>想要把团体属性通告给邻居必须使用peer x.x.x.x advertise-community</li>
+<li><p>用来限制BGP路由的传递范围</p>
+</li>
+<li><p>用来给BGP路由添加团体标记，实现路由的匹配和管理。类似于IGP的TAG，但是BGP路由可以拥有多个团体属性，而IGP TAG一般一条路由只能携带一个TAG，不够多。</p>
+</li>
+<li><p>想要把团体属性通告给邻居必须使用peer x.x.x.x advertise-community</p>
+</li>
 </ul>
+<p>团体属性分为：<br>1、公共团体属性：控制BGP路由传递范围。<br>2、自定义团体属性：实现对BGP路由的标记与管理。</p>
 <p>acl，prefix</p>
 <p>community是可选传递属性，32bit长度，以16bit为一组</p>
 <p> RFC1997的格式AA:NN，思科的默认格式为NN:AA，可以利用命令ip bgp community new-format 将思科更改为RFC1997的标准格式，用来对路由做标识，一条BGP路由可以有多个团体属性，用于简化路由策略。</p>
@@ -668,7 +721,9 @@
 <p>团体与TAG的区别：TAG只能由一个，而团体可以有多个，管理起来更加灵活。</p>
 <p>给路由设置团体属性主要工具：router-policy network、import、agg、peer export import</p>
 <p>赋予团体属性根据出入方向不同分别在rib out 、local rib表生效</p>
-<h4 id="周知团体"><a href="#周知团体" class="headerlink" title="周知团体"></a>周知团体</h4><p><strong>INTERNET</strong>：无任何值，所有路由在默认情况下都属于该团体，如果接收到的路由属于该团体，则可以自由宣告该路由。</p>
+<p>怎么给路由添加团体属性？<br>1、network/import-route结合route-policy对发布的路由添加团体属性，并在local-rib中生效。<br>2、peer route-policy export/import 对发送和接收的路由添加团体属性。</p>
+<p>注意：团体属性不会自动传递给邻居，需要在邻居之间配置传递团体属性的命令，逐跳配置。</p>
+<h4 id="公共团体属性"><a href="#公共团体属性" class="headerlink" title="公共团体属性"></a>公共团体属性</h4><p><strong>INTERNET</strong>：无任何值，所有路由在默认情况下都属于该团体，如果接收到的路由属于该团体，则可以自由宣告该路由。</p>
 <p><strong>NO_EXPORT</strong>：如果过接收到的路由携带该参数，则不能将该路由宣告给EBGP对等体；如果配置了联盟，则不能将该路由宣告到联盟之外，联盟里的EBGP还是可以宣告的。</p>
 <p><strong>LOCAL_AS</strong>：RFC1997将该属性称为<strong>NO_EXPORT_SUBCONFED</strong>如果接收到的路由携带该数值，那么将不宣告给EBGP对等体，包括同一联盟内其他AS的对等体。</p>
 <p><strong>NO_ADVERTISE</strong>：如果接收到的路由携带该数值，则根本就不能宣告该路由，包括EBGP和IBGP对等体</p>
@@ -693,12 +748,30 @@
 <p>route-policy comm permit node 10<br>if-match community-filter 1<br>apply community no-export-subconfed additive<br>apply comm-filter 2 delete<br>#<br>ip community-filter 1 permit 1:100<br>ip community-filter 2 permit 1:300</p>
 <p>无论次序如何，先执行删除团体属性的动作再执行增加的动作。</p>
 </blockquote>
-<h3 id="BGP路由属性"><a href="#BGP路由属性" class="headerlink" title="BGP路由属性"></a>BGP路由属性</h3><p>BGP路由属性是一套参数，它是对特定的路由进一步的描述</p>
+<h3 id="BGP路由属性"><a href="#BGP路由属性" class="headerlink" title="BGP路由属性"></a>BGP路由属性</h3><p>BGP为什么要给路由额外的设计属性呢？<br>1、防止BGP路由环路<br>2、实现BGP路由的选路和管理</p>
+<p>BGP路由属性是一套参数，它是对特定的路由进一步的描述</p>
+<p>属性分为2大类：<br>1、公认：被所有BGP路由器所能够理解并处理的属性，通常是标准属性。</p>
 <ul>
-<li>公认必遵<br>所有BGP路由器可以识别，且必须存在Update消息中<br>如果缺少这种属性，路由信息就会出错</li>
-<li>公认任意<br>所有BGP路由器都可以识别，但不要求必须存在Update消息中<br>即就算缺少这类属性，路由信息也不会出错</li>
-<li>可选过度<br>在AS之间具有可传递性的属性<br>BGP路由器可以不支持此属性，但它仍然会接收这类属性，并传递给其他对等体</li>
-<li>可选非过度<br>如果BGP路由器不支持此属性，则相应的这类属性会被忽略，且不会传递给其他对等体</li>
+<li><p>公认必遵<br>所有BGP路由器可以识别，且必须存在Update消息中<br>如果缺少这种属性，路由信息就会出错</p>
+<ul>
+<li>next-hop</li>
+<li>as-path</li>
+<li>orgin</li>
+</ul>
+</li>
+<li><p>公认任意<br>所有BGP路由器都可以识别，但不要求必须存在Update消息中。根据情况决定是否携带，如果不携带也不会产生问题。<br>即就算缺少这类属性，路由信息也不会出错</p>
+<ul>
+<li>Local-pref</li>
+</ul>
+</li>
+</ul>
+<p>2、可选：不被所有BGP路由器所能理解的属性，通常是厂商自定义的私有属性。</p>
+<ul>
+<li>可选过度<br>在AS之间具有可传递性的属性<br>虽然路由器无法处理或者不理解该属性，但可以继续将该属性传递给邻居。<ul>
+<li>团体属性</li>
+</ul>
+</li>
+<li>可选非过度<br>如果路由器不理解该属性，则不传递给BGP邻居。</li>
 </ul>
 <h4 id="常用于修改BGP路由属性的方法"><a href="#常用于修改BGP路由属性的方法" class="headerlink" title="常用于修改BGP路由属性的方法"></a>常用于修改BGP路由属性的方法</h4><ol>
 <li>network 引用route-policy 修改本地起源BGP路由的BGP属性</li>
@@ -712,12 +785,14 @@
 <p>只在本地有效，不传出去</p>
 <p>使用场景：控制出口链路</p>
 <h5 id="二、Local-Pref（本地优先级）"><a href="#二、Local-Pref（本地优先级）" class="headerlink" title="二、Local_Pref（本地优先级）"></a>二、Local_Pref（本地优先级）</h5><ul>
-<li><p>公认任意属性</p>
-</li>
-<li><p>如果协议首选值相同则比较Local_Pref</p>
-</li>
+<li>公认任意属性</li>
+<li>如果协议首选值相同则比较Local_Pref</li>
+<li>只传递给IBGP邻居，即在AS内部/联盟内部传递</li>
+<li>可以在EBGP邻居传来的路由做local-pref修改，也可以在IBGP邻居之间接收和发送路由时修改。</li>
+<li>默认100，越大越优。</li>
+<li>什么时候用？当本AS有多个出口时，可以使用该属性选择一个出口访问外部网络。</li>
 </ul>
-<p>本地优先级，长度为32bit，值越大越好，该属性值可以在本地（本地AS）内传输，不能传输到AS外部，默认值为100</p>
+<p>本地优先级，长度为32bit，值越大越好，该属性值可以在本地（AS内部/联盟内部，IBGP邻居）内传递，不能传递到AS外部，默认值为100</p>
 <p>作用：一般在AS的多个边界出口路由器上进行配置，针对不同的路由设置不同的优先级，以实现让内部IBGP路由器选择一个更加合适的出口路由器。</p>
 <p>去往同一目地地多条路由中设置本地优先级，在IBGP对等体之间进行传递，不会应用于EBGP对等体之间。不会传出自己地AS，但是在成员EBGP邻居中可以传递，不会传递到出联盟之外地AS，取值范围0-4294967295之间，值越大，表明路由越优先。</p>
 <p>IBGP邻居之间在in或者out方向都可以对local_pre属性做修改<br>EBGP邻居之间只能在in方向做local_pre属性地修改<br>成员EBGP邻居之间可以在in或者out方向对local_pre属性做修改</p>
@@ -730,6 +805,7 @@
 <li>默认情况下local_pre属性不传递给ebgp邻居，此命令对从ebgp邻居接收到的路由设置一个local_pre值，本地bgp表中显示为空，并传递给其他的ibgp邻居。（EBGP邻居传递过来的路由有效）</li>
 <li>本地起源路由，从ebgp传递来的路由，手动汇总的路由生效</li>
 <li>route-policy优先于default local_prefernce</li>
+<li>这条命令对IBGP传递过来的路由无效。</li>
 </ol>
 <p>修改本地优先级的方法：</p>
 <p>针对特定的邻居适用route-policy</p>
@@ -752,15 +828,15 @@
 <li>IBGP之间不检查AS_Path、EBGP之间才检查</li>
 <li>AS_Path分为4种：有序AS_Path：带联盟AS号的Path、不带联盟的AS号的Path，无序AS_Path{}大括号长度算1：不带联盟AS号的Path，带联盟AS号的Path。</li>
 </ul>
-<p>AS_Path：指的时一个BGP在传输过程中所经过的AS的个数，个数越小越好。</p>
+<p>AS-PATH选路规则：<br>1、经过AS-PATH越少，路径越优。</p>
 <p>注意：只有当一条BGP路由离开一个AS 的时候，才会将自身的AS号添加在这条路由的AS_Path属性中。</p>
-<p>作用：用于AS之间的防环！在接收一个EBGP路由（包括成员EBGP）时，检查其AS_Path属性，如果过在其中发现自己的AS号，说明之前曾经穿越过自己的AS，此时就不会接收该路由，达到防环的目的，IBGP邻居之间不做AS_Path属性的防环检测。</p>
+<p>作用：用于AS之间的防环！在接收一个EBGP路由（包括成员EBGP）时，检查其AS_Path属性，如果过在其中发现自己的AS号，说明之前曾经穿越过自己的AS，此时就不会接收该路由，丢弃该路由从而达到防环的目的，IBGP邻居之间不做AS_Path属性的防环检测。</p>
 <ol>
-<li>BGP路由每经过一个AS，就会将这个AS号加入自己的AS_Path中</li>
+<li>当BGP路由传递给EBGP邻居时，会将自身的AS号添加到AS-PATH属性的前面。</li>
 <li>当一个路由器收到两条相同目的地的路由，它将选择AS路径最短的路由。</li>
 <li>这个属性只能在EBGP邻居之间传路由时进行改动，对IBGP邻居传来的路由该不了。Cisco中）</li>
 </ol>
-<p>华为设备在联盟EBGP，成员EBGP邻居，IBGP之间in和out都可以修改as_Path。</p>
+<p>华为设备在任何BGP邻居之间，任何方向都可以对AS-PATH属性做修改。思科仅在EBGP邻居之间修改。</p>
 <p>华为设备：</p>
 <p>BGP路由器如果从联盟EBGP邻居接收到BGP路由时，会检测此路由的AS_Path中是否存在自身联盟AS号，如果存在拒绝此路由，不检测此AS_PATH是否存在自身的成员AS号，如果存在依然接收此路由。</p>
 <p><font color="skyblue">成员EBGP邻居之间会对接收的路由AS_Path做检查，如果成员内AS_Path（小括号中的AS_Path）存在自身成员AS号，不接收此路由，如果小括号中存在自身联盟AS号，可以接收。</font></p>
@@ -768,7 +844,7 @@
 <p>可以有联盟AS不能由成员AS</p>
 
 
-<p>成员ebgp和成员ibgp之间只能对小括的AS_Path属性做修改.<br>apply as-path none overwirte 替换原有AS_Path<br>apply as-path add 在小括号中添加AS_Path<br>apply as-path  overwirte 替换原有AS_Path，在小括号中覆盖AS-path</p>
+<p>成员ebgp和成员ibgp之间只能对小括的AS_Path属性做修改.<br>apply as-path none overwirte 清空掉原有AS_Path<br>apply as-path 1 2 3 additive 添加AS_Path<br>apply as-path  1 2 3  overwirte 用1 2 3替换原有AS_Path</p>
 <p>IBGP邻居之间（包括成员IBGP邻居）不做AS_Path属性的防环检测</p>
 <p>对于EBGP邻居出方向上不可以清空，对于IBGP邻居出方向可清空</p>
 <p>local-rib x.x.x.x as_path 100</p>
@@ -777,7 +853,7 @@
 <p>additive：原有AS_Path基础之上添加AS_Path属性</p>
 <p>overwrite：替代掉原有AS_Path属性</p>
 <p>对收到的路由就开始做AS_Path的检测了</p>
-<p>peer allow-as-loop用于接收EBGP（包括成员EBGP）邻居传递来的路由允许AS_Path中出现自身联盟AS号（或自身成员AS号）的次数，默认1次。只要整个AS_Path（小括号内和小括号外的总和）中出现的次数小于或者等于配置的允许出现的值，就会接收次路由。</p>
+<p>peer allow-as-loop用于接收EBGP（包括成员EBGP）邻居传递来的路由允许AS_Path中出现自身（联盟）AS号（或自身成员AS号）的次数，默认1次，可在后面修改。只要整个AS_Path（小括号内和小括号外的总和）中出现的次数小于或者等于配置的允许出现的值，就会接收次路由。</p>
 <p>联盟内小括号里面的AS号，在选路时，不计算到as-path长度里面。算0个</p>
 <p>as-path-limit不接收AS_Path长度大于此命令定义的值的BGP路由，同时不能发送（adj-out-rib表）AS_Path长度大于此值的BGP路由，小括号中的AS_Path长度计算在内，在import方向如果用策略增加了AS_Path长度超过limit设定的值，还是可以接收。</p>
 <h6 id="通过AS-Path列表过滤路由"><a href="#通过AS-Path列表过滤路由" class="headerlink" title="通过AS_Path列表过滤路由"></a>通过AS_Path列表过滤路由</h6><p>ip as-path-filter</p>
@@ -804,6 +880,11 @@
 <li>公认必遵属性</li>
 <li>任何邻居都可以修改</li>
 </ul>
+<p>只要不人为修改，该属性就不会自己改变，描述该路由是如何成为BGP路由的。</p>
+<p>i：通过network生成的路由</p>
+<p>？：将IGP路由通过import-route生成的BGP路由</p>
+<p>e：从EGP协议中引入到BGP协议中的路由，EGP协议是BGP的前身，目前已经被淘汰。</p>
+<p>如何修改origin属性？<br>1、对自身产生BGP路由时做origin的修改<br>2、对发送给BGP邻居的路由做origin的修改<br>3、对从BGP邻居接收到BGP路由做修改</p>
 <p>origin type | code指的是一条路由在起源路由器上是如何引入BGP进程中的。</p>
 <blockquote>
 <p>有3种类型</p>
@@ -815,7 +896,9 @@
 <h5 id="六、MED（多出口鉴别器）metric"><a href="#六、MED（多出口鉴别器）metric" class="headerlink" title="六、MED（多出口鉴别器）metric"></a>六、MED（多出口鉴别器）metric</h5><ul>
 <li>可选非过度</li>
 <li>med属性在IBGP和EBGP邻居（包括成员EBGP）in和out方向都可以修改</li>
+<li>默认为0，越小越优。</li>
 </ul>
+<p>什么时候用MED呢？一般情况下当本AS管理员希望控制邻居AS如何选择某条链路访问本AS时使用。</p>
 <p>MED属性用于影响邻居AS种的路由决策，MED称为外部度量值，32bit长度。</p>
 <p>作用：用于告诉其他的AS，如何选择一个进入自己的AS的入口，相当于metric，如果过med值没有，则是0。</p>
 <p>注：可以发给自己的EBGP邻居，但是EBGP邻居路由器收到以后，就不会将该MED传输到其他的任何AS去了。在同一个as域内的IBGP可以传，在边缘router，向EBGP宣告时去掉metric值</p>
@@ -823,7 +906,7 @@
 <ol>
 <li>bgp的med值，如果过是直连路由比如直接network和redis conn（不加metric参数）等等，默认是0（华为的也一样）。</li>
 <li>如果是network和重分发 IGP路由到BGP中，med为IGP路由的Metrie（华为的也一样）。</li>
-<li>default med 对所有import路由以及汇总路由生效。</li>
+<li>default med 对所有import路由以及汇总路由生效，发送给EBGP邻居时生效，发送给IBGP邻居不生效。在local-RIB显示原始MED值。（network 不生效）</li>
 </ol>
 <p>MED的通告规则：</p>
 <ol>
@@ -835,27 +918,28 @@
 <p>如果从成员ibgp传递来的路由由med属性，可以传递给成员ebgp邻居，但不会传给联盟ebgp邻居。</p>
 <p>在ebgp和ibgp邻居之间in和out方向都可以对med属性做修改</p>
 </li>
-<li><p>ebgp邻居在发布从ibgp邻居学来的路由时，会清除med的值。如果想强制通告，可以在宣告的路由上使用“set metric-type internal”<br>华为使用“apple cost-type internal”也可以实现。</p>
+<li><p>ebgp邻居在发布从ibgp邻居学来的路由时，会清除med的值。如果想强制通告，可以在宣告的路由上使用“set metric-type internal”<br>华为使用“apple cost-type internal”也可以实现。<br>将MED属性设置为BGP路由下一跳的IGP开销，传递给EBGP邻居。</p>
+</li>
+</ol>
 <p>此cost值为igp路由的cost</p>
 <p>这时BGP将会在IGP表中查找去往这条路由下一跳的metric值，并将该值作为med值传递给ebgp邻居，如果igp表中没有此路由下一跳的路由，则设置为0，可以手动指定。</p>
-</li>
+<ol start="3">
 <li><p>如果过使用network或redistribute命令将来自IGP的路由通告到BGP中，那么BGP的MED是从IGP的metric导出的。</p>
 </li>
 <li><p>如果过是aggregate-address命令注入路由，BGP的MED不被设置，当0。</p>
 <p>默认情况下，只有当去往同一目的地的多条路由均源自同一AS时，才比较这些路由的MED值，也就是AS_Path最左边的AS号要一样。对于AS_Path中最左边不一样的路由，不对med做比较。</p>
 </li>
 </ol>
-<ol start="5">
-<li></li>
-</ol>
+<p>华为设备通告MED属性的规则<br>1、本地始发的路由MED值传给所有邻居<br>2、从EBGP邻居得到的路由的MED不会传递EBGP邻居，影响邻居AS的选路<br>3、从EBGP邻居得到的路由的MED可以传递给IBGP邻居<br>4、从IBGP邻居得到的路由传递给EBGP邻居不携带MED<br>5、从联盟EBGP邻居或联盟内始发的路由的MED值在整个联盟保持传递。</p>
+<p>整合：<br>1、始发路由器产生的路由MED值传递给所有邻居<br>2、从EBGP邻居收到的MED值只传给IBGP邻居<br>3、从IBGP邻居或者从EBGP邻居得到的MED值不传给EBGP邻居。</p>
 <ol start="6">
 <li><p>华为MED高级选路：</p>
 <ul>
-<li>默认情况下，如果过AS_Path最桌左边的AS号相同时，会进行MED值的比较，EBGP和成员EBGP都是默认开启此选路规则</li>
-<li>使用compare-different-as-med命令后，将不做AS号检测，都进行MED值比较，此命令针对EBGP和成员EBGP邻居有效，只要前5条规则相同，始终比较这些路由的MED属性。</li>
+<li>默认情况下，如果过AS_Path最左边的AS号相同时，会进行MED值的比较，EBGP和成员EBGP都是默认开启此选路规则（默认只对来自同一个AS的路由进行比较，即下一跳AS相同的路径才比较MED属性）</li>
+<li>使用compare-different-as-med命令后，将不做AS号检测，都进行MED值比较，此命令针对EBGP和成员EBGP邻居有效，<strong>只要前5条规则相同，始终比较这些路由的MED属性。</strong></li>
 <li>使用bestroute med-confederation命令后，将不做联盟内AS号的检测，都进行MED值比较，注意这些BGP路由的AS_Path中不能包括任何外部AS号，用于在同一个联盟内不同成员AS起源BGP路由进行MED属性的比较。</li>
 <li>bestroute med-none-as-maximum此命令将丢失med值的BGP路由的med值设置为4294967295，但在BGP表中不显示。并且是本地生效，不传MED给IBGP邻居。</li>
-<li>deterministic-med命令先将最左边AS号相同的BGP路由进行分组，再进行med值比较，然后选择出优胜路由和其他组的优胜路由再次进行BGP路径选择。</li>
+<li>deterministic-med 命令先将最左边AS号相同的BGP路由进行分组，再进行med值比较，然后选择出优胜路由和其他组的优胜路由再次进行BGP路径选择。（未敲：车轮战，根据路由接收的次序来逐个比较。已敲：分组赛，根据AS号分组，跟次序无关了。）</li>
 </ul>
 </li>
 <li><p>EBGP&gt;IBGP；EBGP&gt;成员EBGP（注：对于联盟内部的路由，并没有成员内部于成员外部路由之分，都看作是internal路由）</p>
@@ -897,6 +981,8 @@
 </ol>
 <h5 id="简易版路由优选策略"><a href="#简易版路由优选策略" class="headerlink" title="简易版路由优选策略"></a>简易版路由优选策略</h5><p>当到达同一目的地存在多条路由时，BGP依次对比下列属性来选择路由：</p>
 <ol>
+<li><p>如果此路由的下一跳不可达，则忽略此路由。</p>
+</li>
 <li><p>优选协议首选值（PrefVal）最高的路由。</p>
 <p>协议首选值（PrefVal）是华为设备的特有属性，该属性仅在本地有效。</p>
 </li>
@@ -917,7 +1003,9 @@
 <li><p>优选到BGP下一跳IGP度量值（metric）最小的路由。</p>
 <p><strong>说明：在IGP中，对到达同一目的地址的不同路由，IGP根据本身的路由算法计算路由的度量值。</strong></p>
 </li>
-<li><p>优选Cluster_List最短的路由。</p>
+<li><p>优选Cluster_List最短的路由。<br>（默认华为设备先比较cluster-list再比较router-id，如果路由没有cluster-list属性，则认为cluster-list长度为0，进行比较。）</p>
+</li>
+<li><p>originotor id小的。<br>（如果一条路由有originator-id，一条没有，就用originator-id和router-id做比较。）</p>
 </li>
 <li><p>优选Router ID最小的设备发布的路由。</p>
 <p>如果路由携带Originator_ID属性，选路过程中将比较Originator_ID的大小（不再比较Router ID），并优选Originator_ID最小的路由。</p>
@@ -925,6 +1013,10 @@
 <li><p>优选从具有最小IP Address的对等体学来的路由。</p>
 </li>
 </ol>
+<h3 id="BGP路由负载分担"><a href="#BGP路由负载分担" class="headerlink" title="BGP路由负载分担"></a>BGP路由负载分担</h3><p>前8条选路属性必须一样，才进行负载分担。</p>
+<p>maximum load-balacing [num]</p>
+<p>也可通过as-patch-ignore，就不要求as长的不一样，但是长度要一样。</p>
+<p>如果去往最优BGP路由的下一跳的路由如果存在等价路由，则该BGP路由自动做基于下一跳的负载分担。<br>如果去往同一条BGP路由存在多个下一跳，并前8条选路规则相同，则可以启用负载分担。</p>
 <h3 id="BGP路由管理特性"><a href="#BGP路由管理特性" class="headerlink" title="BGP路由管理特性"></a>BGP路由管理特性</h3><p>BGP管理路由特性：<br>EBGP最小通告时间30s，IBGP最小通告时间5s</p>
 <ul>
 <li>BGP路由稳定性管理：默认路由，汇总、路由惩罚</li>
@@ -936,12 +1028,7 @@
 <li>自动汇总会将明细路由从BGP表中删除</li>
 <li>华为设备自动汇总，如果过引入的路由被优选，network的没有被优选，那么也会对引入的路由进行自动汇总。</li>
 </ol>
-<p><strong>aggregate</strong> <em>ipv4-address</em> { <em>mask</em> | <em>mask-length</em> } [ <strong>as-set</strong> | <strong>attribute-policy</strong> <em>route-policy-name1</em> | <strong>detail-suppressed</strong> | <strong>origin-policy</strong> <em>route-policy-name2</em> | <strong>suppress-policy</strong> <em>route-policy-name3</em> ] </p>
-<p><strong>as-set</strong>：在聚合路由中携带明细路由的AS信息，as-set不用于确定最短路径，仅仅是回复恢复聚合路由中丢失的环路检测功能</p>
-<p><strong>attribute-policy</strong>：设置聚合后路由的属性</p>
-<p><strong>detail-suppressed</strong>：抑制所有明细路由</p>
-<p><strong>suppress-policy</strong>：抑制策略中的明细路由</p>
-<p><strong>origin-policy</strong>：匹配策略的路由才参与构建汇聚路由并继承其属性，不参与构建的不继承。（团体，as-path）</p>
+<p>1、自动汇总 只能汇总成有类网络，汇总精确度很差，容易产生黑洞或者次优路由。<br>2、自动汇总对汇总路由的BGP属性修改的能力差<br>3、只能对import-route的路由生效，对邻居传来的或者network产生的BGP路由无效<br>4、默认关闭自动汇总。<br>5、不支持CIDR<br>6、会抑制明细路由的发送</p>
 <h4 id="BGP通告默认路由"><a href="#BGP通告默认路由" class="headerlink" title="BGP通告默认路由"></a>BGP通告默认路由</h4><p> ip route 0.0.0.0 0.0.0.0 null 0<br>route bgp 1<br>network 0.0.0.0</p>
 <h4 id="BGP将默认路由发送给特定的BGP邻居"><a href="#BGP将默认路由发送给特定的BGP邻居" class="headerlink" title="BGP将默认路由发送给特定的BGP邻居"></a>BGP将默认路由发送给特定的BGP邻居</h4><p>router bgp 1<br>peer x.x.x.x default-route-advertise</p>
 <p>该命令不要求再路由表中存在缺省路由，而是无条件地向对等体发送一个下一条为自身地缺省路由（强制下发）</p>
@@ -949,14 +1036,20 @@
 <p>conditional-route-match-all    当匹配所有条件路由时，发送缺省路由。</p>
 <p>conditional-route-match-any    当匹配任一条件路由时，发送缺省路由。</p>
 <p><strong>route-policy</strong>用于修改默认路由地BGP属性。</p>
-<h4 id="BGP路由手动汇总"><a href="#BGP路由手动汇总" class="headerlink" title="BGP路由手动汇总"></a>BGP路由手动汇总</h4><ol>
+<h4 id="BGP路由手动汇总"><a href="#BGP路由手动汇总" class="headerlink" title="BGP路由手动汇总"></a>BGP路由手动汇总</h4><p><strong>aggregate</strong> <em>ipv4-address</em> { <em>mask</em> | <em>mask-length</em> } [ <strong>as-set</strong> | <strong>attribute-policy</strong> <em>route-policy-name1</em> | <strong>detail-suppressed</strong> | <strong>origin-policy</strong> <em>route-policy-name2</em> | <strong>suppress-policy</strong> <em>route-policy-name3</em> ] </p>
+<p><strong>as-set</strong>：在聚合路由中携带明细路由的AS信息，as-set不用于确定最短路径，仅仅是回复恢复聚合路由中丢失的环路检测功能</p>
+<p><strong>attribute-policy</strong>：设置聚合后路由的属性</p>
+<p><strong>detail-suppressed</strong>：抑制所有明细路由</p>
+<p><strong>suppress-policy</strong>：抑制策略中的明细路由</p>
+<p><strong>origin-policy</strong>：匹配策略的路由才参与构建汇聚路由并继承其属性，不参与构建的不继承。（团体，as-path）</p>
+<ol>
 <li><p>在路由表中为聚合地址创建静态表项，再利用network命令宣告该聚合地址。<br>172.16.1.0/24<br>172.16.2.0/24<br>ip route-static 172.16.0.0 22 null0<br>bgp<br>network 172.16.0.0 22</p>
 </li>
 <li><p>使用命令aggregate-address，必须通过重分发或者network命令要求聚合地址中至少有一个更精确的地址进入BGP路由表。默认情况会把明细路由和聚合路由都发送给BGP邻居，会生成null 0 的汇总路由。</p>
 </li>
 <li><p>ATOMIC_AGGREGATE</p>
-<p>ATOMIC_AGGREGATE是用来通告路由接收者，该路由时经过聚合的，是<strong>公认可选属性</strong>。</p>
-<p>有时BGP发布者会收到两条重叠的路由，其中一条路由包含的地址是另一条路由的子集。一般情况下BGP发布者会优选更加精细的路由（前者），但是对外发布时，如果它选择发布更粗略的那条路由（后者），这时需要附加上ATOMIC_AGGREGATE属性，以通知对等体。它实际上是一种警告，因为发布更粗略的路由以为着更精细的路由信息在发布过程中丢失了。在进行路由聚合时，对聚合的路由信息会添加ATOMIC_AGGREGATE属性。</p>
+<p>ATOMIC_AGGREGATE是用来通告路由接收者，该路由是经过聚合的，是<strong>公认可选属性</strong>。</p>
+<p>有时BGP发布者会收到两条重叠的路由，其中一条路由包含的地址是另一条路由的子集。一般情况下BGP发布者会优选更加精细的路由（前者），但是对外发布时，如果它选择发布更粗略的那条路由（后者），这时需要附加上ATOMIC_AGGREGATE属性，以通知对等体。它实际上是一种警告，因为发布更粗略的路由意味着更精细的路由信息在发布过程中丢失了。在进行路由聚合时，对聚合的路由信息会添加ATOMIC_AGGREGATE属性。</p>
 </li>
 <li><p>AGGREGATOR</p>
 <p>AGGREGATOR是ATOMIC_AGGREGATE属性的补充，是<strong>可选过度属性</strong>。</p>
@@ -990,21 +1083,16 @@
 <p>rule 5 permit source 192.168.1.0 0.0.0.255<br>rule 10 permit source 192.168.3.0 0.0.0.255</p>
 <p>route-policy org permit node 10 满足ACL的路由作为构建汇总路由的条件路由，permit代表作为构建汇总路由的条件路由，acl和rule之间是逻辑或的关系。</p>
 <p>aggregate 192.168.0.0 255.255.0.0 as-set detail-suppressed origin-policy org</p>
-<h4 id="BGP路由惩罚"><a href="#BGP路由惩罚" class="headerlink" title="BGP路由惩罚"></a>BGP路由惩罚</h4><ul>
-<li><p>IBGP无此特性，只用在EBGP之间</p>
-</li>
-<li><p>默认路由每失效一次惩罚值增加1000，当BGP属性改变时惩罚值增加500</p>
-</li>
-<li><p>half-life（半衰时间）：将惩罚值减少一般所需经历的时间。取值范围为1-45分钟，默认15分钟。</p>
-</li>
-<li><p>reuse（重用限制值）：用来与惩罚相比较，若惩罚值小于重用限制值，且被抑制的路由重新up，就不再对其进行抑制。取值范围1-20000，默认值为750</p>
-</li>
-<li><p>suppress（抑制限制值）：用来与惩罚值相比较的数值。若惩罚值大于限制值，路由将被抑制，取值范围为1-20000，默认为2000</p>
-</li>
-<li><p>max-suppress-time（最长抑制时间）：可对路由进行抑制的最长时间，取值范围为1-255，默认值为half-life时间的4倍。</p>
-</li>
+<h4 id="BGP路由惩罚（衰减-阻尼）"><a href="#BGP路由惩罚（衰减-阻尼）" class="headerlink" title="BGP路由惩罚（衰减/阻尼）"></a>BGP路由惩罚（衰减/阻尼）</h4><ul>
+<li>IBGP无此特性，只用在EBGP之间</li>
+<li>防止AS中BGP路由震荡，导致整个网络也跟着一起震荡。</li>
+<li>默认路由每失效一次惩罚值增加1000，当BGP属性改变时惩罚值增加500</li>
+<li>half-life（半衰时间）：将惩罚值减少一般所需经历的时间。取值范围为1-45分钟，默认15分钟。</li>
+<li>reuse（重用限制值）：用来与惩罚相比较，若惩罚值小于重用限制值，且被抑制的路由重新up，就不再对其进行抑制。取值范围1-20000，默认值为750</li>
+<li>suppress（抑制限制值）：用来与惩罚值相比较的数值。若惩罚值大于限制值，路由将被抑制，取值范围为1-20000，默认为2000</li>
+<li>max-suppress-time（最长抑制时间）：可对路由进行抑制的最长时间，取值范围为1-255，默认值为half-life时间的4倍。</li>
 </ul>
-<p>dampening 5 1000 2000 3000</p>
+<p>dampening 5（半衰期） 1000（重用惩罚值） 2000（抑制惩罚值） 3000（惩罚最大值）</p>
 <p>当路由惩罚值超过2000时，不会通告此路由可达的消息，用d标记路由被惩罚。直到惩罚值小于重用惩罚值。</p>
 <p>当路由惩罚值小于1000时，如果过此时路由可达，则通告此路由可达，d标记会消失</p>
 <p>当路由惩罚值在1000到2000时，且无d标记，还是可以继续通告此路由可达。</p>
@@ -1014,12 +1102,13 @@
 <p>2、路由传递给EBGP邻居时，将fake as号添加到as-path。</p>
 <h3 id="BGP安全性"><a href="#BGP安全性" class="headerlink" title="BGP安全性"></a>BGP安全性</h3><p>BGP易受到跨链路，长距离的攻击。</p>
 <p>BGP使用认证和通同TTL安全保护机制GTSM（Generalized Security Mechanism）两个方法保证BGP对等体间的安全。</p>
-<h4 id="BGP认证"><a href="#BGP认证" class="headerlink" title="BGP认证"></a>BGP认证</h4><p>BGP无设置认证字段的，BGP认证字段放在TCP的options（20个字段）中</p>
+<h4 id="BGP认证"><a href="#BGP认证" class="headerlink" title="BGP认证"></a>BGP认证</h4><p>BGP无设置认证字段的，BGP认证字段放在TCP的options（20个字段）中携带。</p>
 <p>BGP的认证分为MD5认证和keychain认证</p>
 <p>MD5认证只能为TCP连接设置认证密码</p>
 <p>keychain认证除了可以为TCP连接设置认证密码外，还可以对BGP报文进行认证</p>
+<p>ripv1 不支持认证<br>ripv2 支持，利用第一个路由条目来携带认证信息<br>ospfv2 专用的字段，携带认证信息<br>isis    通过认证TLV携带认证信息<br>bgp    md5认证，tcp option携带认证信息</p>
 <h4 id="BGP-GTSM"><a href="#BGP-GTSM" class="headerlink" title="BGP GTSM"></a>BGP GTSM</h4><ul>
-<li>防御TCP欺骗，TCP伪造攻击。</li>
+<li>防御TCP欺骗，基于TCP的源地址伪造攻击，保护设备不被CPU类型的攻击从而避免CPU负载过大。</li>
 <li>GTSM检测IP报文的TTL值是否在一个自我设定的允许的范围之内。超过了就不合法，不接收，直接丢弃。从而保护了IP层以上的业务，增加了系统安全性。</li>
 </ul>
 <p>华为GTSM功能</p>
@@ -1028,8 +1117,17 @@
 <li>在向邻居x.x.x.x发送BGP报文时，自身ttl设置为255</li>
 <li>在接收邻居x.x.x.x发来的BGP报文时，要求报文的TTL大于等于255-<em>N</em>+1</li>
 </ol>
+<h4 id="限制从对等体接收的路由数量"><a href="#限制从对等体接收的路由数量" class="headerlink" title="限制从对等体接收的路由数量"></a>限制从对等体接收的路由数量</h4><p>peer x.x.x.x route-limit 10 70<br>只收10条，收到路由超过70%告警，超过最大数量断开BGP邻居，30s后自动再次建立邻居。</p>
+<p>peer x.x.x.x route-limit 10 70 alert-only<br>收到路由超过70%告警，超过最大数量还是告警，不断开BGP邻居。</p>
+<p>peer x.x.x.x route-limit 10 70 idle-timeout 10<br>收到路由超过70%告警，超过最大数量断开邻居关系，并在10分钟后重新建立邻居，超时前也可使用reset bgp x.x.x.x手动自建立邻居</p>
+<p>peer x.x.x.x route-limit 10 70 idle-forever<br>收到路由超过70%告警，超过最大数量断开邻居关系，不再自动建立，可以使用reset bgp x.x.x.x 手动重新建立邻居。</p>
+<h4 id="AS-Path长度保护"><a href="#AS-Path长度保护" class="headerlink" title="AS_Path长度保护"></a>AS_Path长度保护</h4><p>as-path-limit [num]</p>
+<p>设置接收和发送路由时，检查AS-path的个数，如果超过限制，则不接受或不发送此路由。</p>
 <h3 id="ORF（出站路由过滤）"><a href="#ORF（出站路由过滤）" class="headerlink" title="ORF（出站路由过滤）"></a>ORF（出站路由过滤）</h3><p>BGP邻居会通告大量路由，也会对路由做过滤。浪费大量链路带宽。需要什么发什么。</p>
-<p>peer x.x.x.x capability-advertise orf ip-prefix send 发送 接收路由的路由器配置<br>peer x.x.x.x capability-advertise orf ip-prefix receive 接收 发送路由的路由器配置</p>
+<p>peer x.x.x.x ip-prefix 1 import<br>peer x.x.x.x capability-advertise orf ip-prefix send发送 接收方路由的路由器配置</p>
+<p>peer x.x.x.x capability-advertise orf ip-prefix receive接收 发送方路由的路由器配置</p>
+<p>active-route-advertise 设置BGP路由通告规则，最优并且该BGP路由在路由表中活跃才通告给邻居。对自身发布的路由无效。</p>
+<p>bgp-rip-only 不将BGP路由下发到路由表，只传递给BGP邻居。</p>
 <h3 id="BGP4"><a href="#BGP4" class="headerlink" title="BGP4+"></a>BGP4+</h3><p>不同的地址族携带着不同的下一条，所以有不同的地址族时最好携带MP_REACH_NLRI好些</p>
 <p>unicast地址族    指导单播报文的转发<br>multicast地址族    实现组播源地址通告，实现组播RPF防环检测。</p>
 
@@ -1270,30 +1368,30 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/05/20/2020-05-20-sui-bi/">
+                <a href="/2020/05/25/zu-bo/">
                     <div class="card-image">
                         
-                        <img src="/images/38.jpg" class="responsive-img" alt="2020-05-20随笔">
+                        <img src="/images/14.jpg" class="responsive-img" alt="组播">
                         
-                        <span class="card-title">2020-05-20随笔</span>
+                        <span class="card-title">组播</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            随笔
+                            组播协议的介绍
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-20
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-25
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
@@ -1303,8 +1401,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BB%84%E6%92%AD/">
+                        <span class="chip bg-color">组播</span>
                     </a>
                     
                 </div>
@@ -1318,30 +1420,30 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/05/16/2020-05-16-sui-bi/">
+                <a href="/2020/05/06/ospf/">
                     <div class="card-image">
                         
-                        <img src="/images/37.jpg" class="responsive-img" alt="2020-05-16随笔">
+                        <img src="/images/32.jpg" class="responsive-img" alt="OSPF">
                         
-                        <span class="card-title">2020-05-16随笔</span>
+                        <span class="card-title">OSPF</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            随笔
+                            OSPF的介绍
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-16
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-06
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
@@ -1351,8 +1453,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                    <a href="/tags/IGP/">
+                        <span class="chip bg-color">IGP</span>
                     </a>
                     
                 </div>
@@ -1504,7 +1610,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">178.1k</span>&nbsp;字
+                class="white-color">145.7k</span>&nbsp;字
             
             
             

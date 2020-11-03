@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    13.6k
+                    16.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    49 分
+                    58 分
                 </div>
                 
 
@@ -620,12 +620,14 @@
 </tr>
 </tbody></table>
 <h5 id="组播MAC地址"><a href="#组播MAC地址" class="headerlink" title="组播MAC地址"></a>组播MAC地址</h5><p>OUI：组织机构标识符，专门用来申请给组播IPv4地址的组播MAC地址标识符</p>
+<p>32个IP共享一个MAC</p>
 <p><strong>01 00 5E是分配给IPv4组播地址的组播MAC地址</strong></p>
 <p>01 00 5E = <font color="red">0000 0001 0000 0000 1101 1110 0</font></p>
 <p>224.1.1.1 = <font color="skyblue"><s>1110 0000 0</s>000 0001 0000 0001 0000 0001 </font>取后面23bit </p>
 <p>组播MAC地址为<font color="red">0000 0001 0000 0000 1101 1110 0</font><font color="skyblue">000 0001 0000 0001 0000 0001</font>再转为16进制</p>
-<p>要避免后面23比特相同</p>
+<p>要避免后面23比特相同，不然组播MAC地址冲突。</p>
 <p><strong>怎么区分一个MAC地址是组播MAC地址？<br>MAC地址的第八个比特等于1就是MAC地址</strong>    0<font color="red">1</font> xx xx</p>
+<p>01-00-5E只是01的一个子集：专门为IPv4组播提供二层封装服务。</p>
 <h3 id="组播组管理协议"><a href="#组播组管理协议" class="headerlink" title="组播组管理协议"></a>组播组管理协议</h3><h4 id="IGMP"><a href="#IGMP" class="headerlink" title="IGMP"></a>IGMP</h4><ul>
 <li>因特网组管理协议</li>
 <li>定义了一个网段内主机与组播路由器之间如何维护成员信息</li>
@@ -657,13 +659,20 @@
 </tr>
 <tr>
 <td>Group Address</td>
-<td>组地址</td>
+<td>组播组地址</td>
 </tr>
 </tbody></table>
 <p><strong>普遍（通用）组查询报文（General-Query）</strong></p>
 <p>普遍组查询消息是查询器定期向共享网段内所有主机以主播方式（224.0.0.1）发送的查询消息，用于查询那些组播组存在的成员。</p>
-<p>封装该消息的IP报文头的目的地址字段为224.0.0.1，本地网段上的所有路由器和主机都能识别并接收。</p>
-<p>组地址字段全0，表示不指定组播组，默认情况下每<strong>60秒周期性发送，180秒为超时时间</strong>。</p>
+<p>由路由器周期性发送，默认每隔<strong>60s</strong>发送一次，通过IP报文封装，SIP为路由器接口地址，DIP为224.0.0.1（代表链路上的所有路由器和主机）</p>
+<p>通用组查询报文<strong>group address为0.0.0.0</strong>，代表针对所有组播组发起组成员查询。</p>
+<p>当组成员接收到通用组查询报文后，随机延时一个<strong>0-10s</strong>的时间后，发送成员报告报文，SIP为主机自身接口IP，DIP为该主机所属的组播组地址。</p>
+<p>​    group address为主机所属的组播组地址</p>
+<p>随机时间为0-10s之间一个值，10s称为最大响应时间，实现组成员报告抑制，IGMPv1无法修改该时间值。</p>
+<p>为什么要设计最大响应时间呢？避免同组的成员重复发送成员报告报文，减少路由器负担。由于组成员报告延时时间不一致。谁先超时谁发报告。</p>
+<p>交换机收到报文后会泛洪，看到组播地址是我加入的就知道有人发了。</p>
+<p>路由器接收到成员报告之后，将创建（<em>，G）表项，并将收到该成员报告的接口做该（\</em>，G）表项的下游接口，未来路由器收到发向该组的组播报文就向该下游接口复制一份，从而发给成员主机所在的网段。</p>
+<p>IGMPv1没有设计离组机制，成员离组不会发送任何通知，默默离开，如果该组最后一个成员离开，路由器在130s内接收不到该组的报告报文，则认为该组不再存在成员，将（*，G）表项的下游接口删除，停止向该网段发送该组的组播报文。130s内还是继续发送该组的流量，导致业务控制不够及时。</p>
 <p><strong>成员报告报文（Report）</strong></p>
 <p>成员报告消息是主机向主播路由器发送的报告消息，用于申请加入某个组播组或者应答查询消息。</p>
 <p>封装该消息的IP报文头的目的地址字段为主机要加入的组播组地址，本网段上所有路由器及属于该组的所有主机都能够识别并接收，同一组的其他成员侦听到该报文后，不再发送针对相同组播组的报告，即报告被抑制。</p>
@@ -671,7 +680,11 @@
 <p>主机随机等待时间为10s</p>
 <h6 id="IGMPv1基本功能"><a href="#IGMPv1基本功能" class="headerlink" title="IGMPv1基本功能"></a>IGMPv1基本功能</h6><p>IGMPv1协议主要基于查询和相应机制完成组播组管理。在连接用户主机的多路由器共享网段上，由三层路由协议选举出唯一的组播信息转发者（Assert Winner或DR），并作为IGMPv1的查询器，负责该网段的组成员关系查询。</p>
 <p>因为IGMPv1不选举IGMP查询器，如果有多台路由器连接同一个多路访问网段时，就必须选举PIM Designated Router（DR）来避免重复查询，这个DR的选举，是由PIM进行的，选择IP地址高的为DR。PIM DR路由器在IGMPv1中充当IGMP查询器的功能，向主机发送IGMP查询。</p>
-<h6 id="IGMPv1查询器"><a href="#IGMPv1查询器" class="headerlink" title="IGMPv1查询器"></a>IGMPv1查询器</h6><p><strong>IGMPv1选举查询器</strong></p>
+<h6 id="IGMPv1查询器"><a href="#IGMPv1查询器" class="headerlink" title="IGMPv1查询器"></a>IGMPv1查询器</h6><p>1、IGMPv1没有查询者选举机制</p>
+<p>2、什么是IGMP查询者呢？当一个网段存在多台路由器时，负责向该网段发送普遍组查询的路由器。</p>
+<p>3、IGMPv1需要PIM协议的DR选举机制来协助查询者的选举，因此启用IGMPv1的接口还需启用PIM协议。由PIM协议选举出该网段上的DR，由DR充当IGMPv1的查询器。</p>
+<p>PIM DR选举机制<br>1、根据PIM协议中hello报文中携带的优先级选举DR，优先级越大，优先成为DR。<br>2、优先级相同，则比较接口IP地址的大小，地址大的优先成为DR。<br>3、PIM DR具有抢夺性。<br>4、DR失效后，会重新选举新的DR充当IGMPv1的查询器。</p>
+<p><strong>IGMPv1选举查询器</strong></p>
 <ul>
 <li><p>在pim-DM中通过比较hello消息上携带的优先级和IP地址，各路由器为多路由器网段选举指定路由器DR，充当IGMPv1的查询器</p>
 </li>
@@ -695,10 +708,14 @@
 <p>基本工作原理于IGMPv1基本相同。最大的不同在于IGMPv2增加离开组机制。成员主机离开组播时，会主动发送成员离开报文通知IGMP查询器；IGMP查询器收到成员离开报文后，会连续发送特定组查询报文，询问该组播组是否还存在组成员。如果过在一段时间内没有收到成员主机发送的报告报文，怎不在维护该组的组成员关系。</p>
 <p><strong>IGMPv2于IGMPv1区别</strong></p>
 <ul>
-<li><p>增加了离组报文和特定组查询报文</p>
+<li><p>在IGMPv1的基础上增加了2种报文<br>1、离组报文<br>2、特定组查询报文</p>
 </li>
-<li><p>可控制（可以配置）主机的离开的最大响应时间，IGMPv1定死了，只能是10s</p>
-</li>
+<li><p>在IGMPv1的基础上新增3种机制<br>1、离组机制</p>
+<p>​        当主机要离开某个组时，会发送离组报文。SIP为自身网卡IP，DIP为224.0.0.2（代表链路上的路由器），group address为离组的组播地址。<br>​        路由器收到离组报文后，会发送指定组查询报文，SIP为路由器接口地址，DIP为主机离组的组地址。group address为主机离组的组地址。<br>​        指定组查询默认连续以1s为间隔，连续发2次，在发送间隔<em>发送次数时间内，如果没有收到该组成员的报告，则认为该组不存在成员，删除相应的（\</em>，G）表项，停止该组播流量转发。</p>
+<p>2、查询器选举机制</p>
+<p>​        1、IGMPv2设计了自身的查询器选举机制，接口地址小的成为查询器，具有抢夺性。<br>​        2、非查询器会维护一个”其他查询器失效时间 “其他IGMP查询器的存活时间 = 健壮系数 × IGMP普遍组查询报文发送间隔 + （1/2） × 最大查询响应时间。<br>​        3、非查询器根据自身的 健壮系数 × IGMP普遍组查询报文发送间隔 + （1/2） × 最大查询响应时间 来计算”其他查询器失效时间 “<br>​        4、igmp timer other-querier-present 60 在非查询器上设置“其他查询器存活时间”，IGMPv2，IGMPv3适用。</p>
+<p>3、最大响应时间控制机制</p>
+<pre><code>看命令去！</code></pre></li>
 </ul>
 <h6 id="IGMPv2报文"><a href="#IGMPv2报文" class="headerlink" title="IGMPv2报文"></a>IGMPv2报文</h6><ul>
 <li>普遍组查询报文（General-Query）<br> DIP 224.0.0.1 60s 周期性发送 180s内收不到组报告，认为成员全部离组。删除相应的（*，G）表项。<br>最大响应时间：10s，可调可控.igmp max-reponse-time</li>
@@ -709,7 +726,7 @@
 </ul>
 <p><img src="/2020/05/25/zu-bo/IGMPv2r.JPG" alt="IGMPv2成员报告报文"></p>
 <ul>
-<li>成员离开报文（Leave）<br>目标地址为224.0.0.2（给所有路由器的）<br>RFC2236建议：只有在将要离开的主机是发送了成员关系报告消息的最后一台主机时，才发送离组消息。<br>因为如果过不是“最后一个响应者”的其他组成员静静的离开组播组，那么路由器也会继续转发组播会话，而不会发送查询消息，从而会一定程度上节省网络带宽。如果过这种行为不是必须的，那么也可以在任一一台主机离开组播时就发送离组消息。（思科路由器采用“最后一个响应者”发送leave消息，不是“最后一个响应者”在离开组时，不会发送leave消息）<br>两种实现机制：主机离组就发送和“最后一个响应者”<br>最大响应时间：0s，无实际意义。</li>
+<li>成员离开报文（Leave）<br>目标地址为224.0.0.2（给所有路由器的）<br>RFC2236建议：只有在将要离开的主机是发送了成员关系报告消息的最后一台主机时，才发送离组消息。<br>因为如果过不是“最后一个响应者”的其他组成员静静的离开组播组，那么路由器也会继续转发组播会话，而不会发送查询消息，从而会一定程度上节省网络带宽。如果过这种行为不是必须的，那么也可以在任一一台主机离开组播时就发送离组消息。（思科路由器采用“最后一个响应者”发送leave消息，不是“最后一个响应者”在离开组时，不会发送leave消息）<br><strong>两种实现机制：1、主机离组就发送 2、只有本轮查询的报告者离组时，由Last report发送离组报文，本轮的非Last report离组不发送离组报文，静默离组。</strong><br>最大响应时间：0s，无实际意义。</li>
 </ul>
 <p><img src="/2020/05/25/zu-bo/IGMPv2l.JPG" alt="IGMPv2成员离开报文"></p>
 <ul>
@@ -757,6 +774,8 @@
 <p>其他IGMP查询器的存活时间 = 健壮系数（robust-count） * IGMP普遍组查询报文发送间隔 + （1/2）* 最大查询响应时间，以自身参数值进行计算。</p>
 <p>也可以想改多少改多少：igmp timer other-querier-present优先于公式</p>
 <h5 id="IGMPv3"><a href="#IGMPv3" class="headerlink" title="IGMPv3"></a>IGMPv3</h5><p>支持ASM、SSM组播服务模型</p>
+<p>IGMPv3的报文类型<br>1、通用组查询报文<br>2、指定组查询报文<br>3、特定源组查询报文<br>4、成员报告报文，没有离组报文。</p>
+<p>取消了成员抑制机制</p>
 <h6 id="IGMPv3报文"><a href="#IGMPv3报文" class="headerlink" title="IGMPv3报文"></a>IGMPv3报文</h6><ul>
 <li>普遍组查询报文（General-Query）</li>
 </ul>
@@ -1076,6 +1095,12 @@
 <td>向VLAN内除接收接口外的其他所有接口转发。</td>
 </tr>
 </tbody></table>
+<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><p>igmp timer query 10 修改IGMP普遍组查询报文的发送间隔，IGMPv1，IGMPv2，IGMPv3适用。</p>
+<p>pim hello-option dr-priority 修改PIM协议hello报文的优先级。</p>
+<p>igmp max-response-time 5 修改通用组查询报文的最大响应时间，IGMPv2，IGMPv3适用。</p>
+<p>igmp lastmember-queryinterval 3 修改指定组查询报文的最大响应时间，IGMPv2,IGMPv3适用。</p>
+<p>igmp robust-count 3 修改该指定组查询报文发送次数，即强健系数。 IGMPv2，IGMPv3适用。</p>
+<p>igmp timer other-querier-present 60 在非查询器上设置“其他查询器存活时间”，IGMPv2，IGMPv3适用。</p>
 <h3 id="组播路由协议"><a href="#组播路由协议" class="headerlink" title="组播路由协议"></a>组播路由协议</h3><p>hello 组播 224.0.0.13<br>Join/prune 组播 224.0.0.13<br>嫁接 单播<br>嫁接确认 单播<br>状态刷新 组播 224.0.0.13<br>断言 组播 224.0.0.13<br>bootstrap 自举报文 组播 224.0.0.13</p>
 <h4 id="PIM"><a href="#PIM" class="headerlink" title="PIM"></a>PIM</h4><p>PIM（与协议无关的组播路由协议）</p>
 <p>历史：DVMRP（底层要RIP）、MOSPF（底层要OSPF）</p>
@@ -1083,7 +1108,8 @@
 <li>域内组播路由协议</li>
 <li>构建、维护组播路由转发表项</li>
 <li>运行在路由器与路由器之间</li>
-<li>PIM分为PIM-DM（密集模式）和PIM-SM（稀疏模式）</li>
+<li>PIM分为PIM-DM（密集模式）、PIM-SM（稀疏模式）、PIM-SSM（指定源组播模式）</li>
+<li>DM、SM用于支持ASM的组播网络，SSM用于支持SSM的组播网络</li>
 </ul>
 <blockquote>
 <p>通用规则：</p>
@@ -1108,7 +1134,18 @@
 <li>以组播源为根，组播组成员为叶子的组播分发树成为SPT</li>
 <li>有多少个源就有多少个（S，G）表项，比较消耗资源。但转发路径是最优无环的。</li>
 <li>（S，G）一定要事先知道S的地址，以及存在S的路由</li>
+<li>（S，G）表项有且只有一个上游接口，也称为RPF接口（反向路径检测接口），用于接收该（S，G）的组播流量。</li>
+<li>可以有一个或多个或者没有下游接口，用于发送该（S，G）的组播流量</li>
+<li>下游接口不可能成为上游接口。</li>
+<li>（S，G）组播转发路径最优，需要维护所有已知（S，G）表项，比较占用设备资源，流量路径比较多，不利于运维和故障定位以及排除。</li>
 </ul>
+<blockquote>
+<p>PIM-SM</p>
+<p>（<em>，G）表项是由收到成员报告报文或者收到（\</em>，G）join报文而创建出来的。</p>
+<p>（*，G）表项的上行接口是根据RP的地址进行RPF检测得到的。</p>
+<p>（*，G）表项的下游接口是存在直连组成员或者收到正确的（*，G）join报文而被创建出来的。 </p>
+<p>（*，G）表项的下游接口收到（*，G）的剪枝报文或者最后组成员leave报文而被删除。当（*，G）表项的下游接口为NULL时，朝RP的RPF接口发送（*，G）剪枝报文。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -1131,6 +1168,10 @@
 <li>不能保证路径是最优的</li>
 <li>接收者到RP构造（*，G），源到RP构造（S，G）。既有（S，G）也有（*，G）</li>
 <li>（*，G）一定要事先知道RP的地址，以及存在RP的的路由</li>
+<li>（*，G）表项有且只有一个上游接口，也称为RPF接口（反向路径检测接口），用于接收该（S，G）的组播流量。</li>
+<li>可以有一个或多个或者没有下游接口，用于发送该（*，G）的组播流量</li>
+<li>下游接口不可能成为上游接口。</li>
+<li>（*，G）组播转发路由非最优，但无需维护所有的（S，G）表项，设备开销较小，组播流量路径明确，有控制点，方便故障定位和排除。</li>
 </ul>
 <table>
 <thead>
@@ -1148,6 +1189,9 @@
 <td>下游接口列表</td>
 </tr>
 </tbody></table>
+<h6 id="PIM-DR"><a href="#PIM-DR" class="headerlink" title="PIM-DR"></a>PIM-DR</h6><p>1、用于充当IGMPv1的查询器</p>
+<p>2、PIM-DM模式下，DR没有实际用途</p>
+<p>3、PIM-SM模式下，存在作用</p>
 <h5 id="RPF"><a href="#RPF" class="headerlink" title="RPF"></a>RPF</h5><p>反向路径转发（查找单播路由表，RPF检查：上游接口来的组播流量的源地址与进入路由器的接口与单播路由表中的表项相匹配则认为RPF校验成功）</p>
 <p>RPF检查过程：</p>
 <blockquote>
@@ -1184,7 +1228,7 @@
 <li>在IGMPv1中选举查询者</li>
 <li>封装Hello报文的组播报文的目的地址：224.0.0.13（表示同一网段中所有PIM路由器）、源地址为接口的IP地址、TTL数值为1</li>
 <li>只有邻居关系建立成功后才接收其他PIM协议报文，从而创建组播路由表项</li>
-<li>每30s发送一次</li>
+<li>每30s发送一次，邻居失效时间：105s。</li>
 </ul>
 <table>
 <thead>
@@ -1222,12 +1266,15 @@
 <li>沿途每台PIM-DM路由器创建（S，G）表项</li>
 </ul>
 <p>DM模式的上游接口，也称为RPF接口，就是去往组播源的出口。</p>
-<p>路由器接收到第一份组播流量时：</p>
-<ol>
-<li>创建（S，G）表项</li>
-<li>进行RPF检测，确定上游接口（RPF接口），接收组播流量的接口如果过通过RPF检测则添加此接口到上游接口。没通RPF检测则丢弃组播报文</li>
-<li>确定下游接口。对于DM模式来说，所有存在PIM邻居的接口以及存在组成员的接口都被认为是下游接口，RPF接口不可能称为下游接口！</li>
-</ol>
+<blockquote>
+<p>DM模式扩散机制：</p>
+<p>1、路由器接收到组播流量后，对接收该组播流量的接口进行RPF检测。如果RPF检测成功，则创建（S，G）表项。</p>
+<p>RPF检测成功的接口称为该（S，G）表项的上游接口，RPF检测失败则丢弃该组播流量。</p>
+<p>2、从上游接口接收到的（S，G）流量，从除了RPF接口之外的存在PIM邻居的接口以及存在直连组成员的接口进行扩散。</p>
+<p>RPF检测机制：根据组播流量的源地址查找单播路由表，如果接收组播流量的接口是去往组播源地址的单播路由出口，则RPF检测通过，接收该组播流量，并创建（S，G）表项。</p>
+<p>如果去往组播源存在多条等价出口，则下一跳地址大的出口，作为RPF接口。</p>
+<p>RPF接口上的PIM邻居，称为RPF邻居。</p>
+</blockquote>
 <p>扩散行为：从上游接口收到的组播流量，从存在PIM邻居的接口和存在组成员的接口扩散下去。</p>
 <p>为什么扩散要周期性做：为了维护（S，G）表项，让那些没有需要接收组播数据的路由器也有（S，G）表项，在它有需要的时候可以即使嫁接到SPT网络中来。从而更快地获取到组播流量。</p>
 <table>
@@ -1250,9 +1297,21 @@
 <td>E1和E2</td>
 </tr>
 </tbody></table>
+<blockquote>
+<p>DM模式周期性扩散的意义<br>1、让全网路由器表明组播源是活跃的<br>2、能够维护（S，G）不被老化</p>
+</blockquote>
 <h6 id="PIM-DM-剪枝-加入"><a href="#PIM-DM-剪枝-加入" class="headerlink" title="PIM-DM 剪枝/加入"></a>PIM-DM 剪枝/加入</h6><ul>
-<li>如不需要上游发送组播报文，则发送Prune消息</li>
-<li>共享网络上有路由器连接接收者，则该路由器发送Join消息来覆盖其他路由器发送的Prune消息</li>
+<li><blockquote>
+<p>DM模式剪枝机制：</p>
+<p>当路由器发现自身不存在任何下游接口时，将发起剪枝机制，向RPF接口上发送剪枝（Prune）报文，即该接口上的所有PIM邻居。上游接口收到剪枝报文后，如果剪枝报文中携带的RPF邻居地址是自身接口IP，则将自身接收剪枝报文的接口从（S，G）下游接口中删除。</p>
+<p>如果剪枝后，下游接口为NULL，继续向（S，G）的RPF接口发送剪枝报文，向上游继续剪枝</p>
+<p>如果剪枝后，下游接口不为NULL，则剪枝结束，不在继续朝上游剪枝。</p>
+</blockquote>
+</li>
+<li><p>共享网络上有路由器连接接收者，则该路由器发送<strong>Join</strong>消息来覆盖其他路由器发送的Prune消息（断言机制场景下）</p>
+</li>
+<li><p>剪纸否决机制在：共享网段中和断言机制中。</p>
+</li>
 </ul>
 <blockquote>
 <p>密集模式中下游接口为空的条件：</p>
@@ -1279,30 +1338,34 @@
 <blockquote>
 <p>为什么嫁接报文是单播？<br>在PIM协议中，在任何场景下。一条链路只能有一个接口发送组播流量，如果有多个接口向这个链路发送组播流量的话一定存在组播发送的冗余或是环路。我希望上游把组播流量发给我，因为这个路由器是有唯一性的，所以就只用发单播就行了。如果过发组播，不是RPF邻居就会增加不必要的负担。</p>
 </blockquote>
-<h6 id="PIM-DM-断言（Assert）"><a href="#PIM-DM-断言（Assert）" class="headerlink" title="PIM-DM 断言（Assert）"></a>PIM-DM 断言（Assert）</h6><ul>
-<li><p>通过组播发送，发送给这个链路上的PIM邻居（224.0.0.13）</p>
-</li>
-<li><p>保证只有一个PIM路由器向该网段转发组播报文，以实现无重复组播流量</p>
-</li>
-<li><p>触发断言机制：下游接口接收到了与自身发送的流量是同源同组的组播流量时。</p>
-</li>
-<li><p>针对（S，G）表项中的某个具体的业务流进行断言</p>
-</li>
-<li><p>断言优胜者高于RPF判断出来的邻居</p>
-</li>
+<p>嫁接，剪枝的路径上如果存在新组成员的加入快速获得组播流量。路由器根据组地址查找对应的（S，G）表项。如果没有对应的（S，G）表项则无法完成嫁接。如果有对应的（S，G）表项，那么根据组播源地址查RPF接口，朝RPF接口的RPF邻居发送单播嫁接报文。SIP地址为自身路由器接口地址，DIP为RPF邻居的地址。上游RPF邻居接收到嫁接报文，将接收该报文的接口加入到自身（S，G）表项的下游接口中，并单播回复嫁接确认报文。如果这个被嫁接的接口是（S，G）表项的唯一下游接口，则继续向上游发起嫁接，如果这个被嫁接的接口不是（S，G）表项唯一的下游接口，则嫁接结束。</p>
+<h6 id="PIM-DM-断言（Assert）"><a href="#PIM-DM-断言（Assert）" class="headerlink" title="PIM-DM 断言（Assert）"></a>PIM-DM 断言（Assert）</h6><p>为了避免网段上有多个路由器进行组播流量的扩散，引入断言机制。</p>
+<blockquote>
+<p>断言报文中携带</p>
+<p>1、路由器到达组播源路由的协议优先级</p>
+<p>2、路由器到达组播源路由的开销值</p>
+<p>3、路由器自身在该网段接口的地址。</p>
+</blockquote>
+<ul>
+<li>通过组播发送，发送给这个链路上的PIM邻居（224.0.0.13）</li>
+<li>保证只有一个PIM路由器向该网段转发组播报文，以实现无重复组播流量</li>
+<li>触发断言机制：下游接口接收到了与自身发送的流量是同源同组的组播流量时。</li>
+<li>针对（S，G）表项中的某个具体的业务流进行断言</li>
+<li>断言优胜者高于RPF判断出来的邻居</li>
+<li>断言优胜者负责在该网段扩散组播流量，失败者将失败的接口从（S，G）表项中删除。</li>
 </ul>
 <blockquote>
 <p>断言竞选规则：</p>
 <ol>
 <li>单播路由协议优先级，谁高谁获胜</li>
 <li>如果优先级相同，则比较自身到组播源的开销值，最小者获胜</li>
-<li>如果以上都相同，则下游接口IP地址最大者获胜</li>
+<li>如果以上都相同，则下游接口的P地址最大者获胜</li>
 </ol>
 </blockquote>
 <p>根据Assert竞选结果，路由器将执行不同的操作：</p>
 <ol>
 <li>获胜一方的下游接口哦称为Assert Winner，将负责后续对该网段组播报文的转发</li>
-<li>落败的一方的下游接口称为Assert Loser，后续不会对该网段转发组播报文，PIM路由器也会将其从（S，G）表项下游接口列表中删除。Assert Loser如果（S，G）表项出接口为空则会向上游RPF邻居、Assert Winner发送剪枝报文。Assert Winner如果在3s内没收到Join报文则删除（S，G）表项的出接口。</li>
+<li>落败的一方的下游接口称为Assert Loser，后续不会对该网段转发组播报文，PIM路由器也会将其从（S，G）表项下游接口列表中删除。Assert Loser如果（S，G）表项出接口为空则会向上游RPF邻居、Assert Winner发送剪枝报文。Assert Winner如果在3s内没收到Join报文则删除（S，G）表项中的出接口。</li>
 <li>Assert竞选结束后，该网段上只存在一个下游接口，只传输一份组播报文，所有AssertLoser可以周期性（默认为180s）地恢复组播报文转发，从而引发周期性地Assert竞选。</li>
 </ol>
 <ul>
@@ -1310,6 +1373,8 @@
 </ul>
 <p>在点到点链路上也会产生断言机制，解释了为什么Assert Loser会向Assert Winner发送剪枝报文。</p>
 <h6 id="PIM-DM-状态刷新（State-Refresh）"><a href="#PIM-DM-状态刷新（State-Refresh）" class="headerlink" title="PIM-DM 状态刷新（State Refresh）"></a>PIM-DM 状态刷新（State Refresh）</h6><p>仅有DM模式有，主要是优化功能。</p>
+<p>是PIM-DM默认的优化机制，避免周期性扩散-剪枝行为的发生，导致组播占用网络带宽，节省网络资源。</p>
+<p>第一跳路由器会周期性发送PIM的状态刷新报文，目的地址为224.0.0.13，即发给所有的PIM邻居，该报文还携带（S，G）的信息。下游路由器接收到状态刷新报文后，会重置（S，G）表项的老化时间以及重置剪枝接口的剪枝超时定时器。当组播源不在向网络发送组播流量时，第一跳路由器停止状态刷新报文的发送，全网（S，G）表项超时后被删除。</p>
 <ul>
 <li><p>通过第一跳路由器周期性发送State Refresh来避免被裁剪的接口因为“剪枝定时器”超时而恢复转发</p>
 </li>
@@ -1321,6 +1386,7 @@
 </li>
 </ul>
 <p>华为默认开启状态刷新机制</p>
+<p>只需在连接主播源的第一跳路由器的接口上配置：pim state-refresh-capable</p>
 <h5 id="PIM-SM（稀疏）（ASM模型）"><a href="#PIM-SM（稀疏）（ASM模型）" class="headerlink" title="PIM-SM（稀疏）（ASM模型）"></a>PIM-SM（稀疏）（ASM模型）</h5><p>工作在ASM</p>
 <ul>
 <li>使用“拉（Pull）模式”转发组播报文</li>
@@ -1328,6 +1394,9 @@
 <li>适用于大型组播网络</li>
 <li>工作机制包括：<br>邻居发现<br>DR竞选<br>RP发现<br>RPT构建<br>组播源注册<br>SPT切换<br>剪枝/加入<br>断言</li>
 </ul>
+<blockquote>
+<p>join消息每60s周期性发一次</p>
+</blockquote>
 <blockquote>
 <p><strong>PIM-SM规则</strong></p>
 <p>（*，G）</p>
@@ -1340,7 +1409,7 @@
 <p>（S，G）</p>
 <ol>
 <li>（S，G）表项在下列条件下创建<ul>
-<li>接收一条（S，G）Join / prune报文或者收到register报文，不可预料的（S，G）到达时（*，G）表项不存在，或是进行SPT切换时。</li>
+<li>接收一条（S，G）Join / prune报文或者RP收到register报文，或者进行SPT切换时。</li>
 </ul>
 </li>
 <li>（S，G）表项的上行接口时根据组播源的地址进行RPF检测得到的。</li>
@@ -1362,8 +1431,8 @@
 <p>如果当前DR出现故障，将导致PIM邻居关系超时，其他PIM邻居之间会触发新一轮的DR竞选。</p>
 <p>DR分为源端DR，成员端DR</p>
 <ul>
-<li>在连接组播源的共享网段，由DR负责向RP发送Register注册报文或发送Register-stop报文。构建SPT树。<br>与组播源相连的DR称为源端DR。</li>
-<li>在连接组成员的共享网段，由DR负责向RP发送Join加入报文。构建RPT树。<br>与组成员相连的DR称为组成员端DR。</li>
+<li>在连接组播源的共享网段，由DR负责向RP发送Register注册报文或发送Register-stop报文。构建<strong>SPT树</strong>。<br>与组播源相连的DR称为源端DR。</li>
+<li>在连接组成员的共享网段，由DR负责向RP发送Join加入报文。构建<strong>RPT树</strong>。<br>与组成员相连的DR称为组成员端DR。</li>
 </ul>
 <p>如果无连接组播P源或无成员端，DR就无意义，只是可以选出来。</p>
 <h6 id="RP发现"><a href="#RP发现" class="headerlink" title="RP发现"></a>RP发现</h6><p>RP特点：</p>
@@ -1376,7 +1445,7 @@
 <p>如果某个组地址同时满足多条ACL，则掩码长度大的优先。即越精确越优先。</p>
 <p>仅对PIM-SM有效</p>
 <p>默认动态优于静态，静态RP如携带preferred则优于动态</p>
-<p>动态RP：在PIM域内选择几台PIM路由器，配置C-RP（Candidate-RP，候选RP）来动态竞选出RP。同时，还需要通过配置C-BSR（Candidate-BSR，候选BSR）选举出BSR，来收集C-RP的通告信息，向PIM-SM域内的所有PIM路由器发布。</p>
+<p>动态RP：在PIM域内选择几台PIM路由器，配置C-RP（Candidate-RP，候选RP）来动态竞选出RP。同时，还需要通过配置C-BSR（Candidate-BSR，候选BSR）选举出BSR，来收集C-RP的通告信息，向PIM-SM域内的所有P    IM路由器发布。</p>
 <ol>
 <li>BSR协议（自举协议，业界标准）</li>
 </ol>
@@ -1457,6 +1526,8 @@
 <li>SSM的特点是网络用户能够预先知道组播源的具体位置。</li>
 <li>SSM模型中，PIM-SM的关键机制包括邻居发现、DR竞选、构建SPT。</li>
 </ul>
+<h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><p>单播以太网数据帧：<br>SMAC：发送该数据帧的3层接口的MAC地址。</p>
+<p>DMAC：根据DIP地址通过ARP协议解析而来。</p>
 
             </div>
             <hr/>
@@ -1695,30 +1766,31 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/05/26/2020-05-26-sui-bi/">
+                <a href="/2020/05/29/mpls/">
                     <div class="card-image">
                         
-                        <img src="/images/40.jpg" class="responsive-img" alt="2020-05-26随笔">
                         
-                        <span class="card-title">2020-05-26随笔</span>
+                        <img src="/medias/featureimages/31.jpg" class="responsive-img" alt="MPLS">
+                        
+                        <span class="card-title">MPLS</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            随笔
+                            MPLS的介绍
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-26
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-29
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
@@ -1728,8 +1800,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/VPN/">
+                        <span class="chip bg-color">VPN</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
                     </a>
                     
                 </div>
@@ -1743,30 +1819,30 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/05/23/2020-05-23-sui-bi/">
+                <a href="/2020/05/19/bgp/">
                     <div class="card-image">
                         
-                        <img src="/images/39.jpg" class="responsive-img" alt="2020-05-23随笔">
+                        <img src="/images/17.jpg" class="responsive-img" alt="BGP">
                         
-                        <span class="card-title">2020-05-23随笔</span>
+                        <span class="card-title">BGP</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            随笔
+                            BGP的介绍
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-23
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-19
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
@@ -1776,8 +1852,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                    <a href="/tags/EGP/">
+                        <span class="chip bg-color">EGP</span>
                     </a>
                     
                 </div>
@@ -1929,7 +2009,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">178.1k</span>&nbsp;字
+                class="white-color">145.7k</span>&nbsp;字
             
             
             

@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    10.8k
+                    11.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    39 分
+                    42 分
                 </div>
                 
 
@@ -569,7 +569,7 @@
 </tr>
 <tr>
 <td>OPTIONS</td>
-<td>选项位，用于支持不同的功能<br><br>DN bit：用于在MPLS VPN防止环路<br><br>O bit：表示始发路由器支持Opaque LSA（类型9、类型10和类型11）<br><br>DC bit：当始发路由器支持按需链路上的OSPF的能力时，该位将被设置。（即ospf不发送hello报文，但邻居不老化）<br><br>L bit：表明是否支持8类LSA<br>N bit：表示此路由器在此接口上是否支持泛洪7类外部路由，即7类LSA。是否为NSSA区域。<br><br>MC bit：如果置位则表示支持MOSPF，即组播数据包的转发能力。<br><br>E bit：表示此路由器在此接口上是否支持泛洪5类外部路由，即5类LSA<br><br>MT bit：表示始发路由器是否支持多拓扑OSPF</td>
+<td>选项位，用于支持不同的功能<br><br>DN bit：用于在MPLS VPN防止环路<br><br>O bit：表示始发路由器支持Opaque LSA（类型9、类型10和类型11）<br><br>DC bit：当始发路由器支持按需链路上的OSPF的能力时，该位将被设置。（即ospf不发送hello报文，但邻居不老化）<br><br>L bit：表明是否支持8类LSA<br>N bit：表示此路由器在此接口上是否支持泛洪7类外部路由，即7类LSA。是否为NSSA区域。（P bit：NSSA独有，如果看到NP位置1则做7转5，没有则不做。ABR引入时会置0，纯粹的ASBR会置位，告诉ABR转5）<br><br>MC bit：如果置位则表示支持MOSPF，即组播数据包的转发能力。<br><br>E bit：表示此路由器在此接口上是否支持泛洪5类外部路由，即5类LSA<br><br>MT bit：表示始发路由器是否支持多拓扑OSPF</td>
 </tr>
 <tr>
 <td>Router Prionity</td>
@@ -815,11 +815,11 @@
 <blockquote>
 <p>5类LSA什么时候FA地址不为0？不为0的时候，FA地址时什么？<br>如果同时满足以下3个条件，则FA地址不为0：</p>
 <ol>
-<li>引入的这条外部路由，其对应的出接口启用了OSPF</li>
-<li>引入的这条外部路由，其对应的出接口未设置为passive-interface（silent-interface）</li>
-<li>引入的这条外部路由，其对应的出接口的OSPF网络类型为Broadcast或NBMA</li>
+<li>引入的这条外部路由，其对应的出接口启用了OSPF（ASBR连接外部网络的接口加入到OSPF进程）</li>
+<li>引入的这条外部路由，其对应的出接口未设置为passive-interface（silent-interface）（外部接口没有设置为silent-interface）</li>
+<li>引入的这条外部路由，其对应的出接口的OSPF网络类型为Broadcast或NBMA（外部接口的OSPF的网络类型为broadcast/NBMA）</li>
 </ol>
-<p>FA地址是外部路由的下一跳为5类LSA的FA地址</p>
+<p>此时FA地址为，ASBR自身到该外部路由的下一跳。</p>
 </blockquote>
 <p>metric type=2 在路由表中只显示引入时的外部路由开销，不体现AS内部所经过的路径开销计算在内<br>metric type=1 在路由表中显示引入时外部开销与在AS内部所经过的路径开销之和</p>
 <p>4类和5类的能不能单独出现？<strong>可以</strong><br>单区域的OSPF网络引入外部 路由时，不需要4类的LSA，存在5类LSA<br>空引入外部路由时或引入的外部路由在ASBR上被全部过滤时 ，会产生4类，而不存在5类</p>
@@ -833,6 +833,11 @@
 <p>以cost-type 1引入外部路由，FA地址为0.0.0.0<br>开销=通过type 4的lsa计算到ASBR的开销+引入时开销<br>下一跳 = 自身到ASBR的下一跳</p>
 <p>以cost-type 2引入外部路由，FA地址为0.0.0.0<br>开销 = 引入时开销<br>下一跳 = 自身到ASBR的下一跳</p>
 </blockquote>
+<blockquote>
+<p>带有FA地址的5类LSA路由如何计算？</p>
+<p>开销=引入时的开销+到FA地址OSPF开销</p>
+<p>下一跳=到FA地址的OSPF路由的下一跳</p>
+</blockquote>
 <h6 id="5类LSA如何防环？"><a href="#5类LSA如何防环？" class="headerlink" title="5类LSA如何防环？"></a>5类LSA如何防环？</h6><p>5类自身没有防环机制<br>与ASBR同一区域的路由器可以通过SPF算法实现外部路由防环<br>没有与ASBR在同一个区域的路由器通过4类的LSA防环</p>
 <h6 id="区域间路由汇总"><a href="#区域间路由汇总" class="headerlink" title="区域间路由汇总"></a>区域间路由汇总</h6><p>不能在区域内做路由汇总的原因：路由汇总针对的是路由条目，区域内的路由都是都是用1类2类LSA计算出来的，1类和2类LSA是无法做汇总，是要在区域内泛洪的。所以无法在区域内做路由汇总</p>
 <p>ABR的汇总：只能针对直连区域的1类2类LSA产生的路由进行汇总，已经成为3类的LSA是无法进行ABR的汇总。</p>
@@ -840,10 +845,15 @@
 <p>ABR产生汇总的3类LSA后，自身路由表不会汇总路由</p>
 <p>明细路由都不存在时，汇总路由才不会产生</p>
 <h5 id="NSSA-LSA（Type7）"><a href="#NSSA-LSA（Type7）" class="headerlink" title="NSSA LSA（Type7）"></a>NSSA LSA（Type7）</h5><blockquote>
-<p>7类LSA产生FA地址特点</p>
-<p>1.如果和5类的LSA的FA地址生成条件相同，则FA地址也和5类FA地址相同<br>2.如果和5类的LSA的FA地址生成条件不同，则FA地址为ASBR上某个加入到OSPF进程的接口地址。（地址大的环回口优先，其次是物理接口）</p>
+<p>7类LSA的FA的产生条件</p>
+<p>1、如果和5类的场景一致，则和5类FA产生条件相同<br>2、如果和5类的场景不一致呢？<br>        优先使用nssa区域的loopback接口地址<br>        如果没有loopback接口，使用nssa的第一个up的物理接口</p>
 </blockquote>
-<p>为什么7类LSA引进来的都带有FA地址（七类默认的不带转发地址）？而5类LSA要在满足条件下才有转发地址？<br>有做7转5的advrouter是会变成abr的router id。如果不带转发地址，而去往abr的cost大于去往fa地址时就会产生次优路径。所以7类LSA都基本带有转发地址。</p>
+<blockquote>
+<p>7类LSA产生FA地址特点</p>
+<p>1.如果和5类的LSA的FA地址生成条件相同，则FA地址也和5类FA地址相同<br>2.如果和5类的LSA的FA地址生成条件不同，则FA地址为ASBR上某个加入到OSPF进程的接口地址。（地址大的环回口优先，其次是物理接口）<br>如果上述两个条件不符合则不带FA地址</p>
+</blockquote>
+<p>为什么7类LSA引进来的都带有FA地址（七类的缺省的不带转发地址）？而5类LSA要在满足条件下才有转发地址？<br>有做7转5的advrouter是会变成abr的router id。如果不带转发地址，而去往abr的cost大于去往fa地址时就会产生次优路径。所以7类LSA都基本带有转发地址。</p>
+<p>nssa translator-always 指定7转5路由器<br>nssa suppress-forwarding-address 抑制转发地址<br>no-import-route NSSA区域ABR专用，当NSSA的ABR引入外部路由时，只产生5类LSA，而不产生7类。<br>default-route-advertise NSSA区域的ASBR专用，自身存在其他协议的缺省路由，才产生缺省路由。</p>
 <h3 id="OSPF的网络类型"><a href="#OSPF的网络类型" class="headerlink" title="OSPF的网络类型"></a>OSPF的网络类型</h3><h4 id="点到点P2P类型"><a href="#点到点P2P类型" class="headerlink" title="点到点P2P类型"></a>点到点P2P类型</h4><p>当链路层协议是PPP、HDLC时，缺省情况下，OSPF人认为网络类型是P2P。在该类型的网络中，以组播形式（224.0.0.5）发送协议报文（Hello报文，DD报文，LSR报文，LSU报文、LSACK报文）。</p>
 <h4 id="P2P网络类型的特点"><a href="#P2P网络类型的特点" class="headerlink" title="P2P网络类型的特点"></a>P2P网络类型的特点</h4><ol>
 <li>hello报文时间为10s</li>
@@ -928,9 +938,7 @@
 <p>当到达转发地址的路由是负载分担，则计算的外部路由也会负载分担</p>
 <p>当NSSA区域的ABR收到一条七类的LSA和一条5类的LSA时，并且转发地址相同时。优先使用7类的进行外部路由计算。可能因为能用1类LSA去到转发地址。</p>
 <h4 id="完全NSSA区域"><a href="#完全NSSA区域" class="headerlink" title="完全NSSA区域"></a>完全NSSA区域</h4><p>允许本区域存在ASBR，不泛洪5类LSA，不产生4类LSA，不通告明细3类LSA，会产生7类LSA，完全NSSA区域的ABR会同时产生1条3类默认路由和一条七类的默认路由（3类优于7类）</p>
-<h3 id="OSPF虚链路"><a href="#OSPF虚链路" class="headerlink" title="OSPF虚链路"></a>OSPF虚链路</h3><p>虚链路只能穿越一个区域</p>
-<p>虚链路通过单播传递报文</p>
-<p>虚链路不检测掩码和地址是否在同一个网段</p>
+<h3 id="OSPF虚链路"><a href="#OSPF虚链路" class="headerlink" title="OSPF虚链路"></a>OSPF虚链路</h3><p>1、虚链路是属于区域0的逻辑链路<br>2、虚链路只能跨越一个非骨干区域创建<br>3、虚链路通过单播传递报文<br>4、虚链路不检测掩码和地址是否在同一个网段<br>5、特殊区域不能创建vlink<br>6、做了区域0的认证，由于vlink属于区域0，也会启用认证。<br>7、增加LSDB的复杂度。</p>
 <p>即使交互报文时，源地址和目的地址完全不同，依然可以正常进行ospf报文交互</p>
 <p>怎么检测虚链路的状态变化？</p>
 <ol>
@@ -938,6 +946,12 @@
 <li>通过transit区域的LSA1的变化，判断vlink是否可达，靠SPF算法，比hello机制更快。</li>
 <li>直连接口失效</li>
 </ol>
+<blockquote>
+<p>vlink上的邻居如何维护？<br>1、周期性通过单播hello维护邻居关系，邻居失效时间40s<br>2、如果v-link的SPF树断了，vlink会直接断开<br>3、本端vlink的出接口出现故障，vlink会立即失效。</p>
+<p>vlink上邻居不要求地址在一个网段，不要求掩码相同，邻居地址无状态。</p>
+<p>vlink hello报文目的地址如何确定？<br>每个虚连接的端点都要计算两个最短路径树，一个是本地最短路径树，而另一个是虚连接邻居的最短路径树。</p>
+<p>虚连接邻居到达本地路由器的出端口的IP地址为本地路由器发送给虚连接邻居的协议报文的目的IP地址。</p>
+</blockquote>
 <h4 id="虚链路的使用场景"><a href="#虚链路的使用场景" class="headerlink" title="虚链路的使用场景"></a>虚链路的使用场景</h4><p>一般虚链路用于临时的连接或者备用的连接，设计中应该避免虚连接的出现，使用隧道技术可以在某些场景下代替虚链路，如GRE隧道，或者是通过不同的OSPF进程实现重引入。</p>
 <ol>
 <li>用于连接非直连的非骨干区域</li>
@@ -948,23 +962,18 @@
 </ol>
 <h4 id="OSPF虚链路的防环"><a href="#OSPF虚链路的防环" class="headerlink" title="OSPF虚链路的防环"></a>OSPF虚链路的防环</h4><p>虚链路的缺点：容易产生环路</p>
 <ol>
-<li>通过虚链路的到的1类LSA所计算出的路由，不会转换成虚链路所在区域的3类LSA，目的是为了防环</li>
-<li>无法再虚链路所在的区域对区域0的路由实现汇总</li>
-<li>即存在vlink的ABR得到一条3类LSA（非自身产生的），那么该LSA在自身区域0中存在，此时也要求此3类LSA也必须在vlink穿越的transtit区域的LSDB中也存在，否则将不适用此3类LSA计算路由</li>
+<li>根据vlink传递1类和3类的LSA，不会再次传入vlink经过的区域，防止环路。</li>
+<li>无法在虚链路所在的区域对区域0的路由实现汇总</li>
+<li>即存在vlink的ABR得到一条3类LSA（非自身产生的），那么该LSA在自身区域0中存在，此时也要求此3类LSA也必须在vlink穿越的transtit区域的LSDB中也存在，否则将不适用此3类LSA计算路由（通过vlink计算出的路由应该在vlink所在的区域也能计算出，才会向其他区域继续泛洪LSA）</li>
 <li>存在vlink的ABR，通过vlink传来的3类LSA和vlink所经过的区域的其他ABR传来的3类LSA，在满足条件3的情况下，优先选择cost小的计算区域间的路由（这时候不一定区域0的3类LSA优于非骨干区域的3类LSA）</li>
 </ol>
 <p>通过虚链路得到的3类LSA不会重传到所经过的区域</p>
-<h3 id="OSPF路由过滤"><a href="#OSPF路由过滤" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h3><h4 id="OSPF路由、LSA过滤"><a href="#OSPF路由、LSA过滤" class="headerlink" title="OSPF路由、LSA过滤"></a>OSPF路由、LSA过滤</h4><p><strong>filter-policy（OSPF）</strong></p>
-<ol>
-<li>filter-policy在ABR上如果对直连的区域1类LSA所产生的做过滤后，将不会产生此路由的3类LSA，ABR本地实现此路由过滤，并且此路由不会泛洪到其他区域。</li>
-<li>在ABR上使用filter-policy对区域0的3类LSA所产生的路由也能实现路由的过滤，此路由不会出现在ABR的路由表中，并且ABR不会为直连的非骨干区域产生对应的此路由的3类LSA。</li>
-<li>filter-policy import方向 可以过滤任何类型的LSA所产生的路由，但不会过滤此路由的LSA（上面那两个是特殊）</li>
-<li>filter-policy export方向（设置对引入的路由在向外发布时进行过滤）仅能在ASBR上配置，因为5类LSA是由ASBR产生的</li>
-</ol>
-<h5 id="区域间LSA过滤"><a href="#区域间LSA过滤" class="headerlink" title="区域间LSA过滤"></a>区域间LSA过滤</h5><p><strong>filter （OSPF区域）</strong></p>
-<p>此命令仅在ABR上配置。</p>
-<p><strong>filter export</strong>命令用来配置对区域内出方向的Type3 LSA进行过滤。（1、3类均可过滤）</p>
-<p><strong>filter import</strong>命令用来配置对区域内入方向的Type3 LSA进行过滤。（1、3类均可过滤）</p>
+<h3 id="OSPF路由过滤"><a href="#OSPF路由过滤" class="headerlink" title="OSPF路由过滤"></a>OSPF路由过滤</h3><h4 id="ABR区域间路由"><a href="#ABR区域间路由" class="headerlink" title="ABR区域间路由"></a>ABR区域间路由</h4><p>对5类、7类不会产生效果</p>
+<p>area 1<br>filter ip-prefix 1 export 对区域1发给其他区域的路由做过滤<br>filter ip-prefix 2 import 对其他区域进入到区域1的路由做过滤</p>
+<h4 id="ASBR外部路由过滤"><a href="#ASBR外部路由过滤" class="headerlink" title="ASBR外部路由过滤"></a>ASBR外部路由过滤</h4><p>filter-policy ip-prefix 1 export static<br>import-route static<br>import-route isis<br>对引入的静态路由做过滤</p>
+<p>filter-policy ip-prefix 1 export<br>import-route static<br>import-route isis<br>对引入的所有路由做过滤</p>
+<p>import-route static route-policy<br>对引入的路由做过滤，并对允许引入的路由做属性修改</p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>ospf 1 router-id 3.3.3.3<br>filter-policy ip-prefix 1 import<br>对ospf区域内路由/区域间路由/外部路由进行本地路由表过滤，但无法过滤LSA，LSA继续泛洪给邻居。</p>
 <h4 id="LSA泛洪控制"><a href="#LSA泛洪控制" class="headerlink" title="LSA泛洪控制"></a>LSA泛洪控制</h4><p>ospf filter-lsa-out all在进程中仅对p2mp网络类型的邻居生效</p>
 <p>ospf filter-lsa-out all在接口中优先在进程中</p>
 <p>ospf filter-lsa-out all接口中不关心网络类型，都可以用。</p>
@@ -1009,6 +1018,11 @@
 <li>减小SPF树的规模，提高网络的整体收敛时间。</li>
 </ol>
 </li>
+<li>link state ID冲突怎么区分？<br>用广播地址区分。lsa3和lsa5都是一样的。</li>
+<li>邻居之间的router id为什么不能冲突？<br>主从选举不下去</li>
+<li>区域内router id为什么不能冲突？<br>冲突的路由器产生的type1的lsa无法区分，导致spf计算异常。</li>
+<li>不同的IR路由器，router id可以冲突，但这些IR路由器不能是ABR或ASBR。</li>
+<li>不能和ASBR的route id冲突，不然会导致LSA的震荡。</li>
 </ol>
 
             </div>
@@ -1248,30 +1262,30 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/05/13/2020-05-13-sui-bi/">
+                <a href="/2020/05/19/bgp/">
                     <div class="card-image">
                         
-                        <img src="/images/36.jpg" class="responsive-img" alt="2020-05-13随笔">
+                        <img src="/images/17.jpg" class="responsive-img" alt="BGP">
                         
-                        <span class="card-title">2020-05-13随笔</span>
+                        <span class="card-title">BGP</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            随笔
+                            BGP的介绍
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-13
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-19
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
@@ -1281,8 +1295,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                    <a href="/tags/EGP/">
+                        <span class="chip bg-color">EGP</span>
                     </a>
                     
                 </div>
@@ -1486,7 +1504,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">178.1k</span>&nbsp;字
+                class="white-color">145.7k</span>&nbsp;字
             
             
             

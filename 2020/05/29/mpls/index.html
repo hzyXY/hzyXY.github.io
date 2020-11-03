@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6.3k
+                    6.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    22 分
+                    23 分
                 </div>
                 
 
@@ -461,7 +461,7 @@
 <li><p>dmac pc2 smac vlanif20 192.168.10.1 192.168.20.1 </p>
 </li>
 </ol>
-<p>直连路由，ARP表差MAC地址，进行2层帧头重写。<br>查MAC地址表执行转发，如果MAC地址表没有DMAC地址，则丢包并执行ARP解析。</p>
+<p>直连路由，ARP表查MAC地址，进行2层帧头重写。<br>查MAC地址表执行转发，如果MAC地址表没有DMAC地址，则丢包并执行ARP解析。</p>
 <blockquote>
 <p>路由器转发技术的3个阶段</p>
 <ol>
@@ -530,7 +530,7 @@
 <p>标签空间：</p>
 <p>1、基于接口的标签空间 1 </p>
 <p>2、基于设备的标签空间 0 </p>
-<h6 id="邻居建立过程"><a href="#邻居建立过程" class="headerlink" title="邻居建立过程"></a>邻居建立过程</h6><ul>
+<h6 id="LDP邻居建立过程"><a href="#LDP邻居建立过程" class="headerlink" title="LDP邻居建立过程"></a>LDP邻居建立过程</h6><ul>
 <li>LDP邻居失效时间15s</li>
 <li>LDP会话失效时间45s</li>
 </ul>
@@ -544,8 +544,8 @@
 <blockquote>
 <p>如果In lable为null，则说明自己是这个FEC的Ingress节点<br>如果In lable为非null且不为3，则说明自己是这个FEC的Transit节点<br>如果In lable为3，则说明自己是这个FEC的Egress节点</p>
 </blockquote>
-<p>lsp-trigger host特点：<br>会为非直连非主机路由作为ingress，transit节点创建LSP<br>会为直连非接口主机路由作为egress节点创建LSP<br>会为其他主机路由作为ingress，transit节点创建LSP</p>
-<p>lsp-trigger all特点：<br>会为直连非接口主机路由作为egress节点创建LSP<br>会为其他主机路由作为ingress，transit节点创建LSP<br>会为直连接口路由作为egress节点创建LSP<br>会为非直连非主机路由作为transit，ingress节点创建LSP</p>
+<p>lsp-trigger host特点：<br>会为非直连非主机路由作为transit节点创建LSP<br>会为直连非接口主机路由作为egress节点创建LSP（环回口 ）<br>会为其他主机路由作为ingress，transit节点创建LSP</p>
+<p>lsp-trigger all特点：<br>会为非直连非主机路由作为transit，ingress节点创建LSP<br>会为直连非接口主机路由作为egress节点创建LSP<br>会为其他主机路由作为ingress，transit节点创建LSP<br>会为直连接口路由作为egress节点创建LSP</p>
 <h6 id="标签发布和管理"><a href="#标签发布和管理" class="headerlink" title="标签发布和管理"></a>标签发布和管理</h6><p>标签发布方式</p>
 <h6 id="LDP-LSP的建立过程"><a href="#LDP-LSP的建立过程" class="headerlink" title="LDP LSP的建立过程"></a>LDP LSP的建立过程</h6><ul>
 <li>LSP的建立过程实际就是将FEC和标签进行绑定，并将这种绑定通告LSP上相邻LSR的过程。</li>
@@ -555,6 +555,8 @@
 <li>Ingress收到标签映射消息后，判断标签映射的发送者（Transit）是否为该FEC的下一跳。若是，则在标签转发表中增加相应的条目。这时，就完成了LSP的建立，接下来就可以对该FEC对应的数据报文进行标签转发。</li>
 </ul>
 <p>LSP：天然自动建立隧道技术</p>
+<h6 id="特殊标签"><a href="#特殊标签" class="headerlink" title="特殊标签"></a>特殊标签</h6><p>IPv4 Explicit NULL Label 显式空标签    ipv4 0，ipv6 2<br>implicit NULL Label    隐式空标签    ipv4/ipv6 3（弹出顶部标签）</p>
+<p>共同点：最后一跳路由器都无需进行LFIB的查找。</p>
 <h4 id="MPLS转发"><a href="#MPLS转发" class="headerlink" title="MPLS转发"></a>MPLS转发</h4><p>转发根据顶部标签执行。</p>
 <p>在MPLS基本转发过程中涉及的相关概念如下：</p>
 <p>标签操作类型包括标签压入（Push）、标签交换（Swap）和标签弹出（Pop），NULL，它们是标签转发的基本动作。</p>
@@ -570,6 +572,9 @@
 <li><p>NULL：本质弹出标签栈，全部弹出。</p>
 </li>
 </ul>
+<h5 id="详细转发过程"><a href="#详细转发过程" class="headerlink" title="详细转发过程"></a>详细转发过程</h5><p>tunnel ID</p>
+<p>NHLFE（下一跳标签转发表项）</p>
+<p>ILM</p>
 <h5 id="MPLS对TTL的处理"><a href="#MPLS对TTL的处理" class="headerlink" title="MPLS对TTL的处理"></a>MPLS对TTL的处理</h5><p>MPLS对TTL的处理包括MPLS对TTL的处理模式和ICMP响应报文这两个方面。</p>
 <p><strong>MPLS对TTL的处理模式</strong></p>
 <p>MPLS标签中包含一个8比特的TTL字段，其含义与IP头中的TTL域相同。MPLS对TTL的处理除了用于防止产生路由环路外，也用于实现Traceroute功能。</p>
@@ -592,7 +597,7 @@
 <li>当从远端PE接收到的私网路由是属于本端那个site的路由，无法方便进行引入控制。</li>
 <li>PE收到远端PE的私网报文时，如何判断该报文属于本端PE的哪个的site。</li>
 </ol>
-<p>支持打tag的路由协议：ripv2，ospfv2的lsa5、7，isis。</p>
+<p>支持打tag的路由协议：ripv2，ospfv2的lsa5、7，isis的wide度量值、静态路由。</p>
 <p>解决：</p>
 <ol>
 <li>本地路由冲突问题，可以通过在同一台路由器上创建不同的路由表解决，而不同的接口可以分属不同的路由表中，这就相当于将一台共享PE模拟成多台专用PE。VRF解决。</li>
@@ -617,7 +622,7 @@
 <ul>
 <li><p>Route Target</p>
 </li>
-<li><p>解决路由在网络中传递时的冲突。</p>
+<li><p>解决路由在网络中传递时引入到不不同站点接收的问题。</p>
 </li>
 </ul>
 <p>ipv4叫团体属性<br>vpnv4叫扩展团体属性，也称为RT。<br>VPNv4的团体属性：RT。</p>
@@ -629,7 +634,7 @@
 <ul>
 <li><p>Route Disinguisher</p>
 </li>
-<li><p>解决路由在网络中传递时的冲突。</p>
+<li><p>在发送和接收的时候能够解决路由冲突的问题，可以区分这些路由是在不同的vrf中。</p>
 </li>
 </ul>
 <p>VPNv4地址族：添加了RD参数的IPv4前缀。</p>
@@ -725,8 +730,10 @@
 <li>sham-link地址通常是有32位掩码的loopback接口地址</li>
 <li>这个loopback接口地址要在bgp ipv4-family vpn-instance中发布</li>
 </ol>
-<h5 id="CE双归属中的防环方式"><a href="#CE双归属中的防环方式" class="headerlink" title="CE双归属中的防环方式"></a>CE双归属中的防环方式</h5><p>3类LSA防环方式：DN bit</p>
-<p>5类LSA防环方式：DN bit、domain tag。<br>(5类为什么要有DN bit和domain tag？防止domain tag变，domain tag有两种作用：标记路由和防环。所以双管齐下。)</p>
+<h5 id="CE双归属中的防环方式"><a href="#CE双归属中的防环方式" class="headerlink" title="CE双归属中的防环方式"></a>CE双归属中的防环方式</h5><p>domain id一致认为是超级骨干</p>
+<p>双归方式从bgp引入的ospf路由dn位会置位</p>
+<p>3类LSA防环方式：DN bit。<br>dimain为空（默认为0），则表示两端的domain-id一致，那么以3类LSA形式引入。</p>
+<p>5类LSA防环方式：DN bit、domain tag。<br>domain-id不同，则以5类LSA引入<br>(5类为什么要有DN bit和domain tag？防止domain tag变，domain tag有两种作用：标记路由和防环。所以双管齐下。</p>
 <p>peer soo命令说明：PE会为从CE收到的路由添加SoO属性并发布给其他的PE对等体。其他PE对等体向接入的CE发布这些路由时会检查VPN路由携带的SoO属性，如果与本地配置的SoO属性相同，PE则不会向CE发布该路由，避免了VPN站点内路由环路。（PE对CE做配置）</p>
 <h3 id="MLSP路由汇总"><a href="#MLSP路由汇总" class="headerlink" title="MLSP路由汇总"></a>MLSP路由汇总</h3><p>思科路由器在执行汇总时，会在执行汇总路由器的路由表中产生一条指向null 0接口的汇总路由。RIP OSPF ISIS EIGRP BGP</p>
 <p>华为设备要想有此功能，则需要在汇总添加参数。</p>
@@ -987,30 +994,30 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/05/30/2020-5-30-sui-bi/">
+                <a href="/2020/06/02/kua-yu-zu-bo/">
                     <div class="card-image">
                         
-                        <img src="/images/41.jpg" class="responsive-img" alt="2020-05-30随笔">
+                        <img src="/images/6.jpg" class="responsive-img" alt="跨域组播">
                         
-                        <span class="card-title">2020-05-30随笔</span>
+                        <span class="card-title">跨域组播</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            随笔
+                            跨域组播协议的介绍
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-30
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-06-02
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
@@ -1020,8 +1027,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BB%84%E6%92%AD/">
+                        <span class="chip bg-color">组播</span>
                     </a>
                     
                 </div>
@@ -1035,30 +1046,30 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/05/26/2020-05-26-sui-bi/">
+                <a href="/2020/05/25/zu-bo/">
                     <div class="card-image">
                         
-                        <img src="/images/40.jpg" class="responsive-img" alt="2020-05-26随笔">
+                        <img src="/images/14.jpg" class="responsive-img" alt="组播">
                         
-                        <span class="card-title">2020-05-26随笔</span>
+                        <span class="card-title">组播</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            随笔
+                            组播协议的介绍
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-26
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-25
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
-                                    随笔
+                            <a href="/categories/Datacom/" class="post-category">
+                                    Datacom
                                 </a>
                             
                             
@@ -1068,8 +1079,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="/tags/%E5%8D%8F%E8%AE%AE/">
+                        <span class="chip bg-color">协议</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BB%84%E6%92%AD/">
+                        <span class="chip bg-color">组播</span>
                     </a>
                     
                 </div>
@@ -1221,7 +1236,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">178.1k</span>&nbsp;字
+                class="white-color">145.7k</span>&nbsp;字
             
             
             
