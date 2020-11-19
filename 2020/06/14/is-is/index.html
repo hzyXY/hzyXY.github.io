@@ -418,14 +418,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    11.8k
+                    12.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    44 分
+                    46 分
                 </div>
                 
 
@@ -1044,6 +1044,9 @@
 <li>IS-IS按优先级收敛是指在大量路由情况下，能够让某些特定的路由（例如匹配指定IP前缀的路由）优先收敛的一种技术。因此用户可以把和关键业务相关的路由配置成相对较高的优先级，使这些路由更快的收敛，从而使关键的业务收到的影响减小。通过对不同的路由配置不同的收敛优先级，达到重要的路由先收敛的目的，提高网络的可靠性。</li>
 </ul>
 <p>prefix-priority<br>缺省情况下，IS-IS主机露露有和缺省路由的收敛优先级为medium，其他IS-IS路由的收敛优先级为low。<br>收敛优先级的顺序由高到低为：critical &gt; high &gt; medium &gt; low。</p>
+<h3 id="P-bit位"><a href="#P-bit位" class="headerlink" title="P bit位"></a>P bit位</h3><p>代表分区修复功能，即表示该路由器是否支持ISIS的虚链路。</p>
+<p>骨干区域修复标志位。用于做虚链路的。但目前各大厂家还未实现，所以置0。</p>
+<p>解释：ISIS不是TCP/IP环境下的网络层协议，那么在基于IP的网络中无法实现跨链路建立ISIS邻居的功能。故无法为IP网络支持虚链路功能。</p>
 <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
 <li>路由协议工作在那一层？</li>
 </ol>
@@ -1118,11 +1121,33 @@
 <p>ACL可以对奇偶地址/奇偶路由做匹配，但前缀列表无法实现。</p>
 <p>定义奇数网段：1.1.1.0 0.0.254.255<br>定义偶数网段：1.1.0.0 0.0.254.255</p>
 <ol start="14">
-<li>BFD能和什么协议联动？<br>静态路由、RIB、VRRP、OSPF、ISIS、BGP</li>
+<li><p>BFD能和什么协议联动？<br>静态路由、RIB、VRRP、OSPF、ISIS、BGP</p>
+</li>
+<li><p>NSAP地址：AFI（组织）+IDI（路由域）+High order DSPT（区域）+ System ID（设备标识） + SEL（何种服务）</p>
+</li>
+<li><p>影响ISIS邻居建立的因素：<br><strong>Level级别</strong>是否兼容</p>
+<p><strong>level-1路由器是否在同区域</strong></p>
+<p><strong>system ID是否冲突</strong> 直连不能建 非直连看你们是不是都是level1或都是level2，是的话会影响。非直连不同区域有中间设备level1/2</p>
+<p><strong>认证</strong> 分为接口认证hello报文中、<code>区域认证L1的psnp、csnp、lsp、路由域认证L2 psnp、csnp、lsp 影响LSDB</code></p>
+<p><strong>网络类型</strong> 分为P2P tlv240里面是system id、MA tlv6里面是MAC</p>
+<p><strong>掩码</strong> P2P可以忽略掩码检查（NCP地址互推所以可以） MA为什么不可以？会造成不同网段的邻居建立，造成IP网络被分割无法通信。</p>
+<p><strong>2-way或是3-tway</strong> 配置成3-way only就不能建，因为2-way的hello包没有tlv240</p>
+<p><strong>MTU</strong> MA大于等于1500 P2P大于等于1497</p>
+<p><strong>开销类型不影响邻居建立</strong></p>
+</li>
+<li><p>TLV232在hello报文和LSP报文中有什么不同？</p>
+<p>hello报文中携带FE80：：/10（链路本地地址）<br>LSP报文中携带全球单播地址、唯一本地地址</p>
+<p>两个的区别就是LSP报文不会携带链路本地地址</p>
+</li>
+<li><p>ISIS多拓扑TLV<br>TLV222——IPV6的拓扑信息<br>TLV235——IPV4的前缀信息<br>TLV237——IPV6的前缀信息<br>TLV229——</p>
+</li>
+<li><p>为什么说ISIS比OSPF快？具体怎么实现？</p>
+<p>ISIS算路由 PRC<br>ISIS算拓扑 SPF</p>
+<p>OSPF拓扑路由1、2类LSA都存在，使用SPF算法。域间和域外使用PRC算法。</p>
+</li>
 </ol>
-<h3 id="P-bit位"><a href="#P-bit位" class="headerlink" title="P bit位"></a>P bit位</h3><p>代表分区修复功能，即表示该路由器是否支持ISIS的虚链路。</p>
-<p>骨干区域修复标志位。用于做虚链路的。但目前各大厂家还未实现，所以置0。</p>
-<p>解释：ISIS不是TCP/IP环境下的网络层协议，那么在基于IP的网络中无法实现跨链路建立ISIS邻居的功能。故无法为IP网络支持虚链路功能。</p>
+<p>PRC（部分路由计算）<br>SPF（不仅计算路由且计算拓扑）</p>
+<p>20. </p>
 
             </div>
             <hr/>
@@ -1599,7 +1624,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">145.7k</span>&nbsp;字
+                class="white-color">160.8k</span>&nbsp;字
             
             
             
