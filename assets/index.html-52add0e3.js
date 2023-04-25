@@ -1,0 +1,1 @@
+import{_ as e,W as t,X as c,Y as n}from"./framework-b6a07282.js";const o={},_=n("p",null,"这里记录了在Hack The Box打靶的过程。",-1),s=[_];function a(r,l){return t(),c("div",null,s)}const i=e(o,[["render",a],["__file","index.html.vue"]]);export{i as default};
